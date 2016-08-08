@@ -1,6 +1,14 @@
 # asteroid_impact
 Asteroid Impact is an open-source video game stimulus for conducting experimental research on human subjects.
 
+<h1>License</h1>
+
+Asteroid Impact is Copyright (c) Media Neuroscience Lab (http://www.medianeuroscience.org/), Rene Weber
+
+Asteroid Impact is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
+
+You should have received a copy of the license along with this work. If not, see http://creativecommons.org/licenses/by-sa/4.0/.
+
 <h1>Introduction</h1>
 
 <em>Asteroid Impact</em> is a point-and-click style video game where subjects use a cursor to collect crystal-shaped targets that are displayed at different locations while avoiding asteroids that bounce around the screen. Game difficulty is manipulated by altering the number of targets a subject needs to collect, the number of objects to be avoided, and the rate at which these objects move. The stimulus provides tremendous experimental control in that all random aspects of the game are removed; any differences in game experience are the result of player intervention. To help resolve this potential confound, the stimulus provides a high resolution content analysis of <em>all</em> events in the game (e.g., when a crystal is collected, x/y position of the player's cursor, time when player dies) with a 16ms temporal resolution. This content analysis is exported to a .csv file that allows for subsequent computation using a wide variety of analysis packages.
