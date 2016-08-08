@@ -27,7 +27,7 @@ Download and uncompress:
 
 The documentation files specify necessary software dependencies and how to get <em>Asteroid Impact</em> running on your system.
 
-<h1>Known Bugs</h1>
+<h1>! Known Issues</h1>
 
 As with all experimental software, please use <em>Asteroid Impact</em> at your own risk, and after sufficient testing on your own hardware. The software does not come with any warranty. 
 
