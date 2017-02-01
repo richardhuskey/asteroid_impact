@@ -47,4 +47,5 @@ As with all experimental software, please use <em>Asteroid Impact</em> at your o
 <ul>
 <li>Trigger latency: TTL triggers connected with a USB or serial port experience a small latency depending on hardware. See the "Trigger Latency" section in the HTLM documentation for more details on how to test for this on your hardware.</li>
 <li>Event Timer: When using OS X 10.10.5, the "total_millis" column in the .csv output does not tick correctly (not ticking every 16ms). This is due to a known limitation in PyGame 1.9.1 and we currently do not see a workaround for this issue. To our knowledge, the log records all game events, it is just that clock is not recording the timings correctly.</li>
+<li>macOS 10.12: Asteroid Impact does not work in macOS 10.12. Unsure what dependency is broken. Needs further investigation. If you are a Mac user, wish to use Asteroid Impact, and do not want to troubleshoot this issue, do not upgrade your software to macOS 10.12.</li>
 </ul>
