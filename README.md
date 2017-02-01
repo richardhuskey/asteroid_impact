@@ -3,11 +3,18 @@ Asteroid Impact is an open-source video game stimulus for conducting experimenta
 
 <h1>License</h1>
 
-Asteroid Impact is Copyright (c) Media Neuroscience Lab (http://www.medianeuroscience.org/), Rene Weber
+Asteroid Impact was developed in the Media Neuroscience Lab (http://www.medianeuroscience.org/), Rene Weber, PI
 
 Asteroid Impact is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 
 You should have received a copy of the license along with this work. If not, see http://creativecommons.org/licenses/by-sa/4.0/.
+
+Key Contributors include:
+
+Nick Winters
+Richard Huskey
+Britney Craighead
+Rene Weber
 
 <h1>Introduction</h1>
 
