@@ -11,10 +11,7 @@ You should have received a copy of the license along with this work. If not, see
 
 Key Contributors include:
 
-Nick Winters
-Richard Huskey
-Britney Craighead
-Rene Weber
+Nick Winters, Richard Huskey, Britney Craighead, Rene Weber
 
 <h1>Introduction</h1>
 
