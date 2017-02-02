@@ -1,7 +1,7 @@
 # asteroid_impact
 Asteroid Impact is an open-source video game stimulus for conducting experimental research on human subjects.
 
-Questions? Contact Richard Huskey (mailto:huskey.29@osu.edu)
+Questions? Contact Richard Huskey (huskey.29@osu.edu)
 
 <h1>License</h1>
 
