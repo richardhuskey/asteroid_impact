@@ -5,7 +5,7 @@ Questions? Contact Richard Huskey (huskey.29@osu.edu)
 
 <h1>License</h1>
 
-Asteroid Impact was developed in the Media Neuroscience Lab (http://www.medianeuroscience.org/), Rene Weber, PI
+Asteroid Impact was developed in the Media Neuroscience Lab (http://www.medianeuroscience.org/) Rene Weber, PI and the Cognitive Communication Science Lab (http://cogcommscience.com/) Richard Huskey, PI.
 
 Asteroid Impact is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License.
 
@@ -13,7 +13,7 @@ You should have received a copy of the license along with this work. If not, see
 
 Key Contributors include:
 
-Nick Winters, Richard Huskey, Britney Craighead, Rene Weber
+Richard Huskey, Nick Winters, Britney Craighead, Rene Weber
 
 <h1>How to cite</h1>
 
