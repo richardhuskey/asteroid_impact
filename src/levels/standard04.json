@@ -1,0 +1,1 @@
+{"asteroids": [{"diameter": 220, "top": 300, "left": 723, "dx": 1, "dy": 1}, {"diameter": 160, "top": 578, "left": 722, "dx": -1, "dy": -1}, {"diameter": 160, "top": 333, "left": 265, "dx": 2, "dy": -1}], "target_positions": [[1051, 65], [593, 722], [184, 417], [592, 64], [1154, 58], [473, 561], [685, 82], [1014, 249]], "powerup_list": [{"duration": 1.0, "type": "none"}]}
