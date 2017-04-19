@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Asteroid Impact’s documentation! &mdash; Asteroid Impact 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="#" />
+    <link rel="next" title="Asteroid Impact Code Introduction" href="codeintro.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-asteroid-impact-s-documentation">
+<h1>Welcome to Asteroid Impact&#8217;s documentation!<a class="headerlink" href="#welcome-to-asteroid-impact-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="codeintro.html">Asteroid Impact Code Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#gameplay">Gameplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#game-logging">Game Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#custom-levels">Custom Levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#game-script">Game &#8216;Script&#8217;</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#operator-keys">Operator Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#command-line-options">Command-Line Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#frequently-asked-questions">Frequently Asked Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#code-introduction">Code Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="leveljson.html">Single Level JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="leveljson.html#game-coordinates">Game Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leveljson.html#top-level">Top level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="leveljson.html#sample-file">Sample file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scriptjson.html">Game Script JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#steps-list">Steps List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#trigger-advance-options">Trigger Advance Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#trigger-latency">Trigger Latency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#common-step-attributes">Common Step Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#available-step-actions">Available step actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#game-adaptive-levels-list">game-adaptive levels list</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logcolumns.html">Log Columns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#game-coordinates">Game Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#log-columns-label">Log Columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#position-of-active-powerups">Position of active powerups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#asteroid-numbers">Asteroid Numbers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="makelevelpy.html">makelevel.py</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="makelevelpy.html#id1">makelevel.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="makelevelpy.html#command-line-options">Command-Line Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/game.html">game</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/game.html#id1"><code class="docutils literal"><span class="pre">game</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/logger.html">logger</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/logger.html#id1"><code class="docutils literal"><span class="pre">logger</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/makelevel.html">makelevel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/makelevel.html#id1"><code class="docutils literal"><span class="pre">makelevel</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/makestandardlevels.html">makestandardlevels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/makestandardlevels.html#id1"><code class="docutils literal"><span class="pre">makestandardlevels</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/resources.html">resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/resources.html#id1"><code class="docutils literal"><span class="pre">resources</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/screens.html">screens</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/screens.html#id1"><code class="docutils literal"><span class="pre">screens</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/sprites.html">sprites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/sprites.html#id1"><code class="docutils literal"><span class="pre">sprites</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref/virtualdisplay.html">virtualdisplay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ref/virtualdisplay.html#id1"><code class="docutils literal"><span class="pre">virtualdisplay</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Asteroid Impact&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="codeintro.html" title="next chapter">Asteroid Impact Code Introduction</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

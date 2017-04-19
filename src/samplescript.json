@@ -1,0 +1,29 @@
+[
+    {
+        "action": "instructions",
+        "duration": 10.0
+    },
+    {
+        "action": "game",
+        "levels": "levels/standardlevels.json",
+        "duration": 20.0
+    },
+    {
+        "action": "text",
+        "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+        "duration": 20.0
+    },
+    {
+        "action": "blackscreen",
+        "duration": 5.0
+    },
+    {
+        "action": "game",
+        "levels": "levels/hardlevels.json",
+        "duration": 20.0
+    },
+    {
+        "action": "blackscreen",
+        "duration": 5.0
+    }
+]

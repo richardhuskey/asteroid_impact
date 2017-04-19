@@ -1,0 +1,90 @@
+{
+    "trigger_settings": {
+        "mode": "keyboard",
+    
+        "serial_options": {
+            "port": "COM11",
+            "baudrate": 19200,
+            "trigger_byte_value" : 53
+        },
+    
+        "keyboard_options" :
+        {
+            "trigger_key": "K_5"
+        }
+    },
+    
+    "steps": [
+        {
+            "action": "instructions",
+            "trigger_count": 10
+        },
+        {
+            "action": "game",
+            "levels": "levels/standardlevels.json",
+            "trigger_count": 10
+        },
+        {
+            "action": "text",
+            "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+            "trigger_count": 10
+        },
+        {
+            "action": "blackscreen",
+            "trigger_count": 5
+        },
+        {
+            "trigger_count": 10,
+            "action": "game-adaptive",
+            "start_level": 0.5,
+            "level_completion_increment": 0.3,
+            "level_death_decrement": 0.4,
+            "level_templates" : 
+            [
+                {
+                    "asteroid_count": 1,
+                    "asteroid_speeds": "slow",
+                    "powerup_count": 0,
+                    "target_count": 3
+                },
+                {
+                    "asteroid_count": 3,
+                    "asteroid_sizes": "varied",
+                    "asteroid_speeds": "medium",
+                    "powerup_count": 10,
+                    "powerup_delay": 0.5,
+                    "powerup_types": [
+                        "slow"
+                    ],
+                    "target_count": 3
+                },
+                {
+                    "asteroid_count": 8,
+                    "asteroid_sizes": "varied",
+                    "asteroid_speeds": "medium",
+                    "powerup_count": 10,
+                    "powerup_delay": 2.0,
+                    "powerup_types": [
+                        "slow",
+                        "shield"
+                    ],
+                    "target_count": 3
+                },
+                {
+                    "asteroid_count": 5,
+                    "asteroid_speeds": "extreme",
+                    "powerup_count": 10,
+                    "powerup_delay": 0.5,
+                    "powerup_types": [
+                        "shield"
+                    ],
+                    "target_count": 3
+                }
+            ]
+        },
+        {
+            "action": "blackscreen",
+            "trigger_count": 10
+        }
+    ]
+}

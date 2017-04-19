@@ -1,0 +1,29 @@
+Music:
+maxstack ( http://soundcloud.com/maxstack ) 
+Licensed CC-BY-SA 3.0
+through space.ogg | http://opengameart.org/content/through-space
+
+(c) copyright Blender Foundation | apricot.blender.org
+Licensed CC-BY 3.0
+DeathFlash.wav from YoFrankie!
+
+by artisticdude
+Licensed CC-BY 3.0, CC-BY-SA 3.0 
+ring_inventory.wav from http://opengameart.org/content/inventory-sound-effects 
+
+Other sounds and graphics listed below (C) Media Neuroscience Lab, Rene Weber, 2015
+Authored by Nick Winters
+Sound effects, Licensed CC-BY-SA 4.0 <http://creativecommons.org/licenses/by-sa/4.0/>
+slow start.wav
+slow end.wav
+shield start.wav
+shield end.wav
+Graphics, Licensed CC-BY-SA 4.0 <http://creativecommons.org/licenses/by-sa/4.0/>
+asteroid.png (uses raw_data/Moon_Farside_LRO.jpeg which is public domain from NASA)
+background.jpg/background4x3.jpg
+gamesprites.svg
+clock.png (exported from gamesprites.svg)
+crystal.png (exported from gamesprites.svg)
+cursor.png (exported from gamesprites.svg)
+shield.png (exported from gamesprites.svg)
+

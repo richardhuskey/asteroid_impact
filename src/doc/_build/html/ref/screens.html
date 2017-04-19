@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>screens &mdash; Asteroid Impact 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="../index.html" />
+    <link rel="next" title="sprites" href="sprites.html" />
+    <link rel="prev" title="resources" href="resources.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="screens">
+<h1>screens<a class="headerlink" href="#screens" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><a class="reference internal" href="#module-screens" title="screens"><code class="xref py py-mod docutils literal"><span class="pre">screens</span></code></a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-screens"></span><p>Game screens for AsteroidImpact</p>
+<dl class="class">
+<dt id="screens.AsteroidImpactGameplayScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>levellist</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Gameplay logic for the Asteroid Impact game.</p>
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.advance_level">
+<code class="descname">advance_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.advance_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advance the current level to the next in the list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw game to <code class="docutils literal"><span class="pre">self.screen</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.setup_level">
+<code class="descname">setup_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.setup_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup for the current level</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run per-frame game logic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.update_notice_text">
+<code class="descname">update_notice_text</code><span class="sig-paren">(</span><em>level_millis</em>, <em>oldlevel_millis</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.update_notice_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update level countdown text</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.update_status_text">
+<code class="descname">update_status_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.update_status_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update numbers in status text sprites</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>level_templates_list</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Gameplay logic for the Asteroid Impact game.</p>
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.advance_level">
+<code class="descname">advance_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.advance_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advance the current level to the next in the list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw game to <code class="docutils literal"><span class="pre">self.screen</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.setup_level">
+<code class="descname">setup_level</code><span class="sig-paren">(</span><em>first=True</em>, <em>died_previously=False</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.setup_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup for the current level</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run per-frame game logic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.update_notice_text">
+<code class="descname">update_notice_text</code><span class="sig-paren">(</span><em>level_millis</em>, <em>oldlevel_millis</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.update_notice_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update level countdown text</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.update_status_text">
+<code class="descname">update_status_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.update_status_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update numbers in status text sprites</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.AsteroidImpactInfiniteLevelMaker">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteLevelMaker</code><span class="sig-paren">(</span><em>level_templates_list</em>, <em>start_level=0.0</em>, <em>level_completion_increment=1.0</em>, <em>level_death_decrement=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>List-like class that generates new levels as they are requested</p>
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteLevelMaker.level_completed">
+<code class="descname">level_completed</code><span class="sig-paren">(</span><em>level_millis</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker.level_completed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Increment level score based on level completion</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteLevelMaker.level_death">
+<code class="descname">level_death</code><span class="sig-paren">(</span><em>level_millis</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker.level_death" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce level score based on level failure</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.AsteroidImpactInstructionsScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInstructionsScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em>, <em>click_to_continue=True</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInstructionsScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Instructions Screen. Displays the game objects (ship, crystal, etc) and rules to the player.</p>
+<dl class="method">
+<dt id="screens.AsteroidImpactInstructionsScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInstructionsScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInstructionsScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInstructionsScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.BlackScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">BlackScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.BlackScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Black screen. Shown to the player while other things are happening in other parts of
+the research. The player can&#8217;t interact with the black sceen.</p>
+<dl class="method">
+<dt id="screens.BlackScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.BlackScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.BlackScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.BlackScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.GameOverOverlayScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">GameOverOverlayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameOverOverlayScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Show a &#8220;Game Over&#8221; message on top of the gameplay screen, pausing the
+gameplay while this screen is visible.</p>
+<p>This screen automatically ends after a delay.</p>
+<dl class="method">
+<dt id="screens.GameOverOverlayScreen.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameOverOverlayScreen.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close this screen by removing it from the screen stack</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.GameOverOverlayScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameOverOverlayScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.GameOverOverlayScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameOverOverlayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.GameScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">GameScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class for AsteroidImpact game screens</p>
+<dl class="method">
+<dt id="screens.GameScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw the game screen to the physical screen buffer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.GameScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the screen&#8217;s game state</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.LevelCompletedOverlayScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">LevelCompletedOverlayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.LevelCompletedOverlayScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Show a &#8220;Level Complete&#8221; message on top of the gameplay screen, pausing the
+gameplay while this screen is visible.</p>
+<p>This screen automatically ends after a delay.</p>
+<dl class="method">
+<dt id="screens.LevelCompletedOverlayScreen.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.LevelCompletedOverlayScreen.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close this screen by removing it from the screen stack</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.LevelCompletedOverlayScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.LevelCompletedOverlayScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.LevelCompletedOverlayScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.LevelCompletedOverlayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="screens.QuitGame">
+<em class="property">exception </em><code class="descclassname">screens.</code><code class="descname">QuitGame</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.QuitGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<p>Exception to raise in update() to quit the game</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.TextSprite">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">TextSprite</code><span class="sig-paren">(</span><em>font</em>, <em>text</em>, <em>color</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.TextSprite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Sprite-like object for text that helps positioning text in game coordinates, and
+keeping text in position when text changes.</p>
+<dl class="method">
+<dt id="screens.TextSprite.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><em>screen</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.TextSprite.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw text on screen</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.TextSprite.set_text">
+<code class="descname">set_text</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.TextSprite.set_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set and render new text</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.UserTextScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">UserTextScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em>, <em>click_to_continue=True</em>, <em>text='[No text value was specified]'</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Text Screen. Displays text specified in step.</p>
+<dl class="method">
+<dt id="screens.UserTextScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.UserTextScreen.init_text">
+<code class="descname">init_text</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen.init_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.UserTextScreen.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="screens.circularspritesoverlap">
+<code class="descclassname">screens.</code><code class="descname">circularspritesoverlap</code><span class="sig-paren">(</span><em>a</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.circularspritesoverlap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if two circular game sprites overlap.</p>
+<p>The sprite overlap is checked using their <code class="docutils literal"><span class="pre">gamerect</span></code> to find the sprite position and diameter.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="screens.font_find_fitting_string_length">
+<code class="descclassname">screens.</code><code class="descname">font_find_fitting_string_length</code><span class="sig-paren">(</span><em>font</em>, <em>line</em>, <em>lineWidth</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.font_find_fitting_string_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the length (in characters) of the string that fits within lineWidth</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="screens.make_powerup">
+<code class="descclassname">screens.</code><code class="descname">make_powerup</code><span class="sig-paren">(</span><em>powerup_dict</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.make_powerup" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a new powerup of the type specified in the level JSON by checking the <code class="docutils literal"><span class="pre">&quot;type&quot;</span></code> key in powerup_dict.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="screens.valid_breakpoint_character">
+<code class="descclassname">screens.</code><code class="descname">valid_breakpoint_character</code><span class="sig-paren">(</span><em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.valid_breakpoint_character" title="Permalink to this definition">¶</a></dt>
+<dd><p>return true when c is a valid word-wrapping breakpoint character</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">screens</a><ul>
+<li><a class="reference internal" href="#id1"><code class="docutils literal"><span class="pre">screens</span></code></a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="resources.html" title="previous chapter">resources</a></li>
+      <li>Next: <a href="sprites.html" title="next chapter">sprites</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/ref/screens.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="../_sources/ref/screens.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
