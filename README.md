@@ -33,13 +33,15 @@ In terms of experimental manipulation, researchers can specify different levels 
 
 <h1>Getting Started</h1>
 
-Download and uncompress:
+Download:
 <ul>
-<li>asteroid_impact_source_code.zip</li>
-<li>asteroid_impact_documentation.zip</li>
+<li>src</li>
+<li>doc/html</li>
 </ul>
 
-The documentation files specify necessary software dependencies and how to get <em>Asteroid Impact</em> running on your system.
+The html documentation files specify necessary software dependencies and how to get <em>Asteroid Impact</em> running on your system.
+
+The src directory contains the game files.
 
 <h1>Features in Development</h1>
 
