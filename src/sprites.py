@@ -355,3 +355,72 @@ class NonePowerup(BasePowerup):
         self.image = None
         self.update_rect()
         #print 'nonepowerup rect', self.gamerect
+
+class ReactionTimePrompt(VirtualGameSprite):
+    """Game element to test reaction time"""
+    def __init__(self, diameter=32, left=20, top=20):
+        VirtualGameSprite.__init__(self) #call Sprite initializer
+        self.gamediameter = diameter
+        self.gamerect_visible = pygame.Rect(left, top, diameter, diameter)
+        self.gamerect_hidden = pygame.Rect(-9999, -9999, diameter, diameter)
+        self.gamerect = self.gamerect_hidden
+        self.update_rect()
+        self.image = load_image(
+            'triangle.png',
+            (self.rect.width, self.rect.height),
+            convert_alpha=True)
+        #self.prompt_sound = load_sound('tone440.wav')
+
+        self.showtimes_millis = [s*2000+1000 for s in xrange(100)]
+        self.timeout_millis = 1*1000
+        self.visible = False
+        self.total_elapsed = 0
+        self.showtime_last = 0 # millis when shown
+        self.dismiss_type = pygame.KEYDOWN
+        self.dismiss_key = pygame.K_1
+
+    def activate(self):
+        print 'showing reaction prompt'
+        self.gamerect = self.gamerect_visible
+        self.update_rect()
+        self.visible = True
+        self.prompt_sound.play()
+
+    def deactivate(self):
+        print 'hiding reaction prompt'
+        self.gamerect = self.gamerect_hidden
+        self.update_rect()
+        self.visible = False
+        self.prompt_sound.stop()
+
+#    def pickedup(self):
+#        """Play pick up sound"""
+#        self.pickup_sound.play()
+#
+    def update(self, millis, events):
+        old_total_elapsed = self.total_elapsed
+        self.total_elapsed += millis
+
+        if not self.visible:
+            for showtime in self.showtimes_millis:
+                if (old_total_elapsed < showtime and
+                    showtime <= self.total_elapsed):
+                    # show
+                    self.showtime_last = self.total_elapsed
+                    self.activate()
+        else:
+            # showing now
+            if self.showtime_last + self.timeout_millis <= self.total_elapsed:
+                # timed out. Hide
+                self.deactivate()
+
+        # these are always 'shown'
+        # the way you hide a sprite is removing it from the group
+        # (or not drawing the group)
+        '''
+        todo:
+ - show and play sound if reached show time
+ - hide if corresponding key is now pressed (log reaction time)
+ - hide if timeout reached (log lack of reaction time)
+        '''
+        pass

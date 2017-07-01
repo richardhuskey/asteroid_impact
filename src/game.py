@@ -568,7 +568,11 @@ class GameModeManager(object):
                     
                 try:
                     if len(self.gamescreenstack) > 0:
-                        self.gamescreenstack[-1].update(millis, logrowdetails, events)
+                        # update frontmost screen
+                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, events)
+                        # update all screens in stack front to back
+                        for screen in reversed(self.gamescreenstack):
+                            screen.update_always(millis, logrowdetails, events)
                 except QuitGame as e:
                     print e
                     return

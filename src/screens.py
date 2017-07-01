@@ -20,7 +20,7 @@ import random
 
 # screens.py
 class QuitGame(Exception):
-    """Exception to raise in update() to quit the game"""
+    """Exception to raise in update_xxx() to quit the game"""
     def __init__(self, value):
         """Create new QuitGame exception"""
         Exception.__init__(self)
@@ -37,8 +37,12 @@ class GameScreen(object):
         self.opaque = True
         self.name = self.__class__.__name__
 
-    def update(self, millis, logrowdetails, events):
-        """Update the screen's game state"""
+    def update_frontmost(self, millis, logrowdetails, events):
+        """Update the screen's game state when this screen is frontmost"""
+        pass
+
+    def update_always(self, millis, logrowdetails, events):
+        """Update the screen's game state every iteration regardless of if another screen is stacked on top"""
         pass
 
     def draw(self):
@@ -100,7 +104,7 @@ class BlackScreen(GameScreen):
 
         self.first_update = True
 
-    def update(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events):
         if self.first_update:
             self.first_update = False
             # don't play music during the black screen
@@ -209,7 +213,7 @@ class UserTextScreen(GameScreen):
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
 
-    def update(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -344,7 +348,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         self.sprites.draw(self.screen)
         self.asteroids.draw(self.screen)
 
-    def update(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events):
         if self.first_update:
             self.first_update = False
             # play music during the instructions at specified volume:
@@ -401,7 +405,7 @@ class LevelCompletedOverlayScreen(GameScreen):
         # remove 'level completed' screen
         self.screenstack.pop()
 
-    def update(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -449,7 +453,7 @@ class GameOverOverlayScreen(GameScreen):
         # remove 'game over' screen
         self.screenstack.pop()
 
-    def update(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -554,6 +558,12 @@ class AsteroidImpactGameplayScreen(GameScreen):
         self.setup_level()
 
         self.first_update = True
+        
+        # reaction time prompts are independent of level list
+        # todo: load reaction prompts list from step JSON
+        self.reaction_prompts = pygame.sprite.OrderedUpdates(
+            [ReactionTimePrompt()])
+        
 
     def setup_level(self):
         """Setup for the current level"""
@@ -607,7 +617,13 @@ class AsteroidImpactGameplayScreen(GameScreen):
         if oldlevel_millis < 500 and 500 <= level_millis:
             self.notice_textsprite.set_text('')
 
-    def update(self, millis, logrowdetails, events):
+    def update_always(self, millis, logrowdetails, events):
+        # The reaction time prompts run always, independent of the game state.
+        # This allows them to be triggered externally, even when the player is
+        # on a "level completed" or "you died" screen.
+        self.reaction_prompts.update(millis, events)
+
+    def update_frontmost(self, millis, logrowdetails, events):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
@@ -724,6 +740,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
 
         self.mostsprites.draw(self.screen)
         self.powerupsprites.draw(self.screen)
+        self.reaction_prompts.draw(self.screen)
 
         # draw all text blocks:
         for textsprite in self.textsprites:
@@ -872,6 +889,10 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.setup_level(first=True)
 
         self.first_update = True
+        
+        # todo: load these
+        self.reaction_prompts = pygame.sprite.OrderedUpdates(
+            [ReactionTimePrompt()])
 
     def setup_level(self, first=True, died_previously=False):
         """Setup for the current level"""
@@ -978,7 +999,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             if oldlevel_millis < 500 and 500 <= level_millis:
                 self.notice_textsprite.set_text('')
 
-    def update(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
