@@ -369,7 +369,7 @@ class ReactionTimePrompt(VirtualGameSprite):
             'triangle.png',
             (self.rect.width, self.rect.height),
             convert_alpha=True)
-        #self.prompt_sound = load_sound('tone440.wav')
+        self.prompt_sound = load_sound('tone440.wav')
 
         self.showtimes_millis = [s*2000+1000 for s in xrange(100)]
         self.timeout_millis = 1*1000
@@ -391,7 +391,8 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.gamerect = self.gamerect_hidden
         self.update_rect()
         self.visible = False
-        self.prompt_sound.stop()
+        # fadeout avoids "click" at end, but I wish I could do shorter duration
+        self.prompt_sound.fadeout(100)
 
 #    def pickedup(self):
 #        """Play pick up sound"""
