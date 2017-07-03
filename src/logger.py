@@ -84,7 +84,15 @@ class AsteroidLogger(object):
             'powerup_type',
 
             'cursor_x',
-            'cursor_y'
+            'cursor_y',
+
+            # reaction prompt state
+            # blank: no active reaction prompt
+            # "waiting": active reaction prompt is visible
+            # "complete": player pressed button to dismiss reaction prompt
+            # "timeout": player didn't press button in time
+            'reaction_prompt_state',
+            'reaction_prompt_millis'
             ]
             
         for i in xrange(1, max_asteroid_count+1):

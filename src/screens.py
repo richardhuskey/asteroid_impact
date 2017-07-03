@@ -621,7 +621,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, events)
+        self.reaction_prompts.update(millis, logrowdetails, events)
 
     def update_frontmost(self, millis, logrowdetails, events):
         """Run per-frame game logic"""

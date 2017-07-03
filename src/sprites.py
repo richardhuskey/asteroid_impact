@@ -11,6 +11,7 @@ AsteroidImpact game sprites including sprite-specific behaviors.
 """
 from __future__ import absolute_import, division
 import pygame
+from pygame.locals import * # KEYDOWN, KEYUP, k_xyz and so-on
 from resources import load_image, load_sound
 import virtualdisplay
 import math
@@ -398,7 +399,7 @@ class ReactionTimePrompt(VirtualGameSprite):
 #        """Play pick up sound"""
 #        self.pickup_sound.play()
 #
-    def update(self, millis, events):
+    def update(self, millis, logrowdetails, events):
         old_total_elapsed = self.total_elapsed
         self.total_elapsed += millis
 
@@ -410,18 +411,23 @@ class ReactionTimePrompt(VirtualGameSprite):
                     self.showtime_last = self.total_elapsed
                     self.activate()
         else:
+            visible_ms = self.total_elapsed - self.showtime_last
+            logrowdetails['reaction_prompt_state'] = 'waiting'
+            logrowdetails['reaction_prompt_millis'] = visible_ms
             # showing now
             if self.showtime_last + self.timeout_millis <= self.total_elapsed:
                 # timed out. Hide
                 self.deactivate()
+                logrowdetails['reaction_prompt_state'] = 'timeout'
+                logrowdetails['reaction_prompt_millis'] = visible_ms
+
+            for event in events:
+                if event.type == KEYDOWN and event.key == K_1:
+                    logrowdetails['reaction_prompt_state'] = 'complete'
+                    logrowdetails['reaction_prompt_millis'] = visible_ms
+                    # correct key pressed
+                    self.deactivate()
 
         # these are always 'shown'
         # the way you hide a sprite is removing it from the group
         # (or not drawing the group)
-        '''
-        todo:
- - show and play sound if reached show time
- - hide if corresponding key is now pressed (log reaction time)
- - hide if timeout reached (log lack of reaction time)
-        '''
-        pass
