@@ -414,6 +414,7 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.visible = False
         self.total_elapsed = 0
         self.showtime_last = 0 # millis when shown
+        self.step_trigger_count_last = 0
         if input_type == 'key':
             pygame_key_constant = getattr(pygame, input_key, None)
             if not pygame_key_constant:
@@ -429,14 +430,12 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.prompt_sound.stop()
 
     def activate(self):
-        print 'showing reaction prompt'
         self.gamerect = self.gamerect_visible
         self.update_rect()
         self.visible = True
         self.prompt_sound.play()
 
     def deactivate(self):
-        print 'hiding reaction prompt'
         self.gamerect = self.gamerect_hidden
         self.update_rect()
         self.visible = False
@@ -447,7 +446,7 @@ class ReactionTimePrompt(VirtualGameSprite):
 #        """Play pick up sound"""
 #        self.pickup_sound.play()
 #
-    def update(self, millis, logrowdetails, events):
+    def update(self, millis, logrowdetails, events, step_trigger_count):
         old_total_elapsed = self.total_elapsed
         self.total_elapsed += millis
 
@@ -455,6 +454,13 @@ class ReactionTimePrompt(VirtualGameSprite):
             for showtime in self.showtimes_millis:
                 if (old_total_elapsed < showtime and
                     showtime <= self.total_elapsed):
+                    # show
+                    self.showtime_last = self.total_elapsed
+                    self.activate()
+            if (not self.visible 
+                and self.step_trigger_count_last != step_trigger_count
+                and self.showtimes_trigger_counts
+                and step_trigger_count in self.showtimes_trigger_counts):
                     # show
                     self.showtime_last = self.total_elapsed
                     self.activate()
@@ -476,3 +482,4 @@ class ReactionTimePrompt(VirtualGameSprite):
                     # correct key pressed
                     self.deactivate()
 
+        self.step_trigger_count_last = step_trigger_count

@@ -37,11 +37,11 @@ class GameScreen(object):
         self.opaque = True
         self.name = self.__class__.__name__
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         """Update the screen's game state when this screen is frontmost"""
         pass
 
-    def update_always(self, millis, logrowdetails, events):
+    def update_always(self, millis, logrowdetails, events, step_trigger_count):
         """Update the screen's game state every iteration regardless of if another screen is stacked on top"""
         pass
 
@@ -108,7 +108,7 @@ class BlackScreen(GameScreen):
 
         self.first_update = True
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # don't play music during the black screen
@@ -217,7 +217,7 @@ class UserTextScreen(GameScreen):
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -352,7 +352,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         self.sprites.draw(self.screen)
         self.asteroids.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # play music during the instructions at specified volume:
@@ -410,7 +410,7 @@ class LevelCompletedOverlayScreen(GameScreen):
         topscreen = self.screenstack.pop()
         topscreen.after_close();
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -459,7 +459,7 @@ class GameOverOverlayScreen(GameScreen):
         topscreen = self.screenstack.pop()
         topscreen.after_close()
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -631,13 +631,13 @@ class AsteroidImpactGameplayScreen(GameScreen):
         if oldlevel_millis < 500 and 500 <= level_millis:
             self.notice_textsprite.set_text('')
 
-    def update_always(self, millis, logrowdetails, events):
+    def update_always(self, millis, logrowdetails, events, step_trigger_count):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, events)
+        self.reaction_prompts.update(millis, logrowdetails, events, step_trigger_count)
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
@@ -1038,13 +1038,13 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             if oldlevel_millis < 500 and 500 <= level_millis:
                 self.notice_textsprite.set_text('')
 
-    def update_always(self, millis, logrowdetails, events):
+    def update_always(self, millis, logrowdetails, events, step_trigger_count):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, events)
+        self.reaction_prompts.update(millis, logrowdetails, events, step_trigger_count)
 
-    def update_frontmost(self, millis, logrowdetails, events):
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
