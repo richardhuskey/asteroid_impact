@@ -555,6 +555,8 @@ class GameModeManager(object):
                           and event.key == K_n
                           and (event.mod & pygame.KMOD_CTRL)):
                         print 'CTRL+n pressed. Advancing to next step'
+                        for screen in reversed(self.gamescreenstack):
+                            screen.after_close()
                         self.gamescreenstack = []
                     else:
                         # check for keyboard trigger
@@ -596,11 +598,15 @@ class GameModeManager(object):
                 step = self.gamesteps[self.stepindex]
                 if self.step_max_millis != None and self.step_max_millis < self.step_millis:
                     # end this step:
+                    for screen in reversed(self.gamescreenstack):
+                        screen.after_close()
                     self.gamescreenstack = []
                 
                 # Check if max trigger count on this step has expired
                 if self.step_max_trigger_count != None and self.step_max_trigger_count <= self.step_trigger_count:
                     # end this step
+                    for screen in reversed(self.gamescreenstack):
+                        screen.after_close()
                     self.gamescreenstack = []
 
                 if len(self.gamescreenstack) == 0:

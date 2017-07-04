@@ -23,8 +23,14 @@ class VirtualGameSprite(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) #call Sprite initializer
         self.gamerect = pygame.Rect(0, 0, 1, 1)
+
+    def stop_audio(self):
+        # override in derived classes
+        pass
+
     def update_rect(self):
         self.rect = virtualdisplay.screenrect_from_gamerect(self.gamerect)
+
 
 #classes for our game objects
 class Cursor(VirtualGameSprite):
@@ -59,7 +65,6 @@ class Cursor(VirtualGameSprite):
         self.gamerect.center = game_pos
         self.update_rect()
 
-
 class Target(VirtualGameSprite):
     """Targets (Crystals) don't move, but do play a sound when collected"""
     def __init__(self, diameter=32, left=20, top=20):
@@ -73,6 +78,9 @@ class Target(VirtualGameSprite):
             convert_alpha=True)
         self.pickup_sound = load_sound('ring_inventory.wav')
 
+    def stop_audio(self):
+        self.pickup_sound.stop()
+
     def pickedup(self):
         """Play pick up sound"""
         self.pickup_sound.play()
@@ -80,6 +88,7 @@ class Target(VirtualGameSprite):
     def update(self, millis):
         # hit test done in AsteroidImpactGameplayScreen
         pass
+
 
 def map_range(value, from_low, from_high, to_low, to_high):
     'return value in range [from_low, from_high] mapped to range [to_low, to_high]'
@@ -251,6 +260,10 @@ class SlowPowerup(BasePowerup):
 
         self.speedfactor = 0.25
 
+    def stop_audio(self):
+        self.sound_end.stop()
+        self.sound_begin.stop()
+
     def update(self, millis, cursor, asteroids):
         """ Play effect end sound if due"""
         BasePowerup.update(self, millis, cursor, asteroids)
@@ -312,6 +325,10 @@ class ShieldPowerup(BasePowerup):
         self.sound_end_duration = self.sound_end.get_length() - 1.0
         self.sound_end_started = False
 
+    def stop_audio(self):
+        self.sound_begin.stop()
+        self.sound_end.stop()
+
     def activate(self, cursor, asteroids, *args):
         """Play activation sound"""
         BasePowerup.activate(self, *args)
@@ -354,7 +371,6 @@ class NonePowerup(BasePowerup):
         self.type = 'none'
         self.image = None
         self.update_rect()
-        #print 'nonepowerup rect', self.gamerect
 
 class ReactionTimePrompt(VirtualGameSprite):
     """Game element to test reaction time"""
@@ -409,6 +425,9 @@ class ReactionTimePrompt(VirtualGameSprite):
             # TODO: allow specifying something other than left mouse
             self.dismiss_test = lambda evt: evt.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]
 
+    def stop_audio(self):
+        self.prompt_sound.stop()
+
     def activate(self):
         print 'showing reaction prompt'
         self.gamerect = self.gamerect_visible
@@ -457,6 +476,3 @@ class ReactionTimePrompt(VirtualGameSprite):
                     # correct key pressed
                     self.deactivate()
 
-        # these are always 'shown'
-        # the way you hide a sprite is removing it from the group
-        # (or not drawing the group)

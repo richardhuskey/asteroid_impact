@@ -49,6 +49,10 @@ class GameScreen(object):
         """Draw the game screen to the physical screen buffer"""
         pass
 
+    def after_close(self):
+        """Clean up after screen is closed"""
+        pass
+
 class TextSprite(object):
     """
     Sprite-like object for text that helps positioning text in game coordinates, and
@@ -403,7 +407,8 @@ class LevelCompletedOverlayScreen(GameScreen):
             # advance to next level
             self.screenstack[-2].advance_level()
         # remove 'level completed' screen
-        self.screenstack.pop()
+        topscreen = self.screenstack.pop()
+        topscreen.after_close();
 
     def update_frontmost(self, millis, logrowdetails, events):
         self.elapsedmillis += millis
@@ -451,7 +456,8 @@ class GameOverOverlayScreen(GameScreen):
             # reload same level
             self.screenstack[-2].setup_level(first=False,died_previously=True)
         # remove 'game over' screen
-        self.screenstack.pop()
+        topscreen = self.screenstack.pop()
+        topscreen.after_close()
 
     def update_frontmost(self, millis, logrowdetails, events):
         self.elapsedmillis += millis
@@ -741,6 +747,15 @@ class AsteroidImpactGameplayScreen(GameScreen):
             logrowdetails[prefix + 'centerx'] = asteroid.gamerect.centerx
             logrowdetails[prefix + 'centery'] = asteroid.gamerect.centery
             logrowdetails[prefix + 'diameter'] = asteroid.gamediameter
+
+    def after_close(self):
+        # halt all pending sounds
+        for s in self.mostsprites:
+            s.stop_audio()
+        for s in self.powerupsprites:
+            s.stop_audio()
+        for s in self.reaction_prompts:
+            s.stop_audio()
 
     def draw(self):
         """draw game to ``self.screen``"""
@@ -1148,6 +1163,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # remove shrunken asteroids
         self.asteroids = [asteroid for asteroid in self.asteroids if asteroid.gamediameter >= 10]
 
+    def after_close(self):
+        # halt all pending sounds
+        for s in self.mostsprites:
+            s.stop_audio()
+        for s in self.powerupsprites:
+            s.stop_audio()
+        for s in self.reaction_prompts:
+            s.stop_audio()
 
     def draw(self):
         """draw game to ``self.screen``"""
