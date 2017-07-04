@@ -11,8 +11,7 @@ AsteroidImpact game sprites including sprite-specific behaviors.
 """
 from __future__ import absolute_import, division
 import pygame
-from pygame.locals import * # KEYDOWN, KEYUP, k_xyz and so-on
-from resources import load_image, load_sound
+from resources import load_image, load_sound, NoneSound
 import virtualdisplay
 import math
 
@@ -359,26 +358,56 @@ class NonePowerup(BasePowerup):
 
 class ReactionTimePrompt(VirtualGameSprite):
     """Game element to test reaction time"""
-    def __init__(self, diameter=32, left=20, top=20):
+    def __init__(
+            self,
+            diameter=64,
+            left=20,
+            top=20,
+            sound='tone440.wav',
+            image='triangle.png',
+            # todo: graphic, sound 
+            input_type='key',
+            input_key='K_1',
+            showtimes_millis=[],
+            showtimes_trigger_counts=[],
+            **kwargs_extra):
+        #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
         self.gamediameter = diameter
         self.gamerect_visible = pygame.Rect(left, top, diameter, diameter)
         self.gamerect_hidden = pygame.Rect(-9999, -9999, diameter, diameter)
         self.gamerect = self.gamerect_hidden
         self.update_rect()
+
+        if not image or image == 'none':
+            image = 'transparent.png'
         self.image = load_image(
-            'triangle.png',
+            image,
             (self.rect.width, self.rect.height),
             convert_alpha=True)
-        self.prompt_sound = load_sound('tone440.wav')
+        
+        if sound and sound != 'none':
+            self.prompt_sound = load_sound(sound)
+        else:
+            self.prompt_sound = NoneSound()
 
-        self.showtimes_millis = [s*2000+1000 for s in xrange(100)]
+        self.showtimes_millis = showtimes_millis
+        # todo: implement trigger showing
+        self.showtimes_trigger_counts = showtimes_trigger_counts
         self.timeout_millis = 1*1000
         self.visible = False
         self.total_elapsed = 0
         self.showtime_last = 0 # millis when shown
-        self.dismiss_type = pygame.KEYDOWN
-        self.dismiss_key = pygame.K_1
+        if input_type == 'key':
+            pygame_key_constant = getattr(pygame, input_key, None)
+            if not pygame_key_constant:
+                print 'input_key of "%s" not found. Please use one of the following'%input_key
+                print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
+                raise QuitGame
+            self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
+        else:
+            # TODO: allow specifying something other than left mouse
+            self.dismiss_test = lambda evt: evt.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]
 
     def activate(self):
         print 'showing reaction prompt'
@@ -422,7 +451,7 @@ class ReactionTimePrompt(VirtualGameSprite):
                 logrowdetails['reaction_prompt_millis'] = visible_ms
 
             for event in events:
-                if event.type == KEYDOWN and event.key == K_1:
+                if self.dismiss_test(event):
                     logrowdetails['reaction_prompt_state'] = 'complete'
                     logrowdetails['reaction_prompt_millis'] = visible_ms
                     # correct key pressed

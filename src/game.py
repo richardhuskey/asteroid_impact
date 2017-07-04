@@ -239,6 +239,16 @@ class GameModeManager(object):
             else:
                 step['trigger_count'] = None
 
+            # reaction_prompts
+            if (step.has_key('reaction_prompts')
+                    and step['reaction_prompts'] != None
+                    and len(step['reaction_prompts']) > 0):
+                # todo: verify/cleanup each reaction_prompt entry
+                pass
+            else:
+                step['reaction_prompts'] = None
+
+                
             if step['action'] == 'instructions':
                 # nothing extra to validate
                 pass
@@ -363,7 +373,10 @@ class GameModeManager(object):
         elif step['action'] == 'game':
             self.gamescreenstack.append(
                 AsteroidImpactGameplayScreen(
-                    self.screen, self.gamescreenstack, step['levellist']))
+                    self.screen,
+                    self.gamescreenstack,
+                    step['levellist'],
+                    step['reaction_prompts']))
         elif step['action'] == 'game-adaptive':
             kwargs = {}
             if step.has_key('start_level'):
@@ -372,11 +385,13 @@ class GameModeManager(object):
                 kwargs['level_completion_increment'] = step['level_completion_increment']
             if step.has_key('level_death_decrement'):
                 kwargs['level_death_decrement'] = step['level_death_decrement']
+
             self.gamescreenstack.append(
                 AsteroidImpactInfiniteGameplayScreen(
                     self.screen,
                     self.gamescreenstack,
                     step['level_templates_list'],
+                    step['reaction_prompts'],
                     **kwargs))
         else:
             raise ValueError('Unknown step action "%s"'%step['action'])

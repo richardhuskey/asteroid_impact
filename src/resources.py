@@ -153,18 +153,21 @@ def load_image(name, size=None, convert_alpha=False, colorkey=None):
     scaledimage_cache[cache_key] = ScaledImageCache(name, convert_alpha, colorkey)
     return scaledimage_cache[cache_key].get(size)
 
+class NoneSound:
+    '''Stub sound object that responds to same methods but plays no audio'''
+    def __init(self):
+        self.volume = 1.0
+    def play(self): pass
+    def stop(self): pass
+    def fadeout(self, duration): pass
+    def get_length(self): return 1.0 #seconds
+    def set_volume(self, volume): self.volume = volume
+    def get_volume(self): return self.volume
+
 def load_sound(name):
     """
     Load audio clip from file name.
     """
-    class NoneSound:
-        def __init(self):
-            self.volume = 1.0
-        def play(self): pass
-        def stop(self): pass
-        def get_length(self): return 1.0 #seconds
-        def set_volume(self, volume): self.volume = volume
-        def get_volume(self): return self.volume
     if not pygame.mixer or not pygame.mixer.get_init():
         return NoneSound()
     fullname = resource_path(os.path.join('data', name))

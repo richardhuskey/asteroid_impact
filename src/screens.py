@@ -501,7 +501,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
     """
     Gameplay logic for the Asteroid Impact game.
     """
-    def __init__(self, screen, screenstack, levellist):
+    def __init__(self, screen, screenstack, levellist, reaction_prompts_settings):
         GameScreen.__init__(self, screen, screenstack)
         self.name = 'gameplay'
         self.blackbackground = pygame.Surface(self.screen.get_size())
@@ -560,9 +560,17 @@ class AsteroidImpactGameplayScreen(GameScreen):
         self.first_update = True
         
         # reaction time prompts are independent of level list
-        # todo: load reaction prompts list from step JSON
+        # load their settings from step JSON
+        if reaction_prompts_settings:
+            new_reaction_prompts = []
+            for rp in reaction_prompts_settings:
+                new_reaction_prompts.append(
+                    ReactionTimePrompt(**rp))
+        else:
+            new_reaction_prompts = []
+        
         self.reaction_prompts = pygame.sprite.OrderedUpdates(
-            [ReactionTimePrompt()])
+            new_reaction_prompts)
         
 
     def setup_level(self):
@@ -718,7 +726,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
         if self.powerup and self.powerup.active:
             logrowdetails['active_powerup'] = self.powerup.type
 
-        # on-screen powerup (these get weird when active)
+        # on-screen powerup (these get weird when active) 
         logrowdetails['powerup_x'] = self.powerup.gamerect.centerx
         logrowdetails['powerup_y'] = self.powerup.gamerect.centery
         logrowdetails['powerup_diameter'] = self.powerup.gamediameter
@@ -750,11 +758,12 @@ class AsteroidImpactInfiniteLevelMaker(object):
     '''
     List-like class that generates new levels as they are requested
     '''
-    def __init__(self, 
+    def __init__(
+            self,
             level_templates_list,
             start_level = 0.0,
             level_completion_increment = 1.0,
-            level_death_decrement = 1.0, ):
+            level_death_decrement = 1.0):
         print start_level, level_completion_increment, level_death_decrement
         self.level_score = start_level
         self.level_completion_increment = level_completion_increment
@@ -831,7 +840,13 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
     """
     Gameplay logic for the Asteroid Impact game.
     """
-    def __init__(self, screen, screenstack, level_templates_list, **kwargs):
+    def __init__(
+            self,
+            screen,
+            screenstack,
+            level_templates_list,
+            reaction_prompts_settings,
+            **kwargs):
         GameScreen.__init__(self, screen, screenstack)
         self.name = 'gameplay-adaptive'
         self.blackbackground = pygame.Surface(self.screen.get_size())
@@ -890,9 +905,18 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         self.first_update = True
         
-        # todo: load these
+        # reaction time prompts are independent of level list
+        # load their settings from step JSON
+        if reaction_prompts_settings:
+            new_reaction_prompts = []
+            for rp in reaction_prompts_settings:
+                new_reaction_prompts.append(
+                    ReactionTimePrompt(**rp))
+        else:
+            new_reaction_prompts = []
+        
         self.reaction_prompts = pygame.sprite.OrderedUpdates(
-            [ReactionTimePrompt()])
+            new_reaction_prompts)
 
     def setup_level(self, first=True, died_previously=False):
         """Setup for the current level"""
@@ -998,6 +1022,12 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 self.notice_textsprite.set_text('Go')
             if oldlevel_millis < 500 and 500 <= level_millis:
                 self.notice_textsprite.set_text('')
+
+    def update_always(self, millis, logrowdetails, events):
+        # The reaction time prompts run always, independent of the game state.
+        # This allows them to be triggered externally, even when the player is
+        # on a "level completed" or "you died" screen.
+        self.reaction_prompts.update(millis, logrowdetails, events)
 
     def update_frontmost(self, millis, logrowdetails, events):
         """Run per-frame game logic"""
@@ -1125,6 +1155,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         self.mostsprites.draw(self.screen)
         self.powerupsprites.draw(self.screen)
+        self.reaction_prompts.draw(self.screen)
 
         # draw all text blocks:
         for textsprite in self.textsprites:
