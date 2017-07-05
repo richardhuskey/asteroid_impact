@@ -86,6 +86,11 @@ class AsteroidLogger(object):
             'cursor_x',
             'cursor_y',
 
+            # question on current survey step
+            'survey_prompt',
+            # currently selected answer on current survey step
+            'survey_answer',
+
             # reaction prompt state
             # blank: no active reaction prompt
             # "waiting": active reaction prompt is visible

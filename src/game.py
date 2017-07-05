@@ -47,6 +47,7 @@ if not pygame.mixer:
 from screens import (
     AsteroidImpactInstructionsScreen,
     UserTextScreen,
+    SurveyQuestionScreen,
     AsteroidImpactGameplayScreen,
     AsteroidImpactInfiniteGameplayScreen,
     BlackScreen,
@@ -257,6 +258,15 @@ class GameModeManager(object):
                 if not step.has_key('text'):
                     print ('ERROR: "text" step must have "text" attribute with string value.')
                     return
+            elif step['action'] == 'survey':
+                # 'prompt' is required
+                if not step.has_key('prompt'):
+                    print ('ERROR: "survey" step must have "prompt" attribute with string value.')
+                    return
+                # 'options' list is required
+                if not step.has_key('options'):
+                    print ('ERROR: "survey" step must have "options" attribute with an array of string values.')
+                    return
             elif step['action'] == 'blackscreen':
                 # duration and trigger_count are both optional, so nothing to validate
                 pass
@@ -368,6 +378,13 @@ class GameModeManager(object):
                     self.gamescreenstack,
                     click_to_continue=click_to_continue,
                     text=step['text']))
+        elif step['action'] == 'survey':
+            self.gamescreenstack.append(
+                SurveyQuestionScreen(
+                    self.screen,
+                    self.gamescreenstack,
+                    prompt=step['prompt'],
+                    survey_options=step['options']))
         elif step['action'] == 'blackscreen':
             self.gamescreenstack.append(BlackScreen(self.screen, self.gamescreenstack))
         elif step['action'] == 'game':

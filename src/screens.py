@@ -219,7 +219,6 @@ class UserTextScreen(GameScreen):
         self.first_update = True
         
     def init_text(self, text):
-        print virtualdisplay.screenarea
         lines, result_bounds = flow_text(
             text,
             virtualdisplay.GAME_AREA,
@@ -229,7 +228,6 @@ class UserTextScreen(GameScreen):
             valign='middle')
         
         self.textsprites += lines
-
 
     def draw(self):
         # draw background
@@ -256,6 +254,207 @@ class UserTextScreen(GameScreen):
                     # game.py will switch to gameplay
             elif event.type is MOUSEBUTTONUP:
                 pass
+
+class SurveyButton:
+    '''Push button for "next" or toggle/radio button'''
+    def __init__(self, gamerect, text, onclick):
+        self.gamerect = gamerect
+        self.screenrect = virtualdisplay.screenrect_from_gamerect(gamerect)
+
+        self.text = text
+
+        self.color_normal = (68, 68, 68) # gray
+        self.color_selected = (23, 100, 214) # blue
+        self.color_highlight = (222, 199, 67) # yellow
+        self.color_pressing = (231, 233, 35) # yellow/orange
+
+
+        self.buttonbackground = pygame.Surface((self.screenrect.width, self.screenrect.height))
+        self.buttonbackground = self.buttonbackground.convert()
+        self.buttonbackground.fill(self.color_normal)
+
+        self.cursor_over = False
+        self.selected = False
+        self.mouse_button_was_down = False
+        self.mouse_button_pressed_inside = False
+        self.onclick = onclick
+
+    def update(self, milliseconds):
+        pos = pygame.mouse.get_pos()
+        overlapping_me = False = self.screenrect.collidepoint(pos)
+
+        mouse_button_down = pygame.mouse.get_pressed()[0]
+
+        '''
+        states:
+         * normal
+         * selected
+         * highlight (mouse over)
+         * pressing (mouse over while pressed down on this object)
+
+        normal/selected happen when:
+         * mouse is up
+         * mouse is down but wasn't pressed on this object but is overlapping it
+        '''
+        if mouse_button_down:
+            if not self.mouse_button_was_down:
+                # mouse left button now pressed
+                self.mouse_button_pressed_inside = overlapping_me
+            if overlapping_me:
+                self.buttonbackground.fill(self.color_pressing)
+            elif self.selected:
+                self.buttonbackground.fill(self.color_selected)
+            else:
+                self.buttonbackground.fill(self.color_normal)
+        if not mouse_button_down:
+            if self.mouse_button_was_down:
+                # mouse button released
+                if self.mouse_button_pressed_inside and overlapping_me:
+                    #self.selected = not self.selected
+                    if self.onclick: self.onclick(self)
+
+            if overlapping_me:
+                self.buttonbackground.fill(self.color_highlight)
+            elif self.selected:
+                self.buttonbackground.fill(self.color_selected)
+            else:
+                self.buttonbackground.fill(self.color_normal)
+
+        self.mouse_button_was_down = mouse_button_down
+
+    def draw(self, screen):
+        screen.blit(self.buttonbackground, (self.screenrect.left, self.screenrect.top))
+
+class SurveyQuestionScreen(GameScreen):
+    """
+    Survey Question Screen. Prompt the player for the answer to a single multiple-choice question.
+    """
+    def __init__(
+        self,
+        screen,
+        gamescreenstack,
+        prompt="[No prompt value was specified]",
+        survey_options=["[default choice]"]):
+        GameScreen.__init__(self, screen, gamescreenstack)
+        self.name = 'surveyquestion'
+        self.prompt = prompt
+        #self.survey_options = survey_options
+        self.opaque = True
+        self.blackbackground = pygame.Surface(self.screen.get_size())
+        self.blackbackground = self.blackbackground.convert()
+        self.blackbackground.fill((0, 0, 0))
+
+        self.sprites = pygame.sprite.OrderedUpdates()
+        s = Cursor(game_bounds=virtualdisplay.GAME_AREA)
+        s.gamerect.topleft = (120, 120)
+        s.update_rect()
+        self.sprites.add(s)
+
+        self.textsprites = []
+
+        big_font_size = virtualdisplay.screenrect_from_gamerect(
+            pygame.Rect(0, 0, 72, 72)).height
+        self.font_big = load_font('freesansbold.ttf', big_font_size)
+        
+        self.line_height = 36 # game-space like font size below
+        small_font_size = virtualdisplay.screenrect_from_gamerect(
+            pygame.Rect(0, 0, 32, 32)).height
+        self.font = load_font('freesansbold.ttf', small_font_size)
+
+        self.text_color = (250, 250, 250) # white
+        self.text_color_option = (250, 250, 250) # white
+
+        # init text for prompt
+        lines, result_bounds = flow_text(
+            prompt,
+            virtualdisplay.GAME_AREA,
+            self.font,
+            self.text_color,
+            self.line_height,
+            valign='top')
+        self.textsprites += lines
+
+        # used for placement of answers
+        bottom_y = virtualdisplay.GAME_AREA.bottom
+
+        # add "next" button on bottom
+        next_text = "Next..."
+        lines, option_bounds = flow_text(
+            next_text,
+            virtualdisplay.GAME_AREA,
+            self.font,
+            self.text_color_option,
+            self.line_height,
+            valign='bottom')
+        bottom_y -= (len(lines)+1)*self.line_height
+        self.textsprites += lines
+        self.nextbutton = SurveyButton(option_bounds, next_text, lambda b:self.next_button_clicked())
+
+        # add buttons for each survey option
+        self.option_buttons = []
+        for option_text in reversed(survey_options):
+            lines, option_bounds = flow_text(
+                option_text,
+                pygame.Rect(
+                    virtualdisplay.GAME_AREA.left,
+                    virtualdisplay.GAME_AREA.top,
+                    virtualdisplay.GAME_AREA.width,
+                    virtualdisplay.GAME_AREA.height - (virtualdisplay.GAME_AREA.bottom-bottom_y)),
+                self.font,
+                self.text_color_option,
+                self.line_height,
+                valign='bottom')
+            bottom_y -= (len(lines)+1)*self.line_height
+            self.textsprites += lines
+            option_button = SurveyButton(option_bounds, option_text, lambda b:self.option_button_click(b))
+            self.option_buttons.append(option_button)
+
+        self.first_update = True
+
+
+    def draw(self):
+        # draw background
+        self.screen.blit(self.blackbackground, (0, 0))
+
+        # draw buttons
+        for b in self.option_buttons:
+            b.draw(self.screen)
+        self.nextbutton.draw(self.screen)
+
+        # draw all text blocks:
+        for textsprite in self.textsprites:
+            textsprite.draw(self.screen)
+
+        self.sprites.draw(self.screen)
+
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+        if self.first_update:
+            self.first_update = False
+            # don't play music:
+            mute_music()
+
+        self.sprites.update(millis)
+
+        for b in self.option_buttons:
+            b.update(millis)
+            if b.selected:
+                logrowdetails['survey_answer'] = b.text
+        logrowdetails['survey_prompt'] = self.prompt
+
+        self.nextbutton.update(millis)
+
+    def option_button_click(self, button):
+        # deselect all buttons
+        for b in self.option_buttons:
+            b.selected = False
+        # select button that was clicked
+        button.selected = True
+
+    def next_button_clicked(self):
+        # validate that a single option is selected
+        if 1 == len([b for b in self.option_buttons if b.selected]):
+            # todo: log selected button
+            self.screenstack.pop()
 
 class AsteroidImpactInstructionsScreen(GameScreen):
     """
