@@ -118,10 +118,10 @@ class BlackScreen(GameScreen):
         # draw background
         self.screen.blit(self.background, (0, 0))
 
-def font_find_fitting_string_length(font, line, lineWidth):
+def font_find_fitting_string_length(font, line, line_width_screenpx):
     """return the length (in characters) of the string that fits within lineWidth"""
     for i in xrange(len(line), -1, -1):
-        if font.size(line[0:i])[0] <= lineWidth:
+        if font.size(line[0:i])[0] <= line_width_screenpx:
             return i
     return len(line)
 
@@ -131,6 +131,55 @@ def valid_breakpoint_character(c):
     # whitespace:
     return c in string.whitespace
 
+def flow_text(text, bounds_rect, font, color, line_height, valign='middle'):
+    """Flow text into rectangle. Returns list of text elements and rectangle bounds of result."""
+    lines = text.split('\n')
+
+    bounds_rect_screen = virtualdisplay.screenrect_from_gamerect(bounds_rect)
+
+    wrapped_lines = []
+    for line in lines:
+        line = line.strip()
+        wrappedline = True
+        while wrappedline:
+            wrappedline = False
+
+            maxlength = font_find_fitting_string_length(
+                font, line, bounds_rect_screen.width)
+            if maxlength < len(line):
+                wrappedline = True
+                # find text breakpoint
+                breakpointlength = maxlength
+                while (breakpointlength > 0 and 
+                        not valid_breakpoint_character(line[breakpointlength - 1])):
+                    breakpointlength -= 1
+                if breakpointlength == 0:
+                    # likely a long single word or URL. Just break where it fits
+                    breakpointlength = maxlength
+                lineremainder = line[breakpointlength:]
+                line = line[:breakpointlength]
+
+            wrapped_lines.append(line)
+
+            if wrappedline:
+                # trim starting whitespace if any after line break
+                line = lineremainder.lstrip()
+
+    # add text blocks, but vertically center them all on screen
+    y = bounds_rect.top
+    if valign=='middle': y = bounds_rect.top + (bounds_rect.height - (len(wrapped_lines) * line_height)) / 2
+    if valign=='bottom': y = bounds_rect.bottom - (len(wrapped_lines) * line_height)
+    top = y
+    sprites = []
+    for line in wrapped_lines:
+        sprites.append(TextSprite(
+            font,
+            line,
+            color,
+            x=bounds_rect.left,
+            y=y))
+        y += line_height
+    return sprites, Rect(bounds_rect.left, top, bounds_rect.width, y-top)
 
 class UserTextScreen(GameScreen):
     """
@@ -170,44 +219,16 @@ class UserTextScreen(GameScreen):
         self.first_update = True
         
     def init_text(self, text):
-        # wrap 'text' to fit in virtualdisplay.screen_width
-        lines = text.split('\n')
-
-        wrapped_lines = []
-        for line in lines:
-            line = line.strip()
-            wrappedline = True
-            while wrappedline:
-                wrappedline = False
-
-                maxlength = font_find_fitting_string_length(self.font, line, virtualdisplay.screenplayarea.width)
-                if maxlength < len(line):
-                    wrappedline = True
-                    # find text breakpoint
-                    breakpointlength = maxlength
-                    while (breakpointlength > 0 and 
-                           not valid_breakpoint_character(line[breakpointlength - 1])):
-                        breakpointlength -= 1
-                    if breakpointlength == 0:
-                        # likely a long single word or URL. Just break where it fits
-                        breakpointlength = maxlength
-                    lineremainder = line[breakpointlength:]
-                    line = line[:breakpointlength]
-
-                wrapped_lines.append(line)
-
-                if wrappedline:
-                    # trim starting whitespace if any after line break
-                    line = lineremainder.lstrip()
-
-        # add text blocks, but vertically center them all on screen
-        y = (virtualdisplay.GAME_AREA.height - (len(wrapped_lines) * self.line_height)) / 2
-        for line in wrapped_lines:
-            self.textsprites.append(
-                TextSprite(self.font, line, self.text_color,
-                           x=0,
-                           y=y))
-            y += self.line_height
+        print virtualdisplay.screenarea
+        lines, result_bounds = flow_text(
+            text,
+            virtualdisplay.GAME_AREA,
+            self.font,
+            self.text_color,
+            self.line_height,
+            valign='middle')
+        
+        self.textsprites += lines
 
 
     def draw(self):
