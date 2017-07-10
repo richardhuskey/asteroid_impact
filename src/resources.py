@@ -128,6 +128,7 @@ class ScaledImageCache(object):
         while log2_size < len(self.cache_by_log2_size) and target_dia < maxsize:
             target_dia *= 2
             log2_size += 1
+        if log2_size >= len(self.cache_by_log2_size): log2_size = len(self.cache_by_log2_size)-1
         larger_img = self.cache_by_log2_size[log2_size]
         image_scaled = pygame.transform.smoothscale(larger_img, size)
         self.cache_by_size[size] = image_scaled
