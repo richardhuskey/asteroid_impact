@@ -17,6 +17,7 @@ import virtualdisplay
 from makelevel import make_level
 import string
 import random
+import parallelportwrapper
 
 # screens.py
 class QuitGame(Exception):
@@ -1404,3 +1405,183 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
 
+
+class ParallelPortTestScreen(GameScreen):
+    """
+    Parallel Port Test Screen. Display input pins status and toggle output pins by clicking on buttons.
+    """
+    def __init__(
+        self,
+        screen,
+        gamescreenstack,
+        port_address=0x0378):
+        GameScreen.__init__(self, screen, gamescreenstack)
+        self.name = 'paralleltest'
+        self.opaque = True
+        self.blackbackground = pygame.Surface(self.screen.get_size())
+        self.blackbackground = self.blackbackground.convert()
+        self.blackbackground.fill((0, 0, 0))
+
+        self.port_address_data = port_address
+        self.port_address_status = port_address + 1
+        self.data_byte = 0xFF
+        self.status_byte = 0xFF
+        self.data_byte = parallelportwrapper.Inp32(self.port_address_data)
+        self.status_byte = parallelportwrapper.Inp32(self.port_address_status)
+
+        self.gamebackground = load_image('parallel_debug.png', size=virtualdisplay.screenarea.size)
+        # draw gamebackground on blackbackground to only have to draw black/game once per frame:
+        self.blackbackground.blit(self.gamebackground, virtualdisplay.screenarea.topleft)
+
+        self.sprites = pygame.sprite.OrderedUpdates()
+        s = Cursor(game_bounds=virtualdisplay.GAME_AREA)
+        s.gamerect.topleft = (120, 120)
+        s.update_rect()
+        self.sprites.add(s)
+
+        self.textsprites = []
+
+        big_font_size = virtualdisplay.screenrect_from_gamerect(
+            pygame.Rect(0, 0, 72, 72)).height
+        self.font_big = load_font('freesansbold.ttf', big_font_size)
+        
+        self.line_height = 36 # game-space like font size below
+        small_font_size = virtualdisplay.screenrect_from_gamerect(
+            pygame.Rect(0, 0, 32, 32)).height
+        self.font = load_font('freesansbold.ttf', small_font_size)
+
+        self.digit_line_height = 32
+        digit_font_size = virtualdisplay.screenrect_from_gamerect(
+            pygame.Rect(0, 0, 32, 32)).height
+        self.digit_font = load_font('freesansbold.ttf', digit_font_size)
+
+        self.text_color = (127, 127, 127) # gray
+        self.text_color_option = (127, 127, 127) # gray
+        self.text_color_digit = (11, 11, 11) # dark
+
+        # init text for prompt
+        lines, result_bounds = flow_text(
+            "Parallel Port Test.\nClick on buttons to change output pins, or just watch input pins change from other computer.",
+            virtualdisplay.GAME_AREA,
+            self.font,
+            self.text_color,
+            self.line_height,
+            valign='top')
+        self.textsprites += lines
+
+        # used for placement of answers
+        bottom_y = virtualdisplay.GAME_AREA.bottom
+
+        # add "Exit" button on bottom
+        next_text = "Exit"
+        lines, option_bounds = flow_text(
+            next_text,
+            virtualdisplay.GAME_AREA,
+            self.font,
+            self.text_color_option,
+            self.line_height,
+            valign='bottom')
+        bottom_y -= (len(lines)+1)*self.line_height
+        self.textsprites += lines
+        self.nextbutton = SurveyButton(option_bounds, next_text, lambda b:self.next_button_clicked())
+
+        # create text blocks for data bit
+        self.data_bits_sprites = []
+        self.data_buttons = []
+        for bit in range(8):
+            # Data bit
+            x = 544 + (64*(7-bit))
+            y = 288
+            self.data_bits_sprites.append(
+                [TextSprite(
+                    self.digit_font, "0", self.text_color_digit,
+                    centerx=x,
+                    bottom=y+16),
+                 TextSprite(
+                    self.digit_font, "1", self.text_color_digit,
+                    centerx=x,
+                    bottom=y+16)])
+            # add button to toggle output digit
+            button_bounds = Rect(x-32, y-32, 64, 64)
+            data_button = SurveyButton(
+                button_bounds, 
+                "toggle bit %d"%bit, 
+                lambda b:self.toggle_data_bit_for_button(b))
+            self.data_buttons.append(data_button)
+
+        # create text blocks for status bits
+        self.status_bits_sprites = [None]*3
+        for bit in [3,4,5,6,7]:
+            x = 224 + (64*(7-bit))
+            y = 672
+            self.status_bits_sprites.append(
+                [TextSprite(
+                    self.digit_font, "0", self.text_color_digit,
+                    centerx=x,
+                    bottom=y+16),
+                 TextSprite(
+                    self.digit_font, "1", self.text_color_digit,
+                    centerx=x,
+                    bottom=y+16),])
+
+        self.first_update = True
+
+
+    def draw(self):
+        # draw background
+        self.screen.blit(self.blackbackground, (0, 0))
+
+        # draw buttons
+        for b in self.data_buttons:
+            b.draw(self.screen)
+        self.nextbutton.draw(self.screen)
+
+        # draw all text blocks:
+        for textsprite in self.textsprites:
+            textsprite.draw(self.screen)
+
+        # Draw data bits:
+        for i, dig_list in enumerate(self.data_bits_sprites):
+            if self.data_byte & (1<<i):
+                dig_list[1].draw(self.screen)
+            else:
+                dig_list[0].draw(self.screen)
+
+        # Draw status bits:
+        for i, dig_list in enumerate(self.status_bits_sprites):
+            if dig_list:
+                if self.status_byte & (1<<i):
+                    dig_list[1].draw(self.screen)
+                else:
+                    dig_list[0].draw(self.screen)
+
+        self.sprites.draw(self.screen)
+
+    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+        if self.first_update:
+            self.first_update = False
+            # don't play music:
+            mute_music()
+
+            pygame.event.set_grab(False)
+
+        self.sprites.update(millis)
+
+        for b in self.data_buttons:
+            b.update(millis)
+
+        self.nextbutton.update(millis)
+
+        #parallelportwrapper.Out32(self.port_address_data, self.data_byte)
+        self.status_byte = parallelportwrapper.Inp32(self.port_address_status)
+
+
+    def toggle_data_bit_for_button(self, button):
+        # toggle corresponding bit
+        self.data_byte = self.data_byte ^ (1 << self.data_buttons.index(button))
+        # update parallel port
+        parallelportwrapper.Out32(self.port_address_data, self.data_byte)
+
+    def next_button_clicked(self):
+        # end step
+        self.screenstack.pop()

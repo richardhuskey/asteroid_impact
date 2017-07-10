@@ -51,6 +51,7 @@ from screens import (
     AsteroidImpactGameplayScreen,
     AsteroidImpactInfiniteGameplayScreen,
     BlackScreen,
+    ParallelPortTestScreen,
     QuitGame)
 import resources
 from sprites import Target
@@ -96,6 +97,8 @@ parser.add_argument('--log-overwrite', choices=['true', 'false'], default='false
                     help='Whether to overwrite pre-existing log file.')
 parser.add_argument('--trigger-blink', choices=['true', 'false'], default='false',
                     help='Blink sprite on screen when trigger pulse is received.')
+parser.add_argument('--parallel-test-address', type=str, default=None,
+                    help='Launch parallel port test interface with specified parallel port data address.')
 
 
 class GameModeManager(object):
@@ -305,7 +308,8 @@ class GameModeManager(object):
             displayflags |= pygame.FULLSCREEN
         else:
             # windowed
-            displayflags |= pygame.NOFRAME
+            if not self.args.parallel_test_address:
+                displayflags |= pygame.NOFRAME
             if self.args.window_x != None and self.args.window_y != None:
                 os.environ['SDL_VIDEO_WINDOW_POS'] = \
                     "%d,%d" % (self.args.window_x, self.args.window_y)
@@ -512,6 +516,21 @@ class GameModeManager(object):
             trigger_blink_sprites = pygame.sprite.Group([trigger_blink_sprite])
         else:
             trigger_blink_sprites = pygame.sprite.Group([])
+
+        if self.args.parallel_test_address:
+            # try to parse parallel port address
+            pport_debug_addr = int(self.args.parallel_test_address, 16)
+            
+            # ignore step list and just launch my new window
+# hack todo: replace step list with just this step
+            self.gamescreenstack = []
+            self.gamescreenstack.append(
+                ParallelPortTestScreen(
+                    self.screen,
+                    self.gamescreenstack,
+                    port_address=pport_debug_addr))
+        else:
+            pport_debug_addr = None
 
         #Main Loop
         while 1:
