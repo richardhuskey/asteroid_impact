@@ -1434,10 +1434,6 @@ class ParallelPortTestScreen(GameScreen):
         self.blackbackground.blit(self.gamebackground, virtualdisplay.screenarea.topleft)
 
         self.sprites = pygame.sprite.OrderedUpdates()
-        s = Cursor(game_bounds=virtualdisplay.GAME_AREA)
-        s.gamerect.topleft = (120, 120)
-        s.update_rect()
-        self.sprites.add(s)
 
         self.textsprites = []
 
@@ -1564,6 +1560,7 @@ class ParallelPortTestScreen(GameScreen):
             mute_music()
 
             pygame.event.set_grab(False)
+            pygame.mouse.set_visible(True)
 
         self.sprites.update(millis)
 
