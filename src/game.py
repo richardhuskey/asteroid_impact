@@ -228,6 +228,17 @@ class GameModeManager(object):
                 print 'trigger_settings mode of "' + trigger_settings['mode'] + '" should be one of keyboard, serial or none'
                 return
         
+        if self.args.parallel_test_address:
+            # try to parse parallel port address
+            pport_debug_addr = int(self.args.parallel_test_address, 16)
+            
+            # ignore step list and replace with just parallel port test step
+            self.gamesteps = [
+                dict(action='parallel_port_test',
+                     parallel_test_address=pport_debug_addr,
+                     duration=None)]
+
+
         # validate steps and load levels:
         for i, step in enumerate(self.gamesteps):
             # duration must be not specified, none or float
@@ -296,6 +307,9 @@ class GameModeManager(object):
                     step['level_completion_increment'] = float(step['level_completion_increment'])
                 if step.has_key('level_death_decrement'):
                     step['level_death_decrement'] = float(step['level_death_decrement'])
+            elif step['action'] == 'parallel_port_test':
+                # nothing else to validate
+                pass
 
         resources.music_volume = self.args.music_volume
         resources.effects_volume = self.args.effects_volume
@@ -414,6 +428,12 @@ class GameModeManager(object):
                     step['level_templates_list'],
                     step['reaction_prompts'],
                     **kwargs))
+        elif step['action'] == 'parallel_port_test':
+            self.gamescreenstack.append(
+                ParallelPortTestScreen(
+                    self.screen,
+                    self.gamescreenstack,
+                    port_address=step['parallel_test_address']))
         else:
             raise ValueError('Unknown step action "%s"'%step['action'])
 
