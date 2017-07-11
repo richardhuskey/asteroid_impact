@@ -1480,7 +1480,33 @@ class ParallelPortTestScreen(GameScreen):
             valign='bottom')
         bottom_y -= (len(lines)+1)*self.line_height
         self.textsprites += lines
+        
         self.nextbutton = SurveyButton(option_bounds, next_text, lambda b:self.next_button_clicked())
+
+        self.textsprites.append(TextSprite(
+            self.font, 
+            'Port Address: 0x%X'%port_address,
+            self.text_color,
+            left=0,
+            bottom=176))
+        
+        self.status_data_value_textsprite = TextSprite(
+            self.font,
+            'Data value: XYZ (0xQW)',
+            self.text_color,
+            left=512,
+            top=128)
+        self.textsprites.append(self.status_data_value_textsprite)
+
+        self.status_status_value_textsprite = TextSprite(
+            self.font,
+            'Status value: XYZ (0xQW)',
+            self.text_color,
+            left=192,
+            top=768)
+        self.textsprites.append(self.status_status_value_textsprite)
+
+        self.update_status_text()
 
         # create text blocks for data bit
         self.data_bits_sprites = []
@@ -1570,8 +1596,11 @@ class ParallelPortTestScreen(GameScreen):
 
         self.nextbutton.update(millis)
 
-        #parallelportwrapper.Out32(self.port_address_data, self.data_byte)
-        self.status_byte = parallelportwrapper.Inp32(self.port_address_status)
+        status_byte_new = parallelportwrapper.Inp32(self.port_address_status)
+        status_byte_new = status_byte_new & 0xF8 # mask off card-specific low bits
+        if self.status_byte != status_byte_new:
+            self.status_byte = status_byte_new
+            self.update_status_text()
 
 
     def toggle_data_bit_for_button(self, button):
@@ -1579,7 +1608,15 @@ class ParallelPortTestScreen(GameScreen):
         self.data_byte = self.data_byte ^ (1 << self.data_buttons.index(button))
         # update parallel port
         parallelportwrapper.Out32(self.port_address_data, self.data_byte)
+        self.update_status_text()
 
     def next_button_clicked(self):
         # end step
         self.screenstack.pop()
+
+    def update_status_text(self):
+        self.status_data_value_textsprite.set_text(
+            'Data value: %d (0x%02X)'%(self.data_byte, self.data_byte))
+        self.status_status_value_textsprite.set_text(
+            'Status value: %d (0x%02X)'%(self.status_byte, self.status_byte))
+

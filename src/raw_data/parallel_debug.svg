@@ -363,9 +363,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.61453791"
-     inkscape:cx="733.11742"
-     inkscape:cy="497.25671"
+     inkscape:zoom="0.86908785"
+     inkscape:cx="831.52326"
+     inkscape:cy="568.46989"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -849,13 +849,13 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="156.40761"
-       y="86.354881"
+       x="136.61913"
+       y="69.306358"
        id="text5299"><tspan
          sodipodi:role="line"
          id="tspan5297"
-         x="156.40761"
-         y="86.354881"
+         x="136.61913"
+         y="69.306358"
          style="stroke-width:0.26458332px">Data byte (Output)</tspan></text>
     <g
        id="g5364">
@@ -1281,13 +1281,13 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="67.283882"
-       y="245.93181"
+       x="51.757545"
+       y="239.23418"
        id="text5299-4"><tspan
          sodipodi:role="line"
          id="tspan5297-1"
-         x="67.283882"
-         y="245.93181"
+         x="51.757545"
+         y="239.23418"
          style="stroke-width:0.26458332px">Status Byte (Input)</tspan></text>
     <flowRoot
        xml:space="preserve"
