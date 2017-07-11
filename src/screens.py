@@ -1451,9 +1451,10 @@ class ParallelPortTestScreen(GameScreen):
             pygame.Rect(0, 0, 32, 32)).height
         self.digit_font = load_font('freesansbold.ttf', digit_font_size)
 
-        self.text_color = (127, 127, 127) # gray
+        self.text_color = (11, 11, 11) # dark
         self.text_color_option = (127, 127, 127) # gray
         self.text_color_digit = (11, 11, 11) # dark
+        self.text_color_active_digit = (215, 211, 5) # yellow
 
         # init text for prompt
         lines, result_bounds = flow_text(
@@ -1494,7 +1495,7 @@ class ParallelPortTestScreen(GameScreen):
                     centerx=x,
                     bottom=y+16),
                  TextSprite(
-                    self.digit_font, "1", self.text_color_digit,
+                    self.digit_font, "1", self.text_color_active_digit,
                     centerx=x,
                     bottom=y+16)])
             # add button to toggle output digit
@@ -1516,7 +1517,7 @@ class ParallelPortTestScreen(GameScreen):
                     centerx=x,
                     bottom=y+16),
                  TextSprite(
-                    self.digit_font, "1", self.text_color_digit,
+                    self.digit_font, "1", self.text_color_active_digit,
                     centerx=x,
                     bottom=y+16),])
 
