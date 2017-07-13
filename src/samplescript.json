@@ -1,70 +1,112 @@
-[
-    {
-        "action": "instructions",
-        "duration": 10.0
+{
+  "trigger_settings": {
+    "mode": "none",
+
+    "serial_options": {
+      "port": "COM5",
+      "baudrate": 19200,
+      "trigger_byte_value": 53
     },
-    {
-        "action": "game",
-        "levels": "levels/standardlevels.json",
-        "duration": 20.0,
-        "reaction_prompts": [
-            {
-                "diameter": 80,
-                "top": 200,
-                "left": 200,
-                "image": "triangle.png",
-                "sound": "tone440.wav",
-                "showtimes_millis": [1000, 3000, 5000, 7000, 9000, 11000, 13000, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 43000, 45000, 47000, 49000, 51000, 53000, 55000, 57000, 59000, 61000, 63000, 65000, 67000, 69000, 71000, 73000, 75000, 77000, 79000, 81000, 83000, 85000, 87000, 89000, 91000, 93000, 95000, 97000, 99000, 101000, 103000, 105000, 107000, 109000, 111000, 113000, 115000, 117000, 119000, 121000, 123000, 125000, 127000, 129000, 131000, 133000, 135000, 137000, 139000, 141000, 143000, 145000, 147000, 149000, 151000, 153000, 155000, 157000, 159000, 161000, 163000, 165000, 167000, 169000, 171000, 173000, 175000, 177000, 179000, 181000, 183000, 185000, 187000, 189000, 191000, 193000, 195000, 197000, 199000],
-                "showtimes_trigger_counts": [],
-                "input_type": "key",
-                "input_key": "K_1"
-            },    
-            {
-                "diameter": 80,
-                "top": 200,
-                "left": 300,
-                "image": "circle.png",
-                "sound": "tone659.wav",
-                "showtimes_millis": [1500, 3500, 5500, 7500, 9500, 11500, 13500, 15500, 17500, 19500, 21500, 23500, 25500, 27500, 29500, 31500, 33500, 35500, 37500, 39500, 41500, 43500, 45500, 47500, 49500, 51500, 53500, 55500, 57500, 59500, 61500, 63500, 65500, 67500, 69500, 71500, 73500, 75500, 77500, 79500, 81500, 83500, 85500, 87500, 89500, 91500, 93500, 95500, 97500, 99500, 101500, 103500, 105500, 107500, 109500, 111500, 113500, 115500, 117500, 119500, 121500, 123500, 125500, 127500, 129500, 131500, 133500, 135500, 137500, 139500, 141500, 143500, 145500, 147500, 149500, 151500, 153500, 155500, 157500, 159500, 161500, 163500, 165500, 167500, 169500, 171500, 173500, 175500, 177500, 179500, 181500, 183500, 185500, 187500, 189500, 191500, 193500, 195500, 197500, 199500],
-                "showtimes_trigger_counts": [],
-                "input_type": "key",
-                "input_key": "K_2"
-            },
-            {
-                "diameter": 80,
-                "top": 200,
-                "left": 400,
-                "image": "square.png",
-                "sound": "tone659.wav",
-                "showtimes_millis": [],
-                "showtimes_trigger_counts": [1,2,3,4,5,6],
-                "input_type": "key",
-                "input_key": "K_3"
-            }
-        ]
+
+    "keyboard_options": {
+      "trigger_key": "K_5"
     },
-    {
-        "action": "text",
-        "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
-        "duration": 20.0
-    },
-    {
-        "duration": 200.5,
-        "action": "survey",
-        "prompt":"Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.",
-        "options": ["one","two","three","four","five"]
-    },
-    {
-        "action": "blackscreen",
-        "duration": 5.0
-    },
-    {
-        "action": "game",
-        "levels": "levels/hardlevels.json",
-        "duration": 20.0
-    },
-    {
-        "action": "blackscreen",
-        "duration": 5.0
+
+    "parallel_options": {
+      "port_address_hex": "BF00",
+      "common_status_value_hex": "0x00",
+      "trigger_status_value_hex": "0x01"
     }
-]
+  },
+  "output_trigger_settings": {
+    "mode": "none",
+
+    "trigger_list": [
+      "step_begin",
+      "game_death"
+    ],
+
+    "serial_options": {
+      "port": "COM5",
+      "baudrate": 19200,
+      "trigger_byte_value": 78
+    },
+
+    "parallel_options": {
+      "port_address_hex": "BF00",
+      "common_data_value_hex": "0x10",
+      "trigger_data_value_hex": "0x11",
+      "trigger_frames": 10
+    }
+  },
+  "steps": [
+    {
+      "action": "instructions",
+      "duration": 10.0
+    },
+    {
+      "action": "game",
+      "levels": "levels/standardlevels.json",
+      "duration": 20.0,
+      "reaction_prompts": [
+        {
+          "diameter": 80,
+          "top": 200,
+          "left": 200,
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [ 1000, 3000, 5000, 7000, 9000, 11000, 13000, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 43000, 45000, 47000, 49000, 51000, 53000, 55000, 57000, 59000, 61000, 63000, 65000, 67000, 69000, 71000, 73000, 75000, 77000, 79000, 81000, 83000, 85000, 87000, 89000, 91000, 93000, 95000, 97000, 99000, 101000, 103000, 105000, 107000, 109000, 111000, 113000, 115000, 117000, 119000, 121000, 123000, 125000, 127000, 129000, 131000, 133000, 135000, 137000, 139000, 141000, 143000, 145000, 147000, 149000, 151000, 153000, 155000, 157000, 159000, 161000, 163000, 165000, 167000, 169000, 171000, 173000, 175000, 177000, 179000, 181000, 183000, 185000, 187000, 189000, 191000, 193000, 195000, 197000, 199000 ],
+          "showtimes_trigger_counts": [],
+          "input_type": "key",
+          "input_key": "K_1"
+        },
+        {
+          "diameter": 80,
+          "top": 200,
+          "left": 300,
+          "image": "circle.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [ 1500, 3500, 5500, 7500, 9500, 11500, 13500, 15500, 17500, 19500, 21500, 23500, 25500, 27500, 29500, 31500, 33500, 35500, 37500, 39500, 41500, 43500, 45500, 47500, 49500, 51500, 53500, 55500, 57500, 59500, 61500, 63500, 65500, 67500, 69500, 71500, 73500, 75500, 77500, 79500, 81500, 83500, 85500, 87500, 89500, 91500, 93500, 95500, 97500, 99500, 101500, 103500, 105500, 107500, 109500, 111500, 113500, 115500, 117500, 119500, 121500, 123500, 125500, 127500, 129500, 131500, 133500, 135500, 137500, 139500, 141500, 143500, 145500, 147500, 149500, 151500, 153500, 155500, 157500, 159500, 161500, 163500, 165500, 167500, 169500, 171500, 173500, 175500, 177500, 179500, 181500, 183500, 185500, 187500, 189500, 191500, 193500, 195500, 197500, 199500 ],
+          "showtimes_trigger_counts": [],
+          "input_type": "key",
+          "input_key": "K_2"
+        },
+        {
+          "diameter": 80,
+          "top": 200,
+          "left": 400,
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [],
+          "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
+          "input_type": "key",
+          "input_key": "K_3"
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+      "duration": 20.0
+    },
+    {
+      "duration": 200.5,
+      "action": "survey",
+      "prompt": "Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.",
+      "options": [ "one", "two", "three", "four", "five" ]
+    },
+    {
+      "action": "blackscreen",
+      "duration": 5.0
+    },
+    {
+      "action": "game",
+      "levels": "levels/hardlevels.json",
+      "duration": 20.0
+    },
+    {
+      "action": "blackscreen",
+      "duration": 5.0
+    }
+  ]
+}
