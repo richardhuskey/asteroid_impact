@@ -57,6 +57,12 @@ import resources
 from sprites import Target
 import virtualdisplay
 from logger import AsteroidLogger
+import parallelportwrapper
+
+ALL_TRIGGERS = [
+    'step_begin', # on begin of any step
+    #'game_death' # in either game mode, when the player touches an asteroid and dies NOT IMPLEMENTED
+    ]
 
 # command-line arguments:
 parser = argparse.ArgumentParser(description='Run Asteroid Impact game.')
@@ -213,6 +219,7 @@ class GameModeManager(object):
                 try:
                     print 'opening serialport with options:', serialport_options
                     self.trigger_serialport = serial.Serial(**serialport_options)
+                    self.trigger_serialport_options = serialport_options
                 except serial.SerialException as e:
                     print 'could not open configured serial port'
                     print e
@@ -228,6 +235,150 @@ class GameModeManager(object):
                 print 'trigger_settings mode of "' + trigger_settings['mode'] + '" should be one of keyboard, serial or none'
                 return
         
+        self.output_trigger_mode = None
+        self.output_trigger_serial_port_trigger_value = ord('Q')
+        self.output_trigger_serial_port = None
+        self.output_trigger_parallel_port_address = 0x0000
+        self.output_trigger_parallel_port_off_value = 0x00
+        self.output_trigger_parallel_port_on_value = 0x00
+        self.output_trigger_parallel_port_on_frames = 6
+        # used to hold output HIGH for # frames
+        self.output_trigger_parallel_frame_countdown = 0
+        
+        self.output_trigger_send_list = []
+
+        if self.script_json.has_key('output_trigger_settings'):
+            output_settings = self.script_json['output_trigger_settings']
+            if output_settings['mode'] == 'serial':
+                self.output_trigger_mode = 'serial'
+                # todo: implement serial output trigger
+                # todo: handle using same serial port for input/output trigger
+                serial_settings = output_settings['serial_options']
+                
+                if not serial_settings.has_key('trigger_byte_value'):
+                    print('for serial port, serial_options needs a trigger_byte_value '+
+                          'attribute whose value is the value of the character sent over'+
+                          'serial, such as 110 for Ascii "n"')
+                self.output_trigger_serial_port_trigger_value = int(serial_settings['trigger_byte_value'])
+                
+                serialport_options = dict(
+                    port=serial_settings['port'],
+                    timeout=0.0,
+                    baudrate=19200)
+
+                if serial_settings.has_key('bytesize'):
+                    serialport_options['bytesize'] = int(serial_settings['bytesize'])
+                if serial_settings.has_key('stopbits'):
+                    serialport_options['stopbits'] = int(serial_settings['stopbits'])
+                if serial_settings.has_key('parity'):
+                    parity_options = dict(
+                        even=serial.PARITY_EVEN,
+                        mark=serial.PARITY_MARK,
+                        names=serial.PARITY_NAMES,
+                        none=serial.PARITY_NONE,
+                        odd=serial.PARITY_ODD,
+                        space=serial.PARITY_SPACE)
+                    # convert parity option
+                    if parity_options.has_key(serial_settings['parity']):
+                        serialport_options['parity'] = parity_options[serial_settings['parity']]
+                    else:
+                        print ('serial_options parity value of "' + serial_settings['parity']
+                            + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
+                        return
+                        
+                if self.trigger_serialport and serialport_options == self.trigger_serialport_options:
+                    print 're-using incoming trigger serial port for output'
+                    self.output_trigger_serial_port = self.trigger_serialport
+                else:
+                    try:
+                        print 'opening serialport with options:', serialport_options
+                        self.output_trigger_serial_port = serial.Serial(**serialport_options)
+                    except serial.SerialException as e:
+                        print 'could not open configured serial port for output trigger'
+                        print e
+                        print 'exiting.'
+                        # exit
+                        return
+            elif output_settings['mode'] == 'parallel':
+                self.output_trigger_mode = 'parallel'
+                # required: parallel_options
+                if not output_settings.has_key('parallel_options'):
+                    print 'Invalid script JSON'
+                    print 'parallel_options attribute is required for parallel mode output_trigger_settings'
+                    return
+                parallel_options = output_settings['parallel_options']
+
+                # required: port address
+                if not parallel_options.has_key('port_address_hex'):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options must have port_address_hex key' 
+                    return
+                try:
+                    self.output_trigger_parallel_port_address = int(parallel_options['port_address_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options port_address_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # required: ["inactive"] value for data pins
+                if not parallel_options.has_key('common_data_value_hex'):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options must have common_data_value_hex key' 
+                    return
+                try:
+                    self.output_trigger_parallel_port_off_value = int(parallel_options['common_data_value_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options common_data_value_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # required: ["active"] value for data pins:
+                if not parallel_options.has_key('trigger_data_value_hex'):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options must have trigger_data_value_hex key' 
+                    return
+                try:
+                    self.output_trigger_parallel_port_on_value = int(parallel_options['trigger_data_value_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options trigger_data_value_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # optional trigger_frames value
+                if parallel_options.has_key('trigger_frames'):
+                    try:
+                        self.output_trigger_parallel_port_on_frames = int(parallel_options['trigger_frames'])
+                    except ValueError as e:
+                        print 'Invalid script JSON'
+                        print 'output_trigger_settings parallel_options trigger_frames must be valid base-10 number' 
+                        print e
+                        return
+            elif output_settings['mode'] == 'none':
+                pass
+            else:
+                print 'output_trigger_settings mode of',output_settings['mode'],'not recognized'
+                return
+
+            # load list of triggers
+            # if none supplied, error
+            if self.output_trigger_mode != None and not output_settings.has_key('trigger_list'):
+                print 'Invalid script JSON'
+                print 'output_trigger_settings must have trigger_list list of strings'
+                return
+
+            # validate trigger list entries are all known triggers
+            for option in output_settings['trigger_list']:
+                if not option in ALL_TRIGGERS:
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings trigger_list option of "%s" is not a known outbound trigger'%option
+                    return
+            self.output_trigger_send_list = list(output_settings['trigger_list'])
+
+
+
         if self.args.parallel_test_address:
             # try to parse parallel port address
             pport_debug_addr = int(self.args.parallel_test_address, 16)
@@ -437,7 +588,6 @@ class GameModeManager(object):
         else:
             raise ValueError('Unknown step action "%s"'%step['action'])
 
-
     def load_levels(self, step):
         "Load level details for game step from inline JSON or file"
         if isinstance(step['levels'], list):
@@ -553,6 +703,7 @@ class GameModeManager(object):
             pport_debug_addr = None
 
         #Main Loop
+        first_update = True
         while 1:
             # more consistent, more cpu
             real_millis = clock.tick_busy_loop(60)
@@ -581,6 +732,11 @@ class GameModeManager(object):
                 logrowdetails['step_number'] = self.stepindex + 1
                 logrowdetails['step_millis'] = self.step_millis
                 logrowdetails['top_screen'] = self.gamescreenstack[-1].name
+
+                frame_outbound_triggers = []
+                if first_update:
+                    first_update = False
+                    frame_outbound_triggers.append('step_begin')
 
                 #Handle Input Events
 
@@ -671,9 +827,11 @@ class GameModeManager(object):
                         # all steps completed
                         return
                     self.init_step()
-                    # Switch to gameplay
+                    frame_outbound_triggers.append('step_begin')
 
                 asteroidlogger.log(logrowdetails)
+
+                self.update_outbound_triggers(frame_outbound_triggers)
 
 
             # draw topmost opaque screen and everything above it
@@ -696,6 +854,43 @@ class GameModeManager(object):
                 trigger_blink_sprites.draw(self.screen)
 
             pygame.display.flip()
+
+    def update_outbound_triggers(self, frametriggerlist):
+        # todo: see if there are any triggers to send
+        send_trigger = False
+        for t in self.output_trigger_send_list:
+            if t in frametriggerlist:
+                send_trigger = True
+
+        if self.output_trigger_mode == 'serial':
+            if not send_trigger:
+                return
+
+            self.output_trigger_serial_port.write(chr(self.output_trigger_serial_port_trigger_value))
+            self.output_trigger_serial_port.flush()
+        elif self.output_trigger_mode == 'parallel':
+            if send_trigger:
+                if self.output_trigger_parallel_frame_countdown == 0:
+                    # start now
+                    self.output_trigger_parallel_frame_countdown = self.output_trigger_parallel_port_on_frames
+                    parallelportwrapper.Out32(
+                        self.output_trigger_parallel_port_address,
+                        self.output_trigger_parallel_port_on_value)
+                else:
+                    # todo: queue trigger for later?
+                    # todo: combine multiple triggers by seeing which bits should be set/unset?
+                    pass
+            else:
+                # not a new trigger, but still need to handle switching to off when trigger frames end
+                if self.output_trigger_parallel_frame_countdown > 0:
+                    self.output_trigger_parallel_frame_countdown -= 1
+                    if self.output_trigger_parallel_frame_countdown == 0:
+                        # set parallel port output back to default value
+                        parallelportwrapper.Out32(
+                            self.output_trigger_parallel_port_address,
+                            self.output_trigger_parallel_port_off_value)
+        elif self.output_trigger_mode != None:
+            raise QuitGame('output trigger mode of %s is not implemented'%self.output_trigger_mode)
 
 def main():
     "parse console arguments and start game"
