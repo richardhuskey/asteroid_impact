@@ -265,9 +265,17 @@ class GameModeManager(object):
                     self.trigger_parallel_port_off_value = int(parallel_options['common_status_value_hex'], 16)
                 except ValueError as e:
                     print 'Invalid script JSON'
-                    print 'trigger_settings parallel_options common_status_value_hex must be valid base-16 number' 
+                    print 'trigger_settings parallel_options common_status_value_hex must be valid base-16 number'
                     print e
                     return
+                # status port shouldn't have lower 3 bits set, nor exceed 8 bits
+                if (self.trigger_parallel_port_off_value < 0 or
+                    255 < self.trigger_parallel_port_off_value or
+                    (self.trigger_parallel_port_off_value & 0x07) != 0):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options common_status_value_hex must be valid base-16 number between 0x08 and 0xF8 and with the bottom 3 bits zero'
+                    return
+
 
                 # required: ["active"] value for status port:
                 if not parallel_options.has_key('trigger_status_value_hex'):
@@ -281,6 +289,19 @@ class GameModeManager(object):
                     print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number' 
                     print e
                     return
+                # status port shouldn't have lower 3 bits set, nor exceed 8 bits
+                if (self.trigger_parallel_port_on_value < 0 or
+                    255 < self.trigger_parallel_port_on_value or
+                    (self.trigger_parallel_port_on_value & 0x07) != 0):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number between 0x08 and 0xF8 and with the bottom 3 bits zero'
+                    return
+                # active value must be different from inactive value
+                if self.trigger_parallel_port_off_value == self.trigger_parallel_port_on_value:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options trigger_status_value_hex and common_status_value_hex must have different values'
+                    return
+
 
                 self.prev_parallel_trigger_status_value = 0xFF # an impossible value
             elif trigger_settings['mode'] == 'none':
