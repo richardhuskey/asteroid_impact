@@ -170,14 +170,17 @@ class GameModeManager(object):
             self.script_json = dict(steps=self.gamesteps)
         
         # load/validate trigger options:
-        self.trigger_enabled = False
+        self.trigger_mode = None
         self.trigger_key = None
         self.trigger_serialport = None
         self.trigger_serialport_byte_value = None
+        self.trigger_parallel_port_address = 0x0000
+        self.trigger_parallel_port_off_value = 0x00
+        self.trigger_parallel_port_on_value = 0x00
         if self.script_json.has_key('trigger_settings'):
             trigger_settings = self.script_json['trigger_settings']
             if trigger_settings['mode'] == 'keyboard':
-                self.trigger_enabled = True
+                self.trigger_mode = 'keyboard'
                 keyboard_settings = trigger_settings['keyboard_options']
                 self.trigger_key = getattr(pygame, keyboard_settings['trigger_key'], None)
                 if not self.trigger_key:
@@ -185,7 +188,7 @@ class GameModeManager(object):
                     print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
                     return
             elif trigger_settings['mode'] == 'serial':
-                self.trigger_enabled = True
+                self.trigger_mode = 'serial'
                 serial_settings = trigger_settings['serial_options']
                 
                 if not serial_settings.has_key('trigger_byte_value'):
@@ -219,6 +222,7 @@ class GameModeManager(object):
                             + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
                         return
                         
+                # try opening serial port
                 try:
                     print 'opening serialport with options:', serialport_options
                     self.trigger_serialport = serial.Serial(**serialport_options)
@@ -230,10 +234,57 @@ class GameModeManager(object):
                     # exit
                     return
 
-                
-                # try opening serial port and loading remaining settings
+            elif trigger_settings['mode'] == 'parallel':
+                self.trigger_mode = 'parallel'
+                # required: parallel_options
+                if not trigger_settings.has_key('parallel_options'):
+                    print 'Invalid script JSON'
+                    print 'parallel_options attribute is required for parallel mode trigger_settings'
+                    return
+                parallel_options = trigger_settings['parallel_options']
+
+                # required: port address
+                if not parallel_options.has_key('port_address_hex'):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options must have port_address_hex key' 
+                    return
+                try:
+                    self.trigger_parallel_port_address = int(parallel_options['port_address_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options port_address_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # required: ["inactive"] value for status port
+                if not parallel_options.has_key('common_status_value_hex'):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options must have common_status_value_hex key' 
+                    return
+                try:
+                    self.trigger_parallel_port_off_value = int(parallel_options['common_status_value_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options common_status_value_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # required: ["active"] value for status port:
+                if not parallel_options.has_key('trigger_status_value_hex'):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options must have trigger_status_value_hex key' 
+                    return
+                try:
+                    self.trigger_parallel_port_on_value = int(parallel_options['trigger_status_value_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                self.prev_parallel_trigger_status_value = 0xFF # an impossible value
             elif trigger_settings['mode'] == 'none':
-                self.trigger_enabled = False
+                self.trigger_mode = None
             else:
                 print 'trigger_settings mode of "' + trigger_settings['mode'] + '" should be one of keyboard, serial or none'
                 return
@@ -775,7 +826,7 @@ class GameModeManager(object):
                         self.gamescreenstack = []
                     else:
                         # check for keyboard trigger
-                        if (self.trigger_enabled
+                        if (self.trigger_mode == 'keyboard'
                             and self.trigger_key != None 
                             and event.type == KEYDOWN 
                             and event.key == self.trigger_key):
@@ -785,7 +836,7 @@ class GameModeManager(object):
                         #print event
 
                 # Check for serial trigger:
-                if self.trigger_enabled and self.trigger_serialport != None:
+                if self.trigger_mode == 'serial' and self.trigger_serialport != None:
                     serial_input = self.trigger_serialport.read()
                     if serial_input:
                         for c in serial_input:
@@ -795,6 +846,15 @@ class GameModeManager(object):
                         # debug print:
                         print ">", repr(serial_input)
                         sys.stdout.flush()
+                
+                # check for parallel port trigger
+                if self.trigger_mode == 'parallel':
+                    current_parallel_trigger_status_value = self.get_parallel_trigger_status_value()
+                    if (self.prev_parallel_trigger_status_value == self.trigger_parallel_port_off_value and
+                        current_parallel_trigger_status_value == self.trigger_parallel_port_on_value):
+                        self.step_trigger_count += 1
+                        trigger_received_this_tick = True
+                    self.prev_parallel_trigger_status_value = current_parallel_trigger_status_value
                 
                 logrowdetails['step_trigger_count'] = self.step_trigger_count
                     
@@ -857,6 +917,11 @@ class GameModeManager(object):
                 trigger_blink_sprites.draw(self.screen)
 
             pygame.display.flip()
+
+    def get_parallel_trigger_status_value(self):
+        # status byte is at base address + 1
+        # mask off bottom 3 bits because they vary by parallel port card
+        return parallelportwrapper.Inp32(self.trigger_parallel_port_address + 1) & 0xF8
 
     def update_outbound_triggers(self, frametriggerlist):
         print_triggers = False

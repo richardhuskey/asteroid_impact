@@ -1,9 +1,9 @@
 {
     "trigger_settings": {
-        "mode": "keyboard",
+        "mode": "none",
     
         "serial_options": {
-            "port": "COM11",
+            "port": "COM5",
             "baudrate": 19200,
             "trigger_byte_value" : 53
         },
@@ -11,6 +11,13 @@
         "keyboard_options" :
         {
             "trigger_key": "K_5"
+        },
+        
+        "parallel_options" :
+        {
+            "port_address_hex": "BF00",
+            "common_status_value_hex": "0x00",
+            "trigger_status_value_hex": "0x08"
         }
     },
     
