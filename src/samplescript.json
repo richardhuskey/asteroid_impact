@@ -23,9 +23,11 @@
 
     "trigger_list": [
       "step_begin",
-      "game_death"
+      "game_death",
+      "game_level_complete",
+      "adaptive_difficulty_increase",
+      "adaptive_difficulty_decrease"
     ],
-
     "serial_options": {
       "port": "COM5",
       "baudrate": 19200,

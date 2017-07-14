@@ -38,11 +38,11 @@ class GameScreen(object):
         self.opaque = True
         self.name = self.__class__.__name__
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         """Update the screen's game state when this screen is frontmost"""
         pass
 
-    def update_always(self, millis, logrowdetails, events, step_trigger_count):
+    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         """Update the screen's game state every iteration regardless of if another screen is stacked on top"""
         pass
 
@@ -109,7 +109,7 @@ class BlackScreen(GameScreen):
 
         self.first_update = True
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # don't play music during the black screen
@@ -237,7 +237,7 @@ class UserTextScreen(GameScreen):
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -428,7 +428,7 @@ class SurveyQuestionScreen(GameScreen):
 
         self.sprites.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -573,7 +573,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         self.sprites.draw(self.screen)
         self.asteroids.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # play music during the instructions at specified volume:
@@ -631,7 +631,7 @@ class LevelCompletedOverlayScreen(GameScreen):
         topscreen = self.screenstack.pop()
         topscreen.after_close();
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -680,7 +680,7 @@ class GameOverOverlayScreen(GameScreen):
         topscreen = self.screenstack.pop()
         topscreen.after_close()
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -852,13 +852,13 @@ class AsteroidImpactGameplayScreen(GameScreen):
         if oldlevel_millis < 500 and 500 <= level_millis:
             self.notice_textsprite.set_text('')
 
-    def update_always(self, millis, logrowdetails, events, step_trigger_count):
+    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, events, step_trigger_count)
+        self.reaction_prompts.update(millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count)
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
@@ -897,7 +897,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
                 self.next_powerup_list_index = \
                     (1 + self.next_powerup_list_index) % len(self.powerup_list)
                 #print 'new available powerup is', self.powerup, 'at', self.powerup.gamerect
-            self.powerup.update(millis, self.cursor, self.asteroids)
+            self.powerup.update(millis, frame_outbound_triggers, self.cursor, self.asteroids)
 
             # Check target collision:
             if circularspritesoverlap(self.cursor, self.target):
@@ -910,6 +910,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
                     levelstate = 'completed'
                     self.screenstack.append(LevelCompletedOverlayScreen(
                         self.screen, self.screenstack))
+                    frame_outbound_triggers.append('game_level_complete')
                 else:
                     # position for next crystal target:
                     self.target.gamerect.left = self.target_positions[self.target_index][0]
@@ -936,6 +937,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
                         levelstate = 'dead'
                         self.screenstack.append(
                             GameOverOverlayScreen(self.screen, self.screenstack))
+                        frame_outbound_triggers.append('game_death')
                         break
 
         self.update_status_text()
@@ -1058,19 +1060,32 @@ class AsteroidImpactInfiniteLevelMaker(object):
 
         return level
     
-    def level_completed(self, level_millis):
+    def level_completed(self, level_millis, frame_outbound_triggers):
         "Increment level score based on level completion"
+        level_index_old = int(self.level_score + 0.001) # add some fudge to round correctly
+
         # increment difficulty
         self.level_score += self.level_completion_increment
         # keep from going too high
         self.level_score = min(len(self.level_args_list), self.level_score)
 
-    def level_death(self, level_millis):
+        level_index_new = int(self.level_score + 0.001) # add some fudge to round correctly
+        if level_index_old < level_index_new:
+            frame_outbound_triggers.append('adaptive_difficulty_increase')
+
+    def level_death(self, level_millis, frame_outbound_triggers):
         "Reduce level score based on level failure"
+
+        level_index_old = int(self.level_score + 0.001) # add some fudge to round correctly
+
         # decrement difficulty
         self.level_score -= self.level_death_decrement
         # keep at or above 0
         self.level_score = max(0.0, self.level_score)
+
+        level_index_new = int(self.level_score + 0.001) # add some fudge to round correctly
+        if level_index_new < level_index_old:
+            frame_outbound_triggers.append('adaptive_difficulty_decrease')
 
 class AsteroidImpactInfiniteGameplayScreen(GameScreen):
     """
@@ -1259,13 +1274,13 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             if oldlevel_millis < 500 and 500 <= level_millis:
                 self.notice_textsprite.set_text('')
 
-    def update_always(self, millis, logrowdetails, events, step_trigger_count):
+    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, events, step_trigger_count)
+        self.reaction_prompts.update(millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count)
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
@@ -1304,7 +1319,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 self.next_powerup_list_index = \
                     (1 + self.next_powerup_list_index) % len(self.powerup_list)
                 #print 'new available powerup is', self.powerup, 'at', self.powerup.gamerect
-            self.powerup.update(millis, self.cursor, self.asteroids)
+            self.powerup.update(millis, frame_outbound_triggers, self.cursor, self.asteroids)
 
             # Check target collision:
             if circularspritesoverlap(self.cursor, self.target):
@@ -1315,10 +1330,11 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 if self.target_index >= len(self.target_positions):
                     print 'completed level'
                     levelstate = 'completed'
-                    self.level_list.level_completed(self.level_millis)
+                    self.level_list.level_completed(self.level_millis, frame_outbound_triggers)
 #                     self.screenstack.append(LevelCompletedOverlayScreen(
 #                         self.screen, self.screenstack))
                     self.advance_level()
+                    frame_outbound_triggers.append('game_level_complete')
                 else:
                     # position for next crystal target:
                     self.target.gamerect.left = self.target_positions[self.target_index][0]
@@ -1342,10 +1358,11 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                             and self.powerup.active):
                         self.sound_death.play()
                         print 'dead', self.cursor.rect.left, self.cursor.rect.top
-                        self.level_list.level_death(self.level_millis)
+                        self.level_list.level_death(self.level_millis, frame_outbound_triggers)
                         levelstate = 'dead'
                         self.screenstack.append(
                             GameOverOverlayScreen(self.screen, self.screenstack))
+                        frame_outbound_triggers.append('game_death')
                         break
 
         self.update_status_text()
@@ -1580,7 +1597,7 @@ class ParallelPortTestScreen(GameScreen):
 
         self.sprites.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         if self.first_update:
             self.first_update = False
             # don't play music:

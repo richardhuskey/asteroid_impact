@@ -217,7 +217,7 @@ class BasePowerup(VirtualGameSprite):
 
         self.used = False
 
-    def update(self, millis, cursor, asteroids):
+    def update(self, millis, frame_outbound_triggers, cursor, asteroids):
         """Deactivate power-up if duration has expired"""
         if self.active:
             self.duration += millis / 1000.
@@ -265,9 +265,9 @@ class SlowPowerup(BasePowerup):
         self.sound_end.stop()
         self.sound_begin.stop()
 
-    def update(self, millis, cursor, asteroids):
+    def update(self, millis, frame_outbound_triggers, cursor, asteroids):
         """ Play effect end sound if due"""
-        BasePowerup.update(self, millis, cursor, asteroids)
+        BasePowerup.update(self, millis, frame_outbound_triggers, cursor, asteroids)
 
         if self.active:
             # start the end effect sound to end when powerup ends:
@@ -338,9 +338,9 @@ class ShieldPowerup(BasePowerup):
 
         self.sound_end_started = False
 
-    def update(self, millis, cursor, asteroids):
+    def update(self, millis, frame_outbound_triggers, cursor, asteroids):
         """Follow cursor. Play effect end sound if due"""
-        BasePowerup.update(self, millis, cursor, asteroids)
+        BasePowerup.update(self, millis, frame_outbound_triggers, cursor, asteroids)
         if self.active:
             # follow on top of cursor:
             self.gamerect.center = cursor.gamerect.center
@@ -443,11 +443,7 @@ class ReactionTimePrompt(VirtualGameSprite):
         # fadeout avoids "click" at end, but I wish I could do shorter duration
         self.prompt_sound.fadeout(100)
 
-#    def pickedup(self):
-#        """Play pick up sound"""
-#        self.pickup_sound.play()
-#
-    def update(self, millis, logrowdetails, events, step_trigger_count):
+    def update(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         old_total_elapsed = self.total_elapsed
         self.total_elapsed += millis
 

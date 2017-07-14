@@ -61,7 +61,10 @@ import parallelportwrapper
 
 ALL_TRIGGERS = [
     'step_begin', # on begin of any step
-    #'game_death' # in either game mode, when the player touches an asteroid and dies NOT IMPLEMENTED
+    'game_death', # in either game mode, when the player touches an asteroid and dies
+    'game_level_complete', # in either game mode, when the player collects the last diamond
+    'adaptive_difficulty_increase', # adaptive, when collecting the last diamond increases to the next level template
+    'adaptive_difficulty_decrease' # adaptive, when dying goes back to an earlier level template
     ]
 
 # command-line arguments:
@@ -798,10 +801,10 @@ class GameModeManager(object):
                 try:
                     if len(self.gamescreenstack) > 0:
                         # update frontmost screen
-                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, events, self.step_trigger_count)
+                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count)
                         # update all screens in stack front to back
                         for screen in reversed(self.gamescreenstack):
-                            screen.update_always(millis, logrowdetails, events, self.step_trigger_count)
+                            screen.update_always(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count)
                 except QuitGame as e:
                     print e
                     return
@@ -856,11 +859,15 @@ class GameModeManager(object):
             pygame.display.flip()
 
     def update_outbound_triggers(self, frametriggerlist):
-        # todo: see if there are any triggers to send
+        print_triggers = False
+
+        # see if there are any triggers to send
         send_trigger = False
         for t in self.output_trigger_send_list:
             if t in frametriggerlist:
                 send_trigger = True
+                if print_triggers: print t
+        if print_triggers and send_trigger: print
 
         if self.output_trigger_mode == 'serial':
             if not send_trigger:
