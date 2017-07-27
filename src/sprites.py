@@ -404,7 +404,7 @@ class ReactionTimePrompt(VirtualGameSprite):
             convert_alpha=True)
         
         if sound and sound != 'none':
-            self.prompt_sound = load_sound(sound)
+            self.prompt_sound = load_sound(sound, mixing_group='reaction')
         else:
             self.prompt_sound = NoneSound()
 
