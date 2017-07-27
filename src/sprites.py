@@ -382,11 +382,11 @@ class ReactionTimePrompt(VirtualGameSprite):
             top=20,
             sound='tone440.wav',
             image='triangle.png',
-            # todo: graphic, sound 
             input_type='key',
             input_key='K_1',
             showtimes_millis=[],
             showtimes_trigger_counts=[],
+            timeout_millis = 1000,
             **kwargs_extra):
         #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -411,7 +411,7 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.showtimes_millis = showtimes_millis
         # todo: implement trigger showing
         self.showtimes_trigger_counts = showtimes_trigger_counts
-        self.timeout_millis = 1*1000
+        self.timeout_millis = timeout_millis
         self.visible = False
         self.total_elapsed = 0
         self.showtime_last = 0 # millis when shown
