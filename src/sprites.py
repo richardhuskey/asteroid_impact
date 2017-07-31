@@ -378,19 +378,21 @@ class ReactionTimePrompt(VirtualGameSprite):
     def __init__(
             self,
             diameter=64,
-            left=20,
-            top=20,
+            position_list=[[20,20]],
             sound='tone440.wav',
             image='triangle.png',
             input_type='key',
             input_key='K_1',
             showtimes_millis=[],
             showtimes_trigger_counts=[],
-            timeout_millis = 1000,
+            timeout_millis = 5000,
             **kwargs_extra):
         #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
         self.gamediameter = diameter
+        self.position_list = position_list
+        self.position_index = 0
+        left, top = self.position_list[self.position_index]
         self.gamerect_visible = pygame.Rect(left, top, diameter, diameter)
         self.gamerect_hidden = pygame.Rect(-9999, -9999, diameter, diameter)
         self.gamerect = self.gamerect_hidden
@@ -440,6 +442,12 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.gamerect = self.gamerect_hidden
         self.update_rect()
         self.visible = False
+
+        # prepare for next position:
+        self.position_index = (self.position_index + 1) % len(self.position_list)
+        left, top = self.position_list[self.position_index]
+        self.gamerect_visible = pygame.Rect(left, top, self.gamediameter, self.gamediameter)
+
         # fadeout avoids "click" at end, but I wish I could do shorter duration
         self.prompt_sound.fadeout(100)
 
