@@ -1,6 +1,6 @@
 {
     "trigger_settings": {
-        "mode": "none",
+        "mode": "keyboard",
     
         "serial_options": {
             "port": "COM5",
@@ -37,8 +37,14 @@
             "trigger_count": 10
         },
         {
-            "action": "blackscreen",
-            "trigger_count": 5
+          "action": "blackscreen",
+          "trigger_count": 5
+        },
+        {
+          "trigger_count": 5,
+          "action": "survey",
+          "prompt": "Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.",
+          "options": [ "one", "two", "three", "four", "five" ]
         },
         {
             "trigger_count": 10,
