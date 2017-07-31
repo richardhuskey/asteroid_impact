@@ -335,10 +335,12 @@ class SurveyQuestionScreen(GameScreen):
         screen,
         gamescreenstack,
         prompt="[No prompt value was specified]",
-        survey_options=["[default choice]"]):
+        survey_options=["[default choice]"],
+        click_to_continue=True):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.name = 'surveyquestion'
         self.prompt = prompt
+        self.click_to_continue = click_to_continue
         #self.survey_options = survey_options
         self.opaque = True
         self.blackbackground = pygame.Surface(self.screen.get_size())
@@ -379,17 +381,20 @@ class SurveyQuestionScreen(GameScreen):
         bottom_y = virtualdisplay.GAME_AREA.bottom
 
         # add "next" button on bottom
-        next_text = "Next..."
-        lines, option_bounds = flow_text(
-            next_text,
-            virtualdisplay.GAME_AREA,
-            self.font,
-            self.text_color_option,
-            self.line_height,
-            valign='bottom')
-        bottom_y -= (len(lines)+1)*self.line_height
-        self.textsprites += lines
-        self.nextbutton = SurveyButton(option_bounds, next_text, lambda b:self.next_button_clicked())
+        if self.click_to_continue:
+            next_text = "Next..."
+            lines, option_bounds = flow_text(
+                next_text,
+                virtualdisplay.GAME_AREA,
+                self.font,
+                self.text_color_option,
+                self.line_height,
+                valign='bottom')
+            bottom_y -= (len(lines)+1)*self.line_height
+            self.textsprites += lines
+            self.nextbutton = SurveyButton(option_bounds, next_text, lambda b:self.next_button_clicked())
+        else:
+            self.nextbutton = None
 
         # add buttons for each survey option
         self.option_buttons = []
@@ -420,7 +425,8 @@ class SurveyQuestionScreen(GameScreen):
         # draw buttons
         for b in self.option_buttons:
             b.draw(self.screen)
-        self.nextbutton.draw(self.screen)
+        if self.nextbutton:
+            self.nextbutton.draw(self.screen)
 
         # draw all text blocks:
         for textsprite in self.textsprites:
@@ -442,7 +448,8 @@ class SurveyQuestionScreen(GameScreen):
                 logrowdetails['survey_answer'] = b.text
         logrowdetails['survey_prompt'] = self.prompt
 
-        self.nextbutton.update(millis)
+        if self.nextbutton:
+            self.nextbutton.update(millis)
 
     def option_button_click(self, button):
         # deselect all buttons

@@ -623,12 +623,19 @@ class GameModeManager(object):
                     click_to_continue=click_to_continue,
                     text=step['text']))
         elif step['action'] == 'survey':
+            click_to_continue = True
+            if step.has_key('duration') and step['duration'] != None:
+                click_to_continue = False
+            if step.has_key('trigger_count') and step['trigger_count'] != None:
+                click_to_continue = False
+
             self.gamescreenstack.append(
                 SurveyQuestionScreen(
                     self.screen,
                     self.gamescreenstack,
                     prompt=step['prompt'],
-                    survey_options=step['options']))
+                    survey_options=step['options'],
+                    click_to_continue=click_to_continue))
         elif step['action'] == 'blackscreen':
             self.gamescreenstack.append(BlackScreen(self.screen, self.gamescreenstack))
         elif step['action'] == 'game':
