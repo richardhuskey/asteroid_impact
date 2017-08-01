@@ -70,7 +70,7 @@
           "showtimes_millis": [],
           "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
           "input_key": "K_MOUSE1",
-          "timeout_millis": 1500
+          "timeout_millis": "never"
         }
       ]
     },

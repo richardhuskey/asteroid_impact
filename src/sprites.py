@@ -412,6 +412,8 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.showtimes_millis = showtimes_millis
         # todo: implement trigger showing
         self.showtimes_trigger_counts = showtimes_trigger_counts
+        if isinstance(timeout_millis, str) or isinstance(timeout_millis, unicode):
+            timeout_millis = None
         self.timeout_millis = timeout_millis
         self.visible = False
         self.total_elapsed = 0
@@ -481,11 +483,12 @@ class ReactionTimePrompt(VirtualGameSprite):
             logrowdetails['reaction_prompt_state'] = 'waiting'
             logrowdetails['reaction_prompt_millis'] = visible_ms
             # showing now
-            if self.showtime_last + self.timeout_millis <= self.total_elapsed:
-                # timed out. Hide
-                self.deactivate()
-                logrowdetails['reaction_prompt_state'] = 'timeout'
-                logrowdetails['reaction_prompt_millis'] = visible_ms
+            if self.timeout_millis:
+                if self.showtime_last + self.timeout_millis <= self.total_elapsed:
+                    # timed out. Hide
+                    self.deactivate()
+                    logrowdetails['reaction_prompt_state'] = 'timeout'
+                    logrowdetails['reaction_prompt_millis'] = visible_ms
 
             for event in events:
                 if self.dismiss_test(event):
