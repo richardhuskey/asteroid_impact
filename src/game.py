@@ -484,8 +484,78 @@ class GameModeManager(object):
             if (step.has_key('reaction_prompts')
                     and step['reaction_prompts'] != None
                     and len(step['reaction_prompts']) > 0):
-                # todo: verify/cleanup each reaction_prompt entry
-                pass
+                for i, reaction_prompt_options in enumerate(step['reaction_prompts']):
+                    # diameter should be number
+                    if reaction_prompt_options.has_key('diameter'):
+                        try:
+                            reaction_prompt_options['diameter'] = float(reaction_prompt_options['diameter'])
+                        except:
+                            print "ERROR: reaction_prompts diameter value of %s should be a number"%repr(reaction_prompt_options['diameter'])
+                            return
+
+                    # position_list should look like [ [0,10], [10,20] ]
+                    if reaction_prompt_options.has_key('position_list'):
+                        if not isinstance(reaction_prompt_options['position_list'], list):
+                            print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers"
+                            return
+                        if len(reaction_prompt_options['position_list']) == 0:
+                            print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers with at least one entry"
+                            return
+                        for pos in reaction_prompt_options['position_list']:
+                            if not isinstance(pos, list) or len(pos) != 2:
+                                print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers"
+                                print 'found invalid entry:', repr(pos)
+                                return
+                            try:
+                                left, top = pos
+                                left += 5 # number-like check
+                                top += 5
+                            except:
+                                print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers"
+                                print 'found invalid entry:', repr(pos)
+                                return
+
+                    # image should be file in data directory. reported on load.
+                    # sound should be file in data directory. reported on load.
+
+                    # showtimes_millis should be list of numbers
+                    if reaction_prompt_options.has_key('showtimes_millis'):
+                        if not isinstance(reaction_prompt_options['showtimes_millis'], list):
+                            print "ERROR: reaction_prompts showtimes_millis should be list of numbers"
+                            return
+                        for n in reaction_prompt_options['showtimes_millis']:
+                            try:
+                                n += 5 # number-like check
+                            except:
+                                print "ERROR: reaction_prompts showtimes_millis should be list of numbers"
+                                return
+
+
+                    # showtimes_trigger_counts should be list of numbers
+                    if reaction_prompt_options.has_key('showtimes_trigger_counts'):
+                        if not isinstance(reaction_prompt_options['showtimes_trigger_counts'], list):
+                            print "ERROR: reaction_prompts showtimes_trigger_counts should be list of numbers"
+                            return
+                        for n in reaction_prompt_options['showtimes_trigger_counts']:
+                            try:
+                                n += 5 # number-like check
+                            except:
+                                print "ERROR: reaction_prompts showtimes_trigger_counts should be list of numbers"
+                                return
+
+                    # input_key should be string starting with K_. reported on load.
+
+                    # timeout_millis should be number
+                    if reaction_prompt_options.has_key('timeout_millis'):
+                        if reaction_prompt_options['timeout_millis'] == 'never':
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['timeout_millis'])
+                            except:
+                                print "ERROR: reaction_prompts timeout_millis value of %s should be a \"never\" or a number"%repr(reaction_prompt_options['timeout_millis'])
+                                return
             else:
                 step['reaction_prompts'] = None
 
