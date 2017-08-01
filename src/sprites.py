@@ -381,7 +381,6 @@ class ReactionTimePrompt(VirtualGameSprite):
             position_list=[[20,20]],
             sound='tone440.wav',
             image='triangle.png',
-            input_type='key',
             input_key='K_1',
             showtimes_millis=[],
             showtimes_trigger_counts=[],
@@ -418,16 +417,24 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.total_elapsed = 0
         self.showtime_last = 0 # millis when shown
         self.step_trigger_count_last = 0
-        if input_type == 'key':
+        if input_key.startswith('K_MOUSE'):
+            mousebutton_index = 0
+            if input_key == 'K_MOUSE1': mousebutton_index = 0 # left mouse
+            elif input_key == 'K_MOUSE2': mousebutton_index = 1 # middle mouse
+            elif input_key == 'K_MOUSE3': mousebutton_index = 2 # right mouse
+            else:
+                raise QuitGame('mouse button for input_key for reaction propmt of %s is not recognized'%input_key)
+                raise QuitGame()
+
+            self.dismiss_test = lambda evt: evt.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[mousebutton_index]
+        else:
+            # input_key should correspond to actual key
             pygame_key_constant = getattr(pygame, input_key, None)
             if not pygame_key_constant:
                 print 'input_key of "%s" not found. Please use one of the following'%input_key
                 print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
-                raise QuitGame
+                raise QuitGame()
             self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
-        else:
-            # TODO: allow specifying something other than left mouse
-            self.dismiss_test = lambda evt: evt.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[0]
 
     def stop_audio(self):
         self.prompt_sound.stop()
