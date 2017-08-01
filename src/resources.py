@@ -221,6 +221,10 @@ def load_sound(name, mixing_group=None):
     try:
         key = (fullname, mixing_group)
         if not sound_cache.has_key(key):
+            if not os.path.isfile(fullname):
+                print 'Cannot load sound:', fullname, 'file does not exist'
+                raise SystemExit
+
             if not mixing_group:
                 sound = pygame.mixer.Sound(fullname)
                 sound.set_volume(effects_volume)
