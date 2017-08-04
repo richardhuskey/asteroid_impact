@@ -68,6 +68,10 @@ Log Columns
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | reaction_prompt_millis | Milliseconds that reaction prompt has been active for, or blank if none.                                                                                                              |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| survey_prompt          | The survey question shown on the current survey question screen.                                                                                                                      |
++------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| survey_answer          | The currently selected survey answer on the current survey question screen.                                                                                                           |
++------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | asteroid_N_centerx     | X-coordinate of asteroid at position N. N starts at 1.                                                                                                                                |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | asteroid_N_centery     | Y-coordinate of asteroid at position N. N starts at 1.                                                                                                                                |
@@ -87,6 +91,21 @@ The slow powerup teleports off screen so it's no longer visible.
 
 These mean that the x/y position of the currently visible powerup
 don't mean the same thing when the powerup is active.
+
+Reaction Prompts
+================
+
+When there is an active (visible or audible) reaction prompt, the state wil change from blank to "waiting". If the player presses the corresponding button the state will change to "complete". Otherwise, on the frame the prompt disappears the state changes to "timeout"
+
+``reaction_prompt_millis`` is the time since the prompt appeared.
+
+
+Survey Question
+===============
+
+When the current step is a survey question screen, the question and selected answer are logged.
+
+
 
 Asteroid Numbers
 ================

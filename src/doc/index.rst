@@ -16,6 +16,7 @@ Contents:
    scriptjson
    logcolumns
    makelevelpy
+   parallelport
 
    ref/game
    ref/logger

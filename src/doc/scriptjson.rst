@@ -7,93 +7,154 @@ AsteroidImpact will optionally run a sequence of modes specified in script.json.
 Sample: ::
 
     {
-        "trigger_settings": {
-            "mode": "keyboard",
-        
-            "serial_options": {
-                "port": "COM11",
-                "baudrate": 19200,
-                "trigger_byte_value" : 53
-            },
-        
-            "keyboard_options" :
-            {
-                "trigger_key": "K_5"
-            }
+      "output_trigger_settings": {
+        "mode": "none",
+
+        "trigger_list": [
+          "step_begin",
+          "game_death",
+          "game_level_complete",
+          "adaptive_difficulty_increase",
+          "adaptive_difficulty_decrease"
+        ],
+        "serial_options": {
+          "port": "COM5",
+          "baudrate": 19200,
+          "trigger_byte_value": 78
         },
-        
-        "steps":
-        [
+
+        "parallel_options": {
+          "port_address_hex": "BF00",
+          "common_data_value_hex": "0x10",
+          "trigger_data_value_hex": "0x11",
+          "trigger_frames": 10
+        }
+      },
+      "steps": [
+        {
+          "action": "instructions",
+          "duration": 10.0
+        },
+        {
+          "action": "game",
+          "levels": "levels/standardlevels.json",
+          "duration": 20.0,
+          "reaction_prompts": [
             {
-                "action": "instructions",
-                "duration": 10.0
+              "diameter": 80,
+              "position_list": [
+                [ 200, 200 ],
+                [ 200, 300 ],
+                [ 200, 400 ],
+                [ 200, 500 ],
+                [ 200, 600 ]
+              ],
+              "image": "triangle.png",
+              "sound": "tone440.wav",
+              "showtimes_millis": [ 1000, 3000, 5000, 7000, 9000, 11000, 13000, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 43000, 45000, 47000, 49000, 51000, 53000, 55000, 57000, 59000, 61000, 63000, 65000, 67000, 69000, 71000, 73000, 75000, 77000, 79000, 81000, 83000, 85000, 87000, 89000, 91000, 93000, 95000, 97000, 99000, 101000, 103000, 105000, 107000, 109000, 111000, 113000, 115000, 117000, 119000, 121000, 123000, 125000, 127000, 129000, 131000, 133000, 135000, 137000, 139000, 141000, 143000, 145000, 147000, 149000, 151000, 153000, 155000, 157000, 159000, 161000, 163000, 165000, 167000, 169000, 171000, 173000, 175000, 177000, 179000, 181000, 183000, 185000, 187000, 189000, 191000, 193000, 195000, 197000, 199000 ],
+              "showtimes_trigger_counts": [],
+              "input_key": "K_1",
+              "timeout_millis": 1500
             },
             {
-                "action": "game",
-                "levels": "levels/standardlevels.json",
-                "duration": 20.0
+              "diameter": 80,
+              "position_list": [
+                [ 300, 200 ]
+              ],
+              "image": "circle.png",
+              "sound": "tone659.wav",
+              "showtimes_millis": [ 1500, 3500, 5500, 7500, 9500, 11500, 13500, 15500, 17500, 19500, 21500, 23500, 25500, 27500, 29500, 31500, 33500, 35500, 37500, 39500, 41500, 43500, 45500, 47500, 49500, 51500, 53500, 55500, 57500, 59500, 61500, 63500, 65500, 67500, 69500, 71500, 73500, 75500, 77500, 79500, 81500, 83500, 85500, 87500, 89500, 91500, 93500, 95500, 97500, 99500, 101500, 103500, 105500, 107500, 109500, 111500, 113500, 115500, 117500, 119500, 121500, 123500, 125500, 127500, 129500, 131500, 133500, 135500, 137500, 139500, 141500, 143500, 145500, 147500, 149500, 151500, 153500, 155500, 157500, 159500, 161500, 163500, 165500, 167500, 169500, 171500, 173500, 175500, 177500, 179500, 181500, 183500, 185500, 187500, 189500, 191500, 193500, 195500, 197500, 199500 ],
+              "showtimes_trigger_counts": [],
+              "input_key": "K_2",
+              "timeout_millis": 1500
             },
             {
-                "action": "text",
-                "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
-                "duration": 20.0
-            },
-            {
-                "action": "blackscreen",
-                "duration": 5.0
-            },
-            {
-                "action": "game",
-                "levels": "levels/hardlevels.json",
-                "duration": 20.0
-            },
-            {
-                "action": "blackscreen",
-                "duration": 5.0
-            },
-            {
-                "action": "game-adaptive",
-                "start_level": 0.5,
-                "level_completion_increment": 0.5,
-                "level_death_decrement": 0.6,
-                "level_templates" : 
-                [
-                    {
-                        "asteroid_count": 3,
-                        "asteroid_sizes": "varied",
-                        "asteroid_speeds": "medium",
-                        "powerup_count": 10,
-                        "powerup_delay": 0.5,
-                        "powerup_types": [
-                            "slow"
-                        ],
-                        "target_count": 10
-                    },
-                    {
-                        "asteroid_count": 8,
-                        "asteroid_sizes": "varied",
-                        "asteroid_speeds": "medium",
-                        "powerup_count": 10,
-                        "powerup_delay": 2.0,
-                        "powerup_types": [
-                            "slow",
-                            "shield"
-                        ],
-                        "target_count": 3
-                    },
-                    {
-                        "asteroid_count": 5,
-                        "asteroid_speeds": "extreme",
-                        "powerup_count": 10,
-                        "powerup_delay": 0.5,
-                        "powerup_types": [
-                            "shield"
-                        ],
-                        "target_count": 3
-                    }
-                ]
+              "diameter": 80,
+              "position_list": [
+                [ 400, 200 ]
+              ],
+              "image": "square.png",
+              "sound": "tone146.wav",
+              "showtimes_millis": [],
+              "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
+              "input_key": "K_MOUSE1",
+              "timeout_millis": "never"
             }
-        ]
+          ]
+        },
+        {
+          "action": "text",
+          "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+          "duration": 20.0
+        },
+        {
+          "action": "blackscreen",
+          "duration": 5.0
+        },
+        {
+          "action": "survey",
+          "prompt": "Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.",
+          "options": [ "one", "two", "three", "four", "five" ],
+          "duration": 20.5
+        },
+        {
+          "action": "game",
+          "levels": "levels/hardlevels.json",
+          "duration": 20.0
+        },
+        {
+          "duration": 10.0,
+          "action": "game-adaptive",
+          "start_level": 0.5,
+          "level_completion_increment": 0.3,
+          "level_death_decrement": 0.4,
+          "level_templates": [
+            {
+              "asteroid_count": 1,
+              "asteroid_speeds": "slow",
+              "powerup_count": 0,
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 3,
+              "asteroid_sizes": "varied",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "slow"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 8,
+              "asteroid_sizes": "varied",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 2.0,
+              "powerup_types": [
+                "slow",
+                "shield"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 5,
+              "asteroid_speeds": "extreme",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "shield"
+              ],
+              "target_count": 3
+            }
+          ]
+        },
+        {
+          "action": "blackscreen",
+          "duration": 5.0
+        }
+      ]
     }
 
 Steps List
@@ -139,92 +200,179 @@ You can visualize trigger pulses on screen by using the `--trigger-blink true` c
 Sample trigger-driven JSON: ::
 
     {
-        "trigger_settings": {
-            "mode": "keyboard",
-        
-            "serial_options": {
-                "port": "COM11",
-                "baudrate": 19200,
-                "trigger_byte_value" : 53
-            },
-        
-            "keyboard_options" :
-            {
-                "trigger_key": "K_5"
-            }
+      "trigger_settings": {
+        "mode": "keyboard",
+
+        "serial_options": {
+          "port": "COM5",
+          "baudrate": 19200,
+          "trigger_byte_value": 53
         },
-        
-        "steps": 
-        [
+
+        "keyboard_options": {
+          "trigger_key": "K_5"
+        },
+
+        "parallel_options": {
+          "port_address_hex": "BF00",
+          "common_status_value_hex": "0x00",
+          "trigger_status_value_hex": "0x08"
+        }
+      },
+      "output_trigger_settings": {
+        "mode": "none",
+
+        "trigger_list": [
+          "step_begin",
+          "game_death",
+          "game_level_complete",
+          "adaptive_difficulty_increase",
+          "adaptive_difficulty_decrease"
+        ],
+        "serial_options": {
+          "port": "COM5",
+          "baudrate": 19200,
+          "trigger_byte_value": 78
+        },
+
+        "parallel_options": {
+          "port_address_hex": "BF00",
+          "common_data_value_hex": "0x10",
+          "trigger_data_value_hex": "0x11",
+          "trigger_frames": 10
+        }
+      },
+      "steps": [
+        {
+          "action": "instructions",
+          "trigger_count": 10
+        },
+        {
+          "action": "game",
+          "levels": "levels/standardlevels.json",
+          "trigger_count": 10,
+          "reaction_prompts": [
             {
-                "action": "instructions",
-                "trigger_count": 10
+              "diameter": 80,
+              "position_list": [
+                [ 200, 200 ],
+                [ 200, 300 ],
+                [ 200, 400 ],
+                [ 200, 500 ],
+                [ 200, 600 ]
+              ],
+              "image": "triangle.png",
+              "sound": "tone440.wav",
+              "showtimes_millis": [ 1000, 3000, 5000, 7000, 9000, 11000, 13000, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 43000, 45000, 47000, 49000, 51000, 53000, 55000, 57000, 59000, 61000, 63000, 65000, 67000, 69000, 71000, 73000, 75000, 77000, 79000, 81000, 83000, 85000, 87000, 89000, 91000, 93000, 95000, 97000, 99000, 101000, 103000, 105000, 107000, 109000, 111000, 113000, 115000, 117000, 119000, 121000, 123000, 125000, 127000, 129000, 131000, 133000, 135000, 137000, 139000, 141000, 143000, 145000, 147000, 149000, 151000, 153000, 155000, 157000, 159000, 161000, 163000, 165000, 167000, 169000, 171000, 173000, 175000, 177000, 179000, 181000, 183000, 185000, 187000, 189000, 191000, 193000, 195000, 197000, 199000 ],
+              "showtimes_trigger_counts": [],
+              "input_key": "K_1",
+              "timeout_millis": 1500
             },
             {
-                "action": "game",
-                "levels": "levels/standardlevels.json",
-                "trigger_count": 10
+              "diameter": 80,
+              "position_list": [
+                [ 300, 200 ]
+              ],
+              "image": "circle.png",
+              "sound": "tone659.wav",
+              "showtimes_millis": [ 1500, 3500, 5500, 7500, 9500, 11500, 13500, 15500, 17500, 19500, 21500, 23500, 25500, 27500, 29500, 31500, 33500, 35500, 37500, 39500, 41500, 43500, 45500, 47500, 49500, 51500, 53500, 55500, 57500, 59500, 61500, 63500, 65500, 67500, 69500, 71500, 73500, 75500, 77500, 79500, 81500, 83500, 85500, 87500, 89500, 91500, 93500, 95500, 97500, 99500, 101500, 103500, 105500, 107500, 109500, 111500, 113500, 115500, 117500, 119500, 121500, 123500, 125500, 127500, 129500, 131500, 133500, 135500, 137500, 139500, 141500, 143500, 145500, 147500, 149500, 151500, 153500, 155500, 157500, 159500, 161500, 163500, 165500, 167500, 169500, 171500, 173500, 175500, 177500, 179500, 181500, 183500, 185500, 187500, 189500, 191500, 193500, 195500, 197500, 199500 ],
+              "showtimes_trigger_counts": [],
+              "input_key": "K_2",
+              "timeout_millis": 1500
             },
             {
-                "action": "text",
-                "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
-                "trigger_count": 10
-            },
-            {
-                "action": "blackscreen",
-                "trigger_count": 5
-            },
-            {
-                "action": "game-adaptive",
-                "trigger_count": 10,
-                "start_level": 0.5,
-                "level_completion_increment": 0.5,
-                "level_death_decrement": 0.6,
-                "level_templates" : 
-                [
-                    {
-                        "asteroid_count": 3,
-                        "asteroid_sizes": "varied",
-                        "asteroid_speeds": "medium",
-                        "powerup_count": 10,
-                        "powerup_delay": 0.5,
-                        "powerup_types": [
-                            "slow"
-                        ],
-                        "target_count": 10
-                    },
-                    {
-                        "asteroid_count": 8,
-                        "asteroid_sizes": "varied",
-                        "asteroid_speeds": "medium",
-                        "powerup_count": 10,
-                        "powerup_delay": 2.0,
-                        "powerup_types": [
-                            "slow",
-                            "shield"
-                        ],
-                        "target_count": 3
-                    },
-                    {
-                        "asteroid_count": 5,
-                        "asteroid_speeds": "extreme",
-                        "powerup_count": 10,
-                        "powerup_delay": 0.5,
-                        "powerup_types": [
-                            "shield"
-                        ],
-                        "target_count": 3
-                    }
-                ]
-            },
-            {
-                "action": "blackscreen",
-                "trigger_count": 10
+              "diameter": 80,
+              "position_list": [
+                [ 400, 200 ]
+              ],
+              "image": "square.png",
+              "sound": "tone146.wav",
+              "showtimes_millis": [],
+              "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
+              "input_key": "K_MOUSE1",
+              "timeout_millis": "never"
             }
-        ]
+          ]
+        },
+        {
+          "action": "text",
+          "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+          "trigger_count": 10
+        },
+        {
+          "action": "blackscreen",
+          "trigger_count": 5
+        },
+        {
+          "action": "survey",
+          "prompt": "Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.",
+          "options": [ "one", "two", "three", "four", "five" ],
+          "trigger_count": 25
+        },
+        {
+          "action": "game",
+          "levels": "levels/hardlevels.json",
+          "trigger_count": 20
+        },
+        {
+          "trigger_count": 10,
+          "action": "game-adaptive",
+          "start_level": 0.5,
+          "level_completion_increment": 0.3,
+          "level_death_decrement": 0.4,
+          "level_templates": [
+            {
+              "asteroid_count": 1,
+              "asteroid_speeds": "slow",
+              "powerup_count": 0,
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 3,
+              "asteroid_sizes": "varied",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "slow"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 8,
+              "asteroid_sizes": "varied",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 2.0,
+              "powerup_types": [
+                "slow",
+                "shield"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 5,
+              "asteroid_speeds": "extreme",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "shield"
+              ],
+              "target_count": 3
+            }
+          ]
+        },
+        {
+          "action": "blackscreen",
+          "trigger_count": 10
+        }
+      ]
     }
 
+
 The serial trigger mode opens a serial port on the computer and when a byte is received with the value matching `trigger_byte_value` increases the trigger count. The `port` setting is the serial port, typically `COM1` through `COM16` on Windows, or `/dev/cu.usbmodem1234` or similar on OSX. If you have python and pyserial installed, you can list serial ports from the command-line by running `python -m serial.tools.list_ports` which will print out serial ports on your computer. You can also specify the `baudrate` for serial connections. The `trigger_byte_value` of 53 is the ASCII code for the character "5".
+
+The parallel trigger mode will connect to a parallel port at the data address specified, and when the value in the status byte changes from the common to the trigger value will increment the current trigger count. See See :doc:`parallelport` for how to use the parallel port test feature to find the values and test. The values configured are in hexadecimal.
 
 The keyboard trigger mode senses a trigger when the specified `trigger_key` is pressed down. `K_5` is the pygame constant for the "5" key. Multi-key trigger sequences are not supported. The availble options for `trigger_key` are the following: ::
 
@@ -381,6 +529,47 @@ Keyboard Latency test sketch for Arduino Leonardo ::
       }
     }
 
+Output Trigger Settings
+=======================
+
+The game can be configured to output signals over a serial port or parallel port on certain game events.
+
+For serial port only one byte is written when any of the listed game events happens.
+
+For parallel, the data pins are changed from the ``common_data_value_hex`` to ``trigger_data_value_hex`` for ``trigger_frames`` frames. One frame is about 1/60 second.
+
+See :doc:`parallelport` for information about parallel ports.
+
+The full list of available game events to send an ouput trigger on are listed in the sample below.
+
+Sample ::
+
+    "output_trigger_settings": {
+      "mode": "serial",
+    
+      "trigger_list": [
+        "step_begin",
+        "game_death",
+        "game_level_complete",
+        "adaptive_difficulty_increase",
+        "adaptive_difficulty_decrease"
+      ],
+      
+      "serial_options": {
+        "port": "COM5",
+        "baudrate": 19200,
+        "trigger_byte_value": 78
+      },
+    
+      "parallel_options": {
+        "port_address_hex": "BF00",
+        "common_data_value_hex": "0x10",
+        "trigger_data_value_hex": "0x11",
+        "trigger_frames": 10
+      }
+    },
+
+
 Common Step Attributes
 ======================
 
@@ -468,3 +657,41 @@ The levels list is a list of objects with the following options:
 +---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
 | ``powerup_types``                                 | one of the strings {"shield","slow","all","none"}      | "all"          | Types of powerups that are in level.                                                                         |
 +---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
+
+``survey``
+----------------
+
+The ``survey`` step will display a configurable prompt and list of options for the player. The player may click on one of the options to select it. If the player then clicks on a different option, the first is deselected.
+
+If there is no ``duration`` or ``trigger_count`` attribute, the step will show a "Next" button to advance to the next step. The "Next" button does not become active to a until one of the survey options are selected.
+
+Long text on the ``prompt`` option is fine. It will wrap to multiple lines.
+
+Sample Survey Step with 20s duration and no Next button::
+
+    {
+      "action": "survey",
+      "prompt": "Which of these is a better number?",
+      "options": [ "one", "two", "three", "four", "five" ],
+      "duration": 20.0
+    },
+
+Sample Survey Step with 5 pulse duration and no Next button::
+
+    {
+      "action": "survey",
+      "prompt": "Which of these is a better number?",
+      "options": [ "one", "two", "three", "four", "five" ],
+      "trigger_count": 5
+    },
+
+Sample Survey Step with no duration a Next button::
+
+    {
+      "action": "survey",
+      "prompt": "Which of these is a better number?",
+      "options": [ "one", "two", "three", "four", "five" ]
+    },
+
+
+
