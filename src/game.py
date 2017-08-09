@@ -876,6 +876,8 @@ class GameModeManager(object):
                 self.total_millis += millis
                 self.step_millis += millis
 
+                frame_start_gamescreenstack = self.gamescreenstack[:]
+
                 logrowdetails.clear()
                 logrowdetails['subject_number'] = self.args.subject_number
                 logrowdetails['subject_run'] = self.args.subject_run
@@ -919,8 +921,6 @@ class GameModeManager(object):
                           and event.key == K_n
                           and (event.mod & pygame.KMOD_CTRL)):
                         print 'CTRL+n pressed. Advancing to next step'
-                        for screen in reversed(self.gamescreenstack):
-                            screen.after_close()
                         self.gamescreenstack = []
                     else:
                         # check for keyboard trigger
@@ -971,16 +971,21 @@ class GameModeManager(object):
                 step = self.gamesteps[self.stepindex]
                 if self.step_max_millis != None and self.step_max_millis < self.step_millis:
                     # end this step:
-                    for screen in reversed(self.gamescreenstack):
-                        screen.after_close()
                     self.gamescreenstack = []
                 
                 # Check if max trigger count on this step has expired
                 if self.step_max_trigger_count != None and self.step_max_trigger_count <= self.step_trigger_count:
                     # end this step
-                    for screen in reversed(self.gamescreenstack):
-                        screen.after_close()
                     self.gamescreenstack = []
+
+                # call .after_close() on any now closed screens:
+                for s in reversed(frame_start_gamescreenstack):
+                    if s not in self.gamescreenstack:
+                        s.after_close()
+
+                asteroidlogger.log(logrowdetails)
+
+                self.update_outbound_triggers(frame_outbound_triggers)
 
                 if len(self.gamescreenstack) == 0:
                     self.stepindex += 1
@@ -989,11 +994,6 @@ class GameModeManager(object):
                         return
                     self.init_step()
                     frame_outbound_triggers.append('step_begin')
-
-                asteroidlogger.log(logrowdetails)
-
-                self.update_outbound_triggers(frame_outbound_triggers)
-
 
             # draw topmost opaque screen and everything above it
             topopaquescreenindex = -1

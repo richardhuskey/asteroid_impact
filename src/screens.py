@@ -636,7 +636,6 @@ class LevelCompletedOverlayScreen(GameScreen):
             self.screenstack[-2].advance_level()
         # remove 'level completed' screen
         topscreen = self.screenstack.pop()
-        topscreen.after_close();
 
     def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         self.elapsedmillis += millis
@@ -685,7 +684,6 @@ class GameOverOverlayScreen(GameScreen):
             self.screenstack[-2].setup_level(first=False,died_previously=True)
         # remove 'game over' screen
         topscreen = self.screenstack.pop()
-        topscreen.after_close()
 
     def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
         self.elapsedmillis += millis
