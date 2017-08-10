@@ -1,0 +1,6 @@
+*.pyc
+build/
+dist/
+temp/
+doc/_build/
+.vs/

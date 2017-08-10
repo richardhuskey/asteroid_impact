@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{285941f0-5c71-4d37-b176-7b47d6937e3b}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>game.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|PythonCore|2.7-32</InterpreterId>
+    <CommandLineArguments>--music-volume 0.0 --effects-volume 1.0 --window-x 100 --window-y 100 --display-width 640 --display-height 480 --script-json testscript.json --trigger-blink true --log-filename test.csv --log-overwrite true --survey-log-filename survey.csv --reaction-log-filename reactions.csv --trigger-blink true</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="button-test.html" />
+    <Content Include="credits.txt" />
+    <Content Include="data\asteroid.png" />
+    <Content Include="data\background4x3.jpg" />
+    <Content Include="data\circle.png" />
+    <Content Include="data\clock.png" />
+    <Content Include="data\crystal.png" />
+    <Content Include="data\cursor.png" />
+    <Content Include="data\shield.png" />
+    <Content Include="data\square.png" />
+    <Content Include="data\triangle.png" />
+    <Content Include="doc\codeintro.rst" />
+    <Content Include="doc\index.rst" />
+    <Content Include="doc\leveljson.rst" />
+    <Content Include="doc\logcolumns.rst" />
+    <Content Include="doc\makelevelpy.rst" />
+    <Content Include="doc\parallelport.rst" />
+    <Content Include="doc\scriptjson.rst" />
+    <Content Include="LICENSE.txt" />
+    <Content Include="raw_data\asteroid.svg" />
+    <Content Include="raw_data\background.jpg" />
+    <Content Include="raw_data\gamesprites.svg" />
+    <Content Include="raw_data\Moon_Farside_LRO.jpg" />
+    <Content Include="samplescript-adaptive.json" />
+    <Content Include="samplescript-trigger.json" />
+    <Content Include="samplescript.json" />
+    <Content Include="testscript.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="doc\conf.py" />
+    <Compile Include="game.py" />
+    <Compile Include="logger.py" />
+    <Compile Include="makelevel.py" />
+    <Compile Include="makestandardlevels.py" />
+    <Compile Include="parallelportwrapper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="resources.py" />
+    <Compile Include="screens.py" />
+    <Compile Include="sprites.py" />
+    <Compile Include="virtualdisplay.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="data" />
+    <Folder Include="doc" />
+    <Folder Include="raw_data" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|2.7-32" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
