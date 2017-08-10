@@ -403,11 +403,14 @@ class ReactionTimePrompt(VirtualGameSprite):
             image,
             (self.rect.width, self.rect.height),
             convert_alpha=True)
+        self.image_name = image
         
         if sound and sound != 'none':
             self.prompt_sound = load_sound(sound, mixing_group='reaction')
+            self.sound_name = sound
         else:
             self.prompt_sound = NoneSound()
+            self.sound_name = 'none'
 
         self.showtimes_millis = showtimes_millis
         # todo: implement trigger showing
@@ -438,9 +441,6 @@ class ReactionTimePrompt(VirtualGameSprite):
                 raise QuitGame()
             self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
 
-    def stop_audio(self):
-        self.prompt_sound.stop()
-
     def activate(self):
         self.gamerect = self.gamerect_visible
         self.update_rect()
@@ -460,7 +460,7 @@ class ReactionTimePrompt(VirtualGameSprite):
         # fadeout avoids "click" at end, but I wish I could do shorter duration
         self.prompt_sound.fadeout(100)
 
-    def update(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update(self, millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count):
         old_total_elapsed = self.total_elapsed
         self.total_elapsed += millis
 
@@ -482,6 +482,8 @@ class ReactionTimePrompt(VirtualGameSprite):
             visible_ms = self.total_elapsed - self.showtime_last
             logrowdetails['reaction_prompt_state'] = 'waiting'
             logrowdetails['reaction_prompt_millis'] = visible_ms
+            logrowdetails['reaction_prompt_sound'] = self.sound_name
+            logrowdetails['reaction_prompt_image'] = self.image_name
             # showing now
             if self.timeout_millis:
                 if self.showtime_last + self.timeout_millis <= self.total_elapsed:
@@ -490,6 +492,9 @@ class ReactionTimePrompt(VirtualGameSprite):
                     logrowdetails['reaction_prompt_state'] = 'timeout'
                     logrowdetails['reaction_prompt_millis'] = visible_ms
 
+                    # log timed out
+                    self.logme(logrowdetails, reactionlogger)
+
             for event in events:
                 if self.dismiss_test(event):
                     logrowdetails['reaction_prompt_state'] = 'complete'
@@ -497,4 +502,26 @@ class ReactionTimePrompt(VirtualGameSprite):
                     # correct key pressed
                     self.deactivate()
 
+                    # log completed
+                    self.logme(logrowdetails, reactionlogger)
+
         self.step_trigger_count_last = step_trigger_count
+
+    def step_end_deactivate(self, logrowdetails, reactionlogger):
+        if self.visible:
+            self.prompt_sound.stop()
+            # log timeout_step_end
+            visible_ms = self.total_elapsed - self.showtime_last
+            logrowdetails['reaction_prompt_sound'] = self.sound_name
+            logrowdetails['reaction_prompt_image'] = self.image_name
+            logrowdetails['reaction_prompt_state'] = 'timeout_step_end'
+            logrowdetails['reaction_prompt_millis'] = visible_ms
+            self.logme(logrowdetails, reactionlogger)
+
+    def logme(self, logrowdetails, reactionlogger):
+        newreactionlogrow = {}
+        for col in reactionlogger.columns:
+            if logrowdetails.has_key(col):
+                newreactionlogrow[col] = logrowdetails[col]
+        reactionlogger.log(newreactionlogrow)
+

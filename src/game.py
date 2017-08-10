@@ -56,7 +56,7 @@ from screens import (
 import resources
 from sprites import Target
 import virtualdisplay
-from logger import AsteroidLogger
+from logger import AsteroidLogger, SurveyLogger, ReactionLogger
 import parallelportwrapper
 
 ALL_TRIGGERS = [
@@ -102,8 +102,12 @@ parser.add_argument('--subject-run', type=str, default='',
                     help='Subject run number to include in the log.')
 parser.add_argument('--log-filename', type=str, default=None,
                     help='File to save log CSV file to with per-frame data.')
+parser.add_argument('--survey-log-filename', type=str, default=None,
+                    help='File to save log CSV file to with survey response data.')
+parser.add_argument('--reaction-log-filename', type=str, default=None,
+                    help='File to save log CSV file to with reaction prompt data.')
 parser.add_argument('--log-overwrite', choices=['true', 'false'], default='false',
-                    help='Whether to overwrite pre-existing log file.')
+                    help='Whether to overwrite pre-existing log files.')
 parser.add_argument('--trigger-blink', choices=['true', 'false'], default='false',
                     help='Blink sprite on screen when trigger pulse is received.')
 parser.add_argument('--parallel-test-address', type=str, default=None,
@@ -817,6 +821,8 @@ class GameModeManager(object):
             pygame.mixer.music.play(-1)
 
         asteroidlogger = AsteroidLogger(self.args.log_filename, self.args.log_overwrite == 'true', self.max_asteroid_count)
+        surveylogger = SurveyLogger(self.args.survey_log_filename, self.args.log_overwrite == 'true')
+        reactionlogger = ReactionLogger(self.args.reaction_log_filename, self.args.log_overwrite == 'true')
         logrowdetails = {}
 
         self.total_millis = 0
@@ -873,6 +879,8 @@ class GameModeManager(object):
                 millis_list = (real_millis,)
 
             for millis in millis_list:
+                # used to indicate we should quit game after finishing update logic for this frame
+                quitgame = False
                 self.total_millis += millis
                 self.step_millis += millis
 
@@ -892,46 +900,16 @@ class GameModeManager(object):
                     first_update = False
                     frame_outbound_triggers.append('step_begin')
 
-                #Handle Input Events
-
-                # update the topmost screen:
                 events = pygame.event.get()
+                #Handle Keyboard triggers
                 for event in events:
-                    if event.type == QUIT:
-                        return
-                    elif (event.type == KEYDOWN
-                          and event.key == K_q
-                          and (event.mod & pygame.KMOD_META)):
-                        print 'CMD+Q Pressed. Exiting'
-                        return
-                    elif (event.type == KEYDOWN 
-                          and event.key == K_F4
-                          and (event.mod & pygame.KMOD_ALT)):
-                        print 'ALT+F4 Pressed. Exiting'
-                        return
-                    elif (event.type == KEYDOWN
-                          and event.key == K_c
-                          and (event.mod & pygame.KMOD_ALT) != 0):
-                        # toggle cursor capture and visibility:
-                        current_grab = pygame.event.get_grab()
-                        new_grab = not current_grab
-                        pygame.event.set_grab(new_grab)
-                        pygame.mouse.set_visible(not new_grab)
-                    elif (event.type == KEYDOWN
-                          and event.key == K_n
-                          and (event.mod & pygame.KMOD_CTRL)):
-                        print 'CTRL+n pressed. Advancing to next step'
-                        self.gamescreenstack = []
-                    else:
-                        # check for keyboard trigger
-                        if (self.trigger_mode == 'keyboard'
-                            and self.trigger_key != None 
-                            and event.type == KEYDOWN 
-                            and event.key == self.trigger_key):
-                            self.step_trigger_count += 1
-                            trigger_received_this_tick = True
-                        pass
-                        #print event
+                    # check for keyboard trigger
+                    if (self.trigger_mode == 'keyboard'
+                        and self.trigger_key != None 
+                        and event.type == KEYDOWN 
+                        and event.key == self.trigger_key):
+                        self.step_trigger_count += 1
+                        trigger_received_this_tick = True
 
                 # Check for serial trigger:
                 if self.trigger_mode == 'serial' and self.trigger_serialport != None:
@@ -959,13 +937,43 @@ class GameModeManager(object):
                 try:
                     if len(self.gamescreenstack) > 0:
                         # update frontmost screen
-                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count)
+                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count, reactionlogger)
                         # update all screens in stack front to back
                         for screen in reversed(self.gamescreenstack):
-                            screen.update_always(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count)
+                            screen.update_always(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count, reactionlogger)
                 except QuitGame as e:
                     print e
                     return
+
+                #Handle Global Input Events
+                for event in events:
+                    if event.type == QUIT:
+                        quitgame = True
+                    elif (event.type == KEYDOWN
+                          and event.key == K_q
+                          and (event.mod & pygame.KMOD_META)):
+                        print 'CMD+Q Pressed. Exiting'
+                        quitgame = True
+                    elif (event.type == KEYDOWN 
+                          and event.key == K_F4
+                          and (event.mod & pygame.KMOD_ALT)):
+                        print 'ALT+F4 Pressed. Exiting'
+                        quitgame = True
+                    elif (event.type == KEYDOWN
+                          and event.key == K_c
+                          and (event.mod & pygame.KMOD_ALT) != 0):
+                        # toggle cursor capture and visibility:
+                        current_grab = pygame.event.get_grab()
+                        new_grab = not current_grab
+                        pygame.event.set_grab(new_grab)
+                        pygame.mouse.set_visible(not new_grab)
+                    elif (event.type == KEYDOWN
+                          and event.key == K_n
+                          and (event.mod & pygame.KMOD_CTRL)):
+                        print 'CTRL+n pressed. Advancing to next step'
+                        self.gamescreenstack = []
+                    else:
+                        pass
 
                 # Check if max duration on this step has expired
                 step = self.gamesteps[self.stepindex]
@@ -980,20 +988,26 @@ class GameModeManager(object):
 
                 # call .after_close() on any now closed screens:
                 for s in reversed(frame_start_gamescreenstack):
-                    if s not in self.gamescreenstack:
-                        s.after_close()
+                    if quitgame or s not in self.gamescreenstack:
+                        s.after_close(logrowdetails, reactionlogger, surveylogger)
 
                 asteroidlogger.log(logrowdetails)
 
                 self.update_outbound_triggers(frame_outbound_triggers)
-
+                
                 if len(self.gamescreenstack) == 0:
                     self.stepindex += 1
                     if self.stepindex >= len(self.gamesteps):
                         # all steps completed
-                        return
-                    self.init_step()
-                    frame_outbound_triggers.append('step_begin')
+                        quitgame = True
+                    else:
+                        self.init_step()
+                        frame_outbound_triggers.append('step_begin')
+
+                # game quit is delayed to here so logging happens for final update
+                if quitgame:
+                    return
+
 
             # draw topmost opaque screen and everything above it
             topopaquescreenindex = -1

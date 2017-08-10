@@ -38,11 +38,11 @@ class GameScreen(object):
         self.opaque = True
         self.name = self.__class__.__name__
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Update the screen's game state when this screen is frontmost"""
         pass
 
-    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Update the screen's game state every iteration regardless of if another screen is stacked on top"""
         pass
 
@@ -50,8 +50,8 @@ class GameScreen(object):
         """Draw the game screen to the physical screen buffer"""
         pass
 
-    def after_close(self):
-        """Clean up after screen is closed"""
+    def after_close(self, logrowdetails, reactionlogger, surveylogger):
+        """Clean up after screen is closed, and perform additional logging"""
         pass
 
 class TextSprite(object):
@@ -109,7 +109,7 @@ class BlackScreen(GameScreen):
 
         self.first_update = True
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music during the black screen
@@ -237,7 +237,7 @@ class UserTextScreen(GameScreen):
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -434,7 +434,7 @@ class SurveyQuestionScreen(GameScreen):
 
         self.sprites.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -463,6 +463,17 @@ class SurveyQuestionScreen(GameScreen):
         if 1 == len([b for b in self.option_buttons if b.selected]):
             # todo: log selected button
             self.screenstack.pop()
+
+    def after_close(self, logrowdetails, reactionlogger, surveylogger):
+        """Clean up after screen is closed, and perform additional logging"""
+        # save survey response in log. Already in logrowdetails
+        # also save every other log column that's known
+        surveylogrow = {}
+        for col in surveylogger.columns:
+            if logrowdetails.has_key(col):
+                surveylogrow[col] = logrowdetails[col]
+        surveylogger.log(surveylogrow)
+
 
 class AsteroidImpactInstructionsScreen(GameScreen):
     """
@@ -580,7 +591,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         self.sprites.draw(self.screen)
         self.asteroids.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # play music during the instructions at specified volume:
@@ -637,7 +648,7 @@ class LevelCompletedOverlayScreen(GameScreen):
         # remove 'level completed' screen
         topscreen = self.screenstack.pop()
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -685,7 +696,7 @@ class GameOverOverlayScreen(GameScreen):
         # remove 'game over' screen
         topscreen = self.screenstack.pop()
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -857,13 +868,13 @@ class AsteroidImpactGameplayScreen(GameScreen):
         if oldlevel_millis < 500 and 500 <= level_millis:
             self.notice_textsprite.set_text('')
 
-    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count)
+        self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
@@ -976,14 +987,14 @@ class AsteroidImpactGameplayScreen(GameScreen):
             logrowdetails[prefix + 'centery'] = asteroid.gamerect.centery
             logrowdetails[prefix + 'diameter'] = asteroid.gamediameter
 
-    def after_close(self):
+    def after_close(self, logrowdetails, reactionlogger, surveylogger):
         # halt all pending sounds
         for s in self.mostsprites:
             s.stop_audio()
         for s in self.powerupsprites:
             s.stop_audio()
         for s in self.reaction_prompts:
-            s.stop_audio()
+            s.step_end_deactivate(logrowdetails, reactionlogger)
 
     def draw(self):
         """draw game to ``self.screen``"""
@@ -1279,13 +1290,13 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             if oldlevel_millis < 500 and 500 <= level_millis:
                 self.notice_textsprite.set_text('')
 
-    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_always(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count)
+        self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""
         oldmlevelillis = self.level_millis
         self.level_millis += millis
@@ -1406,7 +1417,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # remove shrunken asteroids
         self.asteroids = [asteroid for asteroid in self.asteroids if asteroid.gamediameter >= 10]
 
-    def after_close(self):
+    def after_close(self, logrowdetails, reactionlogger, surveylogger):
         # halt all pending sounds
         for s in self.mostsprites:
             s.stop_audio()
@@ -1602,7 +1613,7 @@ class ParallelPortTestScreen(GameScreen):
 
         self.sprites.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music:
