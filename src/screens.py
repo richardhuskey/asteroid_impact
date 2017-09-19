@@ -85,7 +85,7 @@ class TextSprite(object):
         """Set and render new text"""
         if text != self.text:
             self.text = text
-            self.textsurf, rect = self.font.render(self.text, fgcolor=pygame.Color(*self.color))
+            self.textsurf = self.font.render(self.text, 1, self.color)
             self.textrect = self.textsurf.get_rect(**self.textsurf_get_rect_args)
 
     def draw(self, screen):
@@ -200,12 +200,12 @@ class UserTextScreen(GameScreen):
 
         big_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 72, 72)).height
-        self.font_big = load_font('freesansbold.ttf', big_font_size)
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
         
         self.line_height = 36 # game-space like font size below
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font = load_font('freesansbold.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
 
         self.text_color = (250, 250, 250) # white
 
@@ -357,12 +357,12 @@ class SurveyQuestionScreen(GameScreen):
 
         big_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 72, 72)).height
-        self.font_big = load_font('freesansbold.ttf', big_font_size)
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
         
         self.line_height = 36 # game-space like font size below
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font = load_font('freesansbold.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
 
         self.text_color = (250, 250, 250) # white
         self.text_color_option = (250, 250, 250) # white
@@ -499,10 +499,10 @@ class AsteroidImpactInstructionsScreen(GameScreen):
             pygame.Rect(0, 0, 72, 72)).height
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font_big = load_font('freesansbold.ttf', big_font_size)
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
         red = (250, 250, 10)
         black = (255, 255, 255)
-        self.font = load_font('freesansbold.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
         self.textsprites.append(
             TextSprite(self.font_big, "How to Play", red,
                        centerx=virtualdisplay.GAME_AREA.width/2,
@@ -626,8 +626,8 @@ class LevelCompletedOverlayScreen(GameScreen):
         self.name = 'level_complete'
         self.opaque = False
         self.screenarea = self.screen.get_rect()
-        self.font = load_font('freesansbold.ttf', 36)
-        self.text = self.font.render("Level Completed", pygame.Color(250, 10, 10, 255))
+        self.font = load_font('FreeSansBold.ttf', 36)
+        self.text = self.font.render("Level Completed", 1, (250, 10, 10))
         self.textpos = self.text.get_rect(
             centerx=self.screenarea.width/2, centery=self.screenarea.height/2)
         self.elapsedmillis = 0
@@ -673,8 +673,8 @@ class GameOverOverlayScreen(GameScreen):
         self.name = 'game_over'
         self.opaque = False
         self.screenarea = self.screen.get_rect()
-        self.font = load_font('freesansbold.ttf', 36)
-        self.text = self.font.render("You Died!", pygame.Color(250, 10, 10, 255))
+        self.font = load_font('FreeSansBold.ttf', 36)
+        self.text = self.font.render("You Died!", 1, (250, 10, 10))
         self.textpos = self.text.get_rect(
             centerx=self.screenarea.width/2, centery=self.screenarea.height/2)
         self.elapsedmillis = 0
@@ -760,12 +760,12 @@ class AsteroidImpactGameplayScreen(GameScreen):
 
         status_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        status_font = load_font('freesansbold.ttf', status_font_size)
+        status_font = load_font('FreeSansBold.ttf', status_font_size)
         status_color = (250, 250, 10)
 
         notice_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        notice_font = load_font('freesansbold.ttf', notice_font_size)
+        notice_font = load_font('FreeSansBold.ttf', notice_font_size)
         notice_color = (250, 250, 10)
 
         self.status_asteroids_textsprite = TextSprite(
@@ -1129,12 +1129,12 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         status_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        status_font = load_font('freesansbold.ttf', status_font_size)
+        status_font = load_font('FreeSansBold.ttf', status_font_size)
         status_color = (250, 250, 10)
 
         notice_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        notice_font = load_font('freesansbold.ttf', notice_font_size)
+        notice_font = load_font('FreeSansBold.ttf', notice_font_size)
         notice_color = (250, 250, 10)
 
         self.status_asteroids_textsprite = TextSprite(
@@ -1472,17 +1472,17 @@ class ParallelPortTestScreen(GameScreen):
 
         big_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 72, 72)).height
-        self.font_big = load_font('freesansbold.ttf', big_font_size)
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
         
         self.line_height = 36 # game-space like font size below
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font = load_font('freesansbold.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
 
         self.digit_line_height = 32
         digit_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.digit_font = load_font('freesansbold.ttf', digit_font_size)
+        self.digit_font = load_font('FreeSansBold.ttf', digit_font_size)
 
         self.text_color = (11, 11, 11) # dark
         self.text_color_option = (127, 127, 127) # gray
