@@ -85,7 +85,7 @@ class TextSprite(object):
         """Set and render new text"""
         if text != self.text:
             self.text = text
-            self.textsurf = self.font.render(self.text, 1, self.color)
+            self.textsurf, rect = self.font.render(self.text, fgcolor=pygame.Color(*self.color))
             self.textrect = self.textsurf.get_rect(**self.textsurf_get_rect_args)
 
     def draw(self, screen):
@@ -627,7 +627,7 @@ class LevelCompletedOverlayScreen(GameScreen):
         self.opaque = False
         self.screenarea = self.screen.get_rect()
         self.font = load_font('freesansbold.ttf', 36)
-        self.text = self.font.render("Level Completed", 1, (250, 10, 10))
+        self.text = self.font.render("Level Completed", pygame.Color(250, 10, 10, 255))
         self.textpos = self.text.get_rect(
             centerx=self.screenarea.width/2, centery=self.screenarea.height/2)
         self.elapsedmillis = 0
@@ -674,7 +674,7 @@ class GameOverOverlayScreen(GameScreen):
         self.opaque = False
         self.screenarea = self.screen.get_rect()
         self.font = load_font('freesansbold.ttf', 36)
-        self.text = self.font.render("You Died!", 1, (250, 10, 10))
+        self.text = self.font.render("You Died!", pygame.Color(250, 10, 10, 255))
         self.textpos = self.text.get_rect(
             centerx=self.screenarea.width/2, centery=self.screenarea.height/2)
         self.elapsedmillis = 0

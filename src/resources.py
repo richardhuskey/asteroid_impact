@@ -12,6 +12,7 @@ Resource-loading utilities for AsteroidImpact
 
 from __future__ import absolute_import, division
 import os, sys, pygame
+import pygame.freetype
 
 # Changing these only takes effect on newly loaded sounds
 # so set volume before any sounds are loaded
@@ -42,17 +43,18 @@ def load_font(name, size):
     'Load pygame font for specified filename, font size'
     fullname = resource_path(os.path.join('data', name))
 
-    if pygame.font:
-        return pygame.font.Font(fullname, size)
+    if pygame.freetype:
+        return pygame.freetype.Font(fullname, size)
 
     class NoneFont:
         def __init__(self, filename, fontsize):
             self.fontsize = fontsize
-        def render(self, text, antialias, color, background=None):
+        def render(self, text, **kwargs):
             'return no text on a new surface'
-            s = pygame.Surface(self.size(text))
+            dimensions = self.size(text)
+            s = pygame.Surface(dimensions)
             s.fill(color)
-            return s
+            return (s, pygame.Rect(0,0,dimensions[0],dimensions[0]))
         def size(self, text):
             'return size of text without font'
             return (self.fontsize*len(text)//4, self.fontsize)
