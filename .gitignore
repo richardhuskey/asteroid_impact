@@ -4,3 +4,5 @@ dist/
 temp/
 doc/_build/
 .vs/
+env/
+_testscript.json

@@ -11,8 +11,8 @@
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <InterpreterId>Global|PythonCore|2.7-32</InterpreterId>
-    <CommandLineArguments>--music-volume 0.0 --effects-volume 1.0 --window-x 100 --window-y 100 --display-width 640 --display-height 480 --script-json testscript.json --trigger-blink true --log-filename test.csv --log-overwrite true --survey-log-filename survey.csv --reaction-log-filename reactions.csv --trigger-blink true</CommandLineArguments>
+    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <CommandLineArguments>--music-volume 0.0 --effects-volume 1.0 --parallel-test-address 0x3BC</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
@@ -21,7 +21,6 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="button-test.html" />
     <Content Include="credits.txt" />
     <Content Include="data\asteroid.png" />
     <Content Include="data\background4x3.jpg" />
@@ -44,10 +43,10 @@
     <Content Include="raw_data\background.jpg" />
     <Content Include="raw_data\gamesprites.svg" />
     <Content Include="raw_data\Moon_Farside_LRO.jpg" />
+    <Content Include="requirements.txt" />
     <Content Include="samplescript-adaptive.json" />
     <Content Include="samplescript-trigger.json" />
     <Content Include="samplescript.json" />
-    <Content Include="testscript.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="doc\conf.py" />
@@ -70,6 +69,17 @@
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|2.7-32" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="env\">
+      <Id>env</Id>
+      <Version>2.7</Version>
+      <Description>env (Python 2.7 (32-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X86</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
