@@ -13,7 +13,7 @@ You should have received a copy of the license along with this work. If not, see
 
 Key Contributors include:
 
-Richard Huskey, Nick Winters, Britney Craighead, Rene Weber
+Richard Huskey, Nick Winters, Justin Keene, Jacob Fisher, Britney Craighead, and Rene Weber
 
 <h1>How to cite</h1>
 
