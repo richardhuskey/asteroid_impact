@@ -6,6 +6,13 @@ In Windows, Asteroid Impact can receive incoming trigger pulses over parallel po
 
 This video describes parallel ports, how they work in windows, and how you can test them in Asteroid Impact. https://www.youtube.com/watch?v=M0jUZ60QPNk
 
+Software Requirements for Parallel Port
+=======================================
+
+Parallel ports are only supported in Asteroid Impact on Windows.
+
+Additionally, additional dlls and driver are required. inpout32.dll/inpoutx64.dll must be in the same directory as game.py and the driver needs to be installed. Download all three from the "Binaries Only" link on `Highres.co.uk <http://www.highrez.co.uk/Downloads/InpOut32/default.htm>`_.
+
 Parallel Port Background
 =========================
 

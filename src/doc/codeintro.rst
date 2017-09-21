@@ -151,7 +151,7 @@ Asteroid Impact requires the following to run from source:
  * Python 2.7 available from http://python.org
  * PyGame 1.9.1 available from http://pygame.org
  * Pyserial for your python version, available by running `pip install pyserial` or from https://pypi.python.org/pypi/pyserial
- * inpout32.dll/inpoutx64.dll is required for parallel port support.
+ * inpout32.dll/inpoutx64.dll, and driver from Binaries Only download link on `Highres.co.uk <http://www.highrez.co.uk/Downloads/InpOut32/default.htm>`_ is required for parallel port support.
  
 This has primarily been developed been using 32-bit python 2.7.10 on Windows 10 with PyGame 1.9.1 for 32 bit python.
 
