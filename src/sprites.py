@@ -385,12 +385,13 @@ class ReactionTimePrompt(VirtualGameSprite):
             showtimes_millis=[],
             showtimes_trigger_counts=[],
             timeout_millis = 5000,
+            stay_visible = False,
             **kwargs_extra):
         #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
         self.gamediameter = diameter
         self.position_list = position_list
-        self.position_index = 0
+        self.position_index = -1
         left, top = self.position_list[self.position_index]
         self.gamerect_visible = pygame.Rect(left, top, diameter, diameter)
         self.gamerect_hidden = pygame.Rect(-9999, -9999, diameter, diameter)
@@ -418,6 +419,8 @@ class ReactionTimePrompt(VirtualGameSprite):
         if isinstance(timeout_millis, str) or isinstance(timeout_millis, unicode):
             timeout_millis = None
         self.timeout_millis = timeout_millis
+        self.stay_visible = stay_visible
+        self.active = False
         self.visible = False
         self.total_elapsed = 0
         self.showtime_last = 0 # millis when shown
@@ -441,21 +444,23 @@ class ReactionTimePrompt(VirtualGameSprite):
                 raise QuitGame()
             self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
 
-    def activate(self):
-        self.gamerect = self.gamerect_visible
-        self.update_rect()
-        self.visible = True
-        self.prompt_sound.play()
-
-    def deactivate(self):
-        self.gamerect = self.gamerect_hidden
-        self.update_rect()
-        self.visible = False
-
+    def activate_and_show(self):
         # prepare for next position:
         self.position_index = (self.position_index + 1) % len(self.position_list)
         left, top = self.position_list[self.position_index]
         self.gamerect_visible = pygame.Rect(left, top, self.gamediameter, self.gamediameter)
+
+        self.gamerect = self.gamerect_visible
+        self.update_rect()
+        self.active = True
+        self.visible = True
+        self.prompt_sound.play()
+
+    def deactivate_and_hide(self):
+        self.gamerect = self.gamerect_hidden
+        self.update_rect()
+        self.active = False
+        self.visible = False
 
         # fadeout avoids "click" at end, but I wish I could do shorter duration
         self.prompt_sound.fadeout(100)
@@ -470,40 +475,53 @@ class ReactionTimePrompt(VirtualGameSprite):
                     showtime <= self.total_elapsed):
                     # show
                     self.showtime_last = self.total_elapsed
-                    self.activate()
+                    self.activate_and_show()
             if (not self.visible 
                 and self.step_trigger_count_last != step_trigger_count
                 and self.showtimes_trigger_counts
                 and step_trigger_count in self.showtimes_trigger_counts):
                     # show
                     self.showtime_last = self.total_elapsed
-                    self.activate()
+                    self.activate_and_show()
         else:
             visible_ms = self.total_elapsed - self.showtime_last
             logrowdetails['reaction_prompt_state'] = 'waiting'
             logrowdetails['reaction_prompt_millis'] = visible_ms
             logrowdetails['reaction_prompt_sound'] = self.sound_name
             logrowdetails['reaction_prompt_image'] = self.image_name
-            # showing now
+
+            if self.active:
+                # showing now and waiting keypress
+                for event in events:
+                    if self.dismiss_test(event):
+                        logrowdetails['reaction_prompt_state'] = 'complete'
+                        logrowdetails['reaction_prompt_millis'] = visible_ms
+                        # correct key pressed
+                        if self.stay_visible:
+                            # just deactivate, don't hide or stop playing sounds until timeout
+                            self.active = False
+                        else:
+                            self.deactivate_and_hide()
+
+                        # log completed
+                        self.logme(logrowdetails, reactionlogger)
+            else:
+                # no longer active because key was already pressed.
+                logrowdetails['reaction_prompt_state'] = 'after_complete'
+
             if self.timeout_millis:
                 if self.showtime_last + self.timeout_millis <= self.total_elapsed:
-                    # timed out. Hide
-                    self.deactivate()
-                    logrowdetails['reaction_prompt_state'] = 'timeout'
-                    logrowdetails['reaction_prompt_millis'] = visible_ms
+                    # stayed visible entire time allowed
+                    # might be because was supposed to stay visible after key press, so check before logging/notifying
+                    if self.active:
+                        # still waiting for key that didn't happen in time, log it
+                        logrowdetails['reaction_prompt_state'] = 'timeout'
+                        logrowdetails['reaction_prompt_millis'] = visible_ms
 
-                    # log timed out
-                    self.logme(logrowdetails, reactionlogger)
+                        # log timed out
+                        self.logme(logrowdetails, reactionlogger)
 
-            for event in events:
-                if self.dismiss_test(event):
-                    logrowdetails['reaction_prompt_state'] = 'complete'
-                    logrowdetails['reaction_prompt_millis'] = visible_ms
-                    # correct key pressed
-                    self.deactivate()
-
-                    # log completed
-                    self.logme(logrowdetails, reactionlogger)
+                    self.deactivate_and_hide()
 
         self.step_trigger_count_last = step_trigger_count
 

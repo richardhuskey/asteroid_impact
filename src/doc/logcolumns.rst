@@ -142,7 +142,7 @@ To output a reaction prompt log file use the ``--reaction-log-filename FILENAME`
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | reaction_prompt_image  | Configured image for currently visible reaction propmt.                                                                                                                               |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| reaction_prompt_state  | Status of active reaction time prompt (waiting, complete, timeout, timeout_step_end), or blank if none.                                                                               |
+| reaction_prompt_state  | Status of active reaction time prompt (waiting, complete, after_complete, timeout, timeout_step_end), or blank if none.                                                               |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | reaction_prompt_millis | Milliseconds that reaction prompt has been active for, or blank if none.                                                                                                              |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
