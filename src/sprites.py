@@ -35,7 +35,7 @@ class VirtualGameSprite(pygame.sprite.Sprite):
 #classes for our game objects
 class Cursor(VirtualGameSprite):
     """The Player's ship is moved around using the mouse cursor"""
-    def __init__(self, game_bounds=virtualdisplay.screenplayarea):
+    def __init__(self, game_bounds=virtualdisplay.GAME_PLAY_AREA):
         VirtualGameSprite.__init__(self) #call Sprite initializer
         # find screen diameter
         self.gamediameter = 32
@@ -50,19 +50,20 @@ class Cursor(VirtualGameSprite):
     def update(self, millis):
         """Move the cursor based on the mouse position"""
         pos = pygame.mouse.get_pos()
+        game_pos = virtualdisplay.gamepoint_from_screenpoint(pos)
 
         # if the cursor is outside of the game area, move it back
-        if not virtualdisplay.screenplayarea.collidepoint(pos):
-            pos = (
+        if not self.game_bounds.collidepoint(game_pos):
+            game_pos = (
                 max(
-                    min(pos[0], self.game_bounds.right),
+                    min(game_pos[0], self.game_bounds.right),
                     self.game_bounds.left),
                 max(
-                    min(pos[1], self.game_bounds.bottom),
+                    min(game_pos[1], self.game_bounds.bottom),
                     self.game_bounds.top))
+            pos = virtualdisplay.screenpoint_from_gamepoint(game_pos)
             pygame.mouse.set_pos(pos)
 
-        game_pos = virtualdisplay.gamepoint_from_screenpoint(pos)
         self.gamerect.center = game_pos
         self.update_rect()
 

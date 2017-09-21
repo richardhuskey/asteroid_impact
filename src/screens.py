@@ -821,7 +821,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
         leveldetails = self.level_list[self.level_index]
         self.level_millis = -2000 # for the 'get ready' and level countdown
 
-        self.cursor = Cursor()
+        self.cursor = Cursor(game_bounds=virtualdisplay.GAME_PLAY_AREA)
         self.target_positions = leveldetails['target_positions']
         self.target_index = 0
         self.target = Target(
@@ -1196,7 +1196,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # this fixes typical case of advancing to next level, but it still happens 
         # when you die
         if first:
-            self.cursor = Cursor()
+            self.cursor = Cursor(game_bounds=virtualdisplay.GAME_PLAY_AREA)
         self.target_positions = self.current_level['target_positions']
         self.target_index = 0
         self.target = Target(
