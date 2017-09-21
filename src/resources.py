@@ -191,7 +191,7 @@ class MixedSound(pygame.mixer.Sound):
                     if not playing_count_by_filename.has_key(s.filename):
                         playing_count_by_filename[s.filename] = (s, 1)
                     else:
-                        playing_count_by_filename[s.filename] += (s, playing_count_by_filename[s.filename][1]+1)
+                        playing_count_by_filename[s.filename] = (s, playing_count_by_filename[s.filename][1]+1)
                     playing_count_total += 1
         
         playing_count_total += 1 # me once I start playing
@@ -199,7 +199,7 @@ class MixedSound(pygame.mixer.Sound):
         if not playing_count_by_filename.has_key(self.filename):
             playing_count_by_filename[self.filename] = (self, 1)
         else:
-            playing_count_by_filename[self.filename] += (self, playing_count_by_filename[self.filename][1]+1)
+            playing_count_by_filename[self.filename] = (self, playing_count_by_filename[self.filename][1]+1)
 
         # adjust volume of myself and others for number of times playing
         for filename,packed_val in playing_count_by_filename.iteritems():
