@@ -9,24 +9,30 @@ Sample: ::
     {
       "output_trigger_settings": {
         "mode": "none",
-
-        "trigger_list": [
-          "step_begin",
-          "game_death",
-          "game_level_complete",
-          "adaptive_difficulty_increase",
-          "adaptive_difficulty_decrease"
-        ],
+      
+        "serial_trigger_strings_by_event": {
+          "step_begin": "1",
+          "game_death": "2",
+          "game_level_complete": "3",
+          "adaptive_difficulty_increase": "4",
+          "adaptive_difficulty_decrease": "5"
+        },
         "serial_options": {
-          "port": "COM5",
+          "port": "COM6",
           "baudrate": 19200,
           "trigger_byte_value": 78
         },
-
+      
+        "parallel_trigger_hex_values_by_event": {
+          "step_begin": "0x11",
+          "game_death": "0x12",
+          "game_level_complete": "0x14",
+          "adaptive_difficulty_increase": "0x18",
+          "adaptive_difficulty_decrease": "0x00"
+        },
         "parallel_options": {
           "port_address_hex": "BF00",
           "common_data_value_hex": "0x10",
-          "trigger_data_value_hex": "0x11",
           "trigger_frames": 10
         }
       },
@@ -224,24 +230,30 @@ Sample trigger-driven JSON: ::
       },
       "output_trigger_settings": {
         "mode": "none",
-
-        "trigger_list": [
-          "step_begin",
-          "game_death",
-          "game_level_complete",
-          "adaptive_difficulty_increase",
-          "adaptive_difficulty_decrease"
-        ],
+      
+        "serial_trigger_strings_by_event": {
+          "step_begin": "1",
+          "game_death": "2",
+          "game_level_complete": "3",
+          "adaptive_difficulty_increase": "4",
+          "adaptive_difficulty_decrease": "5"
+        },
         "serial_options": {
-          "port": "COM5",
+          "port": "COM6",
           "baudrate": 19200,
           "trigger_byte_value": 78
         },
-
+      
+        "parallel_trigger_hex_values_by_event": {
+          "step_begin": "0x11",
+          "game_death": "0x12",
+          "game_level_complete": "0x14",
+          "adaptive_difficulty_increase": "0x18",
+          "adaptive_difficulty_decrease": "0x00"
+        },
         "parallel_options": {
           "port_address_hex": "BF00",
           "common_data_value_hex": "0x10",
-          "trigger_data_value_hex": "0x11",
           "trigger_frames": 10
         }
       },
@@ -540,9 +552,9 @@ Output Trigger Settings
 
 The game can be configured to output signals over a serial port or parallel port on certain game events.
 
-For serial port only one byte is written when any of the listed game events happens.
+For serial output triggers, ``serial_trigger_strings_by_event`` is a lookup from game event to the string to send over serial. Configure this dictionary to contain only the events you wish to be notified about.
 
-For parallel, the data pins are changed from the ``common_data_value_hex`` to ``trigger_data_value_hex`` for ``trigger_frames`` frames. One frame is about 1/60 second.
+For parallel output triggers, ``parallel_trigger_hex_values_by_event`` is a lookup from game event to the value to change the parallel port data byte to for ``trigger_frames`` frames. One frame is about 1/60 second.
 
 See :doc:`parallelport` for information about parallel ports.
 
@@ -553,24 +565,29 @@ Sample ::
     "output_trigger_settings": {
       "mode": "serial",
     
-      "trigger_list": [
-        "step_begin",
-        "game_death",
-        "game_level_complete",
-        "adaptive_difficulty_increase",
-        "adaptive_difficulty_decrease"
-      ],
-      
+      "serial_trigger_strings_by_event": {
+        "step_begin": "1",
+        "game_death": "2",
+        "game_level_complete": "3",
+        "adaptive_difficulty_increase": "4",
+        "adaptive_difficulty_decrease": "5"
+      },
       "serial_options": {
-        "port": "COM5",
+        "port": "COM6",
         "baudrate": 19200,
         "trigger_byte_value": 78
       },
     
+      "parallel_trigger_hex_values_by_event": {
+        "step_begin": "0x11",
+        "game_death": "0x12",
+        "game_level_complete": "0x14",
+        "adaptive_difficulty_increase": "0x18",
+        "adaptive_difficulty_decrease": "0x00"
+      },
       "parallel_options": {
         "port_address_hex": "BF00",
         "common_data_value_hex": "0x10",
-        "trigger_data_value_hex": "0x11",
         "trigger_frames": 10
       }
     },

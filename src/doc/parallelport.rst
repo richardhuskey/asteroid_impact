@@ -130,7 +130,11 @@ Output trigger behavior
 
 The output trigger system is intended to allow you to record game events mixed with other signals on another computer. Like the input trigger system for parallel ports, the output trigger also specifies a "common" value and "active" value.
 
-For the output triggers you specify a list of game events you want a pulse to be sent on. The full list is in the sample below.
+For the output triggers you specify a list of game events you want a pulse to be sent on. The full list is in the sample below. 
+
+serial_trigger_strings_by_event is used to specify the list of game events a pulse should be sent on over serial, and what data should be sent on that event. For example, the configuration below sends an ascii digit 1 when each step begins.
+
+parallel_trigger_hex_values_by_event works the same way, but specifies the hex value to set the parallel port output pins to when that event occurs. When multiple parallel port output trigger events happen on the same frame, the changes are combined to happen simultaneously across multiple pins. For example, with an inactive value of 0x00 and a level completion value of 0x01 and difficulty increase value of 0x02 when both happen the output port would be set to 0x03 for the configured number of frames. This logic checks which bits are changed, so it will work active-low as well.
 
 trigger_frames is how many frames (1/60th of second) the parallel port should be kept at the "active" value.
 
@@ -139,24 +143,29 @@ Sample: ::
     "output_trigger_settings": {
       "mode": "parallel",
     
-      "trigger_list": [
-        "step_begin",
-        "game_death",
-        "game_level_complete",
-        "adaptive_difficulty_increase",
-        "adaptive_difficulty_decrease"
-      ],
-      
+      "serial_trigger_strings_by_event": {
+        "step_begin": "1",
+        "game_death": "2",
+        "game_level_complete": "3",
+        "adaptive_difficulty_increase": "4",
+        "adaptive_difficulty_decrease": "5"
+      },
       "serial_options": {
-        "port": "COM5",
+        "port": "COM6",
         "baudrate": 19200,
         "trigger_byte_value": 78
       },
     
+      "parallel_trigger_hex_values_by_event": {
+        "step_begin": "0x11",
+        "game_death": "0x12",
+        "game_level_complete": "0x14",
+        "adaptive_difficulty_increase": "0x18",
+        "adaptive_difficulty_decrease": "0x00"
+      },
       "parallel_options": {
         "port_address_hex": "BF00",
         "common_data_value_hex": "0x10",
-        "trigger_data_value_hex": "0x11",
         "trigger_frames": 10
       }
     },
