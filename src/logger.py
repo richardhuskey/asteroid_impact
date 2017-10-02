@@ -180,8 +180,6 @@ class SurveyLogger(object):
         self.log({col:col for col in self.columns})
 
     def log(self, rowdict):
-        #hack test
-        print 'surveylogger.log()'
         """Save new log row for values in rowdict"""
         for i, key in enumerate(self.columns):
             if i > 0:
