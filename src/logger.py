@@ -90,6 +90,8 @@ class AsteroidLogger(object):
             'survey_prompt',
             # currently selected answer on current survey step
             'survey_answer',
+            # 1-based position of currently selected answer on current survey step
+            'survey_answer_number',
 
             # reaction prompt state
             # only shows one active reaction prompts in per-frame log
@@ -172,6 +174,8 @@ class SurveyLogger(object):
             'survey_prompt',
             # currently selected answer on current survey step
             'survey_answer',
+            # 1-based position of currently selected answer on current survey step
+            'survey_answer_number',
             ]
 
         self.columns_set = Set(self.columns)

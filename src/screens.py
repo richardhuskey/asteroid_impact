@@ -258,11 +258,12 @@ class UserTextScreen(GameScreen):
 
 class SurveyButton:
     '''Push button for "next" or toggle/radio button'''
-    def __init__(self, gamerect, text, onclick):
+    def __init__(self, gamerect, text, onclick, option_index = -1):
         self.gamerect = gamerect
         self.screenrect = virtualdisplay.screenrect_from_gamerect(gamerect)
 
         self.text = text
+        self.option_index = option_index
 
         self.color_normal = (68, 68, 68) # gray
         self.color_selected = (23, 100, 214) # blue
@@ -398,7 +399,7 @@ class SurveyQuestionScreen(GameScreen):
 
         # add buttons for each survey option
         self.option_buttons = []
-        for option_text in reversed(survey_options):
+        for option_index,option_text in reversed(list(enumerate(survey_options))):
             lines, option_bounds = flow_text(
                 option_text,
                 pygame.Rect(
@@ -412,7 +413,7 @@ class SurveyQuestionScreen(GameScreen):
                 valign='bottom')
             bottom_y -= (len(lines)+1)*self.line_height
             self.textsprites += lines
-            option_button = SurveyButton(option_bounds, option_text, lambda b:self.option_button_click(b))
+            option_button = SurveyButton(option_bounds, option_text, lambda b:self.option_button_click(b), option_index)
             self.option_buttons.append(option_button)
 
         self.first_update = True
@@ -446,6 +447,7 @@ class SurveyQuestionScreen(GameScreen):
             b.update(millis)
             if b.selected:
                 logrowdetails['survey_answer'] = b.text
+                logrowdetails['survey_answer_number'] = b.option_index + 1
         logrowdetails['survey_prompt'] = self.prompt
 
         if self.nextbutton:
