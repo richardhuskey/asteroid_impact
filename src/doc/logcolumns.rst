@@ -74,7 +74,7 @@ Log Columns
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | survey_prompt          | The survey question shown on the current survey question screen.                                                                                                                      |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| survey_answer          | The currently selected survey answer on the current survey question screen.                                                                                                           |
+| survey_answer          | The currently selected survey answer on the current survey question screen. "MISSING" when none selected.                                                                             |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | survey_answer_number   | Number of selected survey answer on the current survey question screen. For the first option, this will be 1                                                                          |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -181,7 +181,7 @@ To output a survey question answer log file use the ``--survey-log-filename FILE
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | survey_prompt          | The survey question shown on the current survey question screen.                                                                                                                      |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| survey_answer          | The currently selected survey answer on the current survey question screen.                                                                                                           |
+| survey_answer          | The currently selected survey answer on the current survey question screen. "MISSING" when none selected.                                                                             |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | survey_answer_number   | Number of selected survey answer on the current survey question screen. For the first option, this will be 1                                                                          |
 +------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+

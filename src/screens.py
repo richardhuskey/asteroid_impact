@@ -443,6 +443,7 @@ class SurveyQuestionScreen(GameScreen):
 
         self.sprites.update(millis)
 
+        logrowdetails['survey_answer'] = 'MISSING'
         for b in self.option_buttons:
             b.update(millis)
             if b.selected:
