@@ -12,7 +12,7 @@
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
-    <CommandLineArguments>--music-volume 0.0 --effects-volume 1.0 --parallel-test-address 0x3BC</CommandLineArguments>
+    <CommandLineArguments>--music-volume 0.0 --effects-volume 1.0 --window-x 600 --window-y 100 --display-width 640 --display-height 480 --script-json _testscript.json --trigger-blink true --log-filename test.csv --log-overwrite true --survey-log-filename survey.csv --reaction-log-filename reactions.csv --trigger-blink true</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
