@@ -32,6 +32,12 @@
     <Content Include="data\square.png" />
     <Content Include="data\triangle.png" />
     <Content Include="doc\codeintro.rst" />
+    <Content Include="doc\images\blackscreen-screenshot.png" />
+    <Content Include="doc\images\gameplay-adaptive-screenshot.png" />
+    <Content Include="doc\images\gameplay-screenshot.png" />
+    <Content Include="doc\images\instructions-screenshot.png" />
+    <Content Include="doc\images\survey-screenshot.png" />
+    <Content Include="doc\images\text-screenshot.png" />
     <Content Include="doc\index.rst" />
     <Content Include="doc\leveljson.rst" />
     <Content Include="doc\logcolumns.rst" />
@@ -47,6 +53,7 @@
     <Content Include="samplescript-adaptive.json" />
     <Content Include="samplescript-trigger.json" />
     <Content Include="samplescript.json" />
+    <Content Include="_testscript.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="doc\conf.py" />
@@ -65,6 +72,7 @@
   <ItemGroup>
     <Folder Include="data" />
     <Folder Include="doc" />
+    <Folder Include="doc\images\" />
     <Folder Include="raw_data" />
   </ItemGroup>
   <ItemGroup>
