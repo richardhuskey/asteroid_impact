@@ -3,21 +3,26 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Asteroid Impact's documentation!
-===========================================
+Asteroid Impact
+===============
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
+   intro
    codeintro
    leveljson
    scriptjson
    logcolumns
    makelevelpy
    parallelport
-
+   input-trigger
+   step-instructions
+   step-text
+   step-survey
+   step-blackscreen
    ref/game
    ref/logger
    ref/makelevel
