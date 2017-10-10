@@ -80,6 +80,8 @@ Find your parallel port under "Ports (COM & LPT)". Double click on it to bring u
 
 On the Resources tab, the first listed "I/O Range" shows the data address in the first number in the range. These numbers are in hexadecimal.
 
+.. image:: images/windows-devicemgr-parallel-io-address.png
+
 Test parallel port in Asteroid Impact
 ======================================
 
@@ -90,6 +92,8 @@ You can click on each of the digits on the output byte to change the value being
 If you have a second parallel port in your computer you can wire your LapLink cable between the two parallel ports and launch the game.py twice at once with the two different parallel port addresses to test your LapLink cable and parallel ports.
 
 Note that the BUSY bit on the 8th bit of the status register is inverted, so 0V would read as 1 and 5V would read as a 0.
+
+.. image:: images/parallel-test-screnshot.png
 
 Input trigger behavior
 =======================
