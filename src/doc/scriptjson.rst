@@ -19,8 +19,7 @@ Sample: ::
         },
         "serial_options": {
           "port": "COM6",
-          "baudrate": 19200,
-          "trigger_byte_value": 78
+          "baudrate": 19200
         },
       
         "parallel_trigger_hex_values_by_event": {
@@ -240,8 +239,7 @@ Sample trigger-driven JSON: ::
         },
         "serial_options": {
           "port": "COM6",
-          "baudrate": 19200,
-          "trigger_byte_value": 78
+          "baudrate": 19200
         },
       
         "parallel_trigger_hex_values_by_event": {
@@ -419,8 +417,7 @@ Sample ::
       },
       "serial_options": {
         "port": "COM6",
-        "baudrate": 19200,
-        "trigger_byte_value": 78
+        "baudrate": 19200
       },
     
       "parallel_trigger_hex_values_by_event": {
