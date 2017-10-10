@@ -1,8 +1,8 @@
 *.pyc
-build/
-dist/
-temp/
-doc/_build/
-.vs/
-env/
-_testscript.json
+src/build/
+src/dist/
+src/temp/
+src/doc/_build/
+src/.vs/
+src/env/
+src/_testscript.json
