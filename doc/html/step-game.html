@@ -1,0 +1,376 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Gameplay Step and Adaptive Gameplay Step &#8212; Asteroid Impact 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Instructions Step" href="step-instructions.html" />
+    <link rel="prev" title="Output Triggers" href="output-trigger.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gameplay-step-and-adaptive-gameplay-step">
+<h1>Gameplay Step and Adaptive Gameplay Step<a class="headerlink" href="#gameplay-step-and-adaptive-gameplay-step" title="Permalink to this headline">¶</a></h1>
+<img alt="_images/gameplay-screenshot.png" src="_images/gameplay-screenshot.png" />
+<p>The <code class="docutils literal"><span class="pre">game</span></code> step is the actual game of Asteroid Impact. The player gets to try to avoid the bouncing asteroids, while collecting crystals to complete the level. There can also be power-ups that slow down the asteroids temporarily or a shield for temporary invulnerability.</p>
+<p>The <code class="docutils literal"><span class="pre">game-adaptive</span></code> is a variant of standard gameplay where there isn’t a countdown between completed levels. The gameplay is the same.</p>
+<p>Both <code class="docutils literal"><span class="pre">game</span></code> and <code class="docutils literal"><span class="pre">game-adaptive</span></code> steps and their configuration are descirbed on this page because they share many options or related options.</p>
+<div class="section" id="json-configuration-for-game-step">
+<h2>JSON Configuration for <code class="docutils literal"><span class="pre">game</span></code> Step<a class="headerlink" href="#json-configuration-for-game-step" title="Permalink to this headline">¶</a></h2>
+<p>Below is a sample of the full JSON configuration for a <code class="docutils literal"><span class="pre">game</span></code> step.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+  <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+      <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;square.png&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone146.wav&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
+      <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;duration&quot;</span></code></dt>
+<dd>The number of seconds to show the step for. When omitted, gameplay will continue until the game is forced to quit with alt+f4 or cmd+q.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;trigger_count&quot;</span></code></dt>
+<dd>The number of incoming trigger pulses until this step automatically advances. When omitted, gameplay will continue until the game is forced to quit with alt+f4 or cmd+q.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;levels&quot;</span></code></dt>
+<dd>The filename for the JSON file with the list of levels. See <a class="reference internal" href="makelevelpy.html"><span class="doc">makelevel.py</span></a> for information about creating levelss, and <a class="reference internal" href="leveljson.html"><span class="doc">Single Level JSON</span></a> for information about the JSON format for levels themselves.</dd>
+</dl>
+</div>
+<div class="section" id="json-configuration-for-game-adaptive-step">
+<h2>JSON Configuration for <code class="docutils literal"><span class="pre">game-adaptive</span></code> Step<a class="headerlink" href="#json-configuration-for-game-adaptive-step" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">game-adaptive</span></code> step has the same settings as <code class="docutils literal"><span class="pre">game</span></code> except levels work differently for the creation during gameplay. Below is a sample of the full JSON configuration for a <code class="docutils literal"><span class="pre">game-adaptive</span></code> step.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>
+  <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game-adaptive&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+  <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+  <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+  <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+      <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;slow&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+      <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;shield&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+      <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;extreme&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;shield&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;duration&quot;</span></code></dt>
+<dd>The number of seconds to show the step for. When omitted, gameplay will continue until the game is forced to quit with alt+f4 or cmd+q.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;trigger_count&quot;</span></code></dt>
+<dd>The number of incoming trigger pulses until this step automatically advances. When omitted, gameplay will continue until the game is forced to quit with alt+f4 or cmd+q.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;start_level&quot;</span></code></dt>
+<dd>The initial “level” when starting. See the section below for how the player advances into the next level. 0.0 would start the player on the first level, 1.0 the second level and so-on.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;level_completion_incrment&quot;</span></code></dt>
+<dd>When the player completes a level without dying, their current “level score” is increased by this amount. This would typically be between 0.1 and 1.0.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;level_death_decrement&quot;</span></code></dt>
+<dd>When the player dies and fails to complete a level, their “level score” is reduced by this amount. See the “level score” section below.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;levels&quot;</span></code></dt>
+<dd>This is either a filename for a JSON file that contains the list of adaptive level parameters (which aren’t compatible with the normal gameplay level options) or is the list itself. The “Adaptive Level Options” section below describes the options in more detail.</dd>
+</dl>
+<div class="section" id="level-score">
+<h3>Level Score<a class="headerlink" href="#level-score" title="Permalink to this headline">¶</a></h3>
+<p>Where the normal gameplay would show you the same level again you touch an asteroid and fail, and next level when you complete the level, the adaptive mode doesn’t have to work this way. Instead you advance a fractional amount, or fall back a fractional amount.</p>
+<p>These are configurable. Your “level score” starts at <code class="docutils literal"><span class="pre">&quot;start_level&quot;</span></code> where 0.0 to 0.99 is the first level in the list, 1.0 through 1.99 is the second level and so-on.</p>
+<p>Each time you complete a level your “level score” is increased by <code class="docutils literal"><span class="pre">&quot;level_completion_increment&quot;</span></code>, and when you touch an asteroid and die your “level score” is decreased by <code class="docutils literal"><span class="pre">&quot;level_death_decrement&quot;</span></code>.</p>
+<p>So this can be configured to act like the normal gameplay, with increment of 1.0 and decrement of 0.0, but this configuration exists because I felt that would ratchet the difficutly up to the point where you fail continuously, instead of you reaching a happy flow state where you make a few mintues of progress before being set back some.</p>
+</div>
+<div class="section" id="level-list-options">
+<h3>Level List Options<a class="headerlink" href="#level-list-options" title="Permalink to this headline">¶</a></h3>
+<p>The adaptive gameplay level list entries have the following options:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;target_count&quot;</span></code></dt>
+<dd>Number of crystals to pick up to complete the level.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;asteroid_count&quot;</span></code></dt>
+<dd>Number of asteroids.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;asteroid_speeds&quot;</span></code></dt>
+<dd><code class="docutils literal"><span class="pre">&quot;slow&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;medium&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;fast&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;extreme&quot;</span></code> speed for asteroids.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;asteroid_sizes&quot;</span></code></dt>
+<dd><code class="docutils literal"><span class="pre">&quot;small&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;medium&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;large&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;varied&quot;</span></code> sizes of asteroids.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;powerup_count&quot;</span></code></dt>
+<dd>Number of different power-ups available for the player to pick up.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;powerup_initial_delay&quot;</span></code></dt>
+<dd>Number of seconds until the first power-up is available after the level begins.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;powerup_delay&quot;</span></code></dt>
+<dd>Delay between when one power-up is used and when the next appears, in seconds.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;powerup_types&quot;</span></code></dt>
+<dd>The types of power-ups to make available. <code class="docutils literal"><span class="pre">&quot;shield&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;slow&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;all&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="reaction-prompt">
+<h2>Reaction Prompt<a class="headerlink" href="#reaction-prompt" title="Permalink to this headline">¶</a></h2>
+<p>Both the <code class="docutils literal"><span class="pre">game</span></code> and <code class="docutils literal"><span class="pre">game-adaptive</span></code> steps have additional reaction-time prompts that can be configured to show on top of normal gameplay.</p>
+</div>
+<div class="section" id="json-configuration-options-for-reaction-prompts">
+<h2>JSON Configuration options for Reaction Prompts<a class="headerlink" href="#json-configuration-options-for-reaction-prompts" title="Permalink to this headline">¶</a></h2>
+<p>The reaction prompt configuration is optional if you don’t want them to appear for you. If you do, the details of their structure is described below.</p>
+<p>the <code class="docutils literal"><span class="pre">reaction_prompts</span></code> list is filled with entries like the one below</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+  <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">[</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">200</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">400</span> <span class="p">]</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;circle.png&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone659.wav&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">3500</span> <span class="p">],</span>
+  <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="p">],</span>
+  <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+  <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;diameter&quot;</span></code></dt>
+<dd>The diameter (width and height) of the image shown on screen in game units. If the window is 640x480 then 100 units diameter would result in the image appearing 40px wide on screen.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;position_list&quot;</span></code></dt>
+<dd>List of positions the reaction prompt should appear on screen. Each entry should be a 2-element list of numbers, representing the game coordinate for the left edge and top edge of the prompt on screen. The first time the prompt appears it will be at the first listed position, second appearance at the second entry and so-on. If the list is exhausted the next appearance will start at the beginning again. If you’d like, you can position the prompt off screen, or omit the list of positions and change the <code class="docutils literal"><span class="pre">image</span></code> to <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;image&quot;</span></code></dt>
+<dd>The filename for the graphic to be used to represent the reaction prompt. <code class="docutils literal"><span class="pre">&quot;circle.png&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;square.png&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;triangle.png&quot;</span></code> are included in the data folder for this purpose, but feel free to add your own. You may also specify <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> to show no image.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;sound&quot;</span></code></dt>
+<dd>The sound file to play while active. This can be <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> for no sound file. The game includes 3 tones: <code class="docutils literal"><span class="pre">&quot;tone146.wav&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;tone440.wav&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;tone659.wav&quot;</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">&quot;showtimes_millis&quot;</span></code></dt>
+<dd>[when to show]</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;showtimes_trigger_counts&quot;</span></code></dt>
+<dd>[when the current step receives the Nth trigger pulse, show the reaction prompt]</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;timeout_millis&quot;</span></code></dt>
+<dd>After this duration the prompt will go away on its own. Set to <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> to continue showing/sounding the reaction prompt</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;stay_visible&quot;</span></code></dt>
+<dd><code class="docutils literal"><span class="pre">true</span></code> to have the image and sound continue playing for the entire <code class="docutils literal"><span class="pre">timeout_millis</span></code> duration.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;input_key&quot;</span></code></dt>
+<dd>is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below.</dd>
+</dl>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">K_MOUSE1</span> <span class="o">--</span> <span class="n">Left</span> <span class="n">mouse</span> <span class="n">button</span>
+<span class="n">K_MOUSE2</span> <span class="o">--</span> <span class="n">Middle</span> <span class="n">mouse</span> <span class="n">button</span>
+<span class="n">K_MOUSE3</span> <span class="o">--</span> <span class="n">Right</span> <span class="n">mouse</span> <span class="n">button</span>
+<span class="n">K_0</span> <span class="n">through</span> <span class="n">K_9</span>
+<span class="n">K_AMPERSAND</span>
+<span class="n">K_ASTERISK</span>
+<span class="n">K_AT</span>
+<span class="n">K_BACKQUOTE</span>
+<span class="n">K_BACKSLASH</span>
+<span class="n">K_BACKSPACE</span>
+<span class="n">K_BREAK</span>
+<span class="n">K_CAPSLOCK</span>
+<span class="n">K_CARET</span>
+<span class="n">K_CLEAR</span>
+<span class="n">K_COLON</span>
+<span class="n">K_COMMA</span>
+<span class="n">K_DELETE</span>
+<span class="n">K_DOLLAR</span>
+<span class="n">K_DOWN</span>
+<span class="n">K_END</span>
+<span class="n">K_EQUALS</span>
+<span class="n">K_ESCAPE</span>
+<span class="n">K_EURO</span>
+<span class="n">K_EXCLAIM</span>
+<span class="n">K_F1</span> <span class="n">through</span> <span class="n">K_F15</span>
+<span class="n">K_FIRST</span>
+<span class="n">K_GREATER</span>
+<span class="n">K_HASH</span>
+<span class="n">K_HELP</span>
+<span class="n">K_HOME</span>
+<span class="n">K_INSERT</span>
+<span class="n">K_KP0</span> <span class="n">through</span> <span class="n">K_KP9</span>
+<span class="n">K_KP_DIVIDE</span>
+<span class="n">K_KP_ENTER</span>
+<span class="n">K_KP_EQUALS</span>
+<span class="n">K_KP_MINUS</span>
+<span class="n">K_KP_MULTIPLY</span>
+<span class="n">K_KP_PERIOD</span>
+<span class="n">K_KP_PLUS</span>
+<span class="n">K_LALT</span>
+<span class="n">K_LAST</span>
+<span class="n">K_LCTRL</span>
+<span class="n">K_LEFT</span>
+<span class="n">K_LEFTBRACKET</span>
+<span class="n">K_LEFTPAREN</span>
+<span class="n">K_LESS</span>
+<span class="n">K_LMETA</span>
+<span class="n">K_LSHIFT</span>
+<span class="n">K_LSUPER</span>
+<span class="n">K_MENU</span>
+<span class="n">K_MINUS</span>
+<span class="n">K_MODE</span>
+<span class="n">K_NUMLOCK</span>
+<span class="n">K_PAGEDOWN</span>
+<span class="n">K_PAGEUP</span>
+<span class="n">K_PAUSE</span>
+<span class="n">K_PERIOD</span>
+<span class="n">K_PLUS</span>
+<span class="n">K_POWER</span>
+<span class="n">K_PRINT</span>
+<span class="n">K_QUESTION</span>
+<span class="n">K_QUOTE</span>
+<span class="n">K_QUOTEDBL</span>
+<span class="n">K_RALT</span>
+<span class="n">K_RCTRL</span>
+<span class="n">K_RETURN</span>
+<span class="n">K_RIGHT</span>
+<span class="n">K_RIGHTBRACKET</span>
+<span class="n">K_RIGHTPAREN</span>
+<span class="n">K_RMETA</span>
+<span class="n">K_RSHIFT</span>
+<span class="n">K_RSUPER</span>
+<span class="n">K_SCROLLOCK</span>
+<span class="n">K_SEMICOLON</span>
+<span class="n">K_SLASH</span>
+<span class="n">K_SPACE</span>
+<span class="n">K_SYSREQ</span>
+<span class="n">K_TAB</span>
+<span class="n">K_UNDERSCORE</span>
+<span class="n">K_UP</span>
+<span class="n">K_a</span> <span class="n">through</span> <span class="n">K_z</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Gameplay Step and Adaptive Gameplay Step</a><ul>
+<li><a class="reference internal" href="#json-configuration-for-game-step">JSON Configuration for <code class="docutils literal"><span class="pre">game</span></code> Step</a></li>
+<li><a class="reference internal" href="#json-configuration-for-game-adaptive-step">JSON Configuration for <code class="docutils literal"><span class="pre">game-adaptive</span></code> Step</a><ul>
+<li><a class="reference internal" href="#level-score">Level Score</a></li>
+<li><a class="reference internal" href="#level-list-options">Level List Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reaction-prompt">Reaction Prompt</a></li>
+<li><a class="reference internal" href="#json-configuration-options-for-reaction-prompts">JSON Configuration options for Reaction Prompts</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="output-trigger.html" title="previous chapter">Output Triggers</a></li>
+      <li>Next: <a href="step-instructions.html" title="next chapter">Instructions Step</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/step-game.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/step-game.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

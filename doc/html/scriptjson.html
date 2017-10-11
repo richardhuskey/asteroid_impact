@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Game Script JSON &mdash; Asteroid Impact 1.0.0 documentation</title>
-    
+    <title>Game Script JSON &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Log Columns" href="logcolumns.html" />
     <link rel="prev" title="Single Level JSON" href="leveljson.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -40,96 +42,165 @@
             
   <div class="section" id="game-script-json">
 <h1>Game Script JSON<a class="headerlink" href="#game-script-json" title="Permalink to this headline">¶</a></h1>
-<p>AsteroidImpact will optionally run a sequence of modes specified in script.json. This can be used to advance the player between multiple lists of levels, with blank screens in between. Advancing to the next step happens after a specified duration, or for the instructions screen when the user clicks with the mouse.</p>
+<p>AsteroidImpact will optionally run a sequence of modes specified in script.json. This can be used to advance the player between multiple lists of levels, with blank screens inbetween. Advancing to the next step happens after a specified duration, or for the instructions screen when the user clicks with the mouse.</p>
 <p>Sample:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;mode&quot;</span><span class="p">:</span> <span class="s">&quot;keyboard&quot;</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
 
-        <span class="s">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;COM11&quot;</span><span class="p">,</span>
-            <span class="s">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span><span class="p">,</span>
-            <span class="s">&quot;trigger_byte_value&quot;</span> <span class="p">:</span> <span class="mi">53</span>
-        <span class="p">},</span>
-
-        <span class="s">&quot;keyboard_options&quot;</span> <span class="p">:</span>
-        <span class="p">{</span>
-            <span class="s">&quot;trigger_key&quot;</span><span class="p">:</span> <span class="s">&quot;K_5&quot;</span>
-        <span class="p">}</span>
+    <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span>
     <span class="p">},</span>
 
-    <span class="s">&quot;steps&quot;</span><span class="p">:</span>
-    <span class="p">[</span>
+    <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;instructions&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+      <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;instructions&quot;</span><span class="p">,</span>
-            <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">600</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;triangle.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone440.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">7000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">,</span> <span class="mi">11000</span><span class="p">,</span> <span class="mi">13000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">17000</span><span class="p">,</span> <span class="mi">19000</span><span class="p">,</span> <span class="mi">21000</span><span class="p">,</span> <span class="mi">23000</span><span class="p">,</span> <span class="mi">25000</span><span class="p">,</span> <span class="mi">27000</span><span class="p">,</span> <span class="mi">29000</span><span class="p">,</span> <span class="mi">31000</span><span class="p">,</span> <span class="mi">33000</span><span class="p">,</span> <span class="mi">35000</span><span class="p">,</span> <span class="mi">37000</span><span class="p">,</span> <span class="mi">39000</span><span class="p">,</span> <span class="mi">41000</span><span class="p">,</span> <span class="mi">43000</span><span class="p">,</span> <span class="mi">45000</span><span class="p">,</span> <span class="mi">47000</span><span class="p">,</span> <span class="mi">49000</span><span class="p">,</span> <span class="mi">51000</span><span class="p">,</span> <span class="mi">53000</span><span class="p">,</span> <span class="mi">55000</span><span class="p">,</span> <span class="mi">57000</span><span class="p">,</span> <span class="mi">59000</span><span class="p">,</span> <span class="mi">61000</span><span class="p">,</span> <span class="mi">63000</span><span class="p">,</span> <span class="mi">65000</span><span class="p">,</span> <span class="mi">67000</span><span class="p">,</span> <span class="mi">69000</span><span class="p">,</span> <span class="mi">71000</span><span class="p">,</span> <span class="mi">73000</span><span class="p">,</span> <span class="mi">75000</span><span class="p">,</span> <span class="mi">77000</span><span class="p">,</span> <span class="mi">79000</span><span class="p">,</span> <span class="mi">81000</span><span class="p">,</span> <span class="mi">83000</span><span class="p">,</span> <span class="mi">85000</span><span class="p">,</span> <span class="mi">87000</span><span class="p">,</span> <span class="mi">89000</span><span class="p">,</span> <span class="mi">91000</span><span class="p">,</span> <span class="mi">93000</span><span class="p">,</span> <span class="mi">95000</span><span class="p">,</span> <span class="mi">97000</span><span class="p">,</span> <span class="mi">99000</span><span class="p">,</span> <span class="mi">101000</span><span class="p">,</span> <span class="mi">103000</span><span class="p">,</span> <span class="mi">105000</span><span class="p">,</span> <span class="mi">107000</span><span class="p">,</span> <span class="mi">109000</span><span class="p">,</span> <span class="mi">111000</span><span class="p">,</span> <span class="mi">113000</span><span class="p">,</span> <span class="mi">115000</span><span class="p">,</span> <span class="mi">117000</span><span class="p">,</span> <span class="mi">119000</span><span class="p">,</span> <span class="mi">121000</span><span class="p">,</span> <span class="mi">123000</span><span class="p">,</span> <span class="mi">125000</span><span class="p">,</span> <span class="mi">127000</span><span class="p">,</span> <span class="mi">129000</span><span class="p">,</span> <span class="mi">131000</span><span class="p">,</span> <span class="mi">133000</span><span class="p">,</span> <span class="mi">135000</span><span class="p">,</span> <span class="mi">137000</span><span class="p">,</span> <span class="mi">139000</span><span class="p">,</span> <span class="mi">141000</span><span class="p">,</span> <span class="mi">143000</span><span class="p">,</span> <span class="mi">145000</span><span class="p">,</span> <span class="mi">147000</span><span class="p">,</span> <span class="mi">149000</span><span class="p">,</span> <span class="mi">151000</span><span class="p">,</span> <span class="mi">153000</span><span class="p">,</span> <span class="mi">155000</span><span class="p">,</span> <span class="mi">157000</span><span class="p">,</span> <span class="mi">159000</span><span class="p">,</span> <span class="mi">161000</span><span class="p">,</span> <span class="mi">163000</span><span class="p">,</span> <span class="mi">165000</span><span class="p">,</span> <span class="mi">167000</span><span class="p">,</span> <span class="mi">169000</span><span class="p">,</span> <span class="mi">171000</span><span class="p">,</span> <span class="mi">173000</span><span class="p">,</span> <span class="mi">175000</span><span class="p">,</span> <span class="mi">177000</span><span class="p">,</span> <span class="mi">179000</span><span class="p">,</span> <span class="mi">181000</span><span class="p">,</span> <span class="mi">183000</span><span class="p">,</span> <span class="mi">185000</span><span class="p">,</span> <span class="mi">187000</span><span class="p">,</span> <span class="mi">189000</span><span class="p">,</span> <span class="mi">191000</span><span class="p">,</span> <span class="mi">193000</span><span class="p">,</span> <span class="mi">195000</span><span class="p">,</span> <span class="mi">197000</span><span class="p">,</span> <span class="mi">199000</span> <span class="p">],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;game&quot;</span><span class="p">,</span>
-            <span class="s">&quot;levels&quot;</span><span class="p">:</span> <span class="s">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
-            <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;circle.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone659.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">7500</span><span class="p">,</span> <span class="mi">9500</span><span class="p">,</span> <span class="mi">11500</span><span class="p">,</span> <span class="mi">13500</span><span class="p">,</span> <span class="mi">15500</span><span class="p">,</span> <span class="mi">17500</span><span class="p">,</span> <span class="mi">19500</span><span class="p">,</span> <span class="mi">21500</span><span class="p">,</span> <span class="mi">23500</span><span class="p">,</span> <span class="mi">25500</span><span class="p">,</span> <span class="mi">27500</span><span class="p">,</span> <span class="mi">29500</span><span class="p">,</span> <span class="mi">31500</span><span class="p">,</span> <span class="mi">33500</span><span class="p">,</span> <span class="mi">35500</span><span class="p">,</span> <span class="mi">37500</span><span class="p">,</span> <span class="mi">39500</span><span class="p">,</span> <span class="mi">41500</span><span class="p">,</span> <span class="mi">43500</span><span class="p">,</span> <span class="mi">45500</span><span class="p">,</span> <span class="mi">47500</span><span class="p">,</span> <span class="mi">49500</span><span class="p">,</span> <span class="mi">51500</span><span class="p">,</span> <span class="mi">53500</span><span class="p">,</span> <span class="mi">55500</span><span class="p">,</span> <span class="mi">57500</span><span class="p">,</span> <span class="mi">59500</span><span class="p">,</span> <span class="mi">61500</span><span class="p">,</span> <span class="mi">63500</span><span class="p">,</span> <span class="mi">65500</span><span class="p">,</span> <span class="mi">67500</span><span class="p">,</span> <span class="mi">69500</span><span class="p">,</span> <span class="mi">71500</span><span class="p">,</span> <span class="mi">73500</span><span class="p">,</span> <span class="mi">75500</span><span class="p">,</span> <span class="mi">77500</span><span class="p">,</span> <span class="mi">79500</span><span class="p">,</span> <span class="mi">81500</span><span class="p">,</span> <span class="mi">83500</span><span class="p">,</span> <span class="mi">85500</span><span class="p">,</span> <span class="mi">87500</span><span class="p">,</span> <span class="mi">89500</span><span class="p">,</span> <span class="mi">91500</span><span class="p">,</span> <span class="mi">93500</span><span class="p">,</span> <span class="mi">95500</span><span class="p">,</span> <span class="mi">97500</span><span class="p">,</span> <span class="mi">99500</span><span class="p">,</span> <span class="mi">101500</span><span class="p">,</span> <span class="mi">103500</span><span class="p">,</span> <span class="mi">105500</span><span class="p">,</span> <span class="mi">107500</span><span class="p">,</span> <span class="mi">109500</span><span class="p">,</span> <span class="mi">111500</span><span class="p">,</span> <span class="mi">113500</span><span class="p">,</span> <span class="mi">115500</span><span class="p">,</span> <span class="mi">117500</span><span class="p">,</span> <span class="mi">119500</span><span class="p">,</span> <span class="mi">121500</span><span class="p">,</span> <span class="mi">123500</span><span class="p">,</span> <span class="mi">125500</span><span class="p">,</span> <span class="mi">127500</span><span class="p">,</span> <span class="mi">129500</span><span class="p">,</span> <span class="mi">131500</span><span class="p">,</span> <span class="mi">133500</span><span class="p">,</span> <span class="mi">135500</span><span class="p">,</span> <span class="mi">137500</span><span class="p">,</span> <span class="mi">139500</span><span class="p">,</span> <span class="mi">141500</span><span class="p">,</span> <span class="mi">143500</span><span class="p">,</span> <span class="mi">145500</span><span class="p">,</span> <span class="mi">147500</span><span class="p">,</span> <span class="mi">149500</span><span class="p">,</span> <span class="mi">151500</span><span class="p">,</span> <span class="mi">153500</span><span class="p">,</span> <span class="mi">155500</span><span class="p">,</span> <span class="mi">157500</span><span class="p">,</span> <span class="mi">159500</span><span class="p">,</span> <span class="mi">161500</span><span class="p">,</span> <span class="mi">163500</span><span class="p">,</span> <span class="mi">165500</span><span class="p">,</span> <span class="mi">167500</span><span class="p">,</span> <span class="mi">169500</span><span class="p">,</span> <span class="mi">171500</span><span class="p">,</span> <span class="mi">173500</span><span class="p">,</span> <span class="mi">175500</span><span class="p">,</span> <span class="mi">177500</span><span class="p">,</span> <span class="mi">179500</span><span class="p">,</span> <span class="mi">181500</span><span class="p">,</span> <span class="mi">183500</span><span class="p">,</span> <span class="mi">185500</span><span class="p">,</span> <span class="mi">187500</span><span class="p">,</span> <span class="mi">189500</span><span class="p">,</span> <span class="mi">191500</span><span class="p">,</span> <span class="mi">193500</span><span class="p">,</span> <span class="mi">195500</span><span class="p">,</span> <span class="mi">197500</span><span class="p">,</span> <span class="mi">199500</span> <span class="p">],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;text&quot;</span><span class="p">,</span>
-            <span class="s">&quot;text&quot;</span><span class="p">:</span> <span class="s">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s">This is a second paragraph.</span><span class="se">\n\n</span><span class="s">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
-            <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;blackscreen&quot;</span><span class="p">,</span>
-            <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">5.0</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;game&quot;</span><span class="p">,</span>
-            <span class="s">&quot;levels&quot;</span><span class="p">:</span> <span class="s">&quot;levels/hardlevels.json&quot;</span><span class="p">,</span>
-            <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;blackscreen&quot;</span><span class="p">,</span>
-            <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">5.0</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;game-adaptive&quot;</span><span class="p">,</span>
-            <span class="s">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-            <span class="s">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-            <span class="s">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-            <span class="s">&quot;level_templates&quot;</span> <span class="p">:</span>
-            <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s">&quot;varied&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s">&quot;medium&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s">&quot;slow&quot;</span>
-                    <span class="p">],</span>
-                    <span class="s">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s">&quot;varied&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s">&quot;medium&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s">&quot;slow&quot;</span><span class="p">,</span>
-                        <span class="s">&quot;shield&quot;</span>
-                    <span class="p">],</span>
-                    <span class="s">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s">&quot;extreme&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s">&quot;shield&quot;</span>
-                    <span class="p">],</span>
-                    <span class="s">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;square.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone146.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">}</span>
-    <span class="p">]</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s2">This is a second paragraph.</span><span class="se">\n\n</span><span class="s2">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;blackscreen&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">5.0</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.5</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/hardlevels.json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game-adaptive&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+      <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+      <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;extreme&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;blackscreen&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">5.0</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -137,29 +208,29 @@
 <h2>Steps List<a class="headerlink" href="#steps-list" title="Permalink to this headline">¶</a></h2>
 <p>Previous versions specified only the steps list in JSON. This continues to work, but you will not be able to use the trigger advance options.</p>
 <p>Such a JSON file would look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
-        <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;instructions&quot;</span><span class="p">,</span>
-        <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;instructions&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;game&quot;</span><span class="p">,</span>
-        <span class="s">&quot;levels&quot;</span><span class="p">:</span> <span class="s">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
-        <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;text&quot;</span><span class="p">,</span>
-        <span class="s">&quot;text&quot;</span><span class="p">:</span> <span class="s">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s">This is a second paragraph.</span><span class="se">\n\n</span><span class="s">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
-        <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s2">This is a second paragraph.</span><span class="se">\n\n</span><span class="s2">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;blackscreen&quot;</span><span class="p">,</span>
-        <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">5.0</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;blackscreen&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">5.0</span>
     <span class="p">},</span>
     <span class="p">{</span>
-        <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;game&quot;</span><span class="p">,</span>
-        <span class="s">&quot;levels&quot;</span><span class="p">:</span> <span class="s">&quot;levels/hardlevels.json&quot;</span><span class="p">,</span>
-        <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/hardlevels.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
     <span class="p">}</span>
 <span class="p">]</span>
 </pre></div>
@@ -167,258 +238,238 @@
 </div>
 <div class="section" id="trigger-advance-options">
 <h2>Trigger Advance Options<a class="headerlink" href="#trigger-advance-options" title="Permalink to this headline">¶</a></h2>
-<p>Rather than advancing steps after a duration, they can be advanced after receiving a number of &#8220;trigger&#8221; pulses. The pulses can come as key presses or as characters over a serial port. The step advances to the next step after receiving the number of pulses specified for the trigger_count attribute.</p>
-<p>You can visualize trigger pulses on screen by using the <cite>&#8211;trigger-blink true</cite> command-line option.</p>
+<p>Rather than advancing steps after a duration, they can be advanced after receiving a number of “trigger” pulses. The pulses can come as key presses or as characters over a serial port. The step advances to the next step after receiving the number of pulses specified for the trigger_count attribute.</p>
+<p>You can visualize trigger pulses on screen by using the <code class="docutils literal"><span class="pre">--trigger-blink</span> <span class="pre">true</span></code> command-line option.</p>
 <p>Sample trigger-driven JSON:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;mode&quot;</span><span class="p">:</span> <span class="s">&quot;keyboard&quot;</span><span class="p">,</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;keyboard&quot;</span><span class="p">,</span>
 
-        <span class="s">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;port&quot;</span><span class="p">:</span> <span class="s">&quot;COM11&quot;</span><span class="p">,</span>
-            <span class="s">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span><span class="p">,</span>
-            <span class="s">&quot;trigger_byte_value&quot;</span> <span class="p">:</span> <span class="mi">53</span>
-        <span class="p">},</span>
-
-        <span class="s">&quot;keyboard_options&quot;</span> <span class="p">:</span>
-        <span class="p">{</span>
-            <span class="s">&quot;trigger_key&quot;</span><span class="p">:</span> <span class="s">&quot;K_5&quot;</span>
-        <span class="p">}</span>
+    <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM5&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_byte_value&quot;</span><span class="p">:</span> <span class="mi">53</span>
     <span class="p">},</span>
 
-    <span class="s">&quot;steps&quot;</span><span class="p">:</span>
-    <span class="p">[</span>
+    <span class="s2">&quot;keyboard_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;trigger_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_5&quot;</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;common_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;instructions&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;instructions&quot;</span><span class="p">,</span>
-            <span class="s">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">600</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;triangle.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone440.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">7000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">,</span> <span class="mi">11000</span><span class="p">,</span> <span class="mi">13000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">17000</span><span class="p">,</span> <span class="mi">19000</span><span class="p">,</span> <span class="mi">21000</span><span class="p">,</span> <span class="mi">23000</span><span class="p">,</span> <span class="mi">25000</span><span class="p">,</span> <span class="mi">27000</span><span class="p">,</span> <span class="mi">29000</span><span class="p">,</span> <span class="mi">31000</span><span class="p">,</span> <span class="mi">33000</span><span class="p">,</span> <span class="mi">35000</span><span class="p">,</span> <span class="mi">37000</span><span class="p">,</span> <span class="mi">39000</span><span class="p">,</span> <span class="mi">41000</span><span class="p">,</span> <span class="mi">43000</span><span class="p">,</span> <span class="mi">45000</span><span class="p">,</span> <span class="mi">47000</span><span class="p">,</span> <span class="mi">49000</span><span class="p">,</span> <span class="mi">51000</span><span class="p">,</span> <span class="mi">53000</span><span class="p">,</span> <span class="mi">55000</span><span class="p">,</span> <span class="mi">57000</span><span class="p">,</span> <span class="mi">59000</span><span class="p">,</span> <span class="mi">61000</span><span class="p">,</span> <span class="mi">63000</span><span class="p">,</span> <span class="mi">65000</span><span class="p">,</span> <span class="mi">67000</span><span class="p">,</span> <span class="mi">69000</span><span class="p">,</span> <span class="mi">71000</span><span class="p">,</span> <span class="mi">73000</span><span class="p">,</span> <span class="mi">75000</span><span class="p">,</span> <span class="mi">77000</span><span class="p">,</span> <span class="mi">79000</span><span class="p">,</span> <span class="mi">81000</span><span class="p">,</span> <span class="mi">83000</span><span class="p">,</span> <span class="mi">85000</span><span class="p">,</span> <span class="mi">87000</span><span class="p">,</span> <span class="mi">89000</span><span class="p">,</span> <span class="mi">91000</span><span class="p">,</span> <span class="mi">93000</span><span class="p">,</span> <span class="mi">95000</span><span class="p">,</span> <span class="mi">97000</span><span class="p">,</span> <span class="mi">99000</span><span class="p">,</span> <span class="mi">101000</span><span class="p">,</span> <span class="mi">103000</span><span class="p">,</span> <span class="mi">105000</span><span class="p">,</span> <span class="mi">107000</span><span class="p">,</span> <span class="mi">109000</span><span class="p">,</span> <span class="mi">111000</span><span class="p">,</span> <span class="mi">113000</span><span class="p">,</span> <span class="mi">115000</span><span class="p">,</span> <span class="mi">117000</span><span class="p">,</span> <span class="mi">119000</span><span class="p">,</span> <span class="mi">121000</span><span class="p">,</span> <span class="mi">123000</span><span class="p">,</span> <span class="mi">125000</span><span class="p">,</span> <span class="mi">127000</span><span class="p">,</span> <span class="mi">129000</span><span class="p">,</span> <span class="mi">131000</span><span class="p">,</span> <span class="mi">133000</span><span class="p">,</span> <span class="mi">135000</span><span class="p">,</span> <span class="mi">137000</span><span class="p">,</span> <span class="mi">139000</span><span class="p">,</span> <span class="mi">141000</span><span class="p">,</span> <span class="mi">143000</span><span class="p">,</span> <span class="mi">145000</span><span class="p">,</span> <span class="mi">147000</span><span class="p">,</span> <span class="mi">149000</span><span class="p">,</span> <span class="mi">151000</span><span class="p">,</span> <span class="mi">153000</span><span class="p">,</span> <span class="mi">155000</span><span class="p">,</span> <span class="mi">157000</span><span class="p">,</span> <span class="mi">159000</span><span class="p">,</span> <span class="mi">161000</span><span class="p">,</span> <span class="mi">163000</span><span class="p">,</span> <span class="mi">165000</span><span class="p">,</span> <span class="mi">167000</span><span class="p">,</span> <span class="mi">169000</span><span class="p">,</span> <span class="mi">171000</span><span class="p">,</span> <span class="mi">173000</span><span class="p">,</span> <span class="mi">175000</span><span class="p">,</span> <span class="mi">177000</span><span class="p">,</span> <span class="mi">179000</span><span class="p">,</span> <span class="mi">181000</span><span class="p">,</span> <span class="mi">183000</span><span class="p">,</span> <span class="mi">185000</span><span class="p">,</span> <span class="mi">187000</span><span class="p">,</span> <span class="mi">189000</span><span class="p">,</span> <span class="mi">191000</span><span class="p">,</span> <span class="mi">193000</span><span class="p">,</span> <span class="mi">195000</span><span class="p">,</span> <span class="mi">197000</span><span class="p">,</span> <span class="mi">199000</span> <span class="p">],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;game&quot;</span><span class="p">,</span>
-            <span class="s">&quot;levels&quot;</span><span class="p">:</span> <span class="s">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
-            <span class="s">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;circle.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone659.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">7500</span><span class="p">,</span> <span class="mi">9500</span><span class="p">,</span> <span class="mi">11500</span><span class="p">,</span> <span class="mi">13500</span><span class="p">,</span> <span class="mi">15500</span><span class="p">,</span> <span class="mi">17500</span><span class="p">,</span> <span class="mi">19500</span><span class="p">,</span> <span class="mi">21500</span><span class="p">,</span> <span class="mi">23500</span><span class="p">,</span> <span class="mi">25500</span><span class="p">,</span> <span class="mi">27500</span><span class="p">,</span> <span class="mi">29500</span><span class="p">,</span> <span class="mi">31500</span><span class="p">,</span> <span class="mi">33500</span><span class="p">,</span> <span class="mi">35500</span><span class="p">,</span> <span class="mi">37500</span><span class="p">,</span> <span class="mi">39500</span><span class="p">,</span> <span class="mi">41500</span><span class="p">,</span> <span class="mi">43500</span><span class="p">,</span> <span class="mi">45500</span><span class="p">,</span> <span class="mi">47500</span><span class="p">,</span> <span class="mi">49500</span><span class="p">,</span> <span class="mi">51500</span><span class="p">,</span> <span class="mi">53500</span><span class="p">,</span> <span class="mi">55500</span><span class="p">,</span> <span class="mi">57500</span><span class="p">,</span> <span class="mi">59500</span><span class="p">,</span> <span class="mi">61500</span><span class="p">,</span> <span class="mi">63500</span><span class="p">,</span> <span class="mi">65500</span><span class="p">,</span> <span class="mi">67500</span><span class="p">,</span> <span class="mi">69500</span><span class="p">,</span> <span class="mi">71500</span><span class="p">,</span> <span class="mi">73500</span><span class="p">,</span> <span class="mi">75500</span><span class="p">,</span> <span class="mi">77500</span><span class="p">,</span> <span class="mi">79500</span><span class="p">,</span> <span class="mi">81500</span><span class="p">,</span> <span class="mi">83500</span><span class="p">,</span> <span class="mi">85500</span><span class="p">,</span> <span class="mi">87500</span><span class="p">,</span> <span class="mi">89500</span><span class="p">,</span> <span class="mi">91500</span><span class="p">,</span> <span class="mi">93500</span><span class="p">,</span> <span class="mi">95500</span><span class="p">,</span> <span class="mi">97500</span><span class="p">,</span> <span class="mi">99500</span><span class="p">,</span> <span class="mi">101500</span><span class="p">,</span> <span class="mi">103500</span><span class="p">,</span> <span class="mi">105500</span><span class="p">,</span> <span class="mi">107500</span><span class="p">,</span> <span class="mi">109500</span><span class="p">,</span> <span class="mi">111500</span><span class="p">,</span> <span class="mi">113500</span><span class="p">,</span> <span class="mi">115500</span><span class="p">,</span> <span class="mi">117500</span><span class="p">,</span> <span class="mi">119500</span><span class="p">,</span> <span class="mi">121500</span><span class="p">,</span> <span class="mi">123500</span><span class="p">,</span> <span class="mi">125500</span><span class="p">,</span> <span class="mi">127500</span><span class="p">,</span> <span class="mi">129500</span><span class="p">,</span> <span class="mi">131500</span><span class="p">,</span> <span class="mi">133500</span><span class="p">,</span> <span class="mi">135500</span><span class="p">,</span> <span class="mi">137500</span><span class="p">,</span> <span class="mi">139500</span><span class="p">,</span> <span class="mi">141500</span><span class="p">,</span> <span class="mi">143500</span><span class="p">,</span> <span class="mi">145500</span><span class="p">,</span> <span class="mi">147500</span><span class="p">,</span> <span class="mi">149500</span><span class="p">,</span> <span class="mi">151500</span><span class="p">,</span> <span class="mi">153500</span><span class="p">,</span> <span class="mi">155500</span><span class="p">,</span> <span class="mi">157500</span><span class="p">,</span> <span class="mi">159500</span><span class="p">,</span> <span class="mi">161500</span><span class="p">,</span> <span class="mi">163500</span><span class="p">,</span> <span class="mi">165500</span><span class="p">,</span> <span class="mi">167500</span><span class="p">,</span> <span class="mi">169500</span><span class="p">,</span> <span class="mi">171500</span><span class="p">,</span> <span class="mi">173500</span><span class="p">,</span> <span class="mi">175500</span><span class="p">,</span> <span class="mi">177500</span><span class="p">,</span> <span class="mi">179500</span><span class="p">,</span> <span class="mi">181500</span><span class="p">,</span> <span class="mi">183500</span><span class="p">,</span> <span class="mi">185500</span><span class="p">,</span> <span class="mi">187500</span><span class="p">,</span> <span class="mi">189500</span><span class="p">,</span> <span class="mi">191500</span><span class="p">,</span> <span class="mi">193500</span><span class="p">,</span> <span class="mi">195500</span><span class="p">,</span> <span class="mi">197500</span><span class="p">,</span> <span class="mi">199500</span> <span class="p">],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;text&quot;</span><span class="p">,</span>
-            <span class="s">&quot;text&quot;</span><span class="p">:</span> <span class="s">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s">This is a second paragraph.</span><span class="se">\n\n</span><span class="s">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
-            <span class="s">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;blackscreen&quot;</span><span class="p">,</span>
-            <span class="s">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">5</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;game-adaptive&quot;</span><span class="p">,</span>
-            <span class="s">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-            <span class="s">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-            <span class="s">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-            <span class="s">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-            <span class="s">&quot;level_templates&quot;</span> <span class="p">:</span>
-            <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="s">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s">&quot;varied&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s">&quot;medium&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s">&quot;slow&quot;</span>
-                    <span class="p">],</span>
-                    <span class="s">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s">&quot;varied&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s">&quot;medium&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s">&quot;slow&quot;</span><span class="p">,</span>
-                        <span class="s">&quot;shield&quot;</span>
-                    <span class="p">],</span>
-                    <span class="s">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="s">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-                    <span class="s">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s">&quot;extreme&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-                    <span class="s">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s">&quot;shield&quot;</span>
-                    <span class="p">],</span>
-                    <span class="s">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
-                <span class="p">}</span>
-            <span class="p">]</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-            <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;blackscreen&quot;</span><span class="p">,</span>
-            <span class="s">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;square.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone146.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">}</span>
-    <span class="p">]</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s2">This is a second paragraph.</span><span class="se">\n\n</span><span class="s2">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;blackscreen&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">5</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">25</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/hardlevels.json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">20</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game-adaptive&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+      <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+      <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;extreme&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;blackscreen&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The serial trigger mode opens a serial port on the computer and when a byte is received with the value matching <cite>trigger_byte_value</cite> increases the trigger count. The <cite>port</cite> setting is the serial port, typically <cite>COM1</cite> through <cite>COM16</cite> on Windows, or <cite>/dev/cu.usbmodem1234</cite> or similar on OSX. If you have python and pyserial installed, you can list serial ports from the command-line by running <cite>python -m serial.tools.list_ports</cite> which will print out serial ports on your computer. You can also specify the <cite>baudrate</cite> for serial connections. The <cite>trigger_byte_value</cite> of 53 is the ASCII code for the character &#8220;5&#8221;.</p>
-<p>The keyboard trigger mode senses a trigger when the specified <cite>trigger_key</cite> is pressed down. <cite>K_5</cite> is the pygame constant for the &#8220;5&#8221; key. Multi-key trigger sequences are not supported. The availble options for <cite>trigger_key</cite> are the following:</p>
-<div class="highlight-python"><div class="highlight"><pre>K_0 through K_9
-K_AMPERSAND
-K_ASTERISK
-K_AT
-K_BACKQUOTE
-K_BACKSLASH
-K_BACKSPACE
-K_BREAK
-K_CAPSLOCK
-K_CARET
-K_CLEAR
-K_COLON
-K_COMMA
-K_DELETE
-K_DOLLAR
-K_DOWN
-K_END
-K_EQUALS
-K_ESCAPE
-K_EURO
-K_EXCLAIM
-K_F1 through K_F15
-K_FIRST
-K_GREATER
-K_HASH
-K_HELP
-K_HOME
-K_INSERT
-K_KP0 through K_KP9
-K_KP_DIVIDE
-K_KP_ENTER
-K_KP_EQUALS
-K_KP_MINUS
-K_KP_MULTIPLY
-K_KP_PERIOD
-K_KP_PLUS
-K_LALT
-K_LAST
-K_LCTRL
-K_LEFT
-K_LEFTBRACKET
-K_LEFTPAREN
-K_LESS
-K_LMETA
-K_LSHIFT
-K_LSUPER
-K_MENU
-K_MINUS
-K_MODE
-K_NUMLOCK
-K_PAGEDOWN
-K_PAGEUP
-K_PAUSE
-K_PERIOD
-K_PLUS
-K_POWER
-K_PRINT
-K_QUESTION
-K_QUOTE
-K_QUOTEDBL
-K_RALT
-K_RCTRL
-K_RETURN
-K_RIGHT
-K_RIGHTBRACKET
-K_RIGHTPAREN
-K_RMETA
-K_RSHIFT
-K_RSUPER
-K_SCROLLOCK
-K_SEMICOLON
-K_SLASH
-K_SPACE
-K_SYSREQ
-K_TAB
-K_UNDERSCORE
-K_UP
-K_a through K_z
-</pre></div>
+<p>The serial trigger mode opens a serial port on the computer and when a byte is received with the value matching <code class="docutils literal"><span class="pre">trigger_byte_value</span></code> increases the trigger count. The <code class="docutils literal"><span class="pre">port</span></code> setting is the serial port, typically <code class="docutils literal"><span class="pre">COM1</span></code> through <code class="docutils literal"><span class="pre">COM16</span></code> on Windows, or <code class="docutils literal"><span class="pre">/dev/cu.usbmodem1234</span></code> or similar on OSX. If you have python and pyserial installed, you can list serial ports from the command-line by running <code class="docutils literal"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">serial.tools.list_ports</span></code> which will print out serial ports on your computer. You can also specify the <code class="docutils literal"><span class="pre">baudrate</span></code> for serial connections. The <code class="docutils literal"><span class="pre">trigger_byte_value</span></code> of 53 is the ASCII code for the character “5”.</p>
 </div>
-</div>
-<div class="section" id="trigger-latency">
-<h2>Trigger Latency<a class="headerlink" href="#trigger-latency" title="Permalink to this headline">¶</a></h2>
-<p>Depending on the computer being run, the trigger and other input sources has a bit of latency that will add some delay between when a trigger pulse is received and the game updates on screen. This was measured at under 0.1 seconds between sending a trigger pulse and the screen updating. This latency does not delay the scanner or device sending trigger pulses, so the overall timing should be similar, especially if the same hardware is used.</p>
-<p>The latency has several factors:
-* The game runs at 60hz so at best the average latency would be about 1/60s.
-* Serial input is typically buffered on a computer for faster read rates.
-* Graphic drawing is typically pipelined so there is enough work to do at once, and the drawing is completed before output to the screen (double buffering).
-* Video scaling hardware in the LCD or projector will wait for receiving a full frame before scaling the image to the actual display element (LCD or mirrors in a projector)</p>
-<p>Latency was measured as follows:
-* Configure Arduino Leonardo as game trigger (sketch below) and to turn on LED when trigger pulse is sent. The basic stamp board based emulator also blinks an LED when it sends trigger pulses.
-* Run game with <cite>&#8211;trigger-blink true</cite> command-line option
-* Record 120FPS video using iPhone framed to show both LED on Arduino and trigger blink in lower right of game on screen
-* Count frames between LED turning on (frame 0) and game showing blink (typically 9-13 frames at 120FPS). be careful that the video you&#8217;re counting frames in is actually 120FPS and not the slow down/speed up effect the iPhone adds at the start/end.</p>
-<p>Keyboard input latency was typically 2 frames shorter in the 120fps video, and Windows seemed to have a lower latency than OSX.</p>
-<p>Serial Latency test sketch (Nearly any Arduino will work, tested with Leonardo, Uno)</p>
-<div class="highlight-python"><div class="highlight"><pre>// Arduino Leonardo sketch to test latency of input trigger in serial
-// Blinks LED each time trigger pulse is sent over serial
-// Record video of LED with display of trigger pulse to measure latency
-#define DELAY_MILLIS 1000
-#define BLINK_MILLIS 100
+<div class="section" id="output-trigger-settings">
+<h2>Output Trigger Settings<a class="headerlink" href="#output-trigger-settings" title="Permalink to this headline">¶</a></h2>
+<p>The game can be configured to output signals over a serial port or parallel port on certain game events.</p>
+<p>For serial output triggers, <code class="docutils literal"><span class="pre">serial_trigger_strings_by_event</span></code> is a lookup from game event to the string to send over serial. Configure this dictionary to contain only the events you wish to be notified about.</p>
+<p>For parallel output triggers, <code class="docutils literal"><span class="pre">parallel_trigger_hex_values_by_event</span></code> is a lookup from game event to the value to change the parallel port data byte to for <code class="docutils literal"><span class="pre">trigger_frames</span></code> frames. One frame is about 1/60 second.</p>
+<p>See :doc:<code class="docutils literal"><span class="pre">parallelport</span></code> for information about parallel ports.</p>
+<p>The full list of available game events to send an ouput trigger on are listed in the sample below.</p>
+<p>Sample</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
 
-void setup() {
-  // initialize serial communication at 19200 bits per second:
-  Serial.begin(19200);
-  pinMode(13, OUTPUT);
-}
+  <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span>
+  <span class="p">},</span>
 
-void loop() {
-  delay(BLINK_MILLIS);
-  digitalWrite(13, LOW);
-  delay(DELAY_MILLIS-BLINK_MILLIS);
-  Serial.print(&quot;5&quot;);
-  Serial.flush();
-  digitalWrite(13, HIGH);
-}
-</pre></div>
-</div>
-<p>Keyboard Latency test sketch for Arduino Leonardo</p>
-<div class="highlight-python"><div class="highlight"><pre>// Arduino Leonardo sketch to test latency of input trigger in keyboard mode
-// Blinks LED each time trigger pulse is sent over keyboard (5 number key is pressed)
-// Record video of LED with display of trigger pulse to measure latency
-#define DELAY_MILLIS 1000
-#define BLINK_MILLIS 100
-
-#include &quot;Keyboard.h&quot;
-
-void setup() {
-  Keyboard.begin();
-  pinMode(13, OUTPUT);
-}
-
-void loop() {
-  // wait a few seconds before starting
-  delay(10000);
-
-  while (1) {
-    Keyboard.press(&#39;5&#39;);
-    digitalWrite(13, HIGH);
-
-    delay(BLINK_MILLIS);
-
-    Keyboard.releaseAll();
-    digitalWrite(13, LOW);
-
-    delay(DELAY_MILLIS - BLINK_MILLIS);
-  }
-}
+  <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+  <span class="p">}</span>
+<span class="p">},</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="common-step-attributes">
 <h2>Common Step Attributes<a class="headerlink" href="#common-step-attributes" title="Permalink to this headline">¶</a></h2>
 <p>Each step has the following attributes:</p>
-<blockquote>
-<div><ul class="simple">
-<li>action: The name of the action. Should be &#8220;instructions&#8221;, &#8220;game&#8221;, &#8220;text&#8221; or &#8220;blackscreen&#8221;</li>
-<li><cite>duration</cite>: The duration in seconds (such as 12.5) after which to automatically advance to the next step. This can be null for some actions, see below.</li>
-</ul>
-</div></blockquote>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;action&quot;</span></code></dt>
+<dd>The name of the action. Should be “instructions”, “game”, “text” or “blackscreen”</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;duration&quot;</span></code></dt>
+<dd>The duration in seconds (such as 12.5) after which to automatically advance to the next step. This can be null for some actions, see below.</dd>
+</dl>
 </div>
 <div class="section" id="available-step-actions">
 <h2>Available step actions<a class="headerlink" href="#available-step-actions" title="Permalink to this headline">¶</a></h2>
@@ -430,17 +481,17 @@ void loop() {
 <div class="section" id="instructions">
 <h3><code class="docutils literal"><span class="pre">instructions</span></code><a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">instructions</span></code> step displays instructions on how to play the game and each sprite the player will interact with.</p>
-<p>A null <code class="docutils literal"><span class="pre">duration</span></code> for the instructions step will show a &#8220;Click to continue&#8221; message and allow the player to advance to the next step by clicking with their mouse. If a duration is specified the player will have to wait for that time to complete to move on to the next step.</p>
+<p>A null <code class="docutils literal"><span class="pre">duration</span></code> for the instructions step will show a “Click to continue” message and allow the player to advance to the next step by clicking with their mouse. If a duration is specified the player will have to wait for that time to complete to move on to the next step.</p>
 </div>
 <div class="section" id="text">
 <h3><code class="docutils literal"><span class="pre">text</span></code><a class="headerlink" href="#text" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">text</span></code> step will display text specified in the <code class="docutils literal"><span class="pre">text</span></code> attribute on the screen for the specified duration with no available interaction to the player. The <code class="docutils literal"><span class="pre">duration</span></code> must be specified.</p>
 <p>The text will be wrapped to fit on screen, but you can include newlines in the string and they will be included on string. Newlines in JSON must be escaped like <code class="docutils literal"><span class="pre">\n</span></code>.</p>
 <p>For example, here is text step with two lines of text with a blank line in between using two newline characters.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
-    <span class="s">&quot;action&quot;</span><span class="p">:</span> <span class="s">&quot;text&quot;</span><span class="p">,</span>
-    <span class="s">&quot;text&quot;</span><span class="p">:</span> <span class="s">&quot;First Line</span><span class="se">\n\n</span><span class="s">Second Line&quot;</span><span class="p">,</span>
-    <span class="s">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;First Line</span><span class="se">\n\n</span><span class="s2">Second Line&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
 <span class="p">},</span>
 </pre></div>
 </div>
@@ -453,7 +504,7 @@ void loop() {
 <h3><code class="docutils literal"><span class="pre">game-adaptive</span></code><a class="headerlink" href="#game-adaptive" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">game-adaptive</span></code> step will seamlessly transition between generated levels, advancing further in the level list as the player completes levels, and going backwards down the list as they fail. The intention is to tune the levels and how far back the list the player is put so that the player gets into a comfortable amount of difficulty and stays around there.</p>
 <p>A null <code class="docutils literal"><span class="pre">duration</span></code> for the game step will prevent the player from advancing to the next step.</p>
-<p>The <code class="docutils literal"><span class="pre">start_level</span></code> is a float value that specifies the initial value used to choose the current level. <code class="docutils literal"><span class="pre">0.0</span></code> would start at the first level and <code class="docutils literal"><span class="pre">1.0</span></code> would start at the second level. The floor (integer part) of player&#8217;s level score is used to index into the level options list.</p>
+<p>The <code class="docutils literal"><span class="pre">start_level</span></code> is a float value that specifies the initial value used to choose the current level. <code class="docutils literal"><span class="pre">0.0</span></code> would start at the first level and <code class="docutils literal"><span class="pre">1.0</span></code> would start at the second level. The floor (integer part) of player’s level score is used to index into the level options list.</p>
 <p><code class="docutils literal"><span class="pre">level_completion_increment</span></code> is a float value for the amount the level score is incremented when the player completes a level. This can be under <code class="docutils literal"><span class="pre">1.0</span></code> which would usually mean that the player would have to complete another level with the same options before advancing to the next level in the list.</p>
 <p><code class="docutils literal"><span class="pre">level_death_decrement</span></code> is a float value for the amount the level score is reduced when the player dies. This is distinct from the <code class="docutils literal"><span class="pre">level_completion_increment</span></code> so that the steady state reached when the player is near their effective difficulty can be tuned. The value should be a positive or zero.</p>
 <p>The <code class="docutils literal"><span class="pre">levels</span></code> value is required. It must be a list of level parameters (which are different than for the <code class="docutils literal"><span class="pre">game</span></code> mode) or a string filename for a json file that contains a list of level parameters.</p>
@@ -488,13 +539,13 @@ void loop() {
 <td>Number of asteroids to avoid.</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">asteroid_sizes</span></code></td>
-<td>one of the strings {&#8220;small&#8221;,&#8221;medium&#8221;,&#8221;large&#8221;,&#8221;varied&#8221;}</td>
-<td>&#8220;large&#8221;</td>
+<td>one of the strings {“small”,”medium”,”large”,”varied”}</td>
+<td>“large”</td>
 <td>Approximate size of asteroids.</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">asteroid_speeds</span></code></td>
-<td>one of the strings {&#8220;slow&#8221;,&#8221;medium&#8221;,&#8221;fast&#8221;,&#8221;extreme&#8221;}</td>
-<td>&#8220;slow&#8221;</td>
+<td>one of the strings {“slow”,”medium”,”fast”,”extreme”}</td>
+<td>“slow”</td>
 <td>Approximate speed of asteroids.</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">powerup_count</span></code></td>
@@ -513,12 +564,205 @@ void loop() {
 <td>Delay in seconds after powerup is used before next one becomes available.</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">powerup_types</span></code></td>
-<td>one of the strings {&#8220;shield&#8221;,&#8221;slow&#8221;,&#8221;all&#8221;,&#8221;none&#8221;}</td>
-<td>&#8220;all&#8221;</td>
+<td>one of the strings {“shield”,”slow”,”all”,”none”}</td>
+<td>“all”</td>
 <td>Types of powerups that are in level.</td>
 </tr>
 </tbody>
 </table>
+<div class="section" id="survey">
+<h3><code class="docutils literal"><span class="pre">survey</span></code><a class="headerlink" href="#survey" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">survey</span></code> step will display a configurable prompt and list of options for the player. The player may click on one of the options to select it. If the player then clicks on a different option, the first is deselected.</p>
+<p>If there is no <code class="docutils literal"><span class="pre">duration</span></code> or <code class="docutils literal"><span class="pre">trigger_count</span></code> attribute, the step will show a “Next” button to advance to the next step. The “Next” button does not become active to a until one of the survey options are selected.</p>
+<p>Long text on the <code class="docutils literal"><span class="pre">prompt</span></code> option is fine. It will wrap to multiple lines.</p>
+<p>Sample Survey Step with 20s duration and no Next button:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Which of these is a better number?&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">],</span>
+  <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>Sample Survey Step with 5 pulse duration and no Next button:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Which of these is a better number?&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">],</span>
+  <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">5</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>Sample Survey Step with no duration a Next button:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Which of these is a better number?&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="reaction-prompt-elements">
+<h2>Reaction Prompt Elements<a class="headerlink" href="#reaction-prompt-elements" title="Permalink to this headline">¶</a></h2>
+<p>During the <code class="docutils literal"><span class="pre">game</span></code> and <code class="docutils literal"><span class="pre">game-adaptive</span></code> steps you can also configure reaction-time prompts to appear.</p>
+<p>Sample game step with reaction prompts:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+      <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">600</span> <span class="p">]</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;triangle.png&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone440.wav&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">7000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">,</span> <span class="mi">11000</span><span class="p">,</span> <span class="mi">13000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">17000</span><span class="p">,</span> <span class="mi">19000</span><span class="p">,</span> <span class="mi">21000</span><span class="p">,</span> <span class="mi">23000</span><span class="p">,</span> <span class="mi">25000</span><span class="p">,</span> <span class="mi">27000</span><span class="p">,</span> <span class="mi">29000</span><span class="p">,</span> <span class="mi">31000</span><span class="p">,</span> <span class="mi">33000</span><span class="p">,</span> <span class="mi">35000</span><span class="p">,</span> <span class="mi">37000</span><span class="p">,</span> <span class="mi">39000</span><span class="p">,</span> <span class="mi">41000</span><span class="p">,</span> <span class="mi">43000</span><span class="p">,</span> <span class="mi">45000</span><span class="p">,</span> <span class="mi">47000</span><span class="p">,</span> <span class="mi">49000</span><span class="p">,</span> <span class="mi">51000</span><span class="p">,</span> <span class="mi">53000</span><span class="p">,</span> <span class="mi">55000</span><span class="p">,</span> <span class="mi">57000</span><span class="p">,</span> <span class="mi">59000</span><span class="p">,</span> <span class="mi">61000</span><span class="p">,</span> <span class="mi">63000</span><span class="p">,</span> <span class="mi">65000</span><span class="p">,</span> <span class="mi">67000</span><span class="p">,</span> <span class="mi">69000</span><span class="p">,</span> <span class="mi">71000</span><span class="p">,</span> <span class="mi">73000</span><span class="p">,</span> <span class="mi">75000</span><span class="p">,</span> <span class="mi">77000</span><span class="p">,</span> <span class="mi">79000</span><span class="p">,</span> <span class="mi">81000</span><span class="p">,</span> <span class="mi">83000</span><span class="p">,</span> <span class="mi">85000</span><span class="p">,</span> <span class="mi">87000</span><span class="p">,</span> <span class="mi">89000</span><span class="p">,</span> <span class="mi">91000</span><span class="p">,</span> <span class="mi">93000</span><span class="p">,</span> <span class="mi">95000</span><span class="p">,</span> <span class="mi">97000</span><span class="p">,</span> <span class="mi">99000</span><span class="p">,</span> <span class="mi">101000</span><span class="p">,</span> <span class="mi">103000</span><span class="p">,</span> <span class="mi">105000</span><span class="p">,</span> <span class="mi">107000</span><span class="p">,</span> <span class="mi">109000</span><span class="p">,</span> <span class="mi">111000</span><span class="p">,</span> <span class="mi">113000</span><span class="p">,</span> <span class="mi">115000</span><span class="p">,</span> <span class="mi">117000</span><span class="p">,</span> <span class="mi">119000</span><span class="p">,</span> <span class="mi">121000</span><span class="p">,</span> <span class="mi">123000</span><span class="p">,</span> <span class="mi">125000</span><span class="p">,</span> <span class="mi">127000</span><span class="p">,</span> <span class="mi">129000</span><span class="p">,</span> <span class="mi">131000</span><span class="p">,</span> <span class="mi">133000</span><span class="p">,</span> <span class="mi">135000</span><span class="p">,</span> <span class="mi">137000</span><span class="p">,</span> <span class="mi">139000</span><span class="p">,</span> <span class="mi">141000</span><span class="p">,</span> <span class="mi">143000</span><span class="p">,</span> <span class="mi">145000</span><span class="p">,</span> <span class="mi">147000</span><span class="p">,</span> <span class="mi">149000</span><span class="p">,</span> <span class="mi">151000</span><span class="p">,</span> <span class="mi">153000</span><span class="p">,</span> <span class="mi">155000</span><span class="p">,</span> <span class="mi">157000</span><span class="p">,</span> <span class="mi">159000</span><span class="p">,</span> <span class="mi">161000</span><span class="p">,</span> <span class="mi">163000</span><span class="p">,</span> <span class="mi">165000</span><span class="p">,</span> <span class="mi">167000</span><span class="p">,</span> <span class="mi">169000</span><span class="p">,</span> <span class="mi">171000</span><span class="p">,</span> <span class="mi">173000</span><span class="p">,</span> <span class="mi">175000</span><span class="p">,</span> <span class="mi">177000</span><span class="p">,</span> <span class="mi">179000</span><span class="p">,</span> <span class="mi">181000</span><span class="p">,</span> <span class="mi">183000</span><span class="p">,</span> <span class="mi">185000</span><span class="p">,</span> <span class="mi">187000</span><span class="p">,</span> <span class="mi">189000</span><span class="p">,</span> <span class="mi">191000</span><span class="p">,</span> <span class="mi">193000</span><span class="p">,</span> <span class="mi">195000</span><span class="p">,</span> <span class="mi">197000</span><span class="p">,</span> <span class="mi">199000</span> <span class="p">],</span>
+      <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+      <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;circle.png&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone659.wav&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">7500</span><span class="p">,</span> <span class="mi">9500</span><span class="p">,</span> <span class="mi">11500</span><span class="p">,</span> <span class="mi">13500</span><span class="p">,</span> <span class="mi">15500</span><span class="p">,</span> <span class="mi">17500</span><span class="p">,</span> <span class="mi">19500</span><span class="p">,</span> <span class="mi">21500</span><span class="p">,</span> <span class="mi">23500</span><span class="p">,</span> <span class="mi">25500</span><span class="p">,</span> <span class="mi">27500</span><span class="p">,</span> <span class="mi">29500</span><span class="p">,</span> <span class="mi">31500</span><span class="p">,</span> <span class="mi">33500</span><span class="p">,</span> <span class="mi">35500</span><span class="p">,</span> <span class="mi">37500</span><span class="p">,</span> <span class="mi">39500</span><span class="p">,</span> <span class="mi">41500</span><span class="p">,</span> <span class="mi">43500</span><span class="p">,</span> <span class="mi">45500</span><span class="p">,</span> <span class="mi">47500</span><span class="p">,</span> <span class="mi">49500</span><span class="p">,</span> <span class="mi">51500</span><span class="p">,</span> <span class="mi">53500</span><span class="p">,</span> <span class="mi">55500</span><span class="p">,</span> <span class="mi">57500</span><span class="p">,</span> <span class="mi">59500</span><span class="p">,</span> <span class="mi">61500</span><span class="p">,</span> <span class="mi">63500</span><span class="p">,</span> <span class="mi">65500</span><span class="p">,</span> <span class="mi">67500</span><span class="p">,</span> <span class="mi">69500</span><span class="p">,</span> <span class="mi">71500</span><span class="p">,</span> <span class="mi">73500</span><span class="p">,</span> <span class="mi">75500</span><span class="p">,</span> <span class="mi">77500</span><span class="p">,</span> <span class="mi">79500</span><span class="p">,</span> <span class="mi">81500</span><span class="p">,</span> <span class="mi">83500</span><span class="p">,</span> <span class="mi">85500</span><span class="p">,</span> <span class="mi">87500</span><span class="p">,</span> <span class="mi">89500</span><span class="p">,</span> <span class="mi">91500</span><span class="p">,</span> <span class="mi">93500</span><span class="p">,</span> <span class="mi">95500</span><span class="p">,</span> <span class="mi">97500</span><span class="p">,</span> <span class="mi">99500</span><span class="p">,</span> <span class="mi">101500</span><span class="p">,</span> <span class="mi">103500</span><span class="p">,</span> <span class="mi">105500</span><span class="p">,</span> <span class="mi">107500</span><span class="p">,</span> <span class="mi">109500</span><span class="p">,</span> <span class="mi">111500</span><span class="p">,</span> <span class="mi">113500</span><span class="p">,</span> <span class="mi">115500</span><span class="p">,</span> <span class="mi">117500</span><span class="p">,</span> <span class="mi">119500</span><span class="p">,</span> <span class="mi">121500</span><span class="p">,</span> <span class="mi">123500</span><span class="p">,</span> <span class="mi">125500</span><span class="p">,</span> <span class="mi">127500</span><span class="p">,</span> <span class="mi">129500</span><span class="p">,</span> <span class="mi">131500</span><span class="p">,</span> <span class="mi">133500</span><span class="p">,</span> <span class="mi">135500</span><span class="p">,</span> <span class="mi">137500</span><span class="p">,</span> <span class="mi">139500</span><span class="p">,</span> <span class="mi">141500</span><span class="p">,</span> <span class="mi">143500</span><span class="p">,</span> <span class="mi">145500</span><span class="p">,</span> <span class="mi">147500</span><span class="p">,</span> <span class="mi">149500</span><span class="p">,</span> <span class="mi">151500</span><span class="p">,</span> <span class="mi">153500</span><span class="p">,</span> <span class="mi">155500</span><span class="p">,</span> <span class="mi">157500</span><span class="p">,</span> <span class="mi">159500</span><span class="p">,</span> <span class="mi">161500</span><span class="p">,</span> <span class="mi">163500</span><span class="p">,</span> <span class="mi">165500</span><span class="p">,</span> <span class="mi">167500</span><span class="p">,</span> <span class="mi">169500</span><span class="p">,</span> <span class="mi">171500</span><span class="p">,</span> <span class="mi">173500</span><span class="p">,</span> <span class="mi">175500</span><span class="p">,</span> <span class="mi">177500</span><span class="p">,</span> <span class="mi">179500</span><span class="p">,</span> <span class="mi">181500</span><span class="p">,</span> <span class="mi">183500</span><span class="p">,</span> <span class="mi">185500</span><span class="p">,</span> <span class="mi">187500</span><span class="p">,</span> <span class="mi">189500</span><span class="p">,</span> <span class="mi">191500</span><span class="p">,</span> <span class="mi">193500</span><span class="p">,</span> <span class="mi">195500</span><span class="p">,</span> <span class="mi">197500</span><span class="p">,</span> <span class="mi">199500</span> <span class="p">],</span>
+      <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+      <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;square.png&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone146.wav&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
+      <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">&quot;reaction_prompts&quot;</span></code> holds a list of entries. Each one has the following attributes:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;diameter&quot;</span></code></dt>
+<dd>The game-unit width and height of the icon on screen.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;position_list&quot;</span></code></dt>
+<dd>A list of 2-element positions. Each 2-element list is the [left, top] coordinate of the position of the image on screen in game coordinates. The first appearance is at the first entry in the list, second at the second entry and so-on, looping back to the first after the last.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;image&quot;</span></code></dt>
+<dd><code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> or the filename of an image in the data directory. I’ve created <code class="docutils literal"><span class="pre">&quot;trinagle.png&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;circle.png&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;square.png&quot;</span></code> but you may add your own transparent PNG images to the data directory and use them. Use “none” to create audio-only reaction prompts.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;sound&quot;</span></code></dt>
+<dd>The filename of a wav file or “none” to play no sound when the reaction prompt is visible, or <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">&quot;showtimes_millis&quot;</span></code></dt>
+<dd>A list of milliseconds into the <code class="docutils literal"><span class="pre">game</span></code> step to make the reaction prompt visible and audible.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;showtimes_trigger_counts&quot;</span></code></dt>
+<dd>A list of numbers to indicate which trigger pulses inside this step trigger this reaction prompt. A 1 in this list would trigger the reaction prompt to appear when the game receives the first trigger pulse after starting this <code class="docutils literal"><span class="pre">game</span></code> or <code class="docutils literal"><span class="pre">game-adaptive</span></code> step.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;timeout_millis&quot;</span></code></dt>
+<dd>How many milliseconds the prompt should remain visible and audible once it appears if the player doesn’t press the key to dismiss the prompt.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;stay_visible&quot;</span></code></dt>
+<dd><code class="docutils literal"><span class="pre">false</span></code> (default) or <code class="docutils literal"><span class="pre">true</span></code>. A value of <code class="docutils literal"><span class="pre">true</span></code> indicates that the sound and image should continue to appear after the player presses the key corresponding to the prompt.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;input_key&quot;</span></code></dt>
+<dd>Is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below.</dd>
+</dl>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">K_MOUSE1</span> <span class="o">--</span> <span class="n">Left</span> <span class="n">mouse</span> <span class="n">button</span>
+<span class="n">K_MOUSE2</span> <span class="o">--</span> <span class="n">Middle</span> <span class="n">mouse</span> <span class="n">button</span>
+<span class="n">K_MOUSE3</span> <span class="o">--</span> <span class="n">Right</span> <span class="n">mouse</span> <span class="n">button</span>
+<span class="n">K_0</span> <span class="n">through</span> <span class="n">K_9</span>
+<span class="n">K_AMPERSAND</span>
+<span class="n">K_ASTERISK</span>
+<span class="n">K_AT</span>
+<span class="n">K_BACKQUOTE</span>
+<span class="n">K_BACKSLASH</span>
+<span class="n">K_BACKSPACE</span>
+<span class="n">K_BREAK</span>
+<span class="n">K_CAPSLOCK</span>
+<span class="n">K_CARET</span>
+<span class="n">K_CLEAR</span>
+<span class="n">K_COLON</span>
+<span class="n">K_COMMA</span>
+<span class="n">K_DELETE</span>
+<span class="n">K_DOLLAR</span>
+<span class="n">K_DOWN</span>
+<span class="n">K_END</span>
+<span class="n">K_EQUALS</span>
+<span class="n">K_ESCAPE</span>
+<span class="n">K_EURO</span>
+<span class="n">K_EXCLAIM</span>
+<span class="n">K_F1</span> <span class="n">through</span> <span class="n">K_F15</span>
+<span class="n">K_FIRST</span>
+<span class="n">K_GREATER</span>
+<span class="n">K_HASH</span>
+<span class="n">K_HELP</span>
+<span class="n">K_HOME</span>
+<span class="n">K_INSERT</span>
+<span class="n">K_KP0</span> <span class="n">through</span> <span class="n">K_KP9</span>
+<span class="n">K_KP_DIVIDE</span>
+<span class="n">K_KP_ENTER</span>
+<span class="n">K_KP_EQUALS</span>
+<span class="n">K_KP_MINUS</span>
+<span class="n">K_KP_MULTIPLY</span>
+<span class="n">K_KP_PERIOD</span>
+<span class="n">K_KP_PLUS</span>
+<span class="n">K_LALT</span>
+<span class="n">K_LAST</span>
+<span class="n">K_LCTRL</span>
+<span class="n">K_LEFT</span>
+<span class="n">K_LEFTBRACKET</span>
+<span class="n">K_LEFTPAREN</span>
+<span class="n">K_LESS</span>
+<span class="n">K_LMETA</span>
+<span class="n">K_LSHIFT</span>
+<span class="n">K_LSUPER</span>
+<span class="n">K_MENU</span>
+<span class="n">K_MINUS</span>
+<span class="n">K_MODE</span>
+<span class="n">K_NUMLOCK</span>
+<span class="n">K_PAGEDOWN</span>
+<span class="n">K_PAGEUP</span>
+<span class="n">K_PAUSE</span>
+<span class="n">K_PERIOD</span>
+<span class="n">K_PLUS</span>
+<span class="n">K_POWER</span>
+<span class="n">K_PRINT</span>
+<span class="n">K_QUESTION</span>
+<span class="n">K_QUOTE</span>
+<span class="n">K_QUOTEDBL</span>
+<span class="n">K_RALT</span>
+<span class="n">K_RCTRL</span>
+<span class="n">K_RETURN</span>
+<span class="n">K_RIGHT</span>
+<span class="n">K_RIGHTBRACKET</span>
+<span class="n">K_RIGHTPAREN</span>
+<span class="n">K_RMETA</span>
+<span class="n">K_RSHIFT</span>
+<span class="n">K_RSUPER</span>
+<span class="n">K_SCROLLOCK</span>
+<span class="n">K_SEMICOLON</span>
+<span class="n">K_SLASH</span>
+<span class="n">K_SPACE</span>
+<span class="n">K_SYSREQ</span>
+<span class="n">K_TAB</span>
+<span class="n">K_UNDERSCORE</span>
+<span class="n">K_UP</span>
+<span class="n">K_a</span> <span class="n">through</span> <span class="n">K_z</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -533,7 +777,7 @@ void loop() {
 <li><a class="reference internal" href="#">Game Script JSON</a><ul>
 <li><a class="reference internal" href="#steps-list">Steps List</a></li>
 <li><a class="reference internal" href="#trigger-advance-options">Trigger Advance Options</a></li>
-<li><a class="reference internal" href="#trigger-latency">Trigger Latency</a></li>
+<li><a class="reference internal" href="#output-trigger-settings">Output Trigger Settings</a></li>
 <li><a class="reference internal" href="#common-step-attributes">Common Step Attributes</a></li>
 <li><a class="reference internal" href="#available-step-actions">Available step actions</a><ul>
 <li><a class="reference internal" href="#game"><code class="docutils literal"><span class="pre">game</span></code></a></li>
@@ -543,7 +787,11 @@ void loop() {
 <li><a class="reference internal" href="#game-adaptive"><code class="docutils literal"><span class="pre">game-adaptive</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#game-adaptive-levels-list">game-adaptive levels list</a></li>
+<li><a class="reference internal" href="#game-adaptive-levels-list">game-adaptive levels list</a><ul>
+<li><a class="reference internal" href="#survey"><code class="docutils literal"><span class="pre">survey</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reaction-prompt-elements">Reaction Prompt Elements</a></li>
 </ul>
 </li>
 </ul>
@@ -559,21 +807,18 @@ void loop() {
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/scriptjson.txt"
+      <li><a href="_sources/scriptjson.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -584,11 +829,11 @@ void loop() {
       &copy;2015, Nick Winters.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/scriptjson.txt"
+      <a href="_sources/scriptjson.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

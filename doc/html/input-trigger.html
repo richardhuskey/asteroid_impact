@@ -1,0 +1,574 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Input Triggers &#8212; Asteroid Impact 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Output Triggers" href="output-trigger.html" />
+    <link rel="prev" title="Parallel Port Connections" href="parallelport.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="input-triggers">
+<h1>Input Triggers<a class="headerlink" href="#input-triggers" title="Permalink to this headline">¶</a></h1>
+<p>Asteroid Impact can be configured to synchronize advancing steps with pulses from an external system. The external system should either send a byte over serial to the computer running Asteroid Impact, appear as a keyboard and press a key, or change the logic level of at least one parallel status pin. Each of these events is seen as a incoming trigger pulse, and steps in Asteroid Impact advance after a configurable number of pulses.</p>
+<p>You can visualize trigger pulses with an icon that flashes on screen by using the <code class="docutils literal"><span class="pre">-–trigger-blink</span> <span class="pre">true</span></code> command-line option.</p>
+<div class="section" id="id1">
+<h2>Input Triggers<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>The input triggers will automatically advance to the next step after the game receives the configured number of trigger pulses. The trigger pulse count for each step is configured with the <code class="docutils literal"><span class="pre">trigger_count</span></code> attribute.</p>
+<p>The input triggers can be configured for one of the the three inputs:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>When receiving a particular byte, such as an ascii ‘5’ over a serial port.</li>
+<li>When a keyboard key, like the 5 number key is pressed down.</li>
+<li>When the input on configured parallel port changes the status byte value from the configured common value to the configured trigger value.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="json-configuration-sample">
+<h2>JSON Configuration Sample<a class="headerlink" href="#json-configuration-sample" title="Permalink to this headline">¶</a></h2>
+<p>Below is a sample script JSON with input triggers configured.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;keyboard&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM5&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_byte_value&quot;</span><span class="p">:</span> <span class="mi">53</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;keyboard_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;trigger_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_5&quot;</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;common_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;instructions&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">500</span> <span class="p">],</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">600</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;triangle.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone440.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">7000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">,</span> <span class="mi">11000</span><span class="p">,</span> <span class="mi">13000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">17000</span><span class="p">,</span> <span class="mi">19000</span><span class="p">,</span> <span class="mi">21000</span><span class="p">,</span> <span class="mi">23000</span><span class="p">,</span> <span class="mi">25000</span><span class="p">,</span> <span class="mi">27000</span><span class="p">,</span> <span class="mi">29000</span><span class="p">,</span> <span class="mi">31000</span><span class="p">,</span> <span class="mi">33000</span><span class="p">,</span> <span class="mi">35000</span><span class="p">,</span> <span class="mi">37000</span><span class="p">,</span> <span class="mi">39000</span><span class="p">,</span> <span class="mi">41000</span><span class="p">,</span> <span class="mi">43000</span><span class="p">,</span> <span class="mi">45000</span><span class="p">,</span> <span class="mi">47000</span><span class="p">,</span> <span class="mi">49000</span><span class="p">,</span> <span class="mi">51000</span><span class="p">,</span> <span class="mi">53000</span><span class="p">,</span> <span class="mi">55000</span><span class="p">,</span> <span class="mi">57000</span><span class="p">,</span> <span class="mi">59000</span><span class="p">,</span> <span class="mi">61000</span><span class="p">,</span> <span class="mi">63000</span><span class="p">,</span> <span class="mi">65000</span><span class="p">,</span> <span class="mi">67000</span><span class="p">,</span> <span class="mi">69000</span><span class="p">,</span> <span class="mi">71000</span><span class="p">,</span> <span class="mi">73000</span><span class="p">,</span> <span class="mi">75000</span><span class="p">,</span> <span class="mi">77000</span><span class="p">,</span> <span class="mi">79000</span><span class="p">,</span> <span class="mi">81000</span><span class="p">,</span> <span class="mi">83000</span><span class="p">,</span> <span class="mi">85000</span><span class="p">,</span> <span class="mi">87000</span><span class="p">,</span> <span class="mi">89000</span><span class="p">,</span> <span class="mi">91000</span><span class="p">,</span> <span class="mi">93000</span><span class="p">,</span> <span class="mi">95000</span><span class="p">,</span> <span class="mi">97000</span><span class="p">,</span> <span class="mi">99000</span><span class="p">,</span> <span class="mi">101000</span><span class="p">,</span> <span class="mi">103000</span><span class="p">,</span> <span class="mi">105000</span><span class="p">,</span> <span class="mi">107000</span><span class="p">,</span> <span class="mi">109000</span><span class="p">,</span> <span class="mi">111000</span><span class="p">,</span> <span class="mi">113000</span><span class="p">,</span> <span class="mi">115000</span><span class="p">,</span> <span class="mi">117000</span><span class="p">,</span> <span class="mi">119000</span><span class="p">,</span> <span class="mi">121000</span><span class="p">,</span> <span class="mi">123000</span><span class="p">,</span> <span class="mi">125000</span><span class="p">,</span> <span class="mi">127000</span><span class="p">,</span> <span class="mi">129000</span><span class="p">,</span> <span class="mi">131000</span><span class="p">,</span> <span class="mi">133000</span><span class="p">,</span> <span class="mi">135000</span><span class="p">,</span> <span class="mi">137000</span><span class="p">,</span> <span class="mi">139000</span><span class="p">,</span> <span class="mi">141000</span><span class="p">,</span> <span class="mi">143000</span><span class="p">,</span> <span class="mi">145000</span><span class="p">,</span> <span class="mi">147000</span><span class="p">,</span> <span class="mi">149000</span><span class="p">,</span> <span class="mi">151000</span><span class="p">,</span> <span class="mi">153000</span><span class="p">,</span> <span class="mi">155000</span><span class="p">,</span> <span class="mi">157000</span><span class="p">,</span> <span class="mi">159000</span><span class="p">,</span> <span class="mi">161000</span><span class="p">,</span> <span class="mi">163000</span><span class="p">,</span> <span class="mi">165000</span><span class="p">,</span> <span class="mi">167000</span><span class="p">,</span> <span class="mi">169000</span><span class="p">,</span> <span class="mi">171000</span><span class="p">,</span> <span class="mi">173000</span><span class="p">,</span> <span class="mi">175000</span><span class="p">,</span> <span class="mi">177000</span><span class="p">,</span> <span class="mi">179000</span><span class="p">,</span> <span class="mi">181000</span><span class="p">,</span> <span class="mi">183000</span><span class="p">,</span> <span class="mi">185000</span><span class="p">,</span> <span class="mi">187000</span><span class="p">,</span> <span class="mi">189000</span><span class="p">,</span> <span class="mi">191000</span><span class="p">,</span> <span class="mi">193000</span><span class="p">,</span> <span class="mi">195000</span><span class="p">,</span> <span class="mi">197000</span><span class="p">,</span> <span class="mi">199000</span> <span class="p">],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;circle.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone659.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">3500</span><span class="p">,</span> <span class="mi">5500</span><span class="p">,</span> <span class="mi">7500</span><span class="p">,</span> <span class="mi">9500</span><span class="p">,</span> <span class="mi">11500</span><span class="p">,</span> <span class="mi">13500</span><span class="p">,</span> <span class="mi">15500</span><span class="p">,</span> <span class="mi">17500</span><span class="p">,</span> <span class="mi">19500</span><span class="p">,</span> <span class="mi">21500</span><span class="p">,</span> <span class="mi">23500</span><span class="p">,</span> <span class="mi">25500</span><span class="p">,</span> <span class="mi">27500</span><span class="p">,</span> <span class="mi">29500</span><span class="p">,</span> <span class="mi">31500</span><span class="p">,</span> <span class="mi">33500</span><span class="p">,</span> <span class="mi">35500</span><span class="p">,</span> <span class="mi">37500</span><span class="p">,</span> <span class="mi">39500</span><span class="p">,</span> <span class="mi">41500</span><span class="p">,</span> <span class="mi">43500</span><span class="p">,</span> <span class="mi">45500</span><span class="p">,</span> <span class="mi">47500</span><span class="p">,</span> <span class="mi">49500</span><span class="p">,</span> <span class="mi">51500</span><span class="p">,</span> <span class="mi">53500</span><span class="p">,</span> <span class="mi">55500</span><span class="p">,</span> <span class="mi">57500</span><span class="p">,</span> <span class="mi">59500</span><span class="p">,</span> <span class="mi">61500</span><span class="p">,</span> <span class="mi">63500</span><span class="p">,</span> <span class="mi">65500</span><span class="p">,</span> <span class="mi">67500</span><span class="p">,</span> <span class="mi">69500</span><span class="p">,</span> <span class="mi">71500</span><span class="p">,</span> <span class="mi">73500</span><span class="p">,</span> <span class="mi">75500</span><span class="p">,</span> <span class="mi">77500</span><span class="p">,</span> <span class="mi">79500</span><span class="p">,</span> <span class="mi">81500</span><span class="p">,</span> <span class="mi">83500</span><span class="p">,</span> <span class="mi">85500</span><span class="p">,</span> <span class="mi">87500</span><span class="p">,</span> <span class="mi">89500</span><span class="p">,</span> <span class="mi">91500</span><span class="p">,</span> <span class="mi">93500</span><span class="p">,</span> <span class="mi">95500</span><span class="p">,</span> <span class="mi">97500</span><span class="p">,</span> <span class="mi">99500</span><span class="p">,</span> <span class="mi">101500</span><span class="p">,</span> <span class="mi">103500</span><span class="p">,</span> <span class="mi">105500</span><span class="p">,</span> <span class="mi">107500</span><span class="p">,</span> <span class="mi">109500</span><span class="p">,</span> <span class="mi">111500</span><span class="p">,</span> <span class="mi">113500</span><span class="p">,</span> <span class="mi">115500</span><span class="p">,</span> <span class="mi">117500</span><span class="p">,</span> <span class="mi">119500</span><span class="p">,</span> <span class="mi">121500</span><span class="p">,</span> <span class="mi">123500</span><span class="p">,</span> <span class="mi">125500</span><span class="p">,</span> <span class="mi">127500</span><span class="p">,</span> <span class="mi">129500</span><span class="p">,</span> <span class="mi">131500</span><span class="p">,</span> <span class="mi">133500</span><span class="p">,</span> <span class="mi">135500</span><span class="p">,</span> <span class="mi">137500</span><span class="p">,</span> <span class="mi">139500</span><span class="p">,</span> <span class="mi">141500</span><span class="p">,</span> <span class="mi">143500</span><span class="p">,</span> <span class="mi">145500</span><span class="p">,</span> <span class="mi">147500</span><span class="p">,</span> <span class="mi">149500</span><span class="p">,</span> <span class="mi">151500</span><span class="p">,</span> <span class="mi">153500</span><span class="p">,</span> <span class="mi">155500</span><span class="p">,</span> <span class="mi">157500</span><span class="p">,</span> <span class="mi">159500</span><span class="p">,</span> <span class="mi">161500</span><span class="p">,</span> <span class="mi">163500</span><span class="p">,</span> <span class="mi">165500</span><span class="p">,</span> <span class="mi">167500</span><span class="p">,</span> <span class="mi">169500</span><span class="p">,</span> <span class="mi">171500</span><span class="p">,</span> <span class="mi">173500</span><span class="p">,</span> <span class="mi">175500</span><span class="p">,</span> <span class="mi">177500</span><span class="p">,</span> <span class="mi">179500</span><span class="p">,</span> <span class="mi">181500</span><span class="p">,</span> <span class="mi">183500</span><span class="p">,</span> <span class="mi">185500</span><span class="p">,</span> <span class="mi">187500</span><span class="p">,</span> <span class="mi">189500</span><span class="p">,</span> <span class="mi">191500</span><span class="p">,</span> <span class="mi">193500</span><span class="p">,</span> <span class="mi">195500</span><span class="p">,</span> <span class="mi">197500</span><span class="p">,</span> <span class="mi">199500</span> <span class="p">],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;square.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone146.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s2">This is a second paragraph.</span><span class="se">\n\n</span><span class="s2">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;blackscreen&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">5</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Bacon ipsum dolor amet tail ribeye cow prosciutto flank. Short ribs sausage leberkas boudin biltong jerky swine spare ribs flank salami kevin short loin pork chop. Meatloaf drumstick spare ribs ball tip venison meatball. Picanha biltong t-bone fatback flank ribeye. Pork shoulder meatloaf beef, bresaola meatball ground round filet mignon. Tri-tip swine pork belly turkey, prosciutto filet mignon pork loin bresaola kielbasa pig biltong pork frankfurter. Tri-tip ham boudin biltong pig meatloaf pork belly pork tail shank t-bone shoulder pastrami.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">],</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">25</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/hardlevels.json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">20</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game-adaptive&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+      <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+      <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+      <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;extreme&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;blackscreen&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="serial-input-configuration">
+<h2>Serial Input Configuration<a class="headerlink" href="#serial-input-configuration" title="Permalink to this headline">¶</a></h2>
+<p>When configured for serial input, the game connects to the serial port with the specified options and reads all input. When the game receives a byte that matches <code class="docutils literal"><span class="pre">trigger_byte_value</span></code> configuration it treats that as a trigger input. Other bytes are read but ignored.</p>
+<p>Below is a sample script JSON with only serial input triggers configured and two text steps.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;keyboard&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM5&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_byte_value&quot;</span><span class="p">:</span> <span class="mi">53</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Text step 1&quot;</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Text step 2&quot;</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">serial_options</span></code> options:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">trigger_byte_value</span></code></dt>
+<dd>The decimal representation of the byte you want to trigger on. In the sample above, the <code class="docutils literal"><span class="pre">trigger_byte_value</span></code> of 53 is the ‘5’ character in ASCII. See <a class="reference external" href="http://www.asciitable.com">http://www.asciitable.com</a> the ‘Dec’ colum shows the decimal number of the character.</dd>
+<dt><code class="docutils literal"><span class="pre">port</span></code></dt>
+<dd>This should be the device name of your serial port. In Windows it will likely be <code class="docutils literal"><span class="pre">&quot;COM1&quot;</span></code> or similar. Check Device Manager to find your serial port. In Linux it will likely be something like <code class="docutils literal"><span class="pre">&quot;/dev/ttyUSB0&quot;</span></code>, and in OSX something like <code class="docutils literal"><span class="pre">&quot;/dev/tty.usbmodem1234&quot;</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">baudrate</span></code></dt>
+<dd>The baudrate in symbols/second to connect to the serial port. For hardware serial devices connecting at the wrong baudrate will result in gibberish characters being read.</dd>
+<dt><code class="docutils literal"><span class="pre">bytesize</span></code></dt>
+<dd>Number of bits per byte. Defaults to 8, but it can sometimes be 7, 6 or 5.</dd>
+<dt><code class="docutils literal"><span class="pre">stopbits</span></code></dt>
+<dd>Number of stop bits. Defaults to 1, can be 2.</dd>
+<dt><code class="docutils literal"><span class="pre">parity</span></code></dt>
+<dd>The parity must be one of the following: <code class="docutils literal"><span class="pre">&quot;even&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;mark&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;names&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;odd&quot;</span></code>, or <code class="docutils literal"><span class="pre">&quot;space&quot;</span></code>.</dd>
+</dl>
+</div>
+<div class="section" id="keyboard-input">
+<h2>Keyboard Input<a class="headerlink" href="#keyboard-input" title="Permalink to this headline">¶</a></h2>
+<p>Below is a sample script JSON with only keyboard input triggers configured and two text steps.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;keyboard&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;keyboard_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;trigger_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_5&quot;</span>
+    <span class="p">},</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Text step 1&quot;</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Text step 2&quot;</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The trigger pulse is when you press down the configured <code class="docutils literal"><span class="pre">trigger_key</span></code>. <code class="docutils literal"><span class="pre">&quot;K_5&quot;</span></code> corresponds to the 5 key on your keyboard.</p>
+<p>There is not currently an option to trigger on joystick buttons, or mouse buttons. Only keyboard right now.</p>
+<p>Multi-key trigger sequences are not supported. The availble options for <code class="docutils literal"><span class="pre">trigger_key1</span></code> are the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">K_0</span> <span class="n">through</span> <span class="n">K_9</span>
+<span class="n">K_AMPERSAND</span>
+<span class="n">K_ASTERISK</span>
+<span class="n">K_AT</span>
+<span class="n">K_BACKQUOTE</span>
+<span class="n">K_BACKSLASH</span>
+<span class="n">K_BACKSPACE</span>
+<span class="n">K_BREAK</span>
+<span class="n">K_CAPSLOCK</span>
+<span class="n">K_CARET</span>
+<span class="n">K_CLEAR</span>
+<span class="n">K_COLON</span>
+<span class="n">K_COMMA</span>
+<span class="n">K_DELETE</span>
+<span class="n">K_DOLLAR</span>
+<span class="n">K_DOWN</span>
+<span class="n">K_END</span>
+<span class="n">K_EQUALS</span>
+<span class="n">K_ESCAPE</span>
+<span class="n">K_EURO</span>
+<span class="n">K_EXCLAIM</span>
+<span class="n">K_F1</span> <span class="n">through</span> <span class="n">K_F15</span>
+<span class="n">K_FIRST</span>
+<span class="n">K_GREATER</span>
+<span class="n">K_HASH</span>
+<span class="n">K_HELP</span>
+<span class="n">K_HOME</span>
+<span class="n">K_INSERT</span>
+<span class="n">K_KP0</span> <span class="n">through</span> <span class="n">K_KP9</span>
+<span class="n">K_KP_DIVIDE</span>
+<span class="n">K_KP_ENTER</span>
+<span class="n">K_KP_EQUALS</span>
+<span class="n">K_KP_MINUS</span>
+<span class="n">K_KP_MULTIPLY</span>
+<span class="n">K_KP_PERIOD</span>
+<span class="n">K_KP_PLUS</span>
+<span class="n">K_LALT</span>
+<span class="n">K_LAST</span>
+<span class="n">K_LCTRL</span>
+<span class="n">K_LEFT</span>
+<span class="n">K_LEFTBRACKET</span>
+<span class="n">K_LEFTPAREN</span>
+<span class="n">K_LESS</span>
+<span class="n">K_LMETA</span>
+<span class="n">K_LSHIFT</span>
+<span class="n">K_LSUPER</span>
+<span class="n">K_MENU</span>
+<span class="n">K_MINUS</span>
+<span class="n">K_MODE</span>
+<span class="n">K_NUMLOCK</span>
+<span class="n">K_PAGEDOWN</span>
+<span class="n">K_PAGEUP</span>
+<span class="n">K_PAUSE</span>
+<span class="n">K_PERIOD</span>
+<span class="n">K_PLUS</span>
+<span class="n">K_POWER</span>
+<span class="n">K_PRINT</span>
+<span class="n">K_QUESTION</span>
+<span class="n">K_QUOTE</span>
+<span class="n">K_QUOTEDBL</span>
+<span class="n">K_RALT</span>
+<span class="n">K_RCTRL</span>
+<span class="n">K_RETURN</span>
+<span class="n">K_RIGHT</span>
+<span class="n">K_RIGHTBRACKET</span>
+<span class="n">K_RIGHTPAREN</span>
+<span class="n">K_RMETA</span>
+<span class="n">K_RSHIFT</span>
+<span class="n">K_RSUPER</span>
+<span class="n">K_SCROLLOCK</span>
+<span class="n">K_SEMICOLON</span>
+<span class="n">K_SLASH</span>
+<span class="n">K_SPACE</span>
+<span class="n">K_SYSREQ</span>
+<span class="n">K_TAB</span>
+<span class="n">K_UNDERSCORE</span>
+<span class="n">K_UP</span>
+<span class="n">K_a</span> <span class="n">through</span> <span class="n">K_z</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="parallel-input">
+<h2>Parallel Input<a class="headerlink" href="#parallel-input" title="Permalink to this headline">¶</a></h2>
+<p>Note: Parallel input only works on Windows computers, and they require the inpout32 driver to be installed.</p>
+<p>Below is a sample script JSON with only serial input triggers configured and two text steps.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;common_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;trigger_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Text step 1&quot;</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Text step 2&quot;</span>
+      <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The parallel trigger mode will connect to a parallel port at the data address specified, and when the value in the status byte changes from the common to the trigger value will increment the current trigger count. See See <a class="reference internal" href="parallelport.html"><span class="doc">Parallel Port Connections</span></a> for how to use the parallel port test feature to find the values and test. The values configured are in hexadecimal.</p>
+<p><code class="docutils literal"><span class="pre">parallel_options</span></code> fields:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">port_address_hex</span></code></dt>
+<dd>The IO port address for the parallel port. You can see this in Device Manager, go to properties for the parallel port, and on the Resources tab the first listed IO range address in hex is the one you should enter here.</dd>
+<dt><code class="docutils literal"><span class="pre">common_status_value_hex</span></code></dt>
+<dd>The “off” value to wait for for the status register to return to before the next trigger.</dd>
+<dt><code class="docutils literal"><span class="pre">trigger_status_value_hex</span></code></dt>
+<dd>The “active” value to wait for on the status register that indicates a trigger pulse.</dd>
+</dl>
+<p>The parallel port triggers have common/trigger values configured independently so that you can configure both active high and active low, or status pins that are inverted (11/busy).</p>
+</div>
+<div class="section" id="trigger-latency">
+<h2>Trigger Latency<a class="headerlink" href="#trigger-latency" title="Permalink to this headline">¶</a></h2>
+<p>Depending on the computer being run, the trigger and other input sources has a bit of latency that will add some delay between when a trigger pulse is received and the game updates on screen. This was measured at under 0.1 seconds between sending a trigger pulse and the screen updating. This latency does not delay the scanner or device sending trigger pulses, so the overall timing should be similar, especially if the same hardware is used.</p>
+<p>The latency has several factors:
+* The game runs at 60hz so at best the average latency would be about 1/60s.
+* Serial input is typically buffered on a computer for faster read rates.
+* Graphic drawing is typically pipelined so there is enough work to do at once, and the drawing is completed before output to the screen (double buffering).
+* Video scaling hardware in the LCD or projector will wait for receiving a full frame before scaling the image to the actual display element (LCD or mirrors in a projector)</p>
+<p>Latency was measured as follows:
+* Configure Arduino Leonardo as game trigger (sketch below) and to turn on LED when trigger pulse is sent. The basic stamp board based emulator also blinks an LED when it sends trigger pulses.
+* Run game with <code class="docutils literal"><span class="pre">--trigger-blink</span> <span class="pre">true</span></code> command-line option
+* Record 120FPS video using iPhone framed to show both LED on Arduino and trigger blink in lower right of game on screen
+* Count frames between LED turning on (frame 0) and game showing blink (typically 9-13 frames at 120FPS). be careful that the video you’re counting frames in is actually 120FPS and not the slow down/speed up effect the iPhone adds at the start/end.</p>
+<p>Keyboard input latency was typically 2 frames shorter in the 120fps video, and Windows seemed to have a lower latency than OSX.</p>
+<p>Serial Latency test sketch (Nearly any Arduino will work, tested with Leonardo, Uno)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Arduino</span> <span class="n">Leonardo</span> <span class="n">sketch</span> <span class="n">to</span> <span class="n">test</span> <span class="n">latency</span> <span class="n">of</span> <span class="nb">input</span> <span class="n">trigger</span> <span class="ow">in</span> <span class="n">serial</span>
+<span class="o">//</span> <span class="n">Blinks</span> <span class="n">LED</span> <span class="n">each</span> <span class="n">time</span> <span class="n">trigger</span> <span class="n">pulse</span> <span class="ow">is</span> <span class="n">sent</span> <span class="n">over</span> <span class="n">serial</span>
+<span class="o">//</span> <span class="n">Record</span> <span class="n">video</span> <span class="n">of</span> <span class="n">LED</span> <span class="k">with</span> <span class="n">display</span> <span class="n">of</span> <span class="n">trigger</span> <span class="n">pulse</span> <span class="n">to</span> <span class="n">measure</span> <span class="n">latency</span>
+<span class="c1">#define DELAY_MILLIS 1000</span>
+<span class="c1">#define BLINK_MILLIS 100</span>
+
+<span class="n">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">initialize</span> <span class="n">serial</span> <span class="n">communication</span> <span class="n">at</span> <span class="mi">19200</span> <span class="n">bits</span> <span class="n">per</span> <span class="n">second</span><span class="p">:</span>
+  <span class="n">Serial</span><span class="o">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">19200</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">delay</span><span class="p">(</span><span class="n">BLINK_MILLIS</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">delay</span><span class="p">(</span><span class="n">DELAY_MILLIS</span><span class="o">-</span><span class="n">BLINK_MILLIS</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;5&quot;</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="o">.</span><span class="n">flush</span><span class="p">();</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Keyboard Latency test sketch for Arduino Leonardo</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Arduino</span> <span class="n">Leonardo</span> <span class="n">sketch</span> <span class="n">to</span> <span class="n">test</span> <span class="n">latency</span> <span class="n">of</span> <span class="nb">input</span> <span class="n">trigger</span> <span class="ow">in</span> <span class="n">keyboard</span> <span class="n">mode</span>
+<span class="o">//</span> <span class="n">Blinks</span> <span class="n">LED</span> <span class="n">each</span> <span class="n">time</span> <span class="n">trigger</span> <span class="n">pulse</span> <span class="ow">is</span> <span class="n">sent</span> <span class="n">over</span> <span class="n">keyboard</span> <span class="p">(</span><span class="mi">5</span> <span class="n">number</span> <span class="n">key</span> <span class="ow">is</span> <span class="n">pressed</span><span class="p">)</span>
+<span class="o">//</span> <span class="n">Record</span> <span class="n">video</span> <span class="n">of</span> <span class="n">LED</span> <span class="k">with</span> <span class="n">display</span> <span class="n">of</span> <span class="n">trigger</span> <span class="n">pulse</span> <span class="n">to</span> <span class="n">measure</span> <span class="n">latency</span>
+<span class="c1">#define DELAY_MILLIS 1000</span>
+<span class="c1">#define BLINK_MILLIS 100</span>
+
+<span class="c1">#include &quot;Keyboard.h&quot;</span>
+
+<span class="n">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Keyboard</span><span class="o">.</span><span class="n">begin</span><span class="p">();</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">wait</span> <span class="n">a</span> <span class="n">few</span> <span class="n">seconds</span> <span class="n">before</span> <span class="n">starting</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Keyboard</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="s1">&#39;5&#39;</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+
+    <span class="n">delay</span><span class="p">(</span><span class="n">BLINK_MILLIS</span><span class="p">);</span>
+
+    <span class="n">Keyboard</span><span class="o">.</span><span class="n">releaseAll</span><span class="p">();</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+
+    <span class="n">delay</span><span class="p">(</span><span class="n">DELAY_MILLIS</span> <span class="o">-</span> <span class="n">BLINK_MILLIS</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Input Triggers</a><ul>
+<li><a class="reference internal" href="#id1">Input Triggers</a></li>
+<li><a class="reference internal" href="#json-configuration-sample">JSON Configuration Sample</a></li>
+<li><a class="reference internal" href="#serial-input-configuration">Serial Input Configuration</a></li>
+<li><a class="reference internal" href="#keyboard-input">Keyboard Input</a></li>
+<li><a class="reference internal" href="#parallel-input">Parallel Input</a></li>
+<li><a class="reference internal" href="#trigger-latency">Trigger Latency</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="parallelport.html" title="previous chapter">Parallel Port Connections</a></li>
+      <li>Next: <a href="output-trigger.html" title="next chapter">Output Triggers</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/input-trigger.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/input-trigger.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

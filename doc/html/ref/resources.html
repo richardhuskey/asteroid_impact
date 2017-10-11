@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>resources &mdash; Asteroid Impact 1.0.0 documentation</title>
-    
+    <title>resources &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="screens" href="screens.html" />
     <link rel="prev" title="makestandardlevels" href="makestandardlevels.html" />
    
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -43,6 +45,54 @@
 <div class="section" id="id1">
 <h2><a class="reference internal" href="#module-resources" title="resources"><code class="xref py py-mod docutils literal"><span class="pre">resources</span></code></a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-resources"></span><p>Resource-loading utilities for AsteroidImpact</p>
+<dl class="class">
+<dt id="resources.MixedSound">
+<em class="property">class </em><code class="descclassname">resources.</code><code class="descname">MixedSound</code><span class="sig-paren">(</span><em>filename</em>, <em>mixing_group</em>, <em>default_volume</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.MixedSound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Sound</span></code></p>
+<p>Sound object that reduces volume when self or other sounds in same group are played at simultaneously.</p>
+<dl class="method">
+<dt id="resources.MixedSound.play">
+<code class="descname">play</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#resources.MixedSound.play" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="resources.NoneSound">
+<em class="property">class </em><code class="descclassname">resources.</code><code class="descname">NoneSound</code><a class="headerlink" href="#resources.NoneSound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stub sound object that responds to same methods but plays no audio</p>
+<dl class="method">
+<dt id="resources.NoneSound.fadeout">
+<code class="descname">fadeout</code><span class="sig-paren">(</span><em>duration</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.NoneSound.fadeout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="resources.NoneSound.get_length">
+<code class="descname">get_length</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#resources.NoneSound.get_length" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="resources.NoneSound.get_volume">
+<code class="descname">get_volume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#resources.NoneSound.get_volume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="resources.NoneSound.play">
+<code class="descname">play</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#resources.NoneSound.play" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="resources.NoneSound.set_volume">
+<code class="descname">set_volume</code><span class="sig-paren">(</span><em>volume</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.NoneSound.set_volume" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="resources.NoneSound.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#resources.NoneSound.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="resources.ScaledImageCache">
 <em class="property">class </em><code class="descclassname">resources.</code><code class="descname">ScaledImageCache</code><span class="sig-paren">(</span><em>name</em>, <em>convert_alpha=False</em>, <em>colorkey=None</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.ScaledImageCache" title="Permalink to this definition">¶</a></dt>
@@ -70,7 +120,7 @@ requested size than the image on disk. Cache the results for later.</p>
 <code class="descclassname">resources.</code><code class="descname">load_image</code><span class="sig-paren">(</span><em>name</em>, <em>size=None</em>, <em>convert_alpha=False</em>, <em>colorkey=None</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.load_image" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load image, scaling to desired size if specified.</p>
 <p>Results are cached to make future loading of the same resource instant, but
-this means you shouldn&#8217;t draw on returned surfaces.</p>
+this means you shouldn’t draw on returned surfaces.</p>
 </dd></dl>
 
 <dl class="function">
@@ -81,8 +131,10 @@ this means you shouldn&#8217;t draw on returned surfaces.</p>
 
 <dl class="function">
 <dt id="resources.load_sound">
-<code class="descclassname">resources.</code><code class="descname">load_sound</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.load_sound" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">resources.</code><code class="descname">load_sound</code><span class="sig-paren">(</span><em>name</em>, <em>mixing_group=None</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.load_sound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load audio clip from file name.</p>
+<p>mixing_group is key for which group the sound should mix with. Mixed sounds in the same group
+reduce in volume based on how many are currently playing.</p>
 </dd></dl>
 
 <dl class="function">
@@ -95,7 +147,7 @@ this means you shouldn&#8217;t draw on returned surfaces.</p>
 <dt id="resources.resource_path">
 <code class="descclassname">resources.</code><code class="descname">resource_path</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#resources.resource_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return transformed resource path.</p>
-<p>For example, a standalone single-exe build would need to move the &#8216;data&#8217; folder references somewhere else.</p>
+<p>For example, a standalone single-exe build would need to move the ‘data’ folder references somewhere else.</p>
 </dd></dl>
 
 <dl class="function">
@@ -132,21 +184,18 @@ this means you shouldn&#8217;t draw on returned surfaces.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/ref/resources.txt"
+      <li><a href="../_sources/ref/resources.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -157,11 +206,11 @@ this means you shouldn&#8217;t draw on returned surfaces.</p>
       &copy;2015, Nick Winters.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="../_sources/ref/resources.txt"
+      <a href="../_sources/ref/resources.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

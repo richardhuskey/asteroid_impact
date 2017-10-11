@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>screens &mdash; Asteroid Impact 1.0.0 documentation</title>
-    
+    <title>screens &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="sprites" href="sprites.html" />
     <link rel="prev" title="resources" href="resources.html" />
    
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -45,7 +47,7 @@
 <span class="target" id="module-screens"></span><p>Game screens for AsteroidImpact</p>
 <dl class="class">
 <dt id="screens.AsteroidImpactGameplayScreen">
-<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>levellist</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>levellist</em>, <em>reaction_prompts_settings</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
 <p>Gameplay logic for the Asteroid Impact game.</p>
 <dl class="method">
@@ -53,6 +55,11 @@
 <code class="descname">advance_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.advance_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Advance the current level to the next in the list</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.after_close">
+<code class="descname">after_close</code><span class="sig-paren">(</span><em>logrowdetails</em>, <em>reactionlogger</em>, <em>surveylogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.after_close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="screens.AsteroidImpactGameplayScreen.draw">
@@ -67,8 +74,13 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="screens.AsteroidImpactGameplayScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dt id="screens.AsteroidImpactGameplayScreen.update_always">
+<code class="descname">update_always</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.update_always" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactGameplayScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run per-frame game logic</p>
 </dd></dl>
 
@@ -88,7 +100,7 @@
 
 <dl class="class">
 <dt id="screens.AsteroidImpactInfiniteGameplayScreen">
-<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>level_templates_list</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>level_templates_list</em>, <em>reaction_prompts_settings</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
 <p>Gameplay logic for the Asteroid Impact game.</p>
 <dl class="method">
@@ -96,6 +108,11 @@
 <code class="descname">advance_level</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.advance_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Advance the current level to the next in the list</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.after_close">
+<code class="descname">after_close</code><span class="sig-paren">(</span><em>logrowdetails</em>, <em>reactionlogger</em>, <em>surveylogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.after_close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="screens.AsteroidImpactInfiniteGameplayScreen.draw">
@@ -110,8 +127,13 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="screens.AsteroidImpactInfiniteGameplayScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.update_always">
+<code class="descname">update_always</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.update_always" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run per-frame game logic</p>
 </dd></dl>
 
@@ -136,13 +158,13 @@
 <p>List-like class that generates new levels as they are requested</p>
 <dl class="method">
 <dt id="screens.AsteroidImpactInfiniteLevelMaker.level_completed">
-<code class="descname">level_completed</code><span class="sig-paren">(</span><em>level_millis</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker.level_completed" title="Permalink to this definition">¶</a></dt>
+<code class="descname">level_completed</code><span class="sig-paren">(</span><em>level_millis</em>, <em>frame_outbound_triggers</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker.level_completed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Increment level score based on level completion</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="screens.AsteroidImpactInfiniteLevelMaker.level_death">
-<code class="descname">level_death</code><span class="sig-paren">(</span><em>level_millis</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker.level_death" title="Permalink to this definition">¶</a></dt>
+<code class="descname">level_death</code><span class="sig-paren">(</span><em>level_millis</em>, <em>frame_outbound_triggers</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker.level_death" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reduce level score based on level failure</p>
 </dd></dl>
 
@@ -159,8 +181,8 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="screens.AsteroidImpactInstructionsScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInstructionsScreen.update" title="Permalink to this definition">¶</a></dt>
+<dt id="screens.AsteroidImpactInstructionsScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInstructionsScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -170,15 +192,15 @@
 <em class="property">class </em><code class="descclassname">screens.</code><code class="descname">BlackScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.BlackScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
 <p>Black screen. Shown to the player while other things are happening in other parts of
-the research. The player can&#8217;t interact with the black sceen.</p>
+the research. The player can’t interact with the black sceen.</p>
 <dl class="method">
 <dt id="screens.BlackScreen.draw">
 <code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.BlackScreen.draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="screens.BlackScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.BlackScreen.update" title="Permalink to this definition">¶</a></dt>
+<dt id="screens.BlackScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.BlackScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -187,7 +209,7 @@ the research. The player can&#8217;t interact with the black sceen.</p>
 <dt id="screens.GameOverOverlayScreen">
 <em class="property">class </em><code class="descclassname">screens.</code><code class="descname">GameOverOverlayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameOverOverlayScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
-<p>Show a &#8220;Game Over&#8221; message on top of the gameplay screen, pausing the
+<p>Show a “Game Over” message on top of the gameplay screen, pausing the
 gameplay while this screen is visible.</p>
 <p>This screen automatically ends after a delay.</p>
 <dl class="method">
@@ -202,8 +224,8 @@ gameplay while this screen is visible.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="screens.GameOverOverlayScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameOverOverlayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dt id="screens.GameOverOverlayScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameOverOverlayScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -214,15 +236,27 @@ gameplay while this screen is visible.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Base class for AsteroidImpact game screens</p>
 <dl class="method">
+<dt id="screens.GameScreen.after_close">
+<code class="descname">after_close</code><span class="sig-paren">(</span><em>logrowdetails</em>, <em>reactionlogger</em>, <em>surveylogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen.after_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up after screen is closed, and perform additional logging</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="screens.GameScreen.draw">
 <code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen.draw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw the game screen to the physical screen buffer</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="screens.GameScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the screen&#8217;s game state</p>
+<dt id="screens.GameScreen.update_always">
+<code class="descname">update_always</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen.update_always" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the screen’s game state every iteration regardless of if another screen is stacked on top</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.GameScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.GameScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the screen’s game state when this screen is frontmost</p>
 </dd></dl>
 
 </dd></dl>
@@ -231,7 +265,7 @@ gameplay while this screen is visible.</p>
 <dt id="screens.LevelCompletedOverlayScreen">
 <em class="property">class </em><code class="descclassname">screens.</code><code class="descname">LevelCompletedOverlayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.LevelCompletedOverlayScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
-<p>Show a &#8220;Level Complete&#8221; message on top of the gameplay screen, pausing the
+<p>Show a “Level Complete” message on top of the gameplay screen, pausing the
 gameplay while this screen is visible.</p>
 <p>This screen automatically ends after a delay.</p>
 <dl class="method">
@@ -246,8 +280,40 @@ gameplay while this screen is visible.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="screens.LevelCompletedOverlayScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.LevelCompletedOverlayScreen.update" title="Permalink to this definition">¶</a></dt>
+<dt id="screens.LevelCompletedOverlayScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.LevelCompletedOverlayScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.ParallelPortTestScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">ParallelPortTestScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em>, <em>port_address=888</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.ParallelPortTestScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Parallel Port Test Screen. Display input pins status and toggle output pins by clicking on buttons.</p>
+<dl class="method">
+<dt id="screens.ParallelPortTestScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.ParallelPortTestScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.ParallelPortTestScreen.next_button_clicked">
+<code class="descname">next_button_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.ParallelPortTestScreen.next_button_clicked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.ParallelPortTestScreen.toggle_data_bit_for_button">
+<code class="descname">toggle_data_bit_for_button</code><span class="sig-paren">(</span><em>button</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.ParallelPortTestScreen.toggle_data_bit_for_button" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.ParallelPortTestScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.ParallelPortTestScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.ParallelPortTestScreen.update_status_text">
+<code class="descname">update_status_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.ParallelPortTestScreen.update_status_text" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -256,7 +322,56 @@ gameplay while this screen is visible.</p>
 <dt id="screens.QuitGame">
 <em class="property">exception </em><code class="descclassname">screens.</code><code class="descname">QuitGame</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.QuitGame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
-<p>Exception to raise in update() to quit the game</p>
+<p>Exception to raise in update_xxx() to quit the game</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.SurveyButton">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">SurveyButton</code><span class="sig-paren">(</span><em>gamerect</em>, <em>text</em>, <em>onclick</em>, <em>option_index=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push button for “next” or toggle/radio button</p>
+<dl class="method">
+<dt id="screens.SurveyButton.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><em>screen</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyButton.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.SurveyButton.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>milliseconds</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyButton.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="screens.SurveyQuestionScreen">
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">SurveyQuestionScreen</code><span class="sig-paren">(</span><em>screen, gamescreenstack, prompt='[No prompt value was specified]', survey_options=['[default choice]'], click_to_continue=True</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyQuestionScreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
+<p>Survey Question Screen. Prompt the player for the answer to a single multiple-choice question.</p>
+<dl class="method">
+<dt id="screens.SurveyQuestionScreen.after_close">
+<code class="descname">after_close</code><span class="sig-paren">(</span><em>logrowdetails</em>, <em>reactionlogger</em>, <em>surveylogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyQuestionScreen.after_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean up after screen is closed, and perform additional logging</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="screens.SurveyQuestionScreen.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyQuestionScreen.draw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.SurveyQuestionScreen.next_button_clicked">
+<code class="descname">next_button_clicked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyQuestionScreen.next_button_clicked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.SurveyQuestionScreen.option_button_click">
+<code class="descname">option_button_click</code><span class="sig-paren">(</span><em>button</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyQuestionScreen.option_button_click" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="screens.SurveyQuestionScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.SurveyQuestionScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -295,8 +410,8 @@ keeping text in position when text changes.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="screens.UserTextScreen.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>events</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen.update" title="Permalink to this definition">¶</a></dt>
+<dt id="screens.UserTextScreen.update_frontmost">
+<code class="descname">update_frontmost</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen.update_frontmost" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -309,8 +424,14 @@ keeping text in position when text changes.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="screens.flow_text">
+<code class="descclassname">screens.</code><code class="descname">flow_text</code><span class="sig-paren">(</span><em>text</em>, <em>bounds_rect</em>, <em>font</em>, <em>color</em>, <em>line_height</em>, <em>valign='middle'</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.flow_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flow text into rectangle. Returns list of text elements and rectangle bounds of result.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="screens.font_find_fitting_string_length">
-<code class="descclassname">screens.</code><code class="descname">font_find_fitting_string_length</code><span class="sig-paren">(</span><em>font</em>, <em>line</em>, <em>lineWidth</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.font_find_fitting_string_length" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">screens.</code><code class="descname">font_find_fitting_string_length</code><span class="sig-paren">(</span><em>font</em>, <em>line</em>, <em>line_width_screenpx</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.font_find_fitting_string_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the length (in characters) of the string that fits within lineWidth</p>
 </dd></dl>
 
@@ -354,21 +475,18 @@ keeping text in position when text changes.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/ref/screens.txt"
+      <li><a href="../_sources/ref/screens.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -379,11 +497,11 @@ keeping text in position when text changes.</p>
       &copy;2015, Nick Winters.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="../_sources/ref/screens.txt"
+      <a href="../_sources/ref/screens.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>sprites &mdash; Asteroid Impact 1.0.0 documentation</title>
-    
+    <title>sprites &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="../index.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="virtualdisplay" href="virtualdisplay.html" />
     <link rel="prev" title="screens" href="screens.html" />
    
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -80,7 +82,7 @@
 
 <dl class="method">
 <dt id="sprites.BasePowerup.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.BasePowerup.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>frame_outbound_triggers</em>, <em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.BasePowerup.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deactivate power-up if duration has expired</p>
 </dd></dl>
 
@@ -88,9 +90,9 @@
 
 <dl class="class">
 <dt id="sprites.Cursor">
-<em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">Cursor</code><a class="headerlink" href="#sprites.Cursor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">Cursor</code><span class="sig-paren">(</span><em>game_bounds=&lt;rect(0</em>, <em>0</em>, <em>1280</em>, <em>896)&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.Cursor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#sprites.VirtualGameSprite" title="sprites.VirtualGameSprite"><code class="xref py py-class docutils literal"><span class="pre">sprites.VirtualGameSprite</span></code></a></p>
-<p>The Player&#8217;s ship is moved around using the mouse cursor</p>
+<p>The Player’s ship is moved around using the mouse cursor</p>
 <dl class="method">
 <dt id="sprites.Cursor.update">
 <code class="descname">update</code><span class="sig-paren">(</span><em>millis</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.Cursor.update" title="Permalink to this definition">¶</a></dt>
@@ -107,6 +109,38 @@
 </dd></dl>
 
 <dl class="class">
+<dt id="sprites.ReactionTimePrompt">
+<em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">ReactionTimePrompt</code><span class="sig-paren">(</span><em>diameter=64, position_list=[[20, 20]], sound='tone440.wav', image='triangle.png', input_key='K_1', showtimes_millis=[], showtimes_trigger_counts=[], timeout_millis=5000, stay_visible=False, **kwargs_extra</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ReactionTimePrompt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sprites.VirtualGameSprite" title="sprites.VirtualGameSprite"><code class="xref py py-class docutils literal"><span class="pre">sprites.VirtualGameSprite</span></code></a></p>
+<p>Game element to test reaction time</p>
+<dl class="method">
+<dt id="sprites.ReactionTimePrompt.activate_and_show">
+<code class="descname">activate_and_show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ReactionTimePrompt.activate_and_show" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.ReactionTimePrompt.deactivate_and_hide">
+<code class="descname">deactivate_and_hide</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ReactionTimePrompt.deactivate_and_hide" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.ReactionTimePrompt.logme">
+<code class="descname">logme</code><span class="sig-paren">(</span><em>logrowdetails</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ReactionTimePrompt.logme" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.ReactionTimePrompt.step_end_deactivate">
+<code class="descname">step_end_deactivate</code><span class="sig-paren">(</span><em>logrowdetails</em>, <em>reactionlogger</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ReactionTimePrompt.step_end_deactivate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.ReactionTimePrompt.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>logrowdetails</em>, <em>reactionlogger</em>, <em>frame_outbound_triggers</em>, <em>events</em>, <em>step_trigger_count</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ReactionTimePrompt.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="sprites.ShieldPowerup">
 <em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">ShieldPowerup</code><span class="sig-paren">(</span><em>diameter=32</em>, <em>left=80</em>, <em>top=80</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ShieldPowerup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#sprites.BasePowerup" title="sprites.BasePowerup"><code class="xref py py-class docutils literal"><span class="pre">sprites.BasePowerup</span></code></a></p>
@@ -119,8 +153,13 @@ collisions with asteroids.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sprites.ShieldPowerup.stop_audio">
+<code class="descname">stop_audio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ShieldPowerup.stop_audio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="sprites.ShieldPowerup.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ShieldPowerup.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>frame_outbound_triggers</em>, <em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ShieldPowerup.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Follow cursor. Play effect end sound if due</p>
 </dd></dl>
 
@@ -144,8 +183,13 @@ collisions with asteroids.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="sprites.SlowPowerup.stop_audio">
+<code class="descname">stop_audio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.SlowPowerup.stop_audio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="sprites.SlowPowerup.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.SlowPowerup.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em>, <em>frame_outbound_triggers</em>, <em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.SlowPowerup.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Play effect end sound if due</p>
 </dd></dl>
 
@@ -155,12 +199,17 @@ collisions with asteroids.</p>
 <dt id="sprites.Target">
 <em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">Target</code><span class="sig-paren">(</span><em>diameter=32</em>, <em>left=20</em>, <em>top=20</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.Target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#sprites.VirtualGameSprite" title="sprites.VirtualGameSprite"><code class="xref py py-class docutils literal"><span class="pre">sprites.VirtualGameSprite</span></code></a></p>
-<p>Targets (Crystals) don&#8217;t move, but do play a sound when collected</p>
+<p>Targets (Crystals) don’t move, but do play a sound when collected</p>
 <dl class="method">
 <dt id="sprites.Target.pickedup">
 <code class="descname">pickedup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.Target.pickedup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Play pick up sound</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="sprites.Target.stop_audio">
+<code class="descname">stop_audio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.Target.stop_audio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="sprites.Target.update">
@@ -175,6 +224,11 @@ collisions with asteroids.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pygame.sprite.Sprite</span></code></p>
 <p>Sprite with higher resolution game position/size (gamerect) than on-screen
 position/size (rect)</p>
+<dl class="method">
+<dt id="sprites.VirtualGameSprite.stop_audio">
+<code class="descname">stop_audio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.VirtualGameSprite.stop_audio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="sprites.VirtualGameSprite.update_rect">
 <code class="descname">update_rect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.VirtualGameSprite.update_rect" title="Permalink to this definition">¶</a></dt>
@@ -222,21 +276,18 @@ position/size (rect)</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/ref/sprites.txt"
+      <li><a href="../_sources/ref/sprites.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -247,11 +298,11 @@ position/size (rect)</p>
       &copy;2015, Nick Winters.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="../_sources/ref/sprites.txt"
+      <a href="../_sources/ref/sprites.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

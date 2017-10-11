@@ -1,0 +1,275 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Parallel Port Connections &#8212; Asteroid Impact 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Input Triggers" href="input-trigger.html" />
+    <link rel="prev" title="makelevel.py" href="makelevelpy.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="parallel-port-connections">
+<h1>Parallel Port Connections<a class="headerlink" href="#parallel-port-connections" title="Permalink to this headline">¶</a></h1>
+<p>In Windows, Asteroid Impact can receive incoming trigger pulses over parallel port, and send out pulses as well over a parallel port. Below are notes about how a parallel port works, and how to configure and test for AsteroidImpact</p>
+<p>This video describes parallel ports, how they work in windows, and how you can test them in Asteroid Impact. <a class="reference external" href="https://www.youtube.com/watch?v=M0jUZ60QPNk">https://www.youtube.com/watch?v=M0jUZ60QPNk</a></p>
+<div class="section" id="software-requirements-for-parallel-port">
+<h2>Software Requirements for Parallel Port<a class="headerlink" href="#software-requirements-for-parallel-port" title="Permalink to this headline">¶</a></h2>
+<p>Parallel ports are only supported in Asteroid Impact on Windows.</p>
+<p>Additionally, additional dlls and driver are required. inpout32.dll/inpoutx64.dll must be in the same directory as game.py and the driver needs to be installed. Download all three from the “Binaries Only” link on <a class="reference external" href="http://www.highrez.co.uk/Downloads/InpOut32/default.htm">Highres.co.uk</a>.</p>
+</div>
+<div class="section" id="parallel-port-background">
+<h2>Parallel Port Background<a class="headerlink" href="#parallel-port-background" title="Permalink to this headline">¶</a></h2>
+<p>Parallel ports were originally built to send one character at a time over a parallel 8-bit bus to printers. This being a parallel bus means that there are 8 wires for the 8 bits, and some additional wires used to tell the printer “read this byte” and some status wires so your computer can wait until the printer has processed the current byte before sending the next one. When printing your CPU would have to wait until the printer is ready for the next byte before sending it. This is slow, both in the extra waiting your CPU does, and it limits how quickly data can be sent so current printers use USB with controller chips that handle the communication internally.</p>
+<p>That said, the 8 output pins and 5 incoming status are useful for lots of hobbyist projects. Parallel ports are still commonly used to drive computer-controlled milling machines because they are easy to interface with without what used to be an expensive controller chip.</p>
+<p>I neededed to explain all this because you can’t just connect two computers over most parallel port cables because of how the port operates. You need to buy a LapLink cable or wire one.</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Parallel_port">https://en.wikipedia.org/wiki/Parallel_port</a></p>
+</div>
+<div class="section" id="building-a-laplink-cable-to-connect-two-computers-by-parallel-ports">
+<h2>Building a LapLink Cable to connect two computers by parallel ports<a class="headerlink" href="#building-a-laplink-cable-to-connect-two-computers-by-parallel-ports" title="Permalink to this headline">¶</a></h2>
+<p>Before USB and Wifi were common ways to transfer files, LapLink built software to let you transfer files between two computers using a parallel port cable. I haven’t been able to find a LapLink parallel cable for sale, but it is easy to build one yourself. Essentially the cable connects the first 5 data pins to the status pins on the other connector, and vice-versa. Also the logical grounds are connected.</p>
+<p>Connect two DB25 male connectors with wires between the pins as follows.</p>
+<p>You can also use a DB25 male breakout like this one: <a class="reference external" href="https://www.amazon.com/Sysly-Connector-Adapter-Terminal-Riveting/dp/B072FVBR2S/">https://www.amazon.com/Sysly-Connector-Adapter-Terminal-Riveting/dp/B072FVBR2S/</a></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>2</td>
+<td>15</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>13</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>12</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>10</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>11</td>
+</tr>
+<tr class="row-even"><td>10</td>
+<td>5</td>
+</tr>
+<tr class="row-odd"><td>11</td>
+<td>6</td>
+</tr>
+<tr class="row-even"><td>12</td>
+<td>4</td>
+</tr>
+<tr class="row-odd"><td>13</td>
+<td>3</td>
+</tr>
+<tr class="row-even"><td>15</td>
+<td>2</td>
+</tr>
+<tr class="row-odd"><td>17</td>
+<td>19</td>
+</tr>
+<tr class="row-even"><td>18</td>
+<td>18</td>
+</tr>
+<tr class="row-odd"><td>19</td>
+<td>17</td>
+</tr>
+<tr class="row-even"><td>21</td>
+<td>21</td>
+</tr>
+<tr class="row-odd"><td>22</td>
+<td>22</td>
+</tr>
+<tr class="row-even"><td>23</td>
+<td>23</td>
+</tr>
+<tr class="row-odd"><td>25</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="find-parallel-port-data-address-in-windows">
+<h2>Find parallel port data address in Windows<a class="headerlink" href="#find-parallel-port-data-address-in-windows" title="Permalink to this headline">¶</a></h2>
+<p>To find the parallel port data address in Windows, do the following.</p>
+<p>Bring up the Device Manager. In windows 10 it’s fastest to right-click on the start button and choose device manager from the menu.</p>
+<p>Find your parallel port under “Ports (COM &amp; LPT)”. Double click on it to bring up the properties</p>
+<p>On the Resources tab, the first listed “I/O Range” shows the data address in the first number in the range. These numbers are in hexadecimal.</p>
+<img alt="_images/windows-devicemgr-parallel-io-address.png" src="_images/windows-devicemgr-parallel-io-address.png" />
+</div>
+<div class="section" id="test-parallel-port-in-asteroid-impact">
+<h2>Test parallel port in Asteroid Impact<a class="headerlink" href="#test-parallel-port-in-asteroid-impact" title="Permalink to this headline">¶</a></h2>
+<p>Run <code class="docutils literal"><span class="pre">game.py</span> <span class="pre">--parallel-test-address</span> <span class="pre">ADDRESS</span></code> with ADDRESS is the base data address of your parallel port. Instead of launching the game, a screen will appear showing the current output pin status and input pin status.</p>
+<p>You can click on each of the digits on the output byte to change the value being output on that pin.</p>
+<p>If you have a second parallel port in your computer you can wire your LapLink cable between the two parallel ports and launch the game.py twice at once with the two different parallel port addresses to test your LapLink cable and parallel ports.</p>
+<p>Note that the BUSY bit on the 8th bit of the status register is inverted, so 0V would read as 1 and 5V would read as a 0.</p>
+<img alt="_images/parallel-test-screnshot.png" src="_images/parallel-test-screnshot.png" />
+</div>
+<div class="section" id="input-trigger-behavior">
+<h2>Input trigger behavior<a class="headerlink" href="#input-trigger-behavior" title="Permalink to this headline">¶</a></h2>
+<p>The input trigger system for keyboard or serial listen and when a particular byte or keypress happens, increments a counter that may advance to the next step if the step’s configured number of trigger pulses is set. This is intended to be used to synchronize steps with scanner events.</p>
+<p>The parallel port input trigger is used the same way, but watches for a transition from one value, to a second value to indicate that the counter needs to be incremented. This allows you to configure the transition to happen on any particular pin going from 1 to 0 or vice-versa.</p>
+<p>The “common” value is the first of the values, then when the value seen is the “active” value the count increases. Run <code class="docutils literal"><span class="pre">game.py</span> <span class="pre">--parallel-test-address</span> <span class="pre">ADDRESS</span></code> with ADDRESS being the data address of your parallel port to bring up a debug interface that will make it easy to find the values to enter.</p>
+<p>Make sure to enter the hexadecimal values. The hex values are the ones that start with 0x.</p>
+<p>Sample:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+
+  <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span><span class="p">,</span>
+    <span class="s2">&quot;trigger_byte_value&quot;</span><span class="p">:</span> <span class="mi">53</span>
+  <span class="p">},</span>
+
+  <span class="s2">&quot;keyboard_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;trigger_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_5&quot;</span>
+  <span class="p">},</span>
+
+  <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;common_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trigger_status_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span>
+  <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="output-trigger-behavior">
+<h2>Output trigger behavior<a class="headerlink" href="#output-trigger-behavior" title="Permalink to this headline">¶</a></h2>
+<p>The output trigger system is intended to allow you to record game events mixed with other signals on another computer. Like the input trigger system for parallel ports, the output trigger also specifies a “common” value and “active” value.</p>
+<p>For the output triggers you specify a list of game events you want a pulse to be sent on. The full list is in the sample below.</p>
+<p>serial_trigger_strings_by_event is used to specify the list of game events a pulse should be sent on over serial, and what data should be sent on that event. For example, the configuration below sends an ascii digit 1 when each step begins.</p>
+<p>parallel_trigger_hex_values_by_event works the same way, but specifies the hex value to set the parallel port output pins to when that event occurs. When multiple parallel port output trigger events happen on the same frame, the changes are combined to happen simultaneously across multiple pins. For example, with an inactive value of 0x00 and a level completion value of 0x01 and difficulty increase value of 0x02 when both happen the output port would be set to 0x03 for the configured number of frames. This logic checks which bits are changed, so it will work active-low as well.</p>
+<p>trigger_frames is how many frames (1/60th of second) the parallel port should be kept at the “active” value.</p>
+<p>Sample:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+
+  <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span>
+  <span class="p">},</span>
+
+  <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+  <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Parallel Port Connections</a><ul>
+<li><a class="reference internal" href="#software-requirements-for-parallel-port">Software Requirements for Parallel Port</a></li>
+<li><a class="reference internal" href="#parallel-port-background">Parallel Port Background</a></li>
+<li><a class="reference internal" href="#building-a-laplink-cable-to-connect-two-computers-by-parallel-ports">Building a LapLink Cable to connect two computers by parallel ports</a></li>
+<li><a class="reference internal" href="#find-parallel-port-data-address-in-windows">Find parallel port data address in Windows</a></li>
+<li><a class="reference internal" href="#test-parallel-port-in-asteroid-impact">Test parallel port in Asteroid Impact</a></li>
+<li><a class="reference internal" href="#input-trigger-behavior">Input trigger behavior</a></li>
+<li><a class="reference internal" href="#output-trigger-behavior">Output trigger behavior</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="makelevelpy.html" title="previous chapter">makelevel.py</a></li>
+      <li>Next: <a href="input-trigger.html" title="next chapter">Input Triggers</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/parallelport.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/parallelport.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

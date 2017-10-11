@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Log Columns &mdash; Asteroid Impact 1.0.0 documentation</title>
-    
+    <title>Log Columns &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="makelevel.py" href="makelevelpy.html" />
     <link rel="prev" title="Game Script JSON" href="scriptjson.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -50,8 +52,8 @@
 <span id="id1"></span><h2>Log Columns<a class="headerlink" href="#log-columns-label" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="11%" />
-<col width="89%" />
+<col width="12%" />
+<col width="88%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Log Column</th>
@@ -108,10 +110,10 @@
 <td>The currently active powerup type.</td>
 </tr>
 <tr class="row-even"><td>powerup_x</td>
-<td>on-screen powerup center&#8217;s X position. See note below about how this changes while powerup is ctive.</td>
+<td>on-screen powerup center’s X position. See note below about how this changes while powerup is ctive.</td>
 </tr>
 <tr class="row-odd"><td>powerup_y</td>
-<td>on-screen powerup center&#8217;s Y position. See note below about how this changes while powerup is active.</td>
+<td>on-screen powerup center’s Y position. See note below about how this changes while powerup is active.</td>
 </tr>
 <tr class="row-even"><td>powerup_diameter</td>
 <td>on-screen powerup diameter. See note below about how this changes while powerup is active.</td>
@@ -120,18 +122,39 @@
 <td>on-screen powerup type.</td>
 </tr>
 <tr class="row-even"><td>cursor_x</td>
-<td>X-coordinate of the player&#8217;s cursor.</td>
+<td>X-coordinate of the player’s cursor.</td>
 </tr>
 <tr class="row-odd"><td>cursor_y</td>
-<td>Y-coordinate of the player&#8217;s cursor.</td>
+<td>Y-coordinate of the player’s cursor.</td>
 </tr>
-<tr class="row-even"><td>asteroid_N_centerx</td>
+<tr class="row-even"><td>reaction_prompt_sound</td>
+<td>Configured sound for currently visible reaction prompt.</td>
+</tr>
+<tr class="row-odd"><td>reaction_prompt_image</td>
+<td>Configured image for currently visible reaction propmt.</td>
+</tr>
+<tr class="row-even"><td>reaction_prompt_state</td>
+<td>Status of active reaction time prompt (waiting, complete, timeout, timeout_step_end), or blank if none.</td>
+</tr>
+<tr class="row-odd"><td>reaction_prompt_millis</td>
+<td>Milliseconds that reaction prompt has been active for, or blank if none.</td>
+</tr>
+<tr class="row-even"><td>survey_prompt</td>
+<td>The survey question shown on the current survey question screen.</td>
+</tr>
+<tr class="row-odd"><td>survey_answer</td>
+<td>The currently selected survey answer on the current survey question screen. “MISSING” when none selected.</td>
+</tr>
+<tr class="row-even"><td>survey_answer_number</td>
+<td>Number of selected survey answer on the current survey question screen. For the first option, this will be 1</td>
+</tr>
+<tr class="row-odd"><td>asteroid_N_centerx</td>
 <td>X-coordinate of asteroid at position N. N starts at 1.</td>
 </tr>
-<tr class="row-odd"><td>asteroid_N_centery</td>
+<tr class="row-even"><td>asteroid_N_centery</td>
 <td>Y-coordinate of asteroid at position N. N starts at 1.</td>
 </tr>
-<tr class="row-even"><td>asteroid_N_diameter</td>
+<tr class="row-odd"><td>asteroid_N_diameter</td>
 <td>Diameter of asteroid at position N. N starts at 1.</td>
 </tr>
 </tbody>
@@ -140,17 +163,142 @@
 <div class="section" id="position-of-active-powerups">
 <h2>Position of active powerups<a class="headerlink" href="#position-of-active-powerups" title="Permalink to this headline">¶</a></h2>
 <p>When activated, powerups move depending on their effect.</p>
-<p>The shield powerup will follow on top of the player&#8217;s cursor.</p>
-<p>The slow powerup teleports off screen so it&#8217;s no longer visible.</p>
+<p>The shield powerup will follow on top of the player’s cursor.</p>
+<p>The slow powerup teleports off screen so it’s no longer visible.</p>
 <p>These mean that the x/y position of the currently visible powerup
-don&#8217;t mean the same thing when the powerup is active.</p>
+don’t mean the same thing when the powerup is active.</p>
+</div>
+<div class="section" id="reaction-prompts">
+<h2>Reaction Prompts<a class="headerlink" href="#reaction-prompts" title="Permalink to this headline">¶</a></h2>
+<p>When there is an active (visible or audible) reaction prompt, the state wil change from blank to “waiting”. If the player presses the corresponding button the state will change to “complete”. Otherwise, on the frame the prompt disappears the state changes to “timeout”. If the step ends before the reaction prompt is completed or times out naturally the state changes to “timeout_step_end”</p>
+<p><code class="docutils literal"><span class="pre">reaction_prompt_millis</span></code> is the time since the prompt appeared.</p>
+<div class="section" id="reaction-prompts-log-columns">
+<h3>Reaction Prompts Log Columns<a class="headerlink" href="#reaction-prompts-log-columns" title="Permalink to this headline">¶</a></h3>
+<p>For the reaction prompt log CSV, the columns are a subset of those for the per-frame log as shown below.</p>
+<p>New rows for the reaction prompt CSV are only added when a reaction prompt is completed in time, times out, or the step changes.</p>
+<p>To output a reaction prompt log file use the <code class="docutils literal"><span class="pre">--reaction-log-filename</span> <span class="pre">FILENAME</span></code> command-line option.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Log Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>subject_number</td>
+<td>Number for this research participant (subject). This is specified on the command-line.</td>
+</tr>
+<tr class="row-odd"><td>subject_run</td>
+<td>Run number for this subject. This is specified on the command-line.</td>
+</tr>
+<tr class="row-even"><td>total_millis</td>
+<td>Milliseconds since application start.</td>
+</tr>
+<tr class="row-odd"><td>step_number</td>
+<td>Number of step in sequence, for example 1 for instructions then 2 for game.</td>
+</tr>
+<tr class="row-even"><td>step_millis</td>
+<td>Milliseconds elapsed during this step. This resets to 0 on step change.</td>
+</tr>
+<tr class="row-odd"><td>step_trigger_count</td>
+<td>Number of times trigger over serial or keyboard has been received on this step.</td>
+</tr>
+<tr class="row-even"><td>top_screen</td>
+<td>Topmost screen name. Changes when mode change, but also inside of a mode such as the level complete and game over screen. Some values are instructions, gameplay and level_complete.</td>
+</tr>
+<tr class="row-odd"><td>level_millis</td>
+<td>Game timer in milliseconds playing this level. This starts negative for the countdown. Collisions and power-ups become active at 0.</td>
+</tr>
+<tr class="row-even"><td>level_name</td>
+<td>Name of level JSON file.</td>
+</tr>
+<tr class="row-odd"><td>adaptive_level_score</td>
+<td>Score used for choosing level in game-adaptive mode.</td>
+</tr>
+<tr class="row-even"><td>level_attempt</td>
+<td>1 for first attempt at this level, incrementing on each failure of the same level.</td>
+</tr>
+<tr class="row-odd"><td>level_state</td>
+<td>The state of the current level. countdown, playing, completed or dead.</td>
+</tr>
+<tr class="row-even"><td>reaction_prompt_sound</td>
+<td>Configured sound for currently visible reaction prompt.</td>
+</tr>
+<tr class="row-odd"><td>reaction_prompt_image</td>
+<td>Configured image for currently visible reaction propmt.</td>
+</tr>
+<tr class="row-even"><td>reaction_prompt_state</td>
+<td>Status of active reaction time prompt (waiting, complete, after_complete, timeout, timeout_step_end), or blank if none.</td>
+</tr>
+<tr class="row-odd"><td>reaction_prompt_millis</td>
+<td>Milliseconds that reaction prompt has been active for, or blank if none.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="survey-question">
+<h2>Survey Question<a class="headerlink" href="#survey-question" title="Permalink to this headline">¶</a></h2>
+<p>When the current step is a survey question screen, the question and selected answer are logged.</p>
+<div class="section" id="survey-answer-log-columns">
+<h3>Survey Answer Log Columns<a class="headerlink" href="#survey-answer-log-columns" title="Permalink to this headline">¶</a></h3>
+<p>For the survey question response CSV, the columns are a subset of those for the per-frame log as shown below.</p>
+<p>New rows are only added when the step is advanced, so the log will only include the option selected when the step switched not a history of every option they clicked on.</p>
+<p>To output a survey question answer log file use the <code class="docutils literal"><span class="pre">--survey-log-filename</span> <span class="pre">FILENAME</span></code> command-line option.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Log Column</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>subject_number</td>
+<td>Number for this research participant (subject). This is specified on the command-line.</td>
+</tr>
+<tr class="row-odd"><td>subject_run</td>
+<td>Run number for this subject. This is specified on the command-line.</td>
+</tr>
+<tr class="row-even"><td>total_millis</td>
+<td>Milliseconds since application start.</td>
+</tr>
+<tr class="row-odd"><td>step_number</td>
+<td>Number of step in sequence, for example 1 for instructions then 2 for game.</td>
+</tr>
+<tr class="row-even"><td>step_millis</td>
+<td>Milliseconds elapsed during this step. This resets to 0 on step change.</td>
+</tr>
+<tr class="row-odd"><td>step_trigger_count</td>
+<td>Number of times trigger over serial or keyboard has been received on this step.</td>
+</tr>
+<tr class="row-even"><td>top_screen</td>
+<td>Topmost screen name. Changes when mode change, but also inside of a mode such as the level complete and game over screen. Some values are instructions, gameplay and level_complete.</td>
+</tr>
+<tr class="row-odd"><td>survey_prompt</td>
+<td>The survey question shown on the current survey question screen.</td>
+</tr>
+<tr class="row-even"><td>survey_answer</td>
+<td>The currently selected survey answer on the current survey question screen. “MISSING” when none selected.</td>
+</tr>
+<tr class="row-odd"><td>survey_answer_number</td>
+<td>Number of selected survey answer on the current survey question screen. For the first option, this will be 1</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="section" id="asteroid-numbers">
 <h2>Asteroid Numbers<a class="headerlink" href="#asteroid-numbers" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">asteroid_N_centerx</span></code>, <code class="docutils literal"><span class="pre">asteroid_N_centery</span></code> and <code class="docutils literal"><span class="pre">asteroid_N_diameter</span></code> columns are numbered by the position of the asteroid in the game&#8217;s list of asteroids.</p>
+<p>The <code class="docutils literal"><span class="pre">asteroid_N_centerx</span></code>, <code class="docutils literal"><span class="pre">asteroid_N_centery</span></code> and <code class="docutils literal"><span class="pre">asteroid_N_diameter</span></code> columns are numbered by the position of the asteroid in the game’s list of asteroids.</p>
 <p>For the standard gameplay, the index of the asteroid in the list is the same as in the level JSON file.</p>
 <p>For adaptive gameplay, when increasing the number of asteroids they are added to the end of the list. When decreasing the number, they are removed (after scaling to zero over about a second) from the end of the list.</p>
-<p>The <code class="docutils literal"><span class="pre">N</span></code> in the column counts from 1, up to the maximum number of asteroids in any level of either mode. If there aren&#8217;t that many asteroids in the current mode, or current level, the values for the remaining columns will be blank.</p>
+<p>The <code class="docutils literal"><span class="pre">N</span></code> in the column counts from 1, up to the maximum number of asteroids in any level of either mode. If there aren’t that many asteroids in the current mode, or current level, the values for the remaining columns will be blank.</p>
 </div>
 </div>
 
@@ -166,6 +314,14 @@ don&#8217;t mean the same thing when the powerup is active.</p>
 <li><a class="reference internal" href="#game-coordinates">Game Coordinates</a></li>
 <li><a class="reference internal" href="#log-columns-label">Log Columns</a></li>
 <li><a class="reference internal" href="#position-of-active-powerups">Position of active powerups</a></li>
+<li><a class="reference internal" href="#reaction-prompts">Reaction Prompts</a><ul>
+<li><a class="reference internal" href="#reaction-prompts-log-columns">Reaction Prompts Log Columns</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#survey-question">Survey Question</a><ul>
+<li><a class="reference internal" href="#survey-answer-log-columns">Survey Answer Log Columns</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#asteroid-numbers">Asteroid Numbers</a></li>
 </ul>
 </li>
@@ -182,21 +338,18 @@ don&#8217;t mean the same thing when the powerup is active.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/logcolumns.txt"
+      <li><a href="_sources/logcolumns.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -207,11 +360,11 @@ don&#8217;t mean the same thing when the powerup is active.</p>
       &copy;2015, Nick Winters.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/logcolumns.txt"
+      <a href="_sources/logcolumns.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

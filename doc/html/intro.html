@@ -1,0 +1,445 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Asteroid Impact Introduction &#8212; Asteroid Impact 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Asteroid Impact Code Introduction" href="codeintro.html" />
+    <link rel="prev" title="Asteroid Impact" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="asteroid-impact-introduction">
+<h1>Asteroid Impact Introduction<a class="headerlink" href="#asteroid-impact-introduction" title="Permalink to this headline">¶</a></h1>
+<p>Asteroid Impact is a clone of <a class="reference external" href="http://loveisgames.com/Action/1979/Star-Reaction">Star Reaction</a> made for the
+Media Neuroscience Lab of UC Santa Barbara to allow them to run the
+game with randomness removed, collect additional information from the
+game and to reduce the chance participants deviate from the
+instructions by choosing the wrong level or clicking outside the game
+area.</p>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>Asteroid Impact is Copyright (c) Media Neuroscience Lab, Rene Weber</p>
+<p>Asteroid Impact is licensed under a Creative Commons
+Attribution-ShareAlike 4.0 International License.</p>
+<p>You should have received a copy of the license along with this work. If not, see <a class="reference external" href="http://creativecommons.org/licenses/by-sa/4.0/">http://creativecommons.org/licenses/by-sa/4.0/</a>.</p>
+</div>
+<div class="section" id="gameplay">
+<h2>Gameplay<a class="headerlink" href="#gameplay" title="Permalink to this headline">¶</a></h2>
+<p>The player moves their ship around on screen with a mouse to collect crystals which appear one at a time. During this time the player avoids one or more large asteroids that move in a straight line and bounce off the edges of the screen, but not other asteroids. The player can pick up a shield to temporarily be invulnerable from hitting the asteroids, or a clock which will temproarily slow the asteroids to a crawl. Once all the crystals for the level are collected, the player proceeds to the next more difficult level. If the player is hit by an asteroid the level restarts from the beginning.</p>
+<img alt="_images/gameplay-screenshot.png" src="_images/gameplay-screenshot.png" />
+</div>
+<div class="section" id="game-logging">
+<h2>Game Logging<a class="headerlink" href="#game-logging" title="Permalink to this headline">¶</a></h2>
+<p>This game logs the player’s cursor position and the status of power-ups every and more every frame. See the <a class="reference internal" href="logcolumns.html"><span class="doc">Log Columns</span></a> section for more details.</p>
+</div>
+<div class="section" id="custom-levels">
+<h2>Custom Levels<a class="headerlink" href="#custom-levels" title="Permalink to this headline">¶</a></h2>
+<p>The new levels can be created and put into a sequence for the player to complete. The new levels can have different asteriod placement, speed, number and location of crystals, number size and types of power-ups.</p>
+<p>The sequence of levels can be built to have a slow progression or variation or repeat the same level over and over.</p>
+</div>
+<div class="section" id="game-script">
+<h2>Game ‘Script’<a class="headerlink" href="#game-script" title="Permalink to this headline">¶</a></h2>
+<p>To allow the researchers to combine this game with other instructions, the game can be run with a script specified which specifies a series of steps. Each step either shows the game instructions, other text instructions, gameplay, or a black screen, and each step has a specified duration in seconds. The gameplay step can specify a level list to allow the researcher to set up a sequence where easy levels are played before and after hard ones.</p>
+</div>
+<div class="section" id="input-and-output-triggering">
+<h2>Input and Output Triggering<a class="headerlink" href="#input-and-output-triggering" title="Permalink to this headline">¶</a></h2>
+<p>To allow synchronizing step advance with external events, like a scan starting on the FMRI, the game can be configured to advance steps after a number of received pulses over serial, parallel, or keyboard.</p>
+<p>To allow synchronizing other recordings with game events, the operator can configure certain events to output signals over serial or parallel to be recorded by another computer.</p>
+<p>See <a class="reference internal" href="scriptjson.html"><span class="doc">scriptjson</span></a></p>
+<p>See <a class="reference internal" href="parallelport.html"><span class="doc">Parallel Port Connections</span></a> for information about parallel ports.</p>
+</div>
+<div class="section" id="operator-keys">
+<h2>Operator Keys<a class="headerlink" href="#operator-keys" title="Permalink to this headline">¶</a></h2>
+<p>There are semi-obscure keystrokes that test operators can use to make testing levels or managing the game easier. These are listed below</p>
+<blockquote>
+<div><ul class="simple">
+<li>Quit the game: Press alt+f4 or command+q</li>
+<li>Advance to the next step (from instructions to levels, or further on in your sequence). Press ctrl+n</li>
+<li>Lock or unlock the cursor from the window. Press alt+c or option+c</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="command-line-options">
+<h2>Command-Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">game.py</span></code> can be run with the following command-line options.</p>
+<p>The order of the command-line options does not matter.</p>
+<p>Values (where applicable) come immediately after their command-line option. For example <code class="docutils literal"><span class="pre">python</span> <span class="pre">game.py</span> <span class="pre">--music-volume</span> <span class="pre">0.5</span></code>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="14%" />
+<col width="5%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Values</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">-h</span></code>, <code class="docutils literal"><span class="pre">--help</span></code></td>
+<td>&#160;</td>
+<td>&#160;</td>
+<td>Show help message and exit</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--music-volume</span></code> MUSIC_VOLUME</td>
+<td>0.0 to 1.0</td>
+<td>1.0</td>
+<td>Music Volume, 1.0 for full</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--effects-volume</span></code> EFFECTS_VOLUME</td>
+<td>0.0 to 1.0</td>
+<td>1.0</td>
+<td>Sound effects volume, 1.0 for full</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--display-width</span></code> DISPLAY_WIDTH</td>
+<td>320 to 2560</td>
+<td>640</td>
+<td>Width of window or full screen mode.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--display-height</span></code> DISPLAY_HEIGHT</td>
+<td>320 to 1920</td>
+<td>480</td>
+<td>Height of window or full screen mode.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--window-x</span></code> WINDOW_X</td>
+<td>0 to 2560</td>
+<td>None</td>
+<td>X position of window. The window will be positioned where specified only when both X and Y are specified.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--window-y</span></code> WINDOW_Y</td>
+<td>0 to 1920</td>
+<td>None</td>
+<td>Y position of window. The window will be positioned where specified only when both X and Y are specified.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--display-mode</span></code> {windowed,fullscreen}</td>
+<td><code class="docutils literal"><span class="pre">windowed</span></code> or <code class="docutils literal"><span class="pre">fullscreen</span></code></td>
+<td>windowed</td>
+<td>Whether to run windowed or fullscreen.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--list-modes</span></code></td>
+<td>[No Value]</td>
+<td>[No Value]</td>
+<td>List available full screen display modes and exit.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--script-json</span></code> SCRIPT_JSON</td>
+<td>json filename</td>
+<td>None</td>
+<td>script.json file listing all steps such as instructions, gameplay (with levels) and black screens. See samplescript.json for example, or documentation below.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--levels-json</span></code> LEVELS_JSON</td>
+<td>json filename</td>
+<td>None</td>
+<td>levellist.json file listing all levels to complete. Ignored when specifying –script-json. See sample below.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--single-level-json</span></code> SINGLE_LEVEL_JSON</td>
+<td>json filename</td>
+<td>None</td>
+<td>level.json file to test a single level. Can’t be combined with –levels-json or –script-json</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--subject-number</span></code> SUBJECT_NUMBER</td>
+<td>text</td>
+<td>[blank]</td>
+<td>Subject number to include in log.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--subject-run</span></code> SUBJECT_RUN</td>
+<td>text</td>
+<td>[blank]</td>
+<td>Subject run number to include in the log.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--log-filename</span></code> LOG_FILENAME</td>
+<td>CSV filename</td>
+<td>None</td>
+<td>File to save log CSV file to with per-frame data.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--survey-log-filename</span></code> LOG_FILENAME</td>
+<td>CSV filename</td>
+<td>None</td>
+<td>File to save log CSV file to with per-survey-question step data.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--reaction-log-filename</span></code> LOG_FILENAME</td>
+<td>CSV filename</td>
+<td>None</td>
+<td>File to save log CSV file to with per-reaction-prompt data.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--log-overwrite</span></code> {true,false}</td>
+<td><code class="docutils literal"><span class="pre">true</span></code> or <code class="docutils literal"><span class="pre">false</span></code></td>
+<td>false</td>
+<td>Whether to overwrite pre-existing log files.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--trigger-blink</span></code> {true,false}</td>
+<td><code class="docutils literal"><span class="pre">true</span></code> or <code class="docutils literal"><span class="pre">false</span></code></td>
+<td>false</td>
+<td>Blink sprite on screen when a trigger pulse is received.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--parallel-test-address</span></code> ADDRESS</td>
+<td>hex data address of parallel port</td>
+<td>none</td>
+<td>Launch parallel port test screen instead of game.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="levels-json">
+<h3><code class="docutils literal"><span class="pre">levels-json</span></code><a class="headerlink" href="#levels-json" title="Permalink to this headline">¶</a></h3>
+<p>The levels-json file, used for the <code class="docutils literal"><span class="pre">--levels-json</span></code> command-line option, or inside of the <code class="docutils literal"><span class="pre">--script-json</span></code> json file lists each level file in order. The individual level files are expected to be in the same directory as the json file listing them.</p>
+<p>Below is a sample json file listing the standard levels.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;standard01.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard02.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard03.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard04.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard05.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard06.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard07.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard08.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard09.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard10.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard11.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard12.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;standard13.json&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The standalone version of Asteroid Impact should not require additional software beyond Windows 7 to run.</p>
+<dl class="docutils">
+<dt>Asteroid Impact requires the following to run from source:</dt>
+<dd><ul class="first last simple">
+<li>Python 2.7 available from <a class="reference external" href="http://python.org">http://python.org</a></li>
+<li>PyGame 1.9.1 available from <a class="reference external" href="http://pygame.org">http://pygame.org</a></li>
+<li>Pyserial for your python version, available by running <cite>pip install pyserial</cite> or from <a class="reference external" href="https://pypi.python.org/pypi/pyserial">https://pypi.python.org/pypi/pyserial</a></li>
+<li>inpout32.dll/inpoutx64.dll, and driver from Binaries Only download link on <a class="reference external" href="http://www.highrez.co.uk/Downloads/InpOut32/default.htm">Highres.co.uk</a> is required for parallel port support.</li>
+</ul>
+</dd>
+</dl>
+<p>This has primarily been developed been using 32-bit python 2.7.10 on Windows 10 with PyGame 1.9.1 for 32 bit python.</p>
+<dl class="docutils">
+<dt>If you want to build a standalone executable, you will need the following:</dt>
+<dd><ul class="first last simple">
+<li>Python 2.7 available from <a class="reference external" href="http://python.org">http://python.org</a></li>
+<li>PyGame 1.9.1 available from <a class="reference external" href="http://pygame.org">http://pygame.org</a></li>
+<li>Pyserial for your python version, available by running <cite>pip install pyserial</cite> or from <a class="reference external" href="https://pypi.python.org/pypi/pyserial">https://pypi.python.org/pypi/pyserial</a></li>
+<li>PyInstaller availabe from <a class="reference external" href="http://www.pyinstaller.org">http://www.pyinstaller.org</a></li>
+</ul>
+</dd>
+<dt>To generate Html documentation</dt>
+<dd><ul class="first last simple">
+<li>sphinx is required. See <a class="reference external" href="http://sphinx-doc.org/">http://sphinx-doc.org/</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="frequently-asked-questions">
+<h2>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h2>
+<p>The below topics are answers to questions I expect to be common.</p>
+<div class="section" id="quit-the-game">
+<h3>Quit the game<a class="headerlink" href="#quit-the-game" title="Permalink to this headline">¶</a></h3>
+<p>While the game is running, you can quit by pressing alt+f4 or command+q.</p>
+</div>
+<div class="section" id="unlock-the-cursor-from-the-game">
+<h3>Unlock the cursor from the game<a class="headerlink" href="#unlock-the-cursor-from-the-game" title="Permalink to this headline">¶</a></h3>
+<p>While the game is running, you can unlock the cursor from the game or lock it again by pressing alt+c or option+c.</p>
+</div>
+<div class="section" id="advance-to-the-next-step-in-the-sequence-of-screens">
+<h3>Advance to the next step in the sequence of screens.<a class="headerlink" href="#advance-to-the-next-step-in-the-sequence-of-screens" title="Permalink to this headline">¶</a></h3>
+<p>While the game is running, you can advance to the next step immedately by pressing ctrl+n.</p>
+</div>
+<div class="section" id="set-the-volume">
+<h3>Set the volume<a class="headerlink" href="#set-the-volume" title="Permalink to this headline">¶</a></h3>
+<p>Run <code class="docutils literal"><span class="pre">game.py</span></code> with these arguments, modified as needed: <code class="docutils literal"><span class="pre">--effects-volume</span> <span class="pre">1.0</span> <span class="pre">--music-volume</span> <span class="pre">1.0</span></code></p>
+</div>
+<div class="section" id="run-full-screen">
+<h3>Run full screen<a class="headerlink" href="#run-full-screen" title="Permalink to this headline">¶</a></h3>
+<p>Run <code class="docutils literal"><span class="pre">game.py</span></code> with these arguments, modified as needed: <code class="docutils literal"><span class="pre">--display-mode</span> <span class="pre">fullscreen</span></code></p>
+</div>
+<div class="section" id="set-the-window-size">
+<h3>Set the window size<a class="headerlink" href="#set-the-window-size" title="Permalink to this headline">¶</a></h3>
+<p>Run <code class="docutils literal"><span class="pre">game.py</span></code> with these arguments, modified as needed: <code class="docutils literal"><span class="pre">--display-width</span> <span class="pre">800</span> <span class="pre">--display-height</span> <span class="pre">600</span></code></p>
+<p>The game play area will remain centered in the window you create, with black bars added to keep the aspect ratio for the game area 4:3.</p>
+</div>
+<div class="section" id="set-the-window-position">
+<h3>Set the window position<a class="headerlink" href="#set-the-window-position" title="Permalink to this headline">¶</a></h3>
+<p>Run <code class="docutils literal"><span class="pre">game.py</span></code> with these arguments, modifed as needed <code class="docutils literal"><span class="pre">--display-width</span> <span class="pre">800</span> <span class="pre">--display-height</span> <span class="pre">600</span> <span class="pre">--window-x</span> <span class="pre">50</span> <span class="pre">--window-y</span> <span class="pre">10</span></code></p>
+<p>X and Y values of 0 should put your window at the top left of the primary display. X and Y are in pixels.</p>
+</div>
+<div class="section" id="log-details-to-a-file">
+<h3>Log details to a file<a class="headerlink" href="#log-details-to-a-file" title="Permalink to this headline">¶</a></h3>
+<p>Run <code class="docutils literal"><span class="pre">game.py</span></code> with these arguments, modifed as needed <code class="docutils literal"><span class="pre">--log-file</span> <span class="pre">sample.csv</span> <span class="pre">--log-overwrite</span> <span class="pre">false</span></code></p>
+</div>
+<div class="section" id="create-new-levels">
+<h3>Create new levels<a class="headerlink" href="#create-new-levels" title="Permalink to this headline">¶</a></h3>
+<p>Use <code class="docutils literal"><span class="pre">makelevel.py</span></code> to create new levels. For example, with the arguments below a new level will be saved to <code class="docutils literal"><span class="pre">levels/mynewlevel.json</span></code> with 10 crystals, 4 asteroids that are small, move at up to a medium speed, with a looping list of 10 power-up positions of all types that don’t become available until 2 seconds into the level or 3 seconds after the previous one was used.</p>
+<p><code class="docutils literal"><span class="pre">--target-count</span> <span class="pre">10</span> <span class="pre">--asteroid-count</span> <span class="pre">4</span> <span class="pre">--asteroid-sizes</span> <span class="pre">small</span> <span class="pre">--asteroid-speeds</span> <span class="pre">medium</span> <span class="pre">--powerup-count</span> <span class="pre">10</span> <span class="pre">--powerup-types</span> <span class="pre">all</span> <span class="pre">--powerup-initial-delay</span> <span class="pre">2.0</span> <span class="pre">--powerup-delay</span> <span class="pre">3.0</span> <span class="pre">--file</span> <span class="pre">levels/mynewlevel.json</span></code></p>
+<p>See <a class="reference internal" href="makelevelpy.html"><span class="doc">makelevel.py</span></a> for more details on the options for <code class="docutils literal"><span class="pre">makelevel.py</span></code></p>
+</div>
+<div class="section" id="repeat-the-same-level-for-a-specified-duration">
+<h3>Repeat the same level for a specified duration<a class="headerlink" href="#repeat-the-same-level-for-a-specified-duration" title="Permalink to this headline">¶</a></h3>
+<p>When the player completes the last level in a list of levels they next play the first level in the list. To repeat the same level you can create a list of just the one level.</p>
+<p>To limit the player to playing the repeating level for some number of seconds you must specify a script that limits the gameplay step to that number of seconds seconds.</p>
+<p>Create a new level list JSON file named samplerepeatinglevel.json and put it in the levels folder. It should have the following contents:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;standard01.json&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Create a new script JSON file named samplerepeatinglevelscript.json and put it next to the game. It should have the following contents:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;instructions&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/samplerepeatinglevel.json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">200.0</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">&quot;duration&quot;:</span> <span class="pre">200.0</span></code> specified in the above file limits the repeating level step to 200 seconds. Change this value to your desired duration.</p>
+<p>run <code class="docutils literal"><span class="pre">game.py</span></code> with these arguments: <code class="docutils literal"><span class="pre">--script-json</span> <span class="pre">samplerepeatinglevelscript.json</span></code></p>
+<p>The script json file is described in more detail in <a class="reference internal" href="scriptjson.html"><span class="doc">scriptjson</span></a></p>
+</div>
+<div class="section" id="change-the-artwork">
+<h3>Change the artwork<a class="headerlink" href="#change-the-artwork" title="Permalink to this headline">¶</a></h3>
+<p>Edit or replace the corresponding image in the data directory. You don’t need to keep the same resolution, the graphics are scaled up or down to their screen resolution when the game is loaded. If the file name changes, make the corresponding edit to the sprite in <code class="docutils literal"><span class="pre">sprites.py</span></code>.</p>
+</div>
+<div class="section" id="replace-the-sounds">
+<h3>Replace the sounds<a class="headerlink" href="#replace-the-sounds" title="Permalink to this headline">¶</a></h3>
+<p>Overwrite the sound with a .wav file sampled at 22050 samples/second. A wav file with a different sample rate will play faster or slower in the game than it should.</p>
+</div>
+<div class="section" id="log-csv-columns">
+<h3>Log CSV Columns<a class="headerlink" href="#log-csv-columns" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="logcolumns.html"><span class="doc">Log Columns</span></a> section describes the columns saved in the optional log CSV file.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Asteroid Impact Introduction</a><ul>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#gameplay">Gameplay</a></li>
+<li><a class="reference internal" href="#game-logging">Game Logging</a></li>
+<li><a class="reference internal" href="#custom-levels">Custom Levels</a></li>
+<li><a class="reference internal" href="#game-script">Game ‘Script’</a></li>
+<li><a class="reference internal" href="#input-and-output-triggering">Input and Output Triggering</a></li>
+<li><a class="reference internal" href="#operator-keys">Operator Keys</a></li>
+<li><a class="reference internal" href="#command-line-options">Command-Line Options</a><ul>
+<li><a class="reference internal" href="#levels-json"><code class="docutils literal"><span class="pre">levels-json</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#frequently-asked-questions">Frequently Asked Questions</a><ul>
+<li><a class="reference internal" href="#quit-the-game">Quit the game</a></li>
+<li><a class="reference internal" href="#unlock-the-cursor-from-the-game">Unlock the cursor from the game</a></li>
+<li><a class="reference internal" href="#advance-to-the-next-step-in-the-sequence-of-screens">Advance to the next step in the sequence of screens.</a></li>
+<li><a class="reference internal" href="#set-the-volume">Set the volume</a></li>
+<li><a class="reference internal" href="#run-full-screen">Run full screen</a></li>
+<li><a class="reference internal" href="#set-the-window-size">Set the window size</a></li>
+<li><a class="reference internal" href="#set-the-window-position">Set the window position</a></li>
+<li><a class="reference internal" href="#log-details-to-a-file">Log details to a file</a></li>
+<li><a class="reference internal" href="#create-new-levels">Create new levels</a></li>
+<li><a class="reference internal" href="#repeat-the-same-level-for-a-specified-duration">Repeat the same level for a specified duration</a></li>
+<li><a class="reference internal" href="#change-the-artwork">Change the artwork</a></li>
+<li><a class="reference internal" href="#replace-the-sounds">Replace the sounds</a></li>
+<li><a class="reference internal" href="#log-csv-columns">Log CSV Columns</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Asteroid Impact</a></li>
+      <li>Next: <a href="codeintro.html" title="next chapter">Asteroid Impact Code Introduction</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/intro.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
