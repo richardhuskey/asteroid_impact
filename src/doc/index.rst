@@ -12,17 +12,19 @@ Contents:
    :maxdepth: 2
 
    intro
-   codeintro
-   leveljson
-   scriptjson
-   logcolumns
-   makelevelpy
-   parallelport
-   input-trigger
+   step-game
    step-instructions
    step-text
    step-survey
    step-blackscreen
+   logcolumns
+   parallelport
+   input-trigger
+   output-trigger
+   scriptjson
+   leveljson
+   makelevelpy
+   codeintro
    ref/game
    ref/logger
    ref/makelevel

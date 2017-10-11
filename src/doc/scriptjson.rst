@@ -2,7 +2,7 @@
  Game Script JSON 
 ******************
 
-AsteroidImpact will optionally run a sequence of modes specified in script.json. This can be used to advance the player between multiple lists of levels, with blank screens in between. Advancing to the next step happens after a specified duration, or for the instructions screen when the user clicks with the mouse.
+AsteroidImpact will optionally run a sequence of modes specified in script.json. This can be used to advance the player between multiple lists of levels, with blank screens inbetween. Advancing to the next step happens after a specified duration, or for the instructions screen when the user clicks with the mouse.
 
 Sample: ::
 
@@ -203,7 +203,7 @@ Trigger Advance Options
 
 Rather than advancing steps after a duration, they can be advanced after receiving a number of "trigger" pulses. The pulses can come as key presses or as characters over a serial port. The step advances to the next step after receiving the number of pulses specified for the trigger_count attribute.
 
-You can visualize trigger pulses on screen by using the `--trigger-blink true` command-line option.
+You can visualize trigger pulses on screen by using the ``--trigger-blink true`` command-line option.
 
 Sample trigger-driven JSON: ::
 
@@ -386,7 +386,7 @@ Sample trigger-driven JSON: ::
     }
 
 
-The serial trigger mode opens a serial port on the computer and when a byte is received with the value matching `trigger_byte_value` increases the trigger count. The `port` setting is the serial port, typically `COM1` through `COM16` on Windows, or `/dev/cu.usbmodem1234` or similar on OSX. If you have python and pyserial installed, you can list serial ports from the command-line by running `python -m serial.tools.list_ports` which will print out serial ports on your computer. You can also specify the `baudrate` for serial connections. The `trigger_byte_value` of 53 is the ASCII code for the character "5".
+The serial trigger mode opens a serial port on the computer and when a byte is received with the value matching ``trigger_byte_value`` increases the trigger count. The ``port`` setting is the serial port, typically ``COM1`` through ``COM16`` on Windows, or ``/dev/cu.usbmodem1234`` or similar on OSX. If you have python and pyserial installed, you can list serial ports from the command-line by running ``python -m serial.tools.list_ports`` which will print out serial ports on your computer. You can also specify the ``baudrate`` for serial connections. The ``trigger_byte_value`` of 53 is the ASCII code for the character "5".
 
 
 
@@ -399,7 +399,7 @@ For serial output triggers, ``serial_trigger_strings_by_event`` is a lookup from
 
 For parallel output triggers, ``parallel_trigger_hex_values_by_event`` is a lookup from game event to the value to change the parallel port data byte to for ``trigger_frames`` frames. One frame is about 1/60 second.
 
-See :doc:`parallelport` for information about parallel ports.
+See :doc:``parallelport`` for information about parallel ports.
 
 The full list of available game events to send an ouput trigger on are listed in the sample below.
 
@@ -440,8 +440,10 @@ Common Step Attributes
 
 Each step has the following attributes:
 
- * action: The name of the action. Should be "instructions", "game", "text" or "blackscreen"
- * `duration`: The duration in seconds (such as 12.5) after which to automatically advance to the next step. This can be null for some actions, see below.
+``"action"``
+    The name of the action. Should be "instructions", "game", "text" or "blackscreen"
+``"duration"``
+    The duration in seconds (such as 12.5) after which to automatically advance to the next step. This can be null for some actions, see below.
 
 
 Available step actions
@@ -618,26 +620,28 @@ Sample game step with reaction prompts::
       ]
     },
 
-``reaction_prompts`` holds a list of entries. Each one has the following attributes:
+``"reaction_prompts"`` holds a list of entries. Each one has the following attributes:
 
-``diameter`` is the game-unit width and height of the icon on screen.
+``"diameter"``
+    The game-unit width and height of the icon on screen.
+``"position_list"``
+   A list of 2-element positions. Each 2-element list is the [left, top] coordinate of the position of the image on screen in game coordinates. The first appearance is at the first entry in the list, second at the second entry and so-on, looping back to the first after the last.
+``"image"``
+    ``"none"`` or the filename of an image in the data directory. I've created ``"trinagle.png"``, ``"circle.png"`` and ``"square.png"`` but you may add your own transparent PNG images to the data directory and use them. Use "none" to create audio-only reaction prompts.
+``"sound"``
+    The filename of a wav file or "none" to play no sound when the reaction prompt is visible, or ``"none"``
+``"showtimes_millis"``
+     A list of milliseconds into the ``game`` step to make the reaction prompt visible and audible.
+``"showtimes_trigger_counts"``
+     A list of numbers to indicate which trigger pulses inside this step trigger this reaction prompt. A 1 in this list would trigger the reaction prompt to appear when the game receives the first trigger pulse after starting this ``game`` or ``game-adaptive`` step.
+``"timeout_millis"``
+     How many milliseconds the prompt should remain visible and audible once it appears if the player doesn't press the key to dismiss the prompt.
+``"stay_visible"``
+    ``false`` (default) or ``true``. A value of ``true`` indicates that the sound and image should continue to appear after the player presses the key corresponding to the prompt.
+``"input_key"``
+    Is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below.
 
-``position_list`` is a list of 2-element positions. Each 2-element list is the [left, top] coordinate of the position of the image on screen in game coordinates. The first appearance is at the first entry in the list, second at the second entry and so-on, looping back to the first after the last.
-
-``image`` is "none" or the filename of an image in the data directory. I've created "trinagle.png" "circle.png" and "square.png" but you may add your own transparent PNG images to the data directory and use them. Use "none" to create audio-only reaction prompts.
-
-``sound`` may be the filename of a wav file or "none" to play no sound when the reaction prompt is visible.
-
-``showtimes_millis`` is a list of milliseconds into the ``game`` step to make the reaction prompt visible and audible.
-
-``showtimes_trigger_counts`` is a list of numbers to indicate which trigger pulses inside this step trigger this reaction prompt. A 1 in this list would trigger the reaction prompt to appear when the game receives the first trigger pulse after starting this ``game`` or ``game-adaptive`` step.
-
-``timeout_millis`` is how many milliseconds the prompt should remain visible and audible once it appears if the player doesn't press the key to dismiss the prompt.
-
-``stay_visible`` value is ``false`` (default) or ``true``. A value of ``true`` indicates that the sound and image should continue to appear after the player presses the key corresponding to the prompt.
-
-``input_key`` is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below. ::
-
+::
 
     K_MOUSE1 -- Left mouse button
     K_MOUSE2 -- Middle mouse button
@@ -720,3 +724,4 @@ Sample game step with reaction prompts::
     K_UNDERSCORE
     K_UP
     K_a through K_z
+

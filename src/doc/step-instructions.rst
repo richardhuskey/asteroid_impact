@@ -7,7 +7,7 @@ Instructions Step
 The Instructions step displays information about the game elements and how to play Asteroid Impact.
 
 JSON Configuration for Instructions Step
-==================================
+========================================
 
 Below is sample JSON for a instructions step will all the options specified.
 

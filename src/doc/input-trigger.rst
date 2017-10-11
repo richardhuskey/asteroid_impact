@@ -418,7 +418,7 @@ The latency has several factors:
 
 Latency was measured as follows:
 * Configure Arduino Leonardo as game trigger (sketch below) and to turn on LED when trigger pulse is sent. The basic stamp board based emulator also blinks an LED when it sends trigger pulses.
-* Run game with `--trigger-blink true` command-line option
+* Run game with ``--trigger-blink true`` command-line option
 * Record 120FPS video using iPhone framed to show both LED on Arduino and trigger blink in lower right of game on screen
 * Count frames between LED turning on (frame 0) and game showing blink (typically 9-13 frames at 120FPS). be careful that the video you're counting frames in is actually 120FPS and not the slow down/speed up effect the iPhone adds at the start/end.
 
