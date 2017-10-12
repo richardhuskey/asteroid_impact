@@ -1095,7 +1095,7 @@ class AsteroidImpactInfiniteLevelMaker(object):
         # increment difficulty
         self.level_score += self.level_completion_increment
         # keep from going too high
-        self.level_score = min(len(self.level_args_list), self.level_score)
+        self.level_score = min(max(0.0, self.level_score), len(self.level_args_list))
 
         level_index_new = int(self.level_score + 0.001) # add some fudge to round correctly
         if level_index_old < level_index_new:
@@ -1109,7 +1109,7 @@ class AsteroidImpactInfiniteLevelMaker(object):
         # decrement difficulty
         self.level_score -= self.level_death_decrement
         # keep at or above 0
-        self.level_score = max(0.0, self.level_score)
+        self.level_score = min(max(0.0, self.level_score), len(self.level_args_list))
 
         level_index_new = int(self.level_score + 0.001) # add some fudge to round correctly
         if level_index_new < level_index_old:
