@@ -636,7 +636,7 @@ class GameModeManager(object):
         resources.effects_volume = self.args.effects_volume
 
         if pygame.mixer:
-            pygame.mixer.pre_init(frequency=22050, size=-16, channels=2, buffer=1024)
+            pygame.mixer.pre_init(frequency=22050, size=-16, channels=2, buffer=256)
 
         displayflags = pygame.DOUBLEBUF
         if args.display_mode == 'fullscreen':
