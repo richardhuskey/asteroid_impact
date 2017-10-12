@@ -814,10 +814,9 @@ class AsteroidImpactGameplayScreen(GameScreen):
                     ReactionTimePrompt(**rp))
         else:
             new_reaction_prompts = []
-        
+
         self.reaction_prompts = pygame.sprite.OrderedUpdates(
             new_reaction_prompts)
-        
 
     def setup_level(self):
         """Setup for the current level"""
@@ -1029,14 +1028,18 @@ class AsteroidImpactInfiniteLevelMaker(object):
             level_templates_list,
             start_level = 0.0,
             level_completion_increment = 1.0,
-            level_death_decrement = 1.0):
+            level_death_decrement = 1.0,
+            continuous_asteroids_on_same_level = False):
         print start_level, level_completion_increment, level_death_decrement
         self.level_score = start_level
         self.level_completion_increment = level_completion_increment
         self.level_death_decrement = level_death_decrement
-        
+        self.continuous_asteroids_on_same_level = continuous_asteroids_on_same_level
+
         self.level_args_list = level_templates_list
         self.level_used_count_list = [0] * len(level_templates_list)
+
+        self.level_index_previous = -1
 
     # must act like a list?
     def __len__(self):
@@ -1085,6 +1088,12 @@ class AsteroidImpactInfiniteLevelMaker(object):
         level = make_level(**level_args)
         self.level_used_count_list[level_index] += 1
         level['level_name']  = 'dynamic-' + str(level_index)
+
+        # debug print
+        #print 'previous level_index', self.level_index_previous, 'new', level_index
+        level['level_index_changed_from_previous'] = (level_index != self.level_index_previous)
+
+        self.level_index_previous = level_index
 
         return level
     
@@ -1178,7 +1187,6 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             raise QuitGame
         levellist = AsteroidImpactInfiniteLevelMaker(level_templates_list, **kwargs)
         self.level_list = levellist
-        self.level_index = 0
         self.level_attempt = -1
         self.setup_level(first=True)
 
@@ -1201,7 +1209,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         """Setup for the current level"""
         self.is_first_level = first
         self.died_previously = died_previously
-        self.current_level = self.level_list[self.level_index]
+        self.current_level = self.level_list['unused']
         self.level_millis = -2000 if (first or died_previously) else 0 # for the 'get ready' and level countdown
 
         # resetting the cursor flashes it in top left
@@ -1219,35 +1227,38 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         if (first):
             self.asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
         else:
-            new_asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
-            # transition existing asteroid list into new asteroid list
-            if (len(new_asteroids) < len(self.asteroids)):
-                # reduce asteroid count by scaling down size. They are removed in update()
-                for i in xrange(len(new_asteroids),len(self.asteroids)):
-                    disappearing_asteroid = self.asteroids[i]
-                    disappearing_asteroid.gamediameternew_start_diameter = disappearing_asteroid.gamediameter
-                    disappearing_asteroid.gamediameternew_end_diameter = 1
-                    disappearing_asteroid.gamediameternew_transition_duration_millis = 1000
-                    disappearing_asteroid.gamediameternew_transition_remaining_millis = 1000
-                    disappearing_asteroid.dxnew = disappearing_asteroid.dx
-                    disappearing_asteroid.dynew = disappearing_asteroid.dy
-            elif (len(self.asteroids) < len(new_asteroids)):
-                prev_asteroid_count = len(self.asteroids)
-                # duplicate asteroids to increase count
-                for i in range(len(self.asteroids), len(new_asteroids)):
-                    new_asteroid = Asteroid()
-                    new_asteroid.copy_from(self.asteroids[i % prev_asteroid_count])
-                    self.asteroids.append(new_asteroid)
+            if (self.current_level['level_index_changed_from_previous']
+                or (not self.level_list.continuous_asteroids_on_same_level)):
+                # update asteroid speeds and sizes:
+                new_asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
+                # transition existing asteroid list into new asteroid list
+                if (len(new_asteroids) < len(self.asteroids)):
+                    # reduce asteroid count by scaling down size. They are removed in update()
+                    for i in xrange(len(new_asteroids),len(self.asteroids)):
+                        disappearing_asteroid = self.asteroids[i]
+                        disappearing_asteroid.gamediameternew_start_diameter = disappearing_asteroid.gamediameter
+                        disappearing_asteroid.gamediameternew_end_diameter = 1
+                        disappearing_asteroid.gamediameternew_transition_duration_millis = 1000
+                        disappearing_asteroid.gamediameternew_transition_remaining_millis = 1000
+                        disappearing_asteroid.dxnew = disappearing_asteroid.dx
+                        disappearing_asteroid.dynew = disappearing_asteroid.dy
+                elif (len(self.asteroids) < len(new_asteroids)):
+                    prev_asteroid_count = len(self.asteroids)
+                    # duplicate asteroids to increase count
+                    for i in range(len(self.asteroids), len(new_asteroids)):
+                        new_asteroid = Asteroid()
+                        new_asteroid.copy_from(self.asteroids[i % prev_asteroid_count])
+                        self.asteroids.append(new_asteroid)
 
-            for i, newasteroid in enumerate(new_asteroids):
-                # set up transition to new size, angle
-                asteroid = self.asteroids[i]
-                asteroid.gamediameternew_start_diameter = asteroid.gamediameter
-                asteroid.gamediameternew_end_diameter = newasteroid.gamediameter
-                asteroid.gamediameternew_transition_duration_millis = 2000
-                asteroid.gamediameternew_transition_remaining_millis = 2000
-                asteroid.dxnew = newasteroid.dx
-                asteroid.dynew = newasteroid.dy
+                for i, newasteroid in enumerate(new_asteroids):
+                    # set up transition to new size, angle
+                    asteroid = self.asteroids[i]
+                    asteroid.gamediameternew_start_diameter = asteroid.gamediameter
+                    asteroid.gamediameternew_end_diameter = newasteroid.gamediameter
+                    asteroid.gamediameternew_transition_duration_millis = 2000
+                    asteroid.gamediameternew_transition_remaining_millis = 2000
+                    asteroid.dxnew = newasteroid.dx
+                    asteroid.dynew = newasteroid.dy
         
         if first:
             prevpowerup = None
@@ -1275,7 +1286,6 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
     def advance_level(self):
         """Advance the current level to the next in the list"""
-        self.level_index = (self.level_index + 1) % len(self.level_list)
         self.level_attempt = -1
         self.setup_level(first=False)
 

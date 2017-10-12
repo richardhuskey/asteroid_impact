@@ -160,6 +160,7 @@ Below is a sample script JSON with input triggers configured. ::
           "start_level": 0.5,
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
+          "continuous_asteroids_on_same_level": false,
           "level_templates": [
             {
               "asteroid_count": 1,

@@ -124,6 +124,7 @@ Sample: ::
           "start_level": 0.5,
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
+          "continuous_asteroids_on_same_level": false,
           "level_templates": [
             {
               "asteroid_count": 1,
@@ -352,6 +353,7 @@ Sample trigger-driven JSON: ::
           "start_level": 0.5,
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
+          "continuous_asteroids_on_same_level": false,
           "level_templates": [
             {
               "asteroid_count": 1,
@@ -520,6 +522,8 @@ The ``start_level`` is a float value that specifies the initial value used to ch
 ``level_completion_increment`` is a float value for the amount the level score is incremented when the player completes a level. This can be under ``1.0`` which would usually mean that the player would have to complete another level with the same options before advancing to the next level in the list.
 
 ``level_death_decrement`` is a float value for the amount the level score is reduced when the player dies. This is distinct from the ``level_completion_increment`` so that the steady state reached when the player is near their effective difficulty can be tuned. The value should be a positive or zero.
+
+``continuous_asteroids_on_same_level`` of ``true`` will keep the asteroids moving in their existing size and pattern when a player dying or completing a level does not advance all the way to a different level in the list. ``false`` is the default.
 
 The ``levels`` value is required. It must be a list of level parameters (which are different than for the ``game`` mode) or a string filename for a json file that contains a list of level parameters. 
 

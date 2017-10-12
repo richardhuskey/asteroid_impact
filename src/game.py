@@ -632,6 +632,8 @@ class GameModeManager(object):
                     step['level_completion_increment'] = float(step['level_completion_increment'])
                 if step.has_key('level_death_decrement'):
                     step['level_death_decrement'] = float(step['level_death_decrement'])
+                if step.has_key('continuous_asteroids_on_same_level'):
+                    step['continuous_asteroids_on_same_level'] = bool(step['continuous_asteroids_on_same_level'])
             elif step['action'] == 'parallel_port_test':
                 # nothing else to validate
                 pass
@@ -752,6 +754,8 @@ class GameModeManager(object):
                 kwargs['level_completion_increment'] = step['level_completion_increment']
             if step.has_key('level_death_decrement'):
                 kwargs['level_death_decrement'] = step['level_death_decrement']
+            if step.has_key('continuous_asteroids_on_same_level'):
+                kwargs['continuous_asteroids_on_same_level'] = step['continuous_asteroids_on_same_level']
 
             self.gamescreenstack.append(
                 AsteroidImpactInfiniteGameplayScreen(
