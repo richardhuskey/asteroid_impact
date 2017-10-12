@@ -39,12 +39,15 @@ class StubParallelPort:
         pass
 
 try:
+    dllfile = ''
     arch = platform.architecture()
     if arch == ('32bit', 'WindowsPE'):
         # 32-bit python on 32-bit or 64-bit Windows:
+        dllfile = 'inpout32.dll'
         pport = ctypes.windll.inpout32
     elif arch == ('64bit', 'WindowsPE'):
         # 64-bit python on 64-bit Windows:
+        dllfile = 'inpoutx64.dll'
         pport = ctypes.windll.inpoutx64
     else:
         print 'WARNING: Parallel port support not available. Parallel port interface only implemented for Windows'
@@ -57,6 +60,7 @@ except AttributeError as e:
 except WindowsError as e:
     # dll probably not found
     print e
+    print dllfile, 'not found. parallel port support is unavailable'
     pport = StubParallelPort()
 except OSError as e:
     # probably running 64-bit python trying to load 32-bit DLL
