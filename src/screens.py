@@ -1029,12 +1029,14 @@ class AsteroidImpactInfiniteLevelMaker(object):
             start_level = 0.0,
             level_completion_increment = 1.0,
             level_death_decrement = 1.0,
-            continuous_asteroids_on_same_level = False):
+            continuous_asteroids_on_same_level = False,
+            show_advance_countdown = False):
         print start_level, level_completion_increment, level_death_decrement
         self.level_score = start_level
         self.level_completion_increment = level_completion_increment
         self.level_death_decrement = level_death_decrement
         self.continuous_asteroids_on_same_level = continuous_asteroids_on_same_level
+        self.show_advance_countdown = show_advance_countdown
 
         self.level_args_list = level_templates_list
         self.level_used_count_list = [0] * len(level_templates_list)
@@ -1207,10 +1209,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
     def setup_level(self, first=True, died_previously=False):
         """Setup for the current level"""
-        self.is_first_level = first
         self.died_previously = died_previously
         self.current_level = self.level_list['unused']
-        self.level_millis = -2000 if (first or died_previously) else 0 # for the 'get ready' and level countdown
+        self.show_countdown = (
+            first 
+            or died_previously 
+            or (self.level_list.show_advance_countdown and self.current_level['level_index_changed_from_previous']))
+        print 'self.show_countdown', self.show_countdown
+        self.level_millis = -2000 if (self.show_countdown) else 0 # for the 'get ready' and level countdown
 
         # resetting the cursor flashes it in top left
         # this fixes typical case of advancing to next level, but it still happens 
@@ -1301,7 +1307,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # -1000... -0000    Set
         # -0000 ... +500    Go
         # +500 ... death    [nothing]
-        if self.is_first_level or self.died_previously:
+        if self.show_countdown:
             if oldlevel_millis < -2000 and -2000 <= level_millis:
                 self.notice_textsprite.set_text('Get Ready')
             if oldlevel_millis < -1000 and -1000 <= level_millis:
@@ -1345,6 +1351,10 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             # get ready countdown
             # only update asteroids, cursor
             self.mostsprites.update(millis)
+
+            # update shield with zero duration so it continues to follow cursor
+            if self.powerup.active:
+                self.powerup.update(0, frame_outbound_triggers, self.cursor, self.asteroids)
         else:
             # game is running (countdown to level start is over)
             self.mostsprites.update(millis)
