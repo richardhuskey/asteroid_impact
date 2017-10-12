@@ -12,14 +12,18 @@ JSON Configuration Sample
 This would go inside your configuration JSON, at the same level as the ``"steps"=[]`` list ::
 
     "output_trigger_settings": {
-      "mode": "serial",
+      "mode": "none",
     
       "serial_trigger_strings_by_event": {
         "step_begin": "1",
-        "game_death": "2",
+        "game_level_begin": "2",
         "game_level_complete": "3",
-        "adaptive_difficulty_increase": "4",
-        "adaptive_difficulty_decrease": "5"
+        "game_death": "4",
+        "game_shield_activate": "5",
+        "game_slow_activate": "6",
+        "game_crystal_collected": "7",
+        "adaptive_difficulty_increase": "8",
+        "adaptive_difficulty_decrease": "9"
       },
       "serial_options": {
         "port": "COM6",
@@ -27,19 +31,22 @@ This would go inside your configuration JSON, at the same level as the ``"steps"
       },
     
       "parallel_trigger_hex_values_by_event": {
-        "step_begin": "0x11",
-        "game_death": "0x12",
-        "game_level_complete": "0x14",
-        "adaptive_difficulty_increase": "0x18",
-        "adaptive_difficulty_decrease": "0x00"
+        "step_begin": "0x01",
+        "game_level_begin": "0x02",
+        "game_level_complete": "0x04",
+        "game_death": "0x08",
+        "game_shield_activate": "0x10",
+        "game_slow_activate": "0x20",
+        "game_crystal_collected": "0x40",
+        "adaptive_difficulty_increase": "0x80",
+        "adaptive_difficulty_decrease": "0xFF"
       },
       "parallel_options": {
         "port_address_hex": "BF00",
         "common_data_value_hex": "0x10",
-        "trigger_frames": 10
+        "trigger_frames": 3
       }
     },
-
 
 ``"mode"`` Should be ``"none"`` to disable output triggers, ``"serial"``, or ``"parallel"``
 
@@ -47,10 +54,18 @@ The available game events are the following:
 
 ``"step_begin"``
     Occurs on the beginning of each step.
-``"game_death"``
-    When the player touches an asteroid during gameplay and dies. This works in both the game and adaptive gameplay steps.
+``"game_level_begin"``
+    Occurs when the level begins, or changes. The level changes when the player collects the number of crystals for the level.
 ``"game_level_complete"``
     When the player picks up the last crystal in a level in either the standard gameplay or adaptive gameplay steps.
+``"game_death"``
+    When the player touches an asteroid during gameplay and dies. This works in both the game and adaptive gameplay steps.
+``"game_shield_activate"``
+    When the player picks and activates a shield power-up.
+``"game_slow_activate"``
+    When the player picks and activates a time slowdown power-up.
+``"game_crystal_collected"``
+    When the player picks and activates a time slowdown power-up.
 ``"adaptive_difficulty_increase"``
     When the player completes a level in the adaptive gameplay mode, and the "level score" increments to the next more difficult level in the list.
 ``"adaptive_difficulty_decrease"``
@@ -106,16 +121,20 @@ Below is a sample script JSON with only serial output triggers configured and tw
       "mode": "parallel",
 
       "parallel_trigger_hex_values_by_event": {
-        "step_begin": "0x11",
-        "game_death": "0x12",
-        "game_level_complete": "0x14",
-        "adaptive_difficulty_increase": "0x18",
-        "adaptive_difficulty_decrease": "0x00"
+        "step_begin": "0x01",
+        "game_level_begin": "0x02",
+        "game_level_complete": "0x04",
+        "game_death": "0x08",
+        "game_shield_activate": "0x10",
+        "game_slow_activate": "0x20",
+        "game_crystal_collected": "0x40",
+        "adaptive_difficulty_increase": "0x80",
+        "adaptive_difficulty_decrease": "0xFF"
       },
       "parallel_options": {
         "port_address_hex": "BF00",
         "common_data_value_hex": "0x10",
-        "trigger_frames": 10
+        "trigger_frames": 3
       }
     },
 
@@ -128,7 +147,7 @@ The parallel output trigger mode will connect to a parallel port at the data add
 ``"common_status_value_hex"``
     The "inactive" value to wait for for the output register to while not outputting anything.
 ``"trigger_frames"``
-    The number of 1/60s frames to hold the paralel port pins active. 10 would be about 160 milliseconds.
+    The number of 1/60s frames to hold the paralel port pins active. 10 would be about 160 milliseconds, 3 would be about 48ms.
 
 The hex value shown in the ``"parallel_trigger_hex_values_by_event"`` dictionary are what the output data pins would be set to if the one event happened on its own. For example, ``"step_begin": "0x11"`` would set D0 and D4 high (5v) and the other D pins low to notify of a step starting. By changing the trigger active value here, and the ``"parallel_options"``  ``"common_data_value_hex"`` you can configure your output to be either active-high or active low or even a mix of the two.
 

@@ -61,8 +61,12 @@ import parallelportwrapper
 
 ALL_TRIGGERS = [
     'step_begin', # on begin of any step
-    'game_death', # in either game mode, when the player touches an asteroid and dies
+    'game_level_begin', # in either game mode, when the level begins
     'game_level_complete', # in either game mode, when the player collects the last diamond
+    'game_death', # in either game mode, when the player touches an asteroid and dies
+    'game_crystal_collected', # in either game mode, when the player collects any diamond
+    'game_shield_activate', # in either game mode, when the player activates a shield
+    'game_slow_activate', # in either game mode, when the player activates the slowdown powerup
     'adaptive_difficulty_increase', # adaptive, when collecting the last diamond increases to the next level template
     'adaptive_difficulty_decrease' # adaptive, when dying goes back to an earlier level template
     ]
@@ -318,7 +322,7 @@ class GameModeManager(object):
         self.output_trigger_serial_port = None
         self.output_trigger_parallel_port_address = 0x0000
         self.output_trigger_parallel_port_off_value = 0x00
-        self.output_trigger_parallel_port_on_frames = 6
+        self.output_trigger_parallel_port_on_frames = 3
         # used to hold output HIGH for # frames
         self.output_trigger_parallel_frame_countdown = 0
         
@@ -1060,7 +1064,7 @@ class GameModeManager(object):
         return parallelportwrapper.Inp32(self.trigger_parallel_port_address + 1) & 0xF8
 
     def update_outbound_triggers(self, frametriggerlist):
-        print_triggers = True
+        print_triggers = False
 
         # see if there are any triggers to send
         send_trigger = False

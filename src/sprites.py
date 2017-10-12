@@ -225,16 +225,16 @@ class BasePowerup(VirtualGameSprite):
 
             if self.duration > self.maxduration:
                 # deactivate:
-                self.deactivate(cursor, asteroids)
+                self.deactivate(cursor, asteroids, frame_outbound_triggers)
 
-    def activate(self, *args):
+    def activate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Activate power-up because it was picked up"""
         self.oldgamerect = self.gamerect.copy()
         self.active = True
         self.duration = 0
         self.used = False
 
-    def deactivate(self, cursor, asteroids):
+    def deactivate(self, cursor, asteroids, frame_outbound_triggers):
         """Deactivate power-up"""
         self.active = False
         self.gamerect = self.oldgamerect
@@ -279,9 +279,9 @@ class SlowPowerup(BasePowerup):
             for asteroid in asteroids:
                 asteroid.speedfactor = self.speedfactor
 
-    def activate(self, cursor, asteroids, *args):
+    def activate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Play start sound. Slow asteroids to a crawl"""
-        BasePowerup.activate(self, *args)
+        BasePowerup.activate(self, cursor, asteroids, frame_outbound_triggers, *args)
 
         # adjust speed of asteroids
         for asteroid in asteroids:
@@ -296,9 +296,11 @@ class SlowPowerup(BasePowerup):
 
         self.sound_end_started = False
 
-    def deactivate(self, cursor, asteroids):
+        frame_outbound_triggers.append('game_slow_activate')
+
+    def deactivate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Restore normal speed of asteroids"""
-        BasePowerup.deactivate(self, cursor, asteroids)
+        BasePowerup.deactivate(self, cursor, asteroids, frame_outbound_triggers, *args)
 
         # restore speed of asteroids
         for asteroid in asteroids:
@@ -331,13 +333,15 @@ class ShieldPowerup(BasePowerup):
         self.sound_begin.stop()
         self.sound_end.stop()
 
-    def activate(self, cursor, asteroids, *args):
+    def activate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Play activation sound"""
-        BasePowerup.activate(self, *args)
+        BasePowerup.activate(self, cursor, asteroids, frame_outbound_triggers, *args)
 
         self.sound_begin.play()
 
         self.sound_end_started = False
+
+        frame_outbound_triggers.append('game_shield_activate')
 
     def update(self, millis, frame_outbound_triggers, cursor, asteroids):
         """Follow cursor. Play effect end sound if due"""

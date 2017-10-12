@@ -843,6 +843,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
         self.update_status_text()
         self.update_notice_text(self.level_millis, -10000)
         self.level_attempt += 1
+        self.level_first_update = True
 
     def advance_level(self):
         """Advance the current level to the next in the list"""
@@ -879,6 +880,11 @@ class AsteroidImpactGameplayScreen(GameScreen):
 
     def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""
+
+        if self.level_first_update:
+            self.level_first_update = False
+            frame_outbound_triggers.append('game_level_begin')
+
         oldmlevelillis = self.level_millis
         self.level_millis += millis
 
@@ -921,9 +927,12 @@ class AsteroidImpactGameplayScreen(GameScreen):
             # Check target collision:
             if circularspritesoverlap(self.cursor, self.target):
                 # hit.
-                # todo: increment counter of targets hit
                 self.target.pickedup()
+                # increment counter of targets hit
                 self.target_index += 1
+
+                frame_outbound_triggers.append('game_crystal_collected')
+
                 if self.target_index >= len(self.target_positions):
                     print 'completed level'
                     levelstate = 'completed'
@@ -942,7 +951,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
                 and not self.powerup.active\
                 and not self.powerup.used:
                 print 'activating powerup:', self.powerup
-                self.powerup.activate(self.cursor, self.asteroids)
+                self.powerup.activate(self.cursor, self.asteroids, frame_outbound_triggers)
 
             # Check asteroid collision:
             for asteroid in self.asteroids:
@@ -1245,8 +1254,6 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         else:
             prevpowerup = self.powerup
         if died_previously:
-            if prevpowerup.active:
-                prevpowerup.deactivate(self.cursor, self.asteroids)
             prevpowerup = None
             
         self.powerup_list = [make_powerup(d) for d in self.current_level['powerup_list']]
@@ -1264,6 +1271,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.update_status_text()
         self.update_notice_text(self.level_millis, -10000)
         self.level_attempt += 1
+        self.level_first_update = True
 
     def advance_level(self):
         """Advance the current level to the next in the list"""
@@ -1301,6 +1309,11 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
     def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""
+
+        if self.level_first_update:
+            self.level_first_update = False
+            frame_outbound_triggers.append('game_level_begin')
+
         oldmlevelillis = self.level_millis
         self.level_millis += millis
 
@@ -1343,9 +1356,13 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             # Check target collision:
             if circularspritesoverlap(self.cursor, self.target):
                 # hit.
-                # todo: increment counter of targets hit
                 self.target.pickedup()
+
+                # increment counter of targets hit
                 self.target_index += 1
+
+                frame_outbound_triggers.append('game_crystal_collected')
+
                 if self.target_index >= len(self.target_positions):
                     print 'completed level'
                     levelstate = 'completed'
@@ -1366,7 +1383,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 and not self.powerup.active\
                 and not self.powerup.used:
                 #print 'activating powerup:', self.powerup
-                self.powerup.activate(self.cursor, self.asteroids)
+                self.powerup.activate(self.cursor, self.asteroids, frame_outbound_triggers)
 
             # Check asteroid collision:
             for asteroid in self.asteroids:
@@ -1382,6 +1399,10 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                         self.screenstack.append(
                             GameOverOverlayScreen(self.screen, self.screenstack))
                         frame_outbound_triggers.append('game_death')
+
+                        if self.powerup.active:
+                            self.powerup.deactivate(self.cursor, self.asteroids, frame_outbound_triggers)
+
                         break
 
         self.update_status_text()
