@@ -47,14 +47,29 @@ if not pygame.mixer:
 from screens import (
     AsteroidImpactInstructionsScreen,
     UserTextScreen,
+    SurveyQuestionScreen,
     AsteroidImpactGameplayScreen,
     AsteroidImpactInfiniteGameplayScreen,
     BlackScreen,
+    ParallelPortTestScreen,
     QuitGame)
 import resources
 from sprites import Target
 import virtualdisplay
-from logger import AsteroidLogger
+from logger import AsteroidLogger, SurveyLogger, ReactionLogger
+import parallelportwrapper
+
+ALL_TRIGGERS = [
+    'step_begin', # on begin of any step
+    'game_level_begin', # in either game mode, when the level begins
+    'game_level_complete', # in either game mode, when the player collects the last diamond
+    'game_death', # in either game mode, when the player touches an asteroid and dies
+    'game_crystal_collected', # in either game mode, when the player collects any diamond
+    'game_shield_activate', # in either game mode, when the player activates a shield
+    'game_slow_activate', # in either game mode, when the player activates the slowdown powerup
+    'adaptive_difficulty_increase', # adaptive, when collecting the last diamond increases to the next level template
+    'adaptive_difficulty_decrease' # adaptive, when dying goes back to an earlier level template
+    ]
 
 # command-line arguments:
 parser = argparse.ArgumentParser(description='Run Asteroid Impact game.')
@@ -91,10 +106,16 @@ parser.add_argument('--subject-run', type=str, default='',
                     help='Subject run number to include in the log.')
 parser.add_argument('--log-filename', type=str, default=None,
                     help='File to save log CSV file to with per-frame data.')
+parser.add_argument('--survey-log-filename', type=str, default=None,
+                    help='File to save log CSV file to with survey response data.')
+parser.add_argument('--reaction-log-filename', type=str, default=None,
+                    help='File to save log CSV file to with reaction prompt data.')
 parser.add_argument('--log-overwrite', choices=['true', 'false'], default='false',
-                    help='Whether to overwrite pre-existing log file.')
+                    help='Whether to overwrite pre-existing log files.')
 parser.add_argument('--trigger-blink', choices=['true', 'false'], default='false',
                     help='Blink sprite on screen when trigger pulse is received.')
+parser.add_argument('--parallel-test-address', type=str, default=None,
+                    help='Launch parallel port test interface with specified parallel port data address.')
 
 
 class GameModeManager(object):
@@ -157,14 +178,17 @@ class GameModeManager(object):
             self.script_json = dict(steps=self.gamesteps)
         
         # load/validate trigger options:
-        self.trigger_enabled = False
+        self.trigger_mode = None
         self.trigger_key = None
         self.trigger_serialport = None
         self.trigger_serialport_byte_value = None
+        self.trigger_parallel_port_address = 0x0000
+        self.trigger_parallel_port_off_value = 0x00
+        self.trigger_parallel_port_on_value = 0x00
         if self.script_json.has_key('trigger_settings'):
             trigger_settings = self.script_json['trigger_settings']
             if trigger_settings['mode'] == 'keyboard':
-                self.trigger_enabled = True
+                self.trigger_mode = 'keyboard'
                 keyboard_settings = trigger_settings['keyboard_options']
                 self.trigger_key = getattr(pygame, keyboard_settings['trigger_key'], None)
                 if not self.trigger_key:
@@ -172,7 +196,7 @@ class GameModeManager(object):
                     print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
                     return
             elif trigger_settings['mode'] == 'serial':
-                self.trigger_enabled = True
+                self.trigger_mode = 'serial'
                 serial_settings = trigger_settings['serial_options']
                 
                 if not serial_settings.has_key('trigger_byte_value'):
@@ -206,9 +230,11 @@ class GameModeManager(object):
                             + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
                         return
                         
+                # try opening serial port
                 try:
                     print 'opening serialport with options:', serialport_options
                     self.trigger_serialport = serial.Serial(**serialport_options)
+                    self.trigger_serialport_options = serialport_options
                 except serial.SerialException as e:
                     print 'could not open configured serial port'
                     print e
@@ -216,14 +242,258 @@ class GameModeManager(object):
                     # exit
                     return
 
-                
-                # try opening serial port and loading remaining settings
+            elif trigger_settings['mode'] == 'parallel':
+                self.trigger_mode = 'parallel'
+                # required: parallel_options
+                if not trigger_settings.has_key('parallel_options'):
+                    print 'Invalid script JSON'
+                    print 'parallel_options attribute is required for parallel mode trigger_settings'
+                    return
+                parallel_options = trigger_settings['parallel_options']
+
+                # required: port address
+                if not parallel_options.has_key('port_address_hex'):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options must have port_address_hex key' 
+                    return
+                try:
+                    self.trigger_parallel_port_address = int(parallel_options['port_address_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options port_address_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # required: ["inactive"] value for status port
+                if not parallel_options.has_key('common_status_value_hex'):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options must have common_status_value_hex key' 
+                    return
+                try:
+                    self.trigger_parallel_port_off_value = int(parallel_options['common_status_value_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options common_status_value_hex must be valid base-16 number'
+                    print e
+                    return
+                # status port shouldn't have lower 3 bits set, nor exceed 8 bits
+                if (self.trigger_parallel_port_off_value < 0 or
+                    255 < self.trigger_parallel_port_off_value or
+                    (self.trigger_parallel_port_off_value & 0x07) != 0):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options common_status_value_hex must be valid base-16 number between 0x08 and 0xF8 and with the bottom 3 bits zero'
+                    return
+
+
+                # required: ["active"] value for status port:
+                if not parallel_options.has_key('trigger_status_value_hex'):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options must have trigger_status_value_hex key' 
+                    return
+                try:
+                    self.trigger_parallel_port_on_value = int(parallel_options['trigger_status_value_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number' 
+                    print e
+                    return
+                # status port shouldn't have lower 3 bits set, nor exceed 8 bits
+                if (self.trigger_parallel_port_on_value < 0 or
+                    255 < self.trigger_parallel_port_on_value or
+                    (self.trigger_parallel_port_on_value & 0x07) != 0):
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number between 0x08 and 0xF8 and with the bottom 3 bits zero'
+                    return
+                # active value must be different from inactive value
+                if self.trigger_parallel_port_off_value == self.trigger_parallel_port_on_value:
+                    print 'Invalid script JSON'
+                    print 'trigger_settings parallel_options trigger_status_value_hex and common_status_value_hex must have different values'
+                    return
+
+
+                self.prev_parallel_trigger_status_value = 0xFF # an impossible value
             elif trigger_settings['mode'] == 'none':
-                self.trigger_enabled = False
+                self.trigger_mode = None
             else:
                 print 'trigger_settings mode of "' + trigger_settings['mode'] + '" should be one of keyboard, serial or none'
                 return
         
+        self.output_trigger_mode = None
+        self.output_trigger_serial_port = None
+        self.output_trigger_parallel_port_address = 0x0000
+        self.output_trigger_parallel_port_off_value = 0x00
+        self.output_trigger_parallel_port_on_frames = 3
+        # used to hold output HIGH for # frames
+        self.output_trigger_parallel_frame_countdown = 0
+        
+        self.output_trigger_parallel_send_byte_by_trigger = {}
+        self.output_trigger_serial_send_strings_by_trigger = {}
+
+        if self.script_json.has_key('output_trigger_settings'):
+            output_settings = self.script_json['output_trigger_settings']
+            if output_settings['mode'] == 'serial':
+                self.output_trigger_mode = 'serial'
+                # todo: implement serial output trigger
+                # todo: handle using same serial port for input/output trigger
+                serial_settings = output_settings['serial_options']
+                
+                serialport_options = dict(
+                    port=serial_settings['port'],
+                    timeout=0.0,
+                    baudrate=19200)
+
+                if serial_settings.has_key('bytesize'):
+                    serialport_options['bytesize'] = int(serial_settings['bytesize'])
+                if serial_settings.has_key('stopbits'):
+                    serialport_options['stopbits'] = int(serial_settings['stopbits'])
+                if serial_settings.has_key('parity'):
+                    parity_options = dict(
+                        even=serial.PARITY_EVEN,
+                        mark=serial.PARITY_MARK,
+                        names=serial.PARITY_NAMES,
+                        none=serial.PARITY_NONE,
+                        odd=serial.PARITY_ODD,
+                        space=serial.PARITY_SPACE)
+                    # convert parity option
+                    if parity_options.has_key(serial_settings['parity']):
+                        serialport_options['parity'] = parity_options[serial_settings['parity']]
+                    else:
+                        print ('serial_options parity value of "' + serial_settings['parity']
+                            + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
+                        return
+                        
+                if self.trigger_serialport and serialport_options == self.trigger_serialport_options:
+                    print 're-using incoming trigger serial port for output'
+                    self.output_trigger_serial_port = self.trigger_serialport
+                else:
+                    try:
+                        print 'opening serialport with options:', serialport_options
+                        self.output_trigger_serial_port = serial.Serial(**serialport_options)
+                    except serial.SerialException as e:
+                        print 'could not open configured serial port for output trigger'
+                        print e
+                        print 'exiting.'
+                        # exit
+                        return
+
+                # load list of triggers
+                # if none supplied, error
+                if self.output_trigger_mode != None and not output_settings.has_key('parallel_trigger_hex_values_by_event'):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings must have serial_trigger_strings_by_event dictionary of strings/strings'
+                    print 'please see the documentation for a sample file'
+                    return
+
+                if not isinstance(output_settings['serial_trigger_strings_by_event'], dict):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings property serial_trigger_strings_by_event must be dictionary of string keys and string values'
+                    print 'please see the documentation for a sample file'
+                    return
+
+                # validate trigger list entries are all known triggers
+                for option,string_val in output_settings['serial_trigger_strings_by_event'].iteritems():
+                    if not option in ALL_TRIGGERS:
+                        print 'Invalid script JSON'
+                        print 'output_trigger_settings trigger_list option of "%s" is not a known outbound trigger'%option
+                        return
+                    string_val = str(string_val)
+                    self.output_trigger_serial_send_strings_by_trigger[option] = string_val
+
+            elif output_settings['mode'] == 'parallel':
+                self.output_trigger_mode = 'parallel'
+                # required: parallel_options
+                if not output_settings.has_key('parallel_options'):
+                    print 'Invalid script JSON'
+                    print 'parallel_options attribute is required for parallel mode output_trigger_settings'
+                    return
+                parallel_options = output_settings['parallel_options']
+
+                # required: port address
+                if not parallel_options.has_key('port_address_hex'):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options must have port_address_hex key' 
+                    return
+                try:
+                    self.output_trigger_parallel_port_address = int(parallel_options['port_address_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options port_address_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # required: ["inactive"] value for data pins
+                if not parallel_options.has_key('common_data_value_hex'):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options must have common_data_value_hex key' 
+                    return
+                try:
+                    self.output_trigger_parallel_port_off_value = int(parallel_options['common_data_value_hex'], 16)
+                except ValueError as e:
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings parallel_options common_data_value_hex must be valid base-16 number' 
+                    print e
+                    return
+
+                # optional trigger_frames value
+                if parallel_options.has_key('trigger_frames'):
+                    try:
+                        self.output_trigger_parallel_port_on_frames = int(parallel_options['trigger_frames'])
+                    except ValueError as e:
+                        print 'Invalid script JSON'
+                        print 'output_trigger_settings parallel_options trigger_frames must be valid base-10 number' 
+                        print e
+                        return
+
+                # load list of triggers
+                # if none supplied, error
+                if self.output_trigger_mode != None and not output_settings.has_key('parallel_trigger_hex_values_by_event'):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings must have parallel_trigger_hex_values_by_event dictionary of strings/strings'
+                    print 'please see the documentation for a sample file'
+                    return
+
+                if not isinstance(output_settings['parallel_trigger_hex_values_by_event'], dict):
+                    print 'Invalid script JSON'
+                    print 'output_trigger_settings property parallel_trigger_hex_values_by_event must be dictionary of string keys and string values'
+                    print 'please see the documentation for a sample file'
+                    return
+
+                # validate trigger list entries are all known triggers
+                for option,byte_val_string in output_settings['parallel_trigger_hex_values_by_event'].iteritems():
+                    if not option in ALL_TRIGGERS:
+                        print 'Invalid script JSON'
+                        print 'output_trigger_settings trigger_list option of "%s" is not a known outbound trigger'%option
+                        return
+                    # parse byte value
+                    if byte_val_string.startswith('0x'):
+                        pass
+                    try:
+                        byte_val = int(byte_val_string, 16)
+                    except ValueError as e:
+                        print e
+                        print 'Invalid script JSON'
+                        print '"%s" is not a valid base-16 integer'%byte_val_string
+                        return
+                    self.output_trigger_parallel_send_byte_by_trigger[option] = byte_val
+            elif output_settings['mode'] == 'none':
+                pass
+            else:
+                print 'output_trigger_settings mode of',output_settings['mode'],'not recognized'
+                return
+
+           
+
+        if self.args.parallel_test_address:
+            # try to parse parallel port address
+            pport_debug_addr = int(self.args.parallel_test_address, 16)
+            
+            # ignore step list and replace with just parallel port test step
+            self.gamesteps = [
+                dict(action='parallel_port_test',
+                     parallel_test_address=pport_debug_addr,
+                     duration=None)]
+
+
         # validate steps and load levels:
         for i, step in enumerate(self.gamesteps):
             # duration must be not specified, none or float
@@ -239,6 +509,86 @@ class GameModeManager(object):
             else:
                 step['trigger_count'] = None
 
+            # reaction_prompts
+            if (step.has_key('reaction_prompts')
+                    and step['reaction_prompts'] != None
+                    and len(step['reaction_prompts']) > 0):
+                for i, reaction_prompt_options in enumerate(step['reaction_prompts']):
+                    # diameter should be number
+                    if reaction_prompt_options.has_key('diameter'):
+                        try:
+                            reaction_prompt_options['diameter'] = float(reaction_prompt_options['diameter'])
+                        except:
+                            print "ERROR: reaction_prompts diameter value of %s should be a number"%repr(reaction_prompt_options['diameter'])
+                            return
+
+                    # position_list should look like [ [0,10], [10,20] ]
+                    if reaction_prompt_options.has_key('position_list'):
+                        if not isinstance(reaction_prompt_options['position_list'], list):
+                            print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers"
+                            return
+                        if len(reaction_prompt_options['position_list']) == 0:
+                            print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers with at least one entry"
+                            return
+                        for pos in reaction_prompt_options['position_list']:
+                            if not isinstance(pos, list) or len(pos) != 2:
+                                print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers"
+                                print 'found invalid entry:', repr(pos)
+                                return
+                            try:
+                                left, top = pos
+                                left += 5 # number-like check
+                                top += 5
+                            except:
+                                print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers"
+                                print 'found invalid entry:', repr(pos)
+                                return
+
+                    # image should be file in data directory. reported on load.
+                    # sound should be file in data directory. reported on load.
+
+                    # showtimes_millis should be list of numbers
+                    if reaction_prompt_options.has_key('showtimes_millis'):
+                        if not isinstance(reaction_prompt_options['showtimes_millis'], list):
+                            print "ERROR: reaction_prompts showtimes_millis should be list of numbers"
+                            return
+                        for n in reaction_prompt_options['showtimes_millis']:
+                            try:
+                                n += 5 # number-like check
+                            except:
+                                print "ERROR: reaction_prompts showtimes_millis should be list of numbers"
+                                return
+
+
+                    # showtimes_trigger_counts should be list of numbers
+                    if reaction_prompt_options.has_key('showtimes_trigger_counts'):
+                        if not isinstance(reaction_prompt_options['showtimes_trigger_counts'], list):
+                            print "ERROR: reaction_prompts showtimes_trigger_counts should be list of numbers"
+                            return
+                        for n in reaction_prompt_options['showtimes_trigger_counts']:
+                            try:
+                                n += 5 # number-like check
+                            except:
+                                print "ERROR: reaction_prompts showtimes_trigger_counts should be list of numbers"
+                                return
+
+                    # input_key should be string starting with K_. reported on load.
+
+                    # timeout_millis should be number
+                    if reaction_prompt_options.has_key('timeout_millis'):
+                        if reaction_prompt_options['timeout_millis'] == 'never':
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['timeout_millis'])
+                            except:
+                                print "ERROR: reaction_prompts timeout_millis value of %s should be a \"never\" or a number"%repr(reaction_prompt_options['timeout_millis'])
+                                return
+            else:
+                step['reaction_prompts'] = None
+
+                
             if step['action'] == 'instructions':
                 # nothing extra to validate
                 pass
@@ -246,6 +596,15 @@ class GameModeManager(object):
                 # 'text' is required
                 if not step.has_key('text'):
                     print ('ERROR: "text" step must have "text" attribute with string value.')
+                    return
+            elif step['action'] == 'survey':
+                # 'prompt' is required
+                if not step.has_key('prompt'):
+                    print ('ERROR: "survey" step must have "prompt" attribute with string value.')
+                    return
+                # 'options' list is required
+                if not step.has_key('options'):
+                    print ('ERROR: "survey" step must have "options" attribute with an array of string values.')
                     return
             elif step['action'] == 'blackscreen':
                 # duration and trigger_count are both optional, so nothing to validate
@@ -273,19 +632,27 @@ class GameModeManager(object):
                     step['level_completion_increment'] = float(step['level_completion_increment'])
                 if step.has_key('level_death_decrement'):
                     step['level_death_decrement'] = float(step['level_death_decrement'])
+                if step.has_key('continuous_asteroids_on_same_level'):
+                    step['continuous_asteroids_on_same_level'] = bool(step['continuous_asteroids_on_same_level'])
+                if step.has_key('show_advance_countdown'):
+                    step['show_advance_countdown'] = bool(step['show_advance_countdown'])
+            elif step['action'] == 'parallel_port_test':
+                # nothing else to validate
+                pass
 
         resources.music_volume = self.args.music_volume
         resources.effects_volume = self.args.effects_volume
 
         if pygame.mixer:
-            pygame.mixer.pre_init(frequency=22050, size=-16, channels=2, buffer=1024)
+            pygame.mixer.pre_init(frequency=22050, size=-16, channels=2, buffer=256)
 
         displayflags = pygame.DOUBLEBUF
         if args.display_mode == 'fullscreen':
             displayflags |= pygame.FULLSCREEN
         else:
             # windowed
-            displayflags |= pygame.NOFRAME
+            if not self.args.parallel_test_address:
+                displayflags |= pygame.NOFRAME
             if self.args.window_x != None and self.args.window_y != None:
                 os.environ['SDL_VIDEO_WINDOW_POS'] = \
                     "%d,%d" % (self.args.window_x, self.args.window_y)
@@ -358,12 +725,29 @@ class GameModeManager(object):
                     self.gamescreenstack,
                     click_to_continue=click_to_continue,
                     text=step['text']))
+        elif step['action'] == 'survey':
+            click_to_continue = True
+            if step.has_key('duration') and step['duration'] != None:
+                click_to_continue = False
+            if step.has_key('trigger_count') and step['trigger_count'] != None:
+                click_to_continue = False
+
+            self.gamescreenstack.append(
+                SurveyQuestionScreen(
+                    self.screen,
+                    self.gamescreenstack,
+                    prompt=step['prompt'],
+                    survey_options=step['options'],
+                    click_to_continue=click_to_continue))
         elif step['action'] == 'blackscreen':
             self.gamescreenstack.append(BlackScreen(self.screen, self.gamescreenstack))
         elif step['action'] == 'game':
             self.gamescreenstack.append(
                 AsteroidImpactGameplayScreen(
-                    self.screen, self.gamescreenstack, step['levellist']))
+                    self.screen,
+                    self.gamescreenstack,
+                    step['levellist'],
+                    step['reaction_prompts']))
         elif step['action'] == 'game-adaptive':
             kwargs = {}
             if step.has_key('start_level'):
@@ -372,15 +756,26 @@ class GameModeManager(object):
                 kwargs['level_completion_increment'] = step['level_completion_increment']
             if step.has_key('level_death_decrement'):
                 kwargs['level_death_decrement'] = step['level_death_decrement']
+            if step.has_key('continuous_asteroids_on_same_level'):
+                kwargs['continuous_asteroids_on_same_level'] = step['continuous_asteroids_on_same_level']
+            if step.has_key('show_advance_countdown'):
+                kwargs['show_advance_countdown'] = step['show_advance_countdown']
+
             self.gamescreenstack.append(
                 AsteroidImpactInfiniteGameplayScreen(
                     self.screen,
                     self.gamescreenstack,
                     step['level_templates_list'],
+                    step['reaction_prompts'],
                     **kwargs))
+        elif step['action'] == 'parallel_port_test':
+            self.gamescreenstack.append(
+                ParallelPortTestScreen(
+                    self.screen,
+                    self.gamescreenstack,
+                    port_address=step['parallel_test_address']))
         else:
             raise ValueError('Unknown step action "%s"'%step['action'])
-
 
     def load_levels(self, step):
         "Load level details for game step from inline JSON or file"
@@ -459,6 +854,8 @@ class GameModeManager(object):
             pygame.mixer.music.play(-1)
 
         asteroidlogger = AsteroidLogger(self.args.log_filename, self.args.log_overwrite == 'true', self.max_asteroid_count)
+        surveylogger = SurveyLogger(self.args.survey_log_filename, self.args.log_overwrite == 'true')
+        reactionlogger = ReactionLogger(self.args.reaction_log_filename, self.args.log_overwrite == 'true')
         logrowdetails = {}
 
         self.total_millis = 0
@@ -481,7 +878,24 @@ class GameModeManager(object):
         else:
             trigger_blink_sprites = pygame.sprite.Group([])
 
+        if self.args.parallel_test_address:
+            # try to parse parallel port address
+            pport_debug_addr = int(self.args.parallel_test_address, 16)
+            
+            # ignore step list and just launch my new window
+# hack todo: replace step list with just this step
+            self.gamescreenstack = []
+            self.gamescreenstack.append(
+                ParallelPortTestScreen(
+                    self.screen,
+                    self.gamescreenstack,
+                    port_address=pport_debug_addr))
+        else:
+            pport_debug_addr = None
+
         #Main Loop
+        first_update = True
+        next_frame_outbound_triggers = []
         while 1:
             # more consistent, more cpu
             real_millis = clock.tick_busy_loop(60)
@@ -499,8 +913,12 @@ class GameModeManager(object):
                 millis_list = (real_millis,)
 
             for millis in millis_list:
+                # used to indicate we should quit game after finishing update logic for this frame
+                quitgame = False
                 self.total_millis += millis
                 self.step_millis += millis
+
+                frame_start_gamescreenstack = self.gamescreenstack[:]
 
                 logrowdetails.clear()
                 logrowdetails['subject_number'] = self.args.subject_number
@@ -511,23 +929,71 @@ class GameModeManager(object):
                 logrowdetails['step_millis'] = self.step_millis
                 logrowdetails['top_screen'] = self.gamescreenstack[-1].name
 
-                #Handle Input Events
+                frame_outbound_triggers = next_frame_outbound_triggers
+                next_frame_outbound_triggers = []
+                if first_update:
+                    first_update = False
+                    frame_outbound_triggers.append('step_begin')
 
-                # update the topmost screen:
                 events = pygame.event.get()
+                #Handle Keyboard triggers
+                for event in events:
+                    # check for keyboard trigger
+                    if (self.trigger_mode == 'keyboard'
+                        and self.trigger_key != None 
+                        and event.type == KEYDOWN 
+                        and event.key == self.trigger_key):
+                        self.step_trigger_count += 1
+                        trigger_received_this_tick = True
+
+                # Check for serial trigger:
+                if self.trigger_mode == 'serial' and self.trigger_serialport != None:
+                    serial_input = self.trigger_serialport.read()
+                    if serial_input:
+                        for c in serial_input:
+                            if ord(c) == self.trigger_serialport_byte_value:
+                                self.step_trigger_count += 1
+                                trigger_received_this_tick = True
+                        # debug print:
+                        print ">", repr(serial_input)
+                        sys.stdout.flush()
+                
+                # check for parallel port trigger
+                if self.trigger_mode == 'parallel':
+                    current_parallel_trigger_status_value = self.get_parallel_trigger_status_value()
+                    if (self.prev_parallel_trigger_status_value == self.trigger_parallel_port_off_value and
+                        current_parallel_trigger_status_value == self.trigger_parallel_port_on_value):
+                        self.step_trigger_count += 1
+                        trigger_received_this_tick = True
+                    self.prev_parallel_trigger_status_value = current_parallel_trigger_status_value
+                
+                logrowdetails['step_trigger_count'] = self.step_trigger_count
+                    
+                try:
+                    if len(self.gamescreenstack) > 0:
+                        # update frontmost screen
+                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count, reactionlogger)
+                        # update all screens in stack front to back
+                        for screen in reversed(self.gamescreenstack):
+                            screen.update_always(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count, reactionlogger)
+                except QuitGame as e:
+                    print e
+                    return
+
+                #Handle Global Input Events
                 for event in events:
                     if event.type == QUIT:
-                        return
+                        quitgame = True
                     elif (event.type == KEYDOWN
                           and event.key == K_q
                           and (event.mod & pygame.KMOD_META)):
                         print 'CMD+Q Pressed. Exiting'
-                        return
+                        quitgame = True
                     elif (event.type == KEYDOWN 
                           and event.key == K_F4
                           and (event.mod & pygame.KMOD_ALT)):
                         print 'ALT+F4 Pressed. Exiting'
-                        return
+                        quitgame = True
                     elif (event.type == KEYDOWN
                           and event.key == K_c
                           and (event.mod & pygame.KMOD_ALT) != 0):
@@ -542,36 +1008,7 @@ class GameModeManager(object):
                         print 'CTRL+n pressed. Advancing to next step'
                         self.gamescreenstack = []
                     else:
-                        # check for keyboard trigger
-                        if (self.trigger_enabled
-                            and self.trigger_key != None 
-                            and event.type == KEYDOWN 
-                            and event.key == self.trigger_key):
-                            self.step_trigger_count += 1
-                            trigger_received_this_tick = True
                         pass
-                        #print event
-
-                # Check for serial trigger:
-                if self.trigger_enabled and self.trigger_serialport != None:
-                    serial_input = self.trigger_serialport.read()
-                    if serial_input:
-                        for c in serial_input:
-                            if ord(c) == self.trigger_serialport_byte_value:
-                                self.step_trigger_count += 1
-                                trigger_received_this_tick = True
-                        # debug print:
-                        print ">", repr(serial_input)
-                        sys.stdout.flush()
-                
-                logrowdetails['step_trigger_count'] = self.step_trigger_count
-                    
-                try:
-                    if len(self.gamescreenstack) > 0:
-                        self.gamescreenstack[-1].update(millis, logrowdetails, events)
-                except QuitGame as e:
-                    print e
-                    return
 
                 # Check if max duration on this step has expired
                 step = self.gamesteps[self.stepindex]
@@ -584,15 +1021,28 @@ class GameModeManager(object):
                     # end this step
                     self.gamescreenstack = []
 
+                # call .after_close() on any now closed screens:
+                for s in reversed(frame_start_gamescreenstack):
+                    if quitgame or s not in self.gamescreenstack:
+                        s.after_close(logrowdetails, reactionlogger, surveylogger)
+
+                asteroidlogger.log(logrowdetails)
+
+                self.update_outbound_triggers(frame_outbound_triggers)
+                
                 if len(self.gamescreenstack) == 0:
                     self.stepindex += 1
                     if self.stepindex >= len(self.gamesteps):
                         # all steps completed
-                        return
-                    self.init_step()
-                    # Switch to gameplay
+                        quitgame = True
+                    else:
+                        # init step for next frame:
+                        self.init_step()
+                        next_frame_outbound_triggers.append('step_begin')
 
-                asteroidlogger.log(logrowdetails)
+                # game quit is delayed to here so logging happens for final update
+                if quitgame:
+                    return
 
 
             # draw topmost opaque screen and everything above it
@@ -615,6 +1065,69 @@ class GameModeManager(object):
                 trigger_blink_sprites.draw(self.screen)
 
             pygame.display.flip()
+
+    def get_parallel_trigger_status_value(self):
+        # status byte is at base address + 1
+        # mask off bottom 3 bits because they vary by parallel port card
+        return parallelportwrapper.Inp32(self.trigger_parallel_port_address + 1) & 0xF8
+
+    def update_outbound_triggers(self, frametriggerlist):
+        print_triggers = False
+
+        # see if there are any triggers to send
+        send_trigger = False
+
+        if self.output_trigger_mode == 'serial':
+            serial_trigger_output_strings = []
+            for t in frametriggerlist:
+                if self.output_trigger_serial_send_strings_by_trigger.has_key(t):
+                    serial_trigger_output_strings.append(self.output_trigger_serial_send_strings_by_trigger[t])
+                    send_trigger = True
+                    if print_triggers: print t
+            if print_triggers and send_trigger: print
+
+            if not send_trigger:
+                return
+
+            for s in serial_trigger_output_strings:
+                self.output_trigger_serial_port.write(s)
+            self.output_trigger_serial_port.flush()
+        elif self.output_trigger_mode == 'parallel':
+            parallel_trigger_bytes = []
+            for t in frametriggerlist:
+                if self.output_trigger_parallel_send_byte_by_trigger.has_key(t):
+                    parallel_trigger_bytes.append(self.output_trigger_parallel_send_byte_by_trigger[t])
+                    send_trigger = True
+                    if print_triggers: print t
+            if print_triggers and send_trigger: print
+
+            if send_trigger:
+                # combine multiple triggers from this frame by seeing which bits should be set/unset
+                # compute 'on' value that has starts with self.output_trigger_parallel_port_off_value
+                # then combines all changed bits from parallel_trigger_bytes corresponding to triggers this frame
+                changed_bits = 0x00
+                for b in parallel_trigger_bytes:
+                    changed_bits = (changed_bits | 
+                        # xor to find bits that this trigger changed from "off" byte value
+                        (b ^ self.output_trigger_parallel_port_off_value))
+                active_value = self.output_trigger_parallel_port_off_value ^ changed_bits
+
+                # start now
+                self.output_trigger_parallel_frame_countdown = self.output_trigger_parallel_port_on_frames
+                parallelportwrapper.Out32(
+                    self.output_trigger_parallel_port_address,
+                    active_value)
+            else:
+                # not a new trigger, but still need to handle switching to off when trigger frames end
+                if self.output_trigger_parallel_frame_countdown > 0:
+                    self.output_trigger_parallel_frame_countdown -= 1
+                    if self.output_trigger_parallel_frame_countdown == 0:
+                        # set parallel port output back to default value
+                        parallelportwrapper.Out32(
+                            self.output_trigger_parallel_port_address,
+                            self.output_trigger_parallel_port_off_value)
+        elif self.output_trigger_mode != None:
+            raise QuitGame('output trigger mode of %s is not implemented'%self.output_trigger_mode)
 
 def main():
     "parse console arguments and start game"

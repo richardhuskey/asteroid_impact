@@ -11,7 +11,7 @@ AsteroidImpact game sprites including sprite-specific behaviors.
 """
 from __future__ import absolute_import, division
 import pygame
-from resources import load_image, load_sound
+from resources import load_image, load_sound, NoneSound
 import virtualdisplay
 import math
 
@@ -23,17 +23,24 @@ class VirtualGameSprite(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self) #call Sprite initializer
         self.gamerect = pygame.Rect(0, 0, 1, 1)
+
+    def stop_audio(self):
+        # override in derived classes
+        pass
+
     def update_rect(self):
         self.rect = virtualdisplay.screenrect_from_gamerect(self.gamerect)
+
 
 #classes for our game objects
 class Cursor(VirtualGameSprite):
     """The Player's ship is moved around using the mouse cursor"""
-    def __init__(self):
+    def __init__(self, game_bounds=virtualdisplay.GAME_PLAY_AREA):
         VirtualGameSprite.__init__(self) #call Sprite initializer
         # find screen diameter
         self.gamediameter = 32
         self.gamerect = pygame.Rect(0, 0, self.gamediameter,self.gamediameter)
+        self.game_bounds = game_bounds
         self.update_rect()
         self.image = load_image(
             'cursor.png',
@@ -43,22 +50,22 @@ class Cursor(VirtualGameSprite):
     def update(self, millis):
         """Move the cursor based on the mouse position"""
         pos = pygame.mouse.get_pos()
+        game_pos = virtualdisplay.gamepoint_from_screenpoint(pos)
 
         # if the cursor is outside of the game area, move it back
-        if not virtualdisplay.screenplayarea.collidepoint(pos):
-            pos = (
+        if not self.game_bounds.collidepoint(game_pos):
+            game_pos = (
                 max(
-                    min(pos[0], virtualdisplay.screenplayarea.right),
-                    virtualdisplay.screenplayarea.left),
+                    min(game_pos[0], self.game_bounds.right),
+                    self.game_bounds.left),
                 max(
-                    min(pos[1], virtualdisplay.screenplayarea.bottom),
-                    virtualdisplay.screenplayarea.top))
+                    min(game_pos[1], self.game_bounds.bottom),
+                    self.game_bounds.top))
+            pos = virtualdisplay.screenpoint_from_gamepoint(game_pos)
             pygame.mouse.set_pos(pos)
 
-        game_pos = virtualdisplay.gamepoint_from_screenpoint(pos)
         self.gamerect.center = game_pos
         self.update_rect()
-
 
 class Target(VirtualGameSprite):
     """Targets (Crystals) don't move, but do play a sound when collected"""
@@ -73,6 +80,9 @@ class Target(VirtualGameSprite):
             convert_alpha=True)
         self.pickup_sound = load_sound('ring_inventory.wav')
 
+    def stop_audio(self):
+        self.pickup_sound.stop()
+
     def pickedup(self):
         """Play pick up sound"""
         self.pickup_sound.play()
@@ -80,6 +90,7 @@ class Target(VirtualGameSprite):
     def update(self, millis):
         # hit test done in AsteroidImpactGameplayScreen
         pass
+
 
 def map_range(value, from_low, from_high, to_low, to_high):
     'return value in range [from_low, from_high] mapped to range [to_low, to_high]'
@@ -207,23 +218,23 @@ class BasePowerup(VirtualGameSprite):
 
         self.used = False
 
-    def update(self, millis, cursor, asteroids):
+    def update(self, millis, frame_outbound_triggers, cursor, asteroids):
         """Deactivate power-up if duration has expired"""
         if self.active:
             self.duration += millis / 1000.
 
             if self.duration > self.maxduration:
                 # deactivate:
-                self.deactivate(cursor, asteroids)
+                self.deactivate(cursor, asteroids, frame_outbound_triggers)
 
-    def activate(self, *args):
+    def activate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Activate power-up because it was picked up"""
         self.oldgamerect = self.gamerect.copy()
         self.active = True
         self.duration = 0
         self.used = False
 
-    def deactivate(self, cursor, asteroids):
+    def deactivate(self, cursor, asteroids, frame_outbound_triggers):
         """Deactivate power-up"""
         self.active = False
         self.gamerect = self.oldgamerect
@@ -251,9 +262,13 @@ class SlowPowerup(BasePowerup):
 
         self.speedfactor = 0.25
 
-    def update(self, millis, cursor, asteroids):
+    def stop_audio(self):
+        self.sound_end.stop()
+        self.sound_begin.stop()
+
+    def update(self, millis, frame_outbound_triggers, cursor, asteroids):
         """ Play effect end sound if due"""
-        BasePowerup.update(self, millis, cursor, asteroids)
+        BasePowerup.update(self, millis, frame_outbound_triggers, cursor, asteroids)
 
         if self.active:
             # start the end effect sound to end when powerup ends:
@@ -264,9 +279,9 @@ class SlowPowerup(BasePowerup):
             for asteroid in asteroids:
                 asteroid.speedfactor = self.speedfactor
 
-    def activate(self, cursor, asteroids, *args):
+    def activate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Play start sound. Slow asteroids to a crawl"""
-        BasePowerup.activate(self, *args)
+        BasePowerup.activate(self, cursor, asteroids, frame_outbound_triggers, *args)
 
         # adjust speed of asteroids
         for asteroid in asteroids:
@@ -281,9 +296,11 @@ class SlowPowerup(BasePowerup):
 
         self.sound_end_started = False
 
-    def deactivate(self, cursor, asteroids):
+        frame_outbound_triggers.append('game_slow_activate')
+
+    def deactivate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Restore normal speed of asteroids"""
-        BasePowerup.deactivate(self, cursor, asteroids)
+        BasePowerup.deactivate(self, cursor, asteroids, frame_outbound_triggers, *args)
 
         # restore speed of asteroids
         for asteroid in asteroids:
@@ -312,17 +329,23 @@ class ShieldPowerup(BasePowerup):
         self.sound_end_duration = self.sound_end.get_length() - 1.0
         self.sound_end_started = False
 
-    def activate(self, cursor, asteroids, *args):
+    def stop_audio(self):
+        self.sound_begin.stop()
+        self.sound_end.stop()
+
+    def activate(self, cursor, asteroids, frame_outbound_triggers, *args):
         """Play activation sound"""
-        BasePowerup.activate(self, *args)
+        BasePowerup.activate(self, cursor, asteroids, frame_outbound_triggers, *args)
 
         self.sound_begin.play()
 
         self.sound_end_started = False
 
-    def update(self, millis, cursor, asteroids):
+        frame_outbound_triggers.append('game_shield_activate')
+
+    def update(self, millis, frame_outbound_triggers, cursor, asteroids):
         """Follow cursor. Play effect end sound if due"""
-        BasePowerup.update(self, millis, cursor, asteroids)
+        BasePowerup.update(self, millis, frame_outbound_triggers, cursor, asteroids)
         if self.active:
             # follow on top of cursor:
             self.gamerect.center = cursor.gamerect.center
@@ -354,4 +377,174 @@ class NonePowerup(BasePowerup):
         self.type = 'none'
         self.image = None
         self.update_rect()
-        #print 'nonepowerup rect', self.gamerect
+
+class ReactionTimePrompt(VirtualGameSprite):
+    """Game element to test reaction time"""
+    def __init__(
+            self,
+            diameter=64,
+            position_list=[[20,20]],
+            sound='tone440.wav',
+            image='triangle.png',
+            input_key='K_1',
+            showtimes_millis=[],
+            showtimes_trigger_counts=[],
+            timeout_millis = 5000,
+            stay_visible = False,
+            **kwargs_extra):
+        #if kwargs_extra: print 'extra arguments:', kwargs_extra
+        VirtualGameSprite.__init__(self) #call Sprite initializer
+        self.gamediameter = diameter
+        self.position_list = position_list
+        self.position_index = -1
+        left, top = self.position_list[self.position_index]
+        self.gamerect_visible = pygame.Rect(left, top, diameter, diameter)
+        self.gamerect_hidden = pygame.Rect(-9999, -9999, diameter, diameter)
+        self.gamerect = self.gamerect_hidden
+        self.update_rect()
+
+        if not image or image == 'none':
+            image = 'transparent.png'
+        self.image = load_image(
+            image,
+            (self.rect.width, self.rect.height),
+            convert_alpha=True)
+        self.image_name = image
+        
+        if sound and sound != 'none':
+            self.prompt_sound = load_sound(sound, mixing_group='reaction')
+            self.sound_name = sound
+        else:
+            self.prompt_sound = NoneSound()
+            self.sound_name = 'none'
+
+        self.showtimes_millis = showtimes_millis
+        # todo: implement trigger showing
+        self.showtimes_trigger_counts = showtimes_trigger_counts
+        if isinstance(timeout_millis, str) or isinstance(timeout_millis, unicode):
+            timeout_millis = None
+        self.timeout_millis = timeout_millis
+        self.stay_visible = stay_visible
+        self.active = False
+        self.visible = False
+        self.total_elapsed = 0
+        self.showtime_last = 0 # millis when shown
+        self.step_trigger_count_last = 0
+        if input_key.startswith('K_MOUSE'):
+            mousebutton_index = 0
+            if input_key == 'K_MOUSE1': mousebutton_index = 0 # left mouse
+            elif input_key == 'K_MOUSE2': mousebutton_index = 1 # middle mouse
+            elif input_key == 'K_MOUSE3': mousebutton_index = 2 # right mouse
+            else:
+                raise QuitGame('mouse button for input_key for reaction propmt of %s is not recognized'%input_key)
+                raise QuitGame()
+
+            self.dismiss_test = lambda evt: evt.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[mousebutton_index]
+        else:
+            # input_key should correspond to actual key
+            pygame_key_constant = getattr(pygame, input_key, None)
+            if not pygame_key_constant:
+                print 'input_key of "%s" not found. Please use one of the following'%input_key
+                print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
+                raise QuitGame()
+            self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
+
+    def activate_and_show(self):
+        # prepare for next position:
+        self.position_index = (self.position_index + 1) % len(self.position_list)
+        left, top = self.position_list[self.position_index]
+        self.gamerect_visible = pygame.Rect(left, top, self.gamediameter, self.gamediameter)
+
+        self.gamerect = self.gamerect_visible
+        self.update_rect()
+        self.active = True
+        self.visible = True
+        self.prompt_sound.play()
+
+    def deactivate_and_hide(self):
+        self.gamerect = self.gamerect_hidden
+        self.update_rect()
+        self.active = False
+        self.visible = False
+
+        # fadeout avoids "click" at end, but I wish I could do shorter duration
+        self.prompt_sound.fadeout(100)
+
+    def update(self, millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count):
+        old_total_elapsed = self.total_elapsed
+        self.total_elapsed += millis
+
+        if not self.visible:
+            for showtime in self.showtimes_millis:
+                if (old_total_elapsed < showtime and
+                    showtime <= self.total_elapsed):
+                    # show
+                    self.showtime_last = self.total_elapsed
+                    self.activate_and_show()
+            if (not self.visible 
+                and self.step_trigger_count_last != step_trigger_count
+                and self.showtimes_trigger_counts
+                and step_trigger_count in self.showtimes_trigger_counts):
+                    # show
+                    self.showtime_last = self.total_elapsed
+                    self.activate_and_show()
+        else:
+            visible_ms = self.total_elapsed - self.showtime_last
+            logrowdetails['reaction_prompt_state'] = 'waiting'
+            logrowdetails['reaction_prompt_millis'] = visible_ms
+            logrowdetails['reaction_prompt_sound'] = self.sound_name
+            logrowdetails['reaction_prompt_image'] = self.image_name
+
+            if self.active:
+                # showing now and waiting keypress
+                for event in events:
+                    if self.dismiss_test(event):
+                        logrowdetails['reaction_prompt_state'] = 'complete'
+                        logrowdetails['reaction_prompt_millis'] = visible_ms
+                        # correct key pressed
+                        if self.stay_visible:
+                            # just deactivate, don't hide or stop playing sounds until timeout
+                            self.active = False
+                        else:
+                            self.deactivate_and_hide()
+
+                        # log completed
+                        self.logme(logrowdetails, reactionlogger)
+            else:
+                # no longer active because key was already pressed.
+                logrowdetails['reaction_prompt_state'] = 'after_complete'
+
+            if self.timeout_millis:
+                if self.showtime_last + self.timeout_millis <= self.total_elapsed:
+                    # stayed visible entire time allowed
+                    # might be because was supposed to stay visible after key press, so check before logging/notifying
+                    if self.active:
+                        # still waiting for key that didn't happen in time, log it
+                        logrowdetails['reaction_prompt_state'] = 'timeout'
+                        logrowdetails['reaction_prompt_millis'] = visible_ms
+
+                        # log timed out
+                        self.logme(logrowdetails, reactionlogger)
+
+                    self.deactivate_and_hide()
+
+        self.step_trigger_count_last = step_trigger_count
+
+    def step_end_deactivate(self, logrowdetails, reactionlogger):
+        if self.visible:
+            self.prompt_sound.stop()
+            # log timeout_step_end
+            visible_ms = self.total_elapsed - self.showtime_last
+            logrowdetails['reaction_prompt_sound'] = self.sound_name
+            logrowdetails['reaction_prompt_image'] = self.image_name
+            logrowdetails['reaction_prompt_state'] = 'timeout_step_end'
+            logrowdetails['reaction_prompt_millis'] = visible_ms
+            self.logme(logrowdetails, reactionlogger)
+
+    def logme(self, logrowdetails, reactionlogger):
+        newreactionlogrow = {}
+        for col in reactionlogger.columns:
+            if logrowdetails.has_key(col):
+                newreactionlogrow[col] = logrowdetails[col]
+        reactionlogger.log(newreactionlogrow)
+

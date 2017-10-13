@@ -8,7 +8,7 @@ cd ..
 
 @REM build source zip
 del "dist\AsteroidImpact Source.zip"
-7z a "dist\AsteroidImpact Source.zip" *.py *.json *.txt *.bat data\ doc\ levels\
+7z a "dist\AsteroidImpact Source.zip" *.py *.json *.txt *.bat *.spec *.dll data\ doc\ levels\
 if errorlevel 1 goto somethingbad
 
 @REM build documentation zip

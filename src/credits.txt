@@ -27,3 +27,6 @@ crystal.png (exported from gamesprites.svg)
 cursor.png (exported from gamesprites.svg)
 shield.png (exported from gamesprites.svg)
 
+TODO: inpout32.dll/inpoutx64.dll
+MIT licensed, see http://www.highrez.co.uk/Downloads/InpOut32/default.htm
+

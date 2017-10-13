@@ -12,6 +12,7 @@ Resource-loading utilities for AsteroidImpact
 
 from __future__ import absolute_import, division
 import os, sys, pygame
+import pygame.ftfont
 
 # Changing these only takes effect on newly loaded sounds
 # so set volume before any sounds are loaded
@@ -21,6 +22,8 @@ effects_volume = 1.0
 # scaledimage_cache[(some,key)] returns a ScaledImageCache
 # see load_image()
 scaledimage_cache = {}
+
+sound_cache = {}
 
 def resource_path(filename):
     """
@@ -40,8 +43,8 @@ def load_font(name, size):
     'Load pygame font for specified filename, font size'
     fullname = resource_path(os.path.join('data', name))
 
-    if pygame.font:
-        return pygame.font.Font(fullname, size)
+    if pygame.ftfont:
+        return pygame.ftfont.Font(fullname, size)
 
     class NoneFont:
         def __init__(self, filename, fontsize):
@@ -128,6 +131,7 @@ class ScaledImageCache(object):
         while log2_size < len(self.cache_by_log2_size) and target_dia < maxsize:
             target_dia *= 2
             log2_size += 1
+        if log2_size >= len(self.cache_by_log2_size): log2_size = len(self.cache_by_log2_size)-1
         larger_img = self.cache_by_log2_size[log2_size]
         image_scaled = pygame.transform.smoothscale(larger_img, size)
         self.cache_by_size[size] = image_scaled
@@ -153,24 +157,83 @@ def load_image(name, size=None, convert_alpha=False, colorkey=None):
     scaledimage_cache[cache_key] = ScaledImageCache(name, convert_alpha, colorkey)
     return scaledimage_cache[cache_key].get(size)
 
-def load_sound(name):
+class NoneSound:
+    '''Stub sound object that responds to same methods but plays no audio'''
+    def __init__(self):
+        self.volume = 1.0
+    def play(self): pass
+    def stop(self): pass
+    def fadeout(self, duration): pass
+    def get_length(self): return 1.0 #seconds
+    def set_volume(self, volume): self.volume = volume
+    def get_volume(self): return self.volume
+
+class MixedSound(pygame.mixer.Sound):
+    '''Sound object that reduces volume when self or other sounds in same group are played at simultaneously.'''
+    def __init__(self, filename, mixing_group, default_volume):
+        pygame.mixer.Sound.__init__(self, filename)
+        self.filename = filename
+        self.mixing_group = mixing_group
+        self.default_volume = default_volume
+        self.set_volume(self.default_volume)
+    def play(self):
+        # how many sounds in the current mixing group will be playing?
+        # unfortunately s.get_num_channels() doesn't return only PLAYING channels
+
+        playing_count_total = 0
+        # find total playing count for mixing group:
+        playing_count_by_filename = {}
+        for i in xrange(pygame.mixer.get_num_channels()):
+            channel = pygame.mixer.Channel(i)
+            if channel.get_busy():
+                s = channel.get_sound()
+                if isinstance(s, MixedSound) and s.mixing_group == self.mixing_group:
+                    if not playing_count_by_filename.has_key(s.filename):
+                        playing_count_by_filename[s.filename] = (s, 1)
+                    else:
+                        playing_count_by_filename[s.filename] = (s, playing_count_by_filename[s.filename][1]+1)
+                    playing_count_total += 1
+        
+        playing_count_total += 1 # me once I start playing
+        # increment play count for me:
+        if not playing_count_by_filename.has_key(self.filename):
+            playing_count_by_filename[self.filename] = (self, 1)
+        else:
+            playing_count_by_filename[self.filename] = (self, playing_count_by_filename[self.filename][1]+1)
+
+        # adjust volume of myself and others for number of times playing
+        for filename,packed_val in playing_count_by_filename.iteritems():
+            s, playing_count_this = packed_val
+            s.set_volume(s.default_volume * playing_count_this / playing_count_total)
+
+        channel = pygame.mixer.Sound.play(self)
+        # todo: register on sound ending to adjust volume again
+
+def load_sound(name, mixing_group=None):
     """
     Load audio clip from file name.
+
+    mixing_group is key for which group the sound should mix with. Mixed sounds in the same group
+    reduce in volume based on how many are currently playing.
     """
-    class NoneSound:
-        def __init(self):
-            self.volume = 1.0
-        def play(self): pass
-        def stop(self): pass
-        def get_length(self): return 1.0 #seconds
-        def set_volume(self, volume): self.volume = volume
-        def get_volume(self): return self.volume
     if not pygame.mixer or not pygame.mixer.get_init():
         return NoneSound()
     fullname = resource_path(os.path.join('data', name))
     try:
-        sound = pygame.mixer.Sound(fullname)
-        sound.set_volume(effects_volume)
+        key = (fullname, mixing_group)
+        if not sound_cache.has_key(key):
+            if not os.path.isfile(fullname):
+                print 'Cannot load sound:', fullname, 'file does not exist'
+                raise SystemExit
+
+            if not mixing_group:
+                sound = pygame.mixer.Sound(fullname)
+                sound.set_volume(effects_volume)
+            else:
+                sound = MixedSound(fullname, mixing_group, effects_volume)
+
+            sound_cache[key] = sound
+        return sound_cache[key]
     except pygame.error, message:
         print 'Cannot load sound:', fullname
         raise SystemExit, message

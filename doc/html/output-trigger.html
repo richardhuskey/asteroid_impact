@@ -1,0 +1,251 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Output Triggers &#8212; Asteroid Impact 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Game Script JSON" href="scriptjson.html" />
+    <link rel="prev" title="Input Triggers" href="input-trigger.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="output-triggers">
+<h1>Output Triggers<a class="headerlink" href="#output-triggers" title="Permalink to this headline">¶</a></h1>
+<p>Asteroid Impact can be configured to synchronize with external systems to notify them of certain game events over a serial port, or over a parallel port.</p>
+<p>The configuration specifies whether to send to parallel or serial, which device to connect to, and a lookup of which game events to send notifications for, and what value to send for that event.</p>
+<div class="section" id="json-configuration-sample">
+<h2>JSON Configuration Sample<a class="headerlink" href="#json-configuration-sample" title="Permalink to this headline">¶</a></h2>
+<p>This would go inside your configuration JSON, at the same level as the <code class="docutils literal"><span class="pre">&quot;steps&quot;=[]</span></code> list</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+
+  <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;9&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span>
+  <span class="p">},</span>
+
+  <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x02&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x04&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;0x40&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x80&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0xFF&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">3</span>
+  <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">&quot;mode&quot;</span></code> Should be <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> to disable output triggers, <code class="docutils literal"><span class="pre">&quot;serial&quot;</span></code>, or <code class="docutils literal"><span class="pre">&quot;parallel&quot;</span></code></p>
+<p>The available game events are the following:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;step_begin&quot;</span></code></dt>
+<dd>Occurs on the beginning of each step.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_level_begin&quot;</span></code></dt>
+<dd>Occurs when the level begins, or changes. The level changes when the player collects the number of crystals for the level.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;</span></code></dt>
+<dd>When the player picks up the last crystal in a level in either the standard gameplay or adaptive gameplay steps.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_death&quot;</span></code></dt>
+<dd>When the player touches an asteroid during gameplay and dies. This works in both the game and adaptive gameplay steps.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_shield_activate&quot;</span></code></dt>
+<dd>When the player picks and activates a shield power-up.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_slow_activate&quot;</span></code></dt>
+<dd>When the player picks and activates a time slowdown power-up.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_crystal_collected&quot;</span></code></dt>
+<dd>When the player picks and activates a time slowdown power-up.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;</span></code></dt>
+<dd>When the player completes a level in the adaptive gameplay mode, and the “level score” increments to the next more difficult level in the list.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_decrease&quot;</span></code></dt>
+<dd>When the player touches an asteroid and dies in the adaptive gameplay mode, and the “level score” decrements to the next less difficult level in the list.</dd>
+</dl>
+<p>Parallel-specific configuration and serial-specific configuration are described in their own sections below.</p>
+</div>
+<div class="section" id="serial-output-triggers">
+<h2>Serial Output Triggers<a class="headerlink" href="#serial-output-triggers" title="Permalink to this headline">¶</a></h2>
+<p>When configured for serial output, the game will output the specified ascii-encoded string to the configured serial port on the frame the event happens.</p>
+<p>If more than one event happens on the same frame, both strings are output. For example, in adaptive gameplay when the player dies the difficulty can increase on the same frame. When configured with the sample below <code class="docutils literal"><span class="pre">N-</span></code> will be sent over serial.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
+
+  <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;+&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;baudrate&quot;</span><span class="p">:</span> <span class="mi">19200</span>
+  <span class="p">},</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>The options for the <code class="docutils literal"><span class="pre">serial_options</span></code> are the following:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;port&quot;</span></code></dt>
+<dd>This should be the device name of your serial port. In Windows it will likely be <code class="docutils literal"><span class="pre">&quot;COM1&quot;</span></code> or similar. Check Device Manager to find your serial port. In Linux it will likely be something like <code class="docutils literal"><span class="pre">&quot;/dev/ttyUSB0&quot;</span></code>, and in OSX something like <code class="docutils literal"><span class="pre">&quot;/dev/tty.usbmodem1234&quot;</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">&quot;baudrate&quot;</span></code></dt>
+<dd>The baudrate in symbols/second to connect to the serial port. For hardware serial devices connecting at the wrong baudrate will result in gibberish characters being read.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;bytesize&quot;</span></code></dt>
+<dd>Number of bits per byte. Defaults to 8, but it can sometimes be 7, 6 or 5.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;stopbits&quot;</span></code></dt>
+<dd>Number of stop bits. Defaults to 1, can be 2.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;parity&quot;</span></code></dt>
+<dd>The parity must be one of the following: <code class="docutils literal"><span class="pre">&quot;even&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;mark&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;names&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;odd&quot;</span></code>, or <code class="docutils literal"><span class="pre">&quot;space&quot;</span></code>.</dd>
+</dl>
+</div>
+<div class="section" id="parallel-output">
+<h2>Parallel Output<a class="headerlink" href="#parallel-output" title="Permalink to this headline">¶</a></h2>
+<p>Note: Parallel output only works on Windows computers, and they require the inpout32 driver to be installed.</p>
+<p>Below is a sample script JSON with only serial output triggers configured and two text steps.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
+
+  <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x02&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x04&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;0x40&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x80&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0xFF&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">3</span>
+  <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>The parallel output trigger mode will connect to a parallel port at the data address specified, and when the value in the status byte changes from the common to the trigger value will increment the current trigger count. See See <a class="reference internal" href="parallelport.html"><span class="doc">Parallel Port Connections</span></a> for how to use the parallel port test feature to find the values and test. The values configured are in hexadecimal.</p>
+<p><code class="docutils literal"><span class="pre">parallel_options</span></code> fields:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;port_address_hex&quot;</span></code></dt>
+<dd>The IO port address for the parallel port. You can see this in Device Manager, go to properties for the parallel port, and on the Resources tab the first listed IO range address in hex is the one you should enter here.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;common_status_value_hex&quot;</span></code></dt>
+<dd>The “inactive” value to wait for for the output register to while not outputting anything.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;trigger_frames&quot;</span></code></dt>
+<dd>The number of 1/60s frames to hold the paralel port pins active. 10 would be about 160 milliseconds, 3 would be about 48ms.</dd>
+</dl>
+<p>The hex value shown in the <code class="docutils literal"><span class="pre">&quot;parallel_trigger_hex_values_by_event&quot;</span></code> dictionary are what the output data pins would be set to if the one event happened on its own. For example, <code class="docutils literal"><span class="pre">&quot;step_begin&quot;:</span> <span class="pre">&quot;0x11&quot;</span></code> would set D0 and D4 high (5v) and the other D pins low to notify of a step starting. By changing the trigger active value here, and the <code class="docutils literal"><span class="pre">&quot;parallel_options&quot;</span></code>  <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;</span></code> you can configure your output to be either active-high or active low or even a mix of the two.</p>
+<p>If multiple events occur on the same frame, such as <code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;</span></code> the bits <em>changed</em> from the <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;</span></code> are combined. For example, <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;:&quot;0x10&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;:&quot;0x01&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;:&quot;0x02&quot;</span></code> would write <code class="docutils literal"><span class="pre">&quot;0x03&quot;</span></code> to the data port when both happen on the same frame. This essentially wires the two different events to two different data pins, and sets the logic to be active high.</p>
+<p>A second example, active low, would be <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;:&quot;0x1F&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;:&quot;0x1E&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;:&quot;0x1D&quot;</span></code> would write <code class="docutils literal"><span class="pre">&quot;0x1C&quot;</span></code> to the data port when both happen on the same frame.</p>
+<p>A third example, mixed low/high would be <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;:&quot;0x10&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;:&quot;0x01&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;:&quot;0x00&quot;</span></code> would write <code class="docutils literal"><span class="pre">&quot;0x01&quot;</span></code> to the data port when both happen on the same frame.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Output Triggers</a><ul>
+<li><a class="reference internal" href="#json-configuration-sample">JSON Configuration Sample</a></li>
+<li><a class="reference internal" href="#serial-output-triggers">Serial Output Triggers</a></li>
+<li><a class="reference internal" href="#parallel-output">Parallel Output</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="input-trigger.html" title="previous chapter">Input Triggers</a></li>
+      <li>Next: <a href="scriptjson.html" title="next chapter">Game Script JSON</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/output-trigger.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/output-trigger.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

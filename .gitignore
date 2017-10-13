@@ -1,0 +1,8 @@
+*.pyc
+src/build/
+src/dist/
+src/temp/
+src/doc/_build/
+src/.vs/
+src/env/
+src/_testscript.json

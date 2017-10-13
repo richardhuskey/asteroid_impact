@@ -1,0 +1,171 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Survey Step &#8212; Asteroid Impact 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Black Screen Step" href="step-blackscreen.html" />
+    <link rel="prev" title="Text Step" href="step-text.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="survey-step">
+<h1>Survey Step<a class="headerlink" href="#survey-step" title="Permalink to this headline">¶</a></h1>
+<img alt="_images/survey-screenshot.png" src="_images/survey-screenshot.png" />
+<p>The Survey step prompts the participant to choose the answer from a pre-determined list of answers.</p>
+<p>The prompt, and list of answers are configurable.</p>
+<div class="section" id="json-configuration-for-survey-step">
+<h2>JSON Configuration for Survey Step<a class="headerlink" href="#json-configuration-for-survey-step" title="Permalink to this headline">¶</a></h2>
+<p>Below is sample JSON for a survey step will all the options specified.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">30.0</span><span class="p">,</span>
+    <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;This is the prompt. This is the prompt. This is the prompt. This is the prompt.&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;one&quot;</span><span class="p">,</span><span class="s2">&quot;two&quot;</span><span class="p">,</span><span class="s2">&quot;three&quot;</span><span class="p">,</span><span class="s2">&quot;four&quot;</span><span class="p">,</span><span class="s2">&quot;five&quot;</span><span class="p">]</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">duration</span></code></dt>
+<dd>The number of seconds to show the step for. When omitted, a “Next” button is added below the bottom option that allows the player to advance to the next step after selecting a survey option.</dd>
+<dt><code class="docutils literal"><span class="pre">trigger_count</span></code></dt>
+<dd>The number of incoming trigger pulses until this step automatically advances. See <a class="reference internal" href="input-trigger.html"><span class="doc">Trigger Inputs</span></a> for how to configure input triggers. When omitted, a “Next” button is added below the bottom option that allows the player to advance to the next step after selecting a survey option.</dd>
+<dt><code class="docutils literal"><span class="pre">prompt</span></code></dt>
+<dd>The survey question. This can contain newlines and blank lines and will display them. No other special formatting is available.</dd>
+<dt><code class="docutils literal"><span class="pre">options</span></code></dt>
+<dd>The list of options to choose from. There isn’t a hard limit on number but they can end up overlapping the prompt or going off screen. The text you enter will be clipped if it is too long to fit on screen.</dd>
+</dl>
+</div>
+<div class="section" id="per-frame-log">
+<h2>Per-frame log<a class="headerlink" href="#per-frame-log" title="Permalink to this headline">¶</a></h2>
+<p>The per-frame CSV log created with the <cite>–log-filename FILENAME</cite> command-line switch has two columns for the state of the survey question step.</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">survey_answer</span></code></dt>
+<dd>The text of the selected survey answer</dd>
+<dt><code class="docutils literal"><span class="pre">survey_prompt</span></code></dt>
+<dd>The question/prompt text shown to the player on the current survey step.</dd>
+</dl>
+<p>The per-frame log records one row per-frame so will record rows before the player has selected an answer, and will also record every answer they selected before advancing on to the next step.</p>
+</div>
+<div class="section" id="survey-log-file">
+<h2>Survey log file<a class="headerlink" href="#survey-log-file" title="Permalink to this headline">¶</a></h2>
+<p>The players choices for survey questions can also be saved in a CSV file that saves one row per survey question step completed. Run the game with the <code class="docutils literal"><span class="pre">--survey-log-filename</span> <span class="pre">SURVEY_LOG_FILENAME</span></code> command-line switch to save the survey question responses for the current participant to the CSV file named <code class="docutils literal"><span class="pre">SURVEY_LOG_FILENAME</span></code>.</p>
+<p>The full list of columns in this file are the following:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">subject_number</span></code></dt>
+<dd>from <code class="docutils literal"><span class="pre">--subject-number</span> <span class="pre">SUBJECT_NUMBER</span></code> command-line switch
+[other normal columns here]</dd>
+<dt><code class="docutils literal"><span class="pre">subject_run</span></code></dt>
+<dd>from <code class="docutils literal"><span class="pre">--subject-run</span> <span class="pre">SUBJECT_RUN</span></code> command-line switch</dd>
+<dt><code class="docutils literal"><span class="pre">total_millis</span></code></dt>
+<dd>number of milliseconds since the game was started when the survey step ended</dd>
+<dt><code class="docutils literal"><span class="pre">step_number</span></code></dt>
+<dd>number of survey step that was completed from list in JSON file specified to <code class="docutils literal"><span class="pre">--script-json</span> <span class="pre">SCRIPT_JSON</span></code> file.</dd>
+<dt><code class="docutils literal"><span class="pre">step_millis</span></code></dt>
+<dd>duration in milliseconds it took to complete the survey question and advance to the next step.</dd>
+<dt><code class="docutils literal"><span class="pre">step_trigger_count</span></code></dt>
+<dd>the count of incoming trigger pulses (serial or keyboard) that elapsed during this step.</dd>
+<dt><code class="docutils literal"><span class="pre">top_screen</span></code></dt>
+<dd>name of the screen that was topmost at the completion of the survey step. This should always be “Survey”</dd>
+<dt><code class="docutils literal"><span class="pre">survey_prompt</span></code></dt>
+<dd>The prompt configured in the survey question step JSON.</dd>
+<dt><code class="docutils literal"><span class="pre">survey_answer</span></code></dt>
+<dd>The selected answer chosen by the player.</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Survey Step</a><ul>
+<li><a class="reference internal" href="#json-configuration-for-survey-step">JSON Configuration for Survey Step</a></li>
+<li><a class="reference internal" href="#per-frame-log">Per-frame log</a></li>
+<li><a class="reference internal" href="#survey-log-file">Survey log file</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="step-text.html" title="previous chapter">Text Step</a></li>
+      <li>Next: <a href="step-blackscreen.html" title="next chapter">Black Screen Step</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/step-survey.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/step-survey.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

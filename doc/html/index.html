@@ -1,58 +1,129 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Welcome to Asteroid Impact’s documentation! &mdash; Asteroid Impact 1.0.0 documentation</title>
-    
+    <title>Asteroid Impact &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="#" />
-    <link rel="next" title="Asteroid Impact Code Introduction" href="codeintro.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Asteroid Impact Introduction" href="intro.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-asteroid-impact-s-documentation">
-<h1>Welcome to Asteroid Impact&#8217;s documentation!<a class="headerlink" href="#welcome-to-asteroid-impact-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="asteroid-impact">
+<h1>Asteroid Impact<a class="headerlink" href="#asteroid-impact" title="Permalink to this headline">¶</a></h1>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="codeintro.html">Asteroid Impact Code Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#license">License</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#gameplay">Gameplay</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#game-logging">Game Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#custom-levels">Custom Levels</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#game-script">Game &#8216;Script&#8217;</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#operator-keys">Operator Keys</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#command-line-options">Command-Line Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#dependencies">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#frequently-asked-questions">Frequently Asked Questions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="codeintro.html#code-introduction">Code Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Asteroid Impact Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#license">License</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#gameplay">Gameplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#game-logging">Game Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#custom-levels">Custom Levels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#game-script">Game ‘Script’</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#input-and-output-triggering">Input and Output Triggering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#operator-keys">Operator Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#command-line-options">Command-Line Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#frequently-asked-questions">Frequently Asked Questions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step-game.html">Gameplay Step and Adaptive Gameplay Step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="step-game.html#json-configuration-for-game-step">JSON Configuration for <code class="docutils literal"><span class="pre">game</span></code> Step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="step-game.html#json-configuration-for-game-adaptive-step">JSON Configuration for <code class="docutils literal"><span class="pre">game-adaptive</span></code> Step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="step-game.html#reaction-prompt">Reaction Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="step-game.html#json-configuration-options-for-reaction-prompts">JSON Configuration options for Reaction Prompts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step-instructions.html">Instructions Step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="step-instructions.html#json-configuration-for-instructions-step">JSON Configuration for Instructions Step</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step-text.html">Text Step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="step-text.html#json-configuration-for-text-step">JSON Configuration for Text Step</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step-survey.html">Survey Step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="step-survey.html#json-configuration-for-survey-step">JSON Configuration for Survey Step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="step-survey.html#per-frame-log">Per-frame log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="step-survey.html#survey-log-file">Survey log file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="step-blackscreen.html">Black Screen Step</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="step-blackscreen.html#json-configuration-for-blackscreen-step">JSON Configuration for blackscreen Step</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="logcolumns.html">Log Columns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#game-coordinates">Game Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#log-columns-label">Log Columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#position-of-active-powerups">Position of active powerups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#reaction-prompts">Reaction Prompts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#survey-question">Survey Question</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#asteroid-numbers">Asteroid Numbers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="parallelport.html">Parallel Port Connections</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="parallelport.html#software-requirements-for-parallel-port">Software Requirements for Parallel Port</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallelport.html#parallel-port-background">Parallel Port Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallelport.html#building-a-laplink-cable-to-connect-two-computers-by-parallel-ports">Building a LapLink Cable to connect two computers by parallel ports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallelport.html#find-parallel-port-data-address-in-windows">Find parallel port data address in Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallelport.html#test-parallel-port-in-asteroid-impact">Test parallel port in Asteroid Impact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallelport.html#input-trigger-behavior">Input trigger behavior</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parallelport.html#output-trigger-behavior">Output trigger behavior</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="input-trigger.html">Input Triggers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="input-trigger.html#id1">Input Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input-trigger.html#json-configuration-sample">JSON Configuration Sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input-trigger.html#serial-input-configuration">Serial Input Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input-trigger.html#keyboard-input">Keyboard Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input-trigger.html#parallel-input">Parallel Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="input-trigger.html#trigger-latency">Trigger Latency</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="output-trigger.html">Output Triggers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="output-trigger.html#json-configuration-sample">JSON Configuration Sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="output-trigger.html#serial-output-triggers">Serial Output Triggers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="output-trigger.html#parallel-output">Parallel Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scriptjson.html">Game Script JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#steps-list">Steps List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#trigger-advance-options">Trigger Advance Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#output-trigger-settings">Output Trigger Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#common-step-attributes">Common Step Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#available-step-actions">Available step actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#game-adaptive-levels-list">game-adaptive levels list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#reaction-prompt-elements">Reaction Prompt Elements</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="leveljson.html">Single Level JSON</a><ul>
@@ -61,25 +132,17 @@
 <li class="toctree-l2"><a class="reference internal" href="leveljson.html#sample-file">Sample file</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="scriptjson.html">Game Script JSON</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#steps-list">Steps List</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#trigger-advance-options">Trigger Advance Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#trigger-latency">Trigger Latency</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#common-step-attributes">Common Step Attributes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#available-step-actions">Available step actions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scriptjson.html#game-adaptive-levels-list">game-adaptive levels list</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="logcolumns.html">Log Columns</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#game-coordinates">Game Coordinates</a></li>
-<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#log-columns-label">Log Columns</a></li>
-<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#position-of-active-powerups">Position of active powerups</a></li>
-<li class="toctree-l2"><a class="reference internal" href="logcolumns.html#asteroid-numbers">Asteroid Numbers</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="makelevelpy.html">makelevel.py</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="makelevelpy.html#id1">makelevel.py</a></li>
 <li class="toctree-l2"><a class="reference internal" href="makelevelpy.html#command-line-options">Command-Line Options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="codeintro.html">Asteroid Impact Code Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#screen-stack">Screen Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#the-process-of-a-typical-frame">The process of a typical frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#game-coordinates">Game coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#sprites">Sprites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codeintro.html#source-files-and-directories">Source Files and Directories</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ref/game.html">game</a><ul>
@@ -120,9 +183,9 @@
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 
@@ -134,35 +197,32 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to Asteroid Impact&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#">Asteroid Impact</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="codeintro.html" title="next chapter">Asteroid Impact Code Introduction</a></li>
+      <li>Next: <a href="intro.html" title="next chapter">Asteroid Impact Introduction</a></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.txt"
+      <li><a href="_sources/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -173,11 +233,11 @@
       &copy;2015, Nick Winters.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/index.txt"
+      <a href="_sources/index.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

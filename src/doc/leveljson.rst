@@ -9,10 +9,10 @@ Game Coordinates
 
 The sizes, speeds, and positions in this file are specified in game coordinates, not pixels. This allows the screen resoloution to change but the game objects will still move and appear in the same way.
 
-The game play area is 1280 units wide, 896 units tall. 
+The game play area is 1280 units wide, 896 units tall.
 
 
-Top level 
+Top level
 ====================
 
 The single level JSON file's top level is a dictionary with the following 3 keys. The value for each is a list further described below.
@@ -26,20 +26,25 @@ The single level JSON file's top level is a dictionary with the following 3 keys
 
 Each entry in the list of ``asteroids`` is a dictionary with the following keys:
 
- * ``diameter`` The diameter of the asteroid in game units. This must be an integer.
- * ``top`` The distance of the top of the asteroid from the top edge of the play area in game units. This sets the initial position when the asteroids start moving during the level countdown. This must be an integer.
- * ``left`` The distance of the left of the asteroid from the left edge of the play area in game units. This sets the initial position when the asteroids start moving during the level countdown. This must be an integer.
- * ``dx`` distance along x moved per frame. This may be positive or negative or zero, but generated levels don't specify zero X or Y speeds. The sign of the speed is only used for the initial direction of the asteroid. This may be an integer or float.
- * ``dy`` distance along y moved per frame. This may be positive or negative or zero, but generated levels don't specify zero X or Y speeds. The sign of the speed is only used for the initial direction of the asteroid. This may be an integer or float.
+``"diameter"``
+    The diameter of the asteroid in game units. This must be an integer.
+``"top"``
+    The distance of the top of the asteroid from the top edge of the play area in game units. This sets the initial position when the asteroids start moving during the level countdown. This must be an integer.
+``"left"``
+     The distance of the left of the asteroid from the left edge of the play area in game units. This sets the initial position when the asteroids start moving during the level countdown. This must be an integer.
+``"dx"``
+    Distance along x moved per frame. This may be positive or negative or zero, but generated levels don't specify zero X or Y speeds. The sign of the speed is only used for the initial direction of the asteroid. This may be an integer or float.
+``"dy"``
+    Distance along y moved per frame. This may be positive or negative or zero, but generated levels don't specify zero X or Y speeds. The sign of the speed is only used for the initial direction of the asteroid. This may be an integer or float.
 
 ``top``, ``left``, ``dx``, ``dy`` specify the initial positions and direction of motion when the asteroids start moving during the level countdown. Both the position and the speeds change during gameplay, by moving, bouncing off edges, or being slowed down. The during-gameplay values are not saved back to the level.
 
-``target_positions`` List
+``"target_positions"`` List
 -----------------------------
 
-The ``target_positions`` must be set to a list of 2-entry lists. The 2-entry lists represent ``[left, top]`` positions of the crystals to be picked up in the level. By default the crystals are 32 game units in diameter, and the level JSON currently has no way to specify otherwise.
+The ``"target_positions"`` must be set to a list of 2-entry lists. The 2-entry lists represent ``[left, top]`` positions of the crystals to be picked up in the level. By default the crystals are 32 game units in diameter, and the level JSON currently has no way to specify otherwise.
 
-``powerup_list`` List
+``"powerup_list"`` List
 ------------------------
 
 Powerups will spawn in order, starting with the first one in the list and looping back to the first after using up the last powerup. The next powerup spawns after the player picks up a powerup and its expires after its delay. None powerups are picked up instantly (and invisibly) so are used to introduce a delay after one powerup is used before the next is available. For example, to have a 3s delay between the player's shield ending and another becoming available, the list should have a shield, none with 3s delay, then another shield.
@@ -48,11 +53,16 @@ There must be at least one entry in this list. If you don't want the player to h
 
 The ``powerup_list`` is a list of objects with the keys listed below.
 
- * ``type`` must be one of ``shield``, ``slow``, or ``none``
- * ``diameter`` usually 32 game units for ``shield`` or ``slow``. Don't specify this on a ``"type":"none"`` powerup.
- * ``left`` The distance from the left edge of the powerup to the left edge of the game play area.
- * ``top`` The distance from the left edge of the powerup to the left edge of the game play area.
- * ``duration`` The number of seconds this powerup lasts, as a number. This is required for, and should only be specified on ``"type":"none"`` powerups. 
+``"type"``
+    Must be one of ``shield``, ``slow``, or ``none``
+``"diameter"``
+    Usually 32 game units for ``shield`` or ``slow``. Don't specify this on a ``"type":"none"`` powerup.
+``"left"``
+    The distance from the left edge of the powerup to the left edge of the game play area.
+``"top"``
+    The distance from the left edge of the powerup to the left edge of the game play area.
+``"duration"``
+    The number of seconds this powerup lasts, as a number. This is required for, and should only be specified on ``"type":"none"`` powerups.
 
 
 Sample file

@@ -1,37 +1,39 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>makelevel.py &mdash; Asteroid Impact 1.0.0 documentation</title>
-    
+    <title>makelevel.py &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
         VERSION:     '1.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Asteroid Impact 1.0.0 documentation" href="index.html" />
-    <link rel="next" title="game" href="ref/game.html" />
-    <link rel="prev" title="Game Script JSON" href="scriptjson.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parallel Port Connections" href="parallelport.html" />
+    <link rel="prev" title="Log Columns" href="logcolumns.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -44,15 +46,15 @@
 <h2>makelevel.py<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <p>makelevel.py is a python script to create new level JSON files for AsteroidImpact.</p>
 <p>It requires Python 2.7 and PyGame 1.9.1</p>
-<p>See <a class="reference internal" href="leveljson.html"><em>Single Level JSON</em></a> for format details of the generated level JSON files.</p>
-<p>See <a class="reference internal" href="#makelevel-creation-process"><span>Creation Process</span></a> below for how levels are created.</p>
+<p>See <a class="reference internal" href="leveljson.html"><span class="doc">Single Level JSON</span></a> for format details of the generated level JSON files.</p>
+<p>See <a class="reference internal" href="#makelevel-creation-process"><span class="std std-ref">Creation Process</span></a> below for how levels are created.</p>
 <div class="section" id="creation-process">
 <span id="makelevel-creation-process"></span><h3>Creation Process<a class="headerlink" href="#creation-process" title="Permalink to this headline">¶</a></h3>
 <p>The output of makelevel.py is a JSON file with positions for each crystal, power-up, and initial positions and directions for each asteroid. To run the same way repeatably, the game when running does not use any random number generator. Only makelevel.py which creates the level files uses a random number generator.</p>
-<p>The random number generator used by makelevel.py starts with some initial internal state, called the seed, and generates a sequence of numbers which are manipulated into the required range. With the same seed, the random number generator will generate the same sequence of numbers. If the same seed, and other parameters are specified to makelevel.py then the output level JSON will be exactly the same. If for example you keep the seed and other parameters the same, but change the number of crystals the sequence of random numbers wouldn&#8217;t generate the same asteroid positions because (as described below) the random numbers are used for crystals positions before asteroids positions and speeds.</p>
+<p>The random number generator used by makelevel.py starts with some initial internal state, called the seed, and generates a sequence of numbers which are manipulated into the required range. With the same seed, the random number generator will generate the same sequence of numbers. If the same seed, and other parameters are specified to makelevel.py then the output level JSON will be exactly the same. If for example you keep the seed and other parameters the same, but change the number of crystals the sequence of random numbers wouldn’t generate the same asteroid positions because (as described below) the random numbers are used for crystals positions before asteroids positions and speeds.</p>
 <p>If no seed is specified, the random number generator is seeded with the current time. This would give you a different position for crystals, asteroids and power-ups each time makelevel.py is run with the same arguments.</p>
-<p>The seed can be changed to &#8220;re-roll&#8221; a level with the same settings until you are happy with the values randomly chosen by this script. I have generated levels with various seeds until getting the initial conditions I was looking for, such as no asteroids overlapping a crystal just after the level countdown ends, or intentionally creating a level where the first shield power-up overlaps an asteroid after the countdown ends.</p>
-<p>The random numbers from the random number generator would typically come out as a uniform distribution between 0.0 and 1.0, but python exposes ways to convert these to a random integer in some range, for example 0 to 1223 inclusive to fit the X position of a crystal on screen, or a choice from a list of values such as this list of &#8220;medium&#8221; sizes: [110, 120, 150, 120, 140, 130].</p>
+<p>The seed can be changed to “re-roll” a level with the same settings until you are happy with the values randomly chosen by this script. I have generated levels with various seeds until getting the initial conditions I was looking for, such as no asteroids overlapping a crystal just after the level countdown ends, or intentionally creating a level where the first shield power-up overlaps an asteroid after the countdown ends.</p>
+<p>The random numbers from the random number generator would typically come out as a uniform distribution between 0.0 and 1.0, but python exposes ways to convert these to a random integer in some range, for example 0 to 1223 inclusive to fit the X position of a crystal on screen, or a choice from a list of values such as this list of “medium” sizes: [110, 120, 150, 120, 140, 130].</p>
 <p>This script creates levels as follows.</p>
 <ol class="arabic simple">
 <li>Initialize the random number generator with the supplied seed, or the current time if no seed is specified.</li>
@@ -64,7 +66,7 @@
 </ol>
 </li>
 <li>Start the power-up list with a power-up delaying power-up if chosen in the options</li>
-<li>Add each power-up, with a randomly chosen type from the list at a randomly chosen position. After each power-up add a power-up delaying power-up of the specified <cite>&#8211;powerup-delay</cite>.</li>
+<li>Add each power-up, with a randomly chosen type from the list at a randomly chosen position. After each power-up add a power-up delaying power-up of the specified <cite>–powerup-delay</cite>.</li>
 </ol>
 </div>
 </div>
@@ -88,12 +90,12 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">-h</span></code> or <code class="docutils literal"><span class="pre">--help</span></code></td>
-<td>&nbsp;</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
+<td>&#160;</td>
 <td>Show help message and exit</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">--file</span></code> FILE</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td>[none]</td>
 <td>File to save level json to.</td>
 </tr>
@@ -168,29 +170,26 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="scriptjson.html" title="previous chapter">Game Script JSON</a></li>
-      <li>Next: <a href="ref/game.html" title="next chapter">game</a></li>
+      <li>Previous: <a href="logcolumns.html" title="previous chapter">Log Columns</a></li>
+      <li>Next: <a href="parallelport.html" title="next chapter">Parallel Port Connections</a></li>
   </ul></li>
 </ul>
 </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/makelevelpy.txt"
+      <li><a href="_sources/makelevelpy.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -201,11 +200,11 @@
       &copy;2015, Nick Winters.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/makelevelpy.txt"
+      <a href="_sources/makelevelpy.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
