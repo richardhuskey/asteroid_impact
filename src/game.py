@@ -597,6 +597,11 @@ class GameModeManager(object):
                 if not step.has_key('text'):
                     print ('ERROR: "text" step must have "text" attribute with string value.')
                     return
+                # 'title' is optional
+                if step.has_key('title'):
+                    pass
+                else:
+                    step['title'] = ''
             elif step['action'] == 'survey':
                 # 'prompt' is required
                 if not step.has_key('prompt'):
@@ -724,7 +729,8 @@ class GameModeManager(object):
                     self.screen,
                     self.gamescreenstack,
                     click_to_continue=click_to_continue,
-                    text=step['text']))
+                    text=step['text'],
+                    title=step['title']))
         elif step['action'] == 'survey':
             click_to_continue = True
             if step.has_key('duration') and step['duration'] != None:

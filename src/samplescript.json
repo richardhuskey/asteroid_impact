@@ -93,6 +93,7 @@
     {
       "action": "text",
       "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+      "title": "Additional Instructions",
       "duration": 20.0
     },
     {

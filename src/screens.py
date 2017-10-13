@@ -186,7 +186,7 @@ class UserTextScreen(GameScreen):
     """
     Text Screen. Displays text specified in step.
     """
-    def __init__(self, screen, gamescreenstack, click_to_continue=True, text="[No text value was specified]"):
+    def __init__(self, screen, gamescreenstack, click_to_continue=True, text="[No text value was specified]", title=""):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.click_to_continue = click_to_continue
         self.name = 'textdisplay'
@@ -201,7 +201,8 @@ class UserTextScreen(GameScreen):
         big_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 72, 72)).height
         self.font_big = load_font('FreeSansBold.ttf', big_font_size)
-        
+        self.line_height_big = 81
+
         self.line_height = 36 # game-space like font size below
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
@@ -209,7 +210,7 @@ class UserTextScreen(GameScreen):
 
         self.text_color = (250, 250, 250) # white
 
-        self.init_text(text)
+        self.init_text(text, title)
 
         if self.click_to_continue:
             self.textsprites.append(TextSprite(
@@ -218,8 +219,23 @@ class UserTextScreen(GameScreen):
                 bottom=virtualdisplay.GAME_AREA.height))
 
         self.first_update = True
-        
-    def init_text(self, text):
+
+    def init_text(self, text, title):
+        remaining_bounds = virtualdisplay.GAME_AREA
+        if title:
+            title_lines, title_result_bounds = flow_text(
+                title,
+                remaining_bounds,
+                self.font_big,
+                self.text_color,
+                self.line_height_big,
+                valign='top')
+            self.textsprites += title_lines
+
+            # reduce remaining_bounds to start at bottom of title_result_bounds
+            remaining_bounds.height -= title_result_bounds.height
+            remaining_bounds.y = title_result_bounds.bottom
+
         lines, result_bounds = flow_text(
             text,
             virtualdisplay.GAME_AREA,
@@ -227,7 +243,7 @@ class UserTextScreen(GameScreen):
             self.text_color,
             self.line_height,
             valign='middle')
-        
+
         self.textsprites += lines
 
     def draw(self):

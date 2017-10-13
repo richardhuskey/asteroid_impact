@@ -101,6 +101,7 @@ Sample: ::
         {
           "action": "text",
           "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+          "title": "Additional Instructions",
           "duration": 20.0
         },
         {
@@ -195,6 +196,7 @@ Such a JSON file would look like this: ::
         {
             "action": "text",
             "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+            "title": "Additional Instructions",
             "duration": 20.0
         },
         {
@@ -331,6 +333,7 @@ Sample trigger-driven JSON: ::
         {
           "action": "text",
           "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+          "title": "Additional Instructions",
           "trigger_count": 10
         },
         {
@@ -496,6 +499,8 @@ A null ``duration`` for the instructions step will show a "Click to continue" me
 
 The ``text`` step will display text specified in the ``text`` attribute on the screen for the specified duration with no available interaction to the player. The ``duration`` must be specified.
 
+An optional ``"title"`` attribute can be specified to show a title at the otp of the screen.
+
 The text will be wrapped to fit on screen, but you can include newlines in the string and they will be included on string. Newlines in JSON must be escaped like ``\n``.
 
 For example, here is text step with two lines of text with a blank line in between using two newline characters. ::
@@ -503,6 +508,7 @@ For example, here is text step with two lines of text with a blank line in betwe
         {
             "action": "text",
             "text": "First Line\n\nSecond Line",
+            "title": "Additional Instructions",
             "duration": 20.0
         },
 
