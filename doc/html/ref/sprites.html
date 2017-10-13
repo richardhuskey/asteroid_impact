@@ -70,13 +70,13 @@
 <p>Base class for power-ups so they share common expiration behavior</p>
 <dl class="method">
 <dt id="sprites.BasePowerup.activate">
-<code class="descname">activate</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.BasePowerup.activate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">activate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em>, <em>frame_outbound_triggers</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.BasePowerup.activate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Activate power-up because it was picked up</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="sprites.BasePowerup.deactivate">
-<code class="descname">deactivate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.BasePowerup.deactivate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">deactivate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em>, <em>frame_outbound_triggers</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.BasePowerup.deactivate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deactivate power-up</p>
 </dd></dl>
 
@@ -148,7 +148,7 @@
 collisions with asteroids.</p>
 <dl class="method">
 <dt id="sprites.ShieldPowerup.activate">
-<code class="descname">activate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ShieldPowerup.activate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">activate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em>, <em>frame_outbound_triggers</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ShieldPowerup.activate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Play activation sound</p>
 </dd></dl>
 
@@ -172,13 +172,13 @@ collisions with asteroids.</p>
 <p>While active, the SlowPowerup slows the asteroids to a crawl</p>
 <dl class="method">
 <dt id="sprites.SlowPowerup.activate">
-<code class="descname">activate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.SlowPowerup.activate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">activate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em>, <em>frame_outbound_triggers</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.SlowPowerup.activate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Play start sound. Slow asteroids to a crawl</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="sprites.SlowPowerup.deactivate">
-<code class="descname">deactivate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.SlowPowerup.deactivate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">deactivate</code><span class="sig-paren">(</span><em>cursor</em>, <em>asteroids</em>, <em>frame_outbound_triggers</em>, <em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.SlowPowerup.deactivate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restore normal speed of asteroids</p>
 </dd></dl>
 

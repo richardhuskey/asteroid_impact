@@ -23,6 +23,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Game Script JSON" href="scriptjson.html" />
+    <link rel="prev" title="Input Triggers" href="input-trigger.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -46,14 +48,18 @@
 <h2>JSON Configuration Sample<a class="headerlink" href="#json-configuration-sample" title="Permalink to this headline">¶</a></h2>
 <p>This would go inside your configuration JSON, at the same level as the <code class="docutils literal"><span class="pre">&quot;steps&quot;=[]</span></code> list</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
-  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
 
   <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
     <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;9&quot;</span>
   <span class="p">},</span>
   <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
@@ -61,16 +67,20 @@
   <span class="p">},</span>
 
   <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x02&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x04&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;0x40&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x80&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0xFF&quot;</span>
   <span class="p">},</span>
   <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
     <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">3</span>
   <span class="p">}</span>
 <span class="p">},</span>
 </pre></div>
@@ -80,10 +90,18 @@
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">&quot;step_begin&quot;</span></code></dt>
 <dd>Occurs on the beginning of each step.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;game_death&quot;</span></code></dt>
-<dd>When the player touches an asteroid during gameplay and dies. This works in both the game and adaptive gameplay steps.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_level_begin&quot;</span></code></dt>
+<dd>Occurs when the level begins, or changes. The level changes when the player collects the number of crystals for the level.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;</span></code></dt>
 <dd>When the player picks up the last crystal in a level in either the standard gameplay or adaptive gameplay steps.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_death&quot;</span></code></dt>
+<dd>When the player touches an asteroid during gameplay and dies. This works in both the game and adaptive gameplay steps.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_shield_activate&quot;</span></code></dt>
+<dd>When the player picks and activates a shield power-up.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_slow_activate&quot;</span></code></dt>
+<dd>When the player picks and activates a time slowdown power-up.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_crystal_collected&quot;</span></code></dt>
+<dd>When the player picks and activates a time slowdown power-up.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;</span></code></dt>
 <dd>When the player completes a level in the adaptive gameplay mode, and the “level score” increments to the next more difficult level in the list.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_decrease&quot;</span></code></dt>
@@ -134,16 +152,20 @@
   <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;parallel&quot;</span><span class="p">,</span>
 
   <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x02&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x04&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;0x40&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x80&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0xFF&quot;</span>
   <span class="p">},</span>
   <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
     <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">3</span>
   <span class="p">}</span>
 <span class="p">},</span>
 </pre></div>
@@ -156,7 +178,7 @@
 <dt><code class="docutils literal"><span class="pre">&quot;common_status_value_hex&quot;</span></code></dt>
 <dd>The “inactive” value to wait for for the output register to while not outputting anything.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;trigger_frames&quot;</span></code></dt>
-<dd>The number of 1/60s frames to hold the paralel port pins active. 10 would be about 160 milliseconds.</dd>
+<dd>The number of 1/60s frames to hold the paralel port pins active. 10 would be about 160 milliseconds, 3 would be about 48ms.</dd>
 </dl>
 <p>The hex value shown in the <code class="docutils literal"><span class="pre">&quot;parallel_trigger_hex_values_by_event&quot;</span></code> dictionary are what the output data pins would be set to if the one event happened on its own. For example, <code class="docutils literal"><span class="pre">&quot;step_begin&quot;:</span> <span class="pre">&quot;0x11&quot;</span></code> would set D0 and D4 high (5v) and the other D pins low to notify of a step starting. By changing the trigger active value here, and the <code class="docutils literal"><span class="pre">&quot;parallel_options&quot;</span></code>  <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;</span></code> you can configure your output to be either active-high or active low or even a mix of the two.</p>
 <p>If multiple events occur on the same frame, such as <code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;</span></code> the bits <em>changed</em> from the <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;</span></code> are combined. For example, <code class="docutils literal"><span class="pre">&quot;common_data_value_hex&quot;:&quot;0x10&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;game_level_complete&quot;:&quot;0x01&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;adaptive_difficulty_increase&quot;:&quot;0x02&quot;</span></code> would write <code class="docutils literal"><span class="pre">&quot;0x03&quot;</span></code> to the data port when both happen on the same frame. This essentially wires the two different events to two different data pins, and sets the logic to be active high.</p>
@@ -184,6 +206,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="input-trigger.html" title="previous chapter">Input Triggers</a></li>
+      <li>Next: <a href="scriptjson.html" title="next chapter">Game Script JSON</a></li>
   </ul></li>
 </ul>
 </div>

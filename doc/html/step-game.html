@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Instructions Step" href="step-instructions.html" />
-    <link rel="prev" title="Output Triggers" href="output-trigger.html" />
+    <link rel="prev" title="Asteroid Impact Introduction" href="intro.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -89,6 +89,8 @@
   <span class="s2">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
   <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
   <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+  <span class="s2">&quot;continuous_asteroids_on_same_level&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;show_advance_countdown&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">{</span>
       <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -144,6 +146,10 @@
 <dd>When the player completes a level without dying, their current “level score” is increased by this amount. This would typically be between 0.1 and 1.0.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;level_death_decrement&quot;</span></code></dt>
 <dd>When the player dies and fails to complete a level, their “level score” is reduced by this amount. See the “level score” section below.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;continuous_asteroids_on_same_level&quot;</span></code></dt>
+<dd>When the player dies or picks up enough crystals to change the “level score”, it doesn’t always advance to the next more or less difficult level. When <code class="docutils literal"><span class="pre">&quot;continuous_asteroids_on_same_level&quot;</span></code> is set to true, and they don’t advance to the next or previous level the asteroids continue moving in the same pattern with the same sizes they had before. This defaults to <code class="docutils literal"><span class="pre">false</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;show_advance_countdown&quot;</span></code></dt>
+<dd>When <code class="docutils literal"><span class="pre">true</span></code> and the player advances to the next more difficult level, they are invulnerable for a few seconds while the beginning-of-level countdown happens again. This defaults to <code class="docutils literal"><span class="pre">false</span></code></dd>
 <dt><code class="docutils literal"><span class="pre">&quot;levels&quot;</span></code></dt>
 <dd>This is either a filename for a JSON file that contains the list of adaptive level parameters (which aren’t compatible with the normal gameplay level options) or is the list itself. The “Adaptive Level Options” section below describes the options in more detail.</dd>
 </dl>
@@ -331,7 +337,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="output-trigger.html" title="previous chapter">Output Triggers</a></li>
+      <li>Previous: <a href="intro.html" title="previous chapter">Asteroid Impact Introduction</a></li>
       <li>Next: <a href="step-instructions.html" title="next chapter">Instructions Step</a></li>
   </ul></li>
 </ul>

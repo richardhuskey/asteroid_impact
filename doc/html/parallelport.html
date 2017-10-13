@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Input Triggers" href="input-trigger.html" />
-    <link rel="prev" title="makelevel.py" href="makelevelpy.html" />
+    <link rel="prev" title="Log Columns" href="logcolumns.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -179,10 +179,14 @@
 
   <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
     <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;9&quot;</span>
   <span class="p">},</span>
   <span class="s2">&quot;serial_options&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM6&quot;</span><span class="p">,</span>
@@ -190,16 +194,20 @@
   <span class="p">},</span>
 
   <span class="s2">&quot;parallel_trigger_hex_values_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x11&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x12&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x14&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x18&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0x00&quot;</span>
+    <span class="s2">&quot;step_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x01&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_begin&quot;</span><span class="p">:</span> <span class="s2">&quot;0x02&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_level_complete&quot;</span><span class="p">:</span> <span class="s2">&quot;0x04&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_death&quot;</span><span class="p">:</span> <span class="s2">&quot;0x08&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_shield_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_slow_activate&quot;</span><span class="p">:</span> <span class="s2">&quot;0x20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;game_crystal_collected&quot;</span><span class="p">:</span> <span class="s2">&quot;0x40&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_increase&quot;</span><span class="p">:</span> <span class="s2">&quot;0x80&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;adaptive_difficulty_decrease&quot;</span><span class="p">:</span> <span class="s2">&quot;0xFF&quot;</span>
   <span class="p">},</span>
   <span class="s2">&quot;parallel_options&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;port_address_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;BF00&quot;</span><span class="p">,</span>
     <span class="s2">&quot;common_data_value_hex&quot;</span><span class="p">:</span> <span class="s2">&quot;0x10&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="s2">&quot;trigger_frames&quot;</span><span class="p">:</span> <span class="mi">3</span>
   <span class="p">}</span>
 <span class="p">},</span>
 </pre></div>
@@ -230,7 +238,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="makelevelpy.html" title="previous chapter">makelevel.py</a></li>
+      <li>Previous: <a href="logcolumns.html" title="previous chapter">Log Columns</a></li>
       <li>Next: <a href="input-trigger.html" title="next chapter">Input Triggers</a></li>
   </ul></li>
 </ul>

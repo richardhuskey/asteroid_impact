@@ -54,6 +54,8 @@ The ``game-adaptive`` step has the same settings as ``game`` except levels work 
           "start_level": 0.5,
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
+          "continuous_asteroids_on_same_level": false,
+          "show_advance_countdown": false,
           "level_templates": [
             {
               "asteroid_count": 1,
@@ -108,6 +110,10 @@ The ``game-adaptive`` step has the same settings as ``game`` except levels work 
     When the player completes a level without dying, their current "level score" is increased by this amount. This would typically be between 0.1 and 1.0.
 ``"level_death_decrement"``
     When the player dies and fails to complete a level, their "level score" is reduced by this amount. See the "level score" section below.
+``"continuous_asteroids_on_same_level"``
+    When the player dies or picks up enough crystals to change the "level score", it doesn't always advance to the next more or less difficult level. When ``"continuous_asteroids_on_same_level"`` is set to true, and they don't advance to the next or previous level the asteroids continue moving in the same pattern with the same sizes they had before. This defaults to ``false``.
+``"show_advance_countdown"``
+    When ``true`` and the player advances to the next more difficult level, they are invulnerable for a few seconds while the beginning-of-level countdown happens again. This defaults to ``false``
 ``"levels"``
     This is either a filename for a JSON file that contains the list of adaptive level parameters (which aren't compatible with the normal gameplay level options) or is the list itself. The "Adaptive Level Options" section below describes the options in more detail.
 
