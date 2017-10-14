@@ -23,6 +23,7 @@ from __future__ import absolute_import, division
 import argparse
 import os
 from os import path
+import random # step shuffling
 import json
 import pygame
 from pygame.locals import *
@@ -481,12 +482,53 @@ class GameModeManager(object):
                 print 'output_trigger_settings mode of',output_settings['mode'],'not recognized'
                 return
 
-           
+        # number steps in original order:
+        for i,s in enumerate(self.gamesteps):
+            s['stepnumber'] = i+1
+        if self.script_json.has_key('step_shuffle_groups'):
+            if not isinstance(self.script_json['step_shuffle_groups'], list):
+                print 'step_shuffle_groups must be list of list of numbers'
+                print 'exiting.'
+                return
+
+            for sg in self.script_json['step_shuffle_groups']:
+                if not isinstance(sg, list):
+                    print 'step_shuffle_groups must be list of list of numbers'
+                    print 'exiting.'
+                    return
+
+            # step_shuffle_groups specifies a list of "shuffle groups"
+            # each shuffle groups is a list of step numbers, 1-based indexes for original step position
+            # first we number the steps
+            # then we iterate through each group:
+            #     and shuffle only steps with those original step numbers
+            rnd = random.Random()
+            # todo: verify self.script_json['step_randomization_groups'] is list of list of numbers
+            gamesteps_old = self.gamesteps
+            for g_numbers in self.script_json['step_shuffle_groups']:
+                gamesteps_new = []
+                g_steps = [s for s in self.gamesteps if s['stepnumber'] in g_numbers]
+                if g_steps:
+                    for s in gamesteps_old:
+                        if s['stepnumber'] in g_numbers:
+                            # choose random step to replace it from remaing g_steps
+                            step_random = rnd.choice(g_steps)
+                            g_steps.remove(step_random)
+                            gamesteps_new.append(step_random)
+                        else:
+                            gamesteps_new.append(s)
+                else:
+                    gamesteps_new = gamesteps_old
+
+                gamesteps_old = gamesteps_new
+
+            self.gamesteps = gamesteps_old
+            print 'Step order after shuffle(s):', ', '.join(str(s['stepnumber']) for s in self.gamesteps)
 
         if self.args.parallel_test_address:
             # try to parse parallel port address
             pport_debug_addr = int(self.args.parallel_test_address, 16)
-            
+
             # ignore step list and replace with just parallel port test step
             self.gamesteps = [
                 dict(action='parallel_port_test',
@@ -929,9 +971,8 @@ class GameModeManager(object):
                 logrowdetails.clear()
                 logrowdetails['subject_number'] = self.args.subject_number
                 logrowdetails['subject_run'] = self.args.subject_run
-                logrowdetails['step_number'] = self.stepindex + 1
+                logrowdetails['step_number'] = self.gamesteps[self.stepindex]['stepnumber']
                 logrowdetails['total_millis'] = self.total_millis
-                logrowdetails['step_number'] = self.stepindex + 1
                 logrowdetails['step_millis'] = self.step_millis
                 logrowdetails['top_screen'] = self.gamescreenstack[-1].name
 

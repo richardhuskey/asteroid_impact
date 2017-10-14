@@ -763,3 +763,36 @@ Sample game step with reaction prompts::
     K_UP
     K_a through K_z
 
+Step Shuffling
+==============
+
+A new option allows the game to shuffle the steps list each time the game is started. The log continues to record the original step number.
+
+Here's an example script JSON with this new option::
+
+  {
+    "step_shuffle_groups": [
+      [ 1, 2 ],
+      [ 3, 4 ]
+    ],
+    "steps": [
+      {
+        "action": "text",
+        "text": "1"
+      },
+      {
+        "action": "text",
+        "text": "2"
+      },
+      {
+        "action": "text",
+        "text": "3"
+      },
+      {
+        "action": "text",
+        "text": "4"
+      }
+    ]
+  }
+
+The ``"step_shuffle_groups"`` is a list of lists of step numbers (1-based) that are shuffled together. In the example above, steps 1 and 2 are shuffled, then steps 3 and 4 are shuffled.
