@@ -52,6 +52,7 @@ Sample: ::
           "action": "game",
           "levels": "levels/standardlevels.json",
           "duration": 20.0,
+          "game_element_opacity": 255,
           "reaction_prompts": [
             {
               "diameter": 80,
@@ -127,6 +128,7 @@ Sample: ::
           "level_death_decrement": 0.4,
           "continuous_asteroids_on_same_level": false,
           "show_advance_countdown": false,
+          "game_element_opacity": 255,
           "level_templates": [
             {
               "asteroid_count": 1,
@@ -487,6 +489,8 @@ A null ``duration`` for the game step will prevent the player from advancing to 
 
 The ``levels`` value is required. It must point to a levels list json file. 
 
+Optional ``game_element_opacity`` specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).
+
 ``instructions``
 ----------------
 
@@ -536,6 +540,8 @@ The ``start_level`` is a float value that specifies the initial value used to ch
 ``show_advance_countdown`` of ``true`` will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to ``false``.
 
 The ``levels`` value is required. It must be a list of level parameters (which are different than for the ``game`` mode) or a string filename for a json file that contains a list of level parameters. 
+
+Optional ``game_element_opacity`` specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).
 
 
 game-adaptive levels list

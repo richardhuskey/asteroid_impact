@@ -18,6 +18,7 @@ Below is a sample of the full JSON configuration for a ``game`` step. ::
           "action": "game",
           "levels": "levels/standardlevels.json",
           "duration": 20.0,
+          "game_element_opacity": 255,
           "reaction_prompts": [
             {
               "diameter": 80,
@@ -42,6 +43,8 @@ Below is a sample of the full JSON configuration for a ``game`` step. ::
     The number of incoming trigger pulses until this step automatically advances. When omitted, gameplay will continue until the game is forced to quit with alt+f4 or cmd+q.
 ``"levels"``
     The filename for the JSON file with the list of levels. See :doc:`makelevelpy` for information about creating levelss, and :doc:`leveljson` for information about the JSON format for levels themselves.
+``"game_element_opacity"``
+    The apparent opacity of the game elements, from 0 (completely invisible) to 255 (fully opaque, default). 64 is pretty dim but still sort of playable.
 
 
 JSON Configuration for ``game-adaptive`` Step
@@ -56,6 +59,7 @@ The ``game-adaptive`` step has the same settings as ``game`` except levels work 
           "level_death_decrement": 0.4,
           "continuous_asteroids_on_same_level": false,
           "show_advance_countdown": false,
+          "game_element_opacity": 255,
           "level_templates": [
             {
               "asteroid_count": 1,
@@ -116,6 +120,8 @@ The ``game-adaptive`` step has the same settings as ``game`` except levels work 
     When ``true`` and the player advances to the next more difficult level, they are invulnerable for a few seconds while the beginning-of-level countdown happens again. This defaults to ``false``
 ``"levels"``
     This is either a filename for a JSON file that contains the list of adaptive level parameters (which aren't compatible with the normal gameplay level options) or is the list itself. The "Adaptive Level Options" section below describes the options in more detail.
+``"game_element_opacity"``
+    The apparent opacity of the game elements, from 0 (completely invisible) to 255 (fully opaque, default). 64 is pretty dim but still sort of playable.
 
 Level Score
 ___________

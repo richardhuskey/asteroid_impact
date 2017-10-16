@@ -763,8 +763,21 @@ class AsteroidImpactGameplayScreen(GameScreen):
     """
     Gameplay logic for the Asteroid Impact game.
     """
-    def __init__(self, screen, screenstack, levellist, reaction_prompts_settings):
+    def __init__(self,
+                 screen,
+                 screenstack,
+                 levellist,
+                 reaction_prompts_settings,
+                 game_element_opacity=255,
+                 **kwargs):
         GameScreen.__init__(self, screen, screenstack)
+
+        if game_element_opacity > 255:
+            game_element_opacity = 255
+        if game_element_opacity < 1:
+            game_element_opacity = 1
+        self.game_element_opacity = game_element_opacity
+
         self.name = 'gameplay'
         self.blackbackground = pygame.Surface(self.screen.get_size())
         self.blackbackground = self.blackbackground.convert()
@@ -1031,6 +1044,12 @@ class AsteroidImpactGameplayScreen(GameScreen):
         self.powerupsprites.draw(self.screen)
         self.reaction_prompts.draw(self.screen)
 
+        if self.game_element_opacity < 255:
+            # overlay the background over game elements to easily simulate dropping their opacity:
+            self.blackbackground.set_alpha(255 - self.game_element_opacity)
+            self.screen.blit(self.blackbackground, (0, 0))
+            self.blackbackground.set_alpha(None) # another way to be opaque
+
         # draw all text blocks:
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
@@ -1152,9 +1171,17 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             screenstack,
             level_templates_list,
             reaction_prompts_settings,
+            game_element_opacity=255,
             **kwargs):
         GameScreen.__init__(self, screen, screenstack)
         self.name = 'gameplay-adaptive'
+
+        if game_element_opacity > 255:
+            game_element_opacity = 255
+        if game_element_opacity < 1:
+            game_element_opacity = 1
+        self.game_element_opacity = game_element_opacity
+
         self.blackbackground = pygame.Surface(self.screen.get_size())
         self.blackbackground = self.blackbackground.convert()
         self.blackbackground.fill((0, 0, 0))
@@ -1493,6 +1520,12 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.mostsprites.draw(self.screen)
         self.powerupsprites.draw(self.screen)
         self.reaction_prompts.draw(self.screen)
+
+        if self.game_element_opacity < 255:
+            # overlay the background over game elements to easily simulate dropping their opacity:
+            self.blackbackground.set_alpha(255 - self.game_element_opacity)
+            self.screen.blit(self.blackbackground, (0, 0))
+            self.blackbackground.set_alpha(None) # another way to be opaque
 
         # draw all text blocks:
         for textsprite in self.textsprites:

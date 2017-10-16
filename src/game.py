@@ -664,6 +664,10 @@ class GameModeManager(object):
                     return
 
                 step['levellist'] = self.load_levels(step)
+
+                # other options
+                if step.has_key('game_element_opacity'):
+                    step['game_element_opacity'] = int(step['game_element_opacity'])
             elif step['action'] == 'game-adaptive':
                 if not step.has_key('level_templates'):
                     print ('ERROR: "game" action must have level_templates attribute ' +
@@ -672,7 +676,7 @@ class GameModeManager(object):
                     return
                 step['level_templates_list'] = self.load_level_templates(step)
 
-                # float options
+                # other options
                 if step.has_key('start_level'):
                     step['start_level'] = float(step['start_level'])
                 if step.has_key('level_completion_increment'):
@@ -683,6 +687,8 @@ class GameModeManager(object):
                     step['continuous_asteroids_on_same_level'] = bool(step['continuous_asteroids_on_same_level'])
                 if step.has_key('show_advance_countdown'):
                     step['show_advance_countdown'] = bool(step['show_advance_countdown'])
+                if step.has_key('game_element_opacity'):
+                    step['game_element_opacity'] = int(step['game_element_opacity'])
             elif step['action'] == 'parallel_port_test':
                 # nothing else to validate
                 pass
@@ -790,12 +796,17 @@ class GameModeManager(object):
         elif step['action'] == 'blackscreen':
             self.gamescreenstack.append(BlackScreen(self.screen, self.gamescreenstack))
         elif step['action'] == 'game':
+            kwargs = {}
+            if step.has_key('game_element_opacity'):
+                kwargs['game_element_opacity'] = step['game_element_opacity']
+
             self.gamescreenstack.append(
                 AsteroidImpactGameplayScreen(
                     self.screen,
                     self.gamescreenstack,
                     step['levellist'],
-                    step['reaction_prompts']))
+                    step['reaction_prompts'],
+                    **kwargs))
         elif step['action'] == 'game-adaptive':
             kwargs = {}
             if step.has_key('start_level'):
@@ -808,6 +819,8 @@ class GameModeManager(object):
                 kwargs['continuous_asteroids_on_same_level'] = step['continuous_asteroids_on_same_level']
             if step.has_key('show_advance_countdown'):
                 kwargs['show_advance_countdown'] = step['show_advance_countdown']
+            if step.has_key('game_element_opacity'):
+                kwargs['game_element_opacity'] = step['game_element_opacity']
 
             self.gamescreenstack.append(
                 AsteroidImpactInfiniteGameplayScreen(
