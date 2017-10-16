@@ -15,13 +15,14 @@ from resources import load_image, load_sound, NoneSound
 import virtualdisplay
 import math
 
-class VirtualGameSprite(pygame.sprite.Sprite):
+class VirtualGameSprite(pygame.sprite.DirtySprite):
     """
     Sprite with higher resolution game position/size (gamerect) than on-screen
     position/size (rect)
     """
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self) #call Sprite initializer
+        pygame.sprite.DirtySprite.__init__(self) #call Sprite initializer
+        self.dirty = 2 # always redraw
         self.gamerect = pygame.Rect(0, 0, 1, 1)
 
     def stop_audio(self):
@@ -91,6 +92,48 @@ class Target(VirtualGameSprite):
         # hit test done in AsteroidImpactGameplayScreen
         pass
 
+class ScoredTarget(VirtualGameSprite):
+    """Targets (Crystals) don't move, but do play a sound when collected"""
+    def __init__(self, diameter=32, left=20, top=20, imagefile='crystal.png', number='x'):
+        # todo: options for start/fadeout/end times
+        # todo: option for scoring-number
+        VirtualGameSprite.__init__(self) #call Sprite initializer
+        self.gamediameter = diameter
+        self.gamerect = pygame.Rect(left, top, diameter, diameter)
+        self.update_rect()
+        self.image = load_image(
+            imagefile,
+            (self.rect.width, self.rect.height),
+            convert_alpha=True)
+        self.number = number
+        self.visible = 0
+        self.active = False
+        self.pickup_sound = load_sound('ring_inventory.wav')
+        self.flashing = False
+        self.flashing_counter = 0
+
+    def activate(self):
+        self.active = True
+        self.visible = 1
+
+    def stop_audio(self):
+        self.pickup_sound.stop()
+
+    def pickedup(self):
+        """Play pick up sound"""
+        self.pickup_sound.play()
+        self.visible = 0
+        self.active = False
+
+    def update(self, millis):
+        # hit test done in AsteroidImpactGameplayScreen
+        pass
+        #if self.flashing:
+        #    self.flashing_counter = (self.flashing_counter + 1) % 8
+        #    self.visible = 1 if self.flashing_counter < 4 else 0
+        #elif self.active:
+        #    self.flashing_counter = 0
+        #    self.visible = 1
 
 def map_range(value, from_low, from_high, to_low, to_high):
     'return value in range [from_low, from_high] mapped to range [to_low, to_high]'

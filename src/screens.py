@@ -1213,6 +1213,11 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             x=virtualdisplay.GAME_AREA.width/2,
             bottom=960)
 
+        self.status_score_textsprite = TextSprite(
+            status_font, "0000", status_color,
+            x=virtualdisplay.GAME_AREA.width/2,
+            bottom=960)
+
         self.notice_textsprite = TextSprite(
             notice_font, '', notice_color,
             centerx=virtualdisplay.GAME_AREA.centerx,
@@ -1221,6 +1226,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.textsprites = [
             self.status_asteroids_textsprite,
             self.status_time_textsprite,
+            self.status_score_textsprite,
             self.notice_textsprite]
 
         self.sound_death = load_sound('DeathFlash.wav')
@@ -1236,7 +1242,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.setup_level(first=True)
 
         self.first_update = True
-        
+
         # reaction time prompts are independent of level list
         # load their settings from step JSON
         if reaction_prompts_settings:
@@ -1266,15 +1272,45 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # when you die
         if first:
             self.cursor = Cursor(game_bounds=virtualdisplay.GAME_PLAY_AREA)
-        self.target_positions = self.current_level['target_positions']
-        self.target_index = 0
-        self.target = Target(
-            diameter=32,
-            left=self.target_positions[0][0],
-            top=self.target_positions[0][1])
+
+        # all target sprites are created/positioned at load time! just not shown
+
+        # todo: modify makelevel.py to output this only for adaptive sometimes
+        # instead of building it here
+        rnd = random.Random()
+        level_target_list = []
+        for n in range(30):
+            level_target_list.append(dict(left= rnd.randrange(0, 640 * 2 - 32),
+                top= rnd.randrange(0, 480 * 2 - 32 - 64),
+                diameter= 32,
+                color= rnd.randint(1,5)))
+        self.simultaneous_targets = 2
+        # score for collecting p color after q color is self.target_score_by_previous_number[p][q]
+        # score for collecting p color after no previous color is self.target_score_by_previous_number[p][-1]
+        # expect 5 rows, and each row to have 6 numbers
+        # hack: just use 10 for all scores
+        self.target_score_by_previous_number = [[10]*6]*5
+        self.targets_collected = 0
+        self.target_collection_target = 3 # was length of targets for level
+        self.target_next_index = 0
+        self.show_target_score = True
+        self.target_list = []
+        for t in level_target_list:
+            sprite = ScoredTarget(diameter=t['diameter'],
+                left=t['left'],
+                top=t['top'],
+                # todo: when acting like "classic" behavior, use 'crystal.png'
+                imagefile='Crystal_%i.png' % t['color'],
+                number=t['color'])
+            self.target_list.append(sprite)
+        # I'm not sure the LayeredDirty group is ordered so its its own thing
+        self.targetsprites = pygame.sprite.LayeredDirty(self.target_list)
+        self.show_required_targets()
 
         if (first):
             self.asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
+            self.score = 0
+            self.target_previously_collected_number = 'x'
         else:
             if (self.current_level['level_index_changed_from_previous']
                 or (not self.level_list.continuous_asteroids_on_same_level)):
@@ -1323,8 +1359,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             # keep it around
             self.powerup_list.insert(0, prevpowerup)
             self.powerup = prevpowerup
-        self.mostsprites = pygame.sprite.OrderedUpdates(
-            self.asteroids + [self.cursor, self.target])
+        self.mostsprites = pygame.sprite.LayeredDirty(self.asteroids + [self.cursor])
         self.powerupsprites = pygame.sprite.Group()
         if self.powerup.image:
             self.powerupsprites.add(self.powerup)
@@ -1340,9 +1375,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
     def update_status_text(self):
         """Update numbers in status text sprites"""
-        self.status_asteroids_textsprite.set_text(
-            '%d/%d collected'%(self.target_index, len(self.target_positions)))
-        self.status_time_textsprite.set_text('%2.2f'%(self.level_millis / 1000.))
+        if self.show_target_score:
+            self.status_asteroids_textsprite.set_text('')
+            self.status_time_textsprite.set_text('')
+            self.status_score_textsprite.set_text('%05d' % self.score)
+        else:
+            self.status_asteroids_textsprite.set_text('%d/%d collected' % (self.targets_collected, self.target_collection_target))
+            self.status_time_textsprite.set_text('%2.2f' % (self.level_millis / 1000.))
+            self.status_score_textsprite.set_text('')
 
     def update_notice_text(self, level_millis, oldlevel_millis):
         """Update level countdown text"""
@@ -1394,6 +1434,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             # get ready countdown
             # only update asteroids, cursor
             self.mostsprites.update(millis)
+            self.targetsprites.update(millis)
 
             # update shield with zero duration so it continues to follow cursor
             if self.powerup.active:
@@ -1401,6 +1442,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         else:
             # game is running (countdown to level start is over)
             self.mostsprites.update(millis)
+            self.targetsprites.update(millis)
 
             # update powerups
             # if current power-up has been used completely:
@@ -1417,28 +1459,40 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             self.powerup.update(millis, frame_outbound_triggers, self.cursor, self.asteroids)
 
             # Check target collision:
-            if circularspritesoverlap(self.cursor, self.target):
-                # hit.
-                self.target.pickedup()
+            for target in self.target_list:
+                if target.active and circularspritesoverlap(self.cursor, target):
+                    # hit.
+                    target.pickedup()
 
-                # increment counter of targets hit
-                self.target_index += 1
+                    # increment counter of targets hit
+                    self.targets_collected += 1
 
-                frame_outbound_triggers.append('game_crystal_collected')
+                    # increment score
+                    scoreincrement = 0
+                    if isinstance(target.number, int):
+                        if isinstance(self.target_previously_collected_number, int):
+                            # use "nth" column
+                            scoreincrement = self.target_score_by_previous_number[
+                                target.number-1][self.target_previously_collected_number-1]
+                        else:
+                            # use last column
+                            scoreincrement = self.target_score_by_previous_number[
+                                target.number-1][-1]
+                    # todo: it'd be nice to flash on screen the score change either by the cursor or by the score
+                    self.score += scoreincrement
+                    self.target_previously_collected_number = target.number
 
-                if self.target_index >= len(self.target_positions):
-                    print 'completed level'
-                    levelstate = 'completed'
-                    self.level_list.level_completed(self.level_millis, frame_outbound_triggers)
-#                     self.screenstack.append(LevelCompletedOverlayScreen(
-#                         self.screen, self.screenstack))
-                    self.advance_level()
-                    frame_outbound_triggers.append('game_level_complete')
-                else:
-                    # position for next crystal target:
-                    self.target.gamerect.left = self.target_positions[self.target_index][0]
-                    self.target.gamerect.top = self.target_positions[self.target_index][1]
-                    self.target.update_rect()
+                    frame_outbound_triggers.append('game_crystal_collected')
+
+                    if self.targets_collected >= self.target_collection_target:
+                        print 'completed level'
+                        levelstate = 'completed'
+                        self.level_list.level_completed(self.level_millis, frame_outbound_triggers)
+                        self.advance_level()
+                        frame_outbound_triggers.append('game_level_complete')
+                    else:
+                        # showing next target happens at end of update_frontmost() now
+                        pass
 
             # Check powerup collision
             if self.powerup != None\
@@ -1476,9 +1530,9 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # adaptive-specific score:
         logrowdetails['adaptive_level_score'] = self.level_list.level_score
 
-        logrowdetails['targets_collected'] = self.target_index
-        logrowdetails['target_x'] = self.target.gamerect.centerx
-        logrowdetails['target_y'] = self.target.gamerect.centery
+        logrowdetails['targets_collected'] = self.targets_collected
+        logrowdetails['target_x'] = 'todo' # now there's more than one target_x.  was self.target.gamerect.centerx
+        logrowdetails['target_y'] = 'todo' # now there's more than one target_y.  was self.target.gamerect.centery
 
         #active powerup (none, shield, slow)
         logrowdetails['active_powerup'] = 'none'
@@ -1504,9 +1558,21 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # remove shrunken asteroids
         self.asteroids = [asteroid for asteroid in self.asteroids if asteroid.gamediameter >= 10]
 
+        self.show_required_targets()
+
+    def show_required_targets(self):
+        # show targets if not enough are visible
+        visible_target_count = len([t for t in self.target_list if t.active])
+        while visible_target_count < self.simultaneous_targets:
+            self.target_list[self.target_next_index].activate()
+            self.target_next_index = (self.target_next_index + 1) % len(self.target_list)
+            visible_target_count += 1
+
     def after_close(self, logrowdetails, reactionlogger, surveylogger):
         # halt all pending sounds
         for s in self.mostsprites:
+            s.stop_audio()
+        for s in self.targetsprites:
             s.stop_audio()
         for s in self.powerupsprites:
             s.stop_audio()
@@ -1518,6 +1584,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.screen.blit(self.blackbackground, (0, 0))
 
         self.mostsprites.draw(self.screen)
+        self.targetsprites.draw(self.screen)
         self.powerupsprites.draw(self.screen)
         self.reaction_prompts.draw(self.screen)
 
