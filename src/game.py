@@ -700,7 +700,7 @@ class GameModeManager(object):
                 if step.has_key('multicolor_crystal_scoring'):
                     step['multicolor_crystal_scoring'] = bool(step['multicolor_crystal_scoring'])
                 else:
-                    step['multicolor_crystal_scoring'] = false
+                    step['multicolor_crystal_scoring'] = False
 
                 if step.has_key('multicolor_crystal_numbers'):
                     # should be list of integers 1 <= n <= 5 for Crystal_1 through Crystal_5 graphics
@@ -890,7 +890,7 @@ class GameModeManager(object):
             if step.has_key('multicolor_crystal_scoring'):
                 kwargs['multicolor_crystal_scoring'] = step['multicolor_crystal_scoring']
             else:
-                kwargs['multicolor_crystal_scoring'] = false
+                kwargs['multicolor_crystal_scoring'] = False
 
             if step.has_key('multicolor_crystal_numbers'):
                 kwargs['multicolor_crystal_numbers'] = step['multicolor_crystal_numbers']

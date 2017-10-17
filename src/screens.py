@@ -1419,6 +1419,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             self.status_asteroids_textsprite.set_text('%d/%d collected' % (self.targets_collected, self.target_collection_target))
             self.status_time_textsprite.set_text('%2.2f' % (self.level_millis / 1000.))
             self.status_score_textsprite.set_text('')
+            self.status_highscore_textsprite.set_text('')
 
     def update_notice_text(self, level_millis, oldlevel_millis):
         """Update level countdown text"""
@@ -1504,28 +1505,30 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                     self.targets_collected += 1
 
                     # increment score
-                    scoreincrement = 0
-                    if isinstance(target.number, int) and target.number > 0:
-                        if isinstance(self.target_previously_collected_number, int):
-                            # use "nth" column
-                            scoreincrement = self.multicolor_crystal_score_table[
-                                target.number-1][self.target_previously_collected_number-1]
-                        else:
-                            # use last column
-                            scoreincrement = self.multicolor_crystal_score_table[
-                                target.number-1][-1]
-                    # todo: it'd be nice to flash on screen the score change either by the cursor or by the score
-                    self.score += scoreincrement
+                    if self.multicolor_crystal_scoring:
+                        scoreincrement = 0
+                        if isinstance(target.number, int) and target.number > 0:
+                            if isinstance(self.target_previously_collected_number, int):
+                                # use "nth" column
+                                scoreincrement = self.multicolor_crystal_score_table[
+                                    target.number-1][self.target_previously_collected_number-1]
+                            else:
+                                # use last column
+                                scoreincrement = self.multicolor_crystal_score_table[
+                                    target.number-1][-1]
 
-                    # show player score change:
-                    self.score_increment_elapsed_ms = 0
-                    self.score_increment_textsprite.set_position(
-                        centerx=target.gamerect.centerx,
-                        centery=target.gamerect.centery)
-                    self.score_increment_textsprite.set_text('{:+n}'.format(scoreincrement))
+                        self.score += scoreincrement
 
-                    if self.game_globals['multicolor_high_score'] < self.score:
-                        self.game_globals['multicolor_high_score'] = self.score
+                        # show player score change:
+                        self.score_increment_elapsed_ms = 0
+                        self.score_increment_textsprite.set_position(
+                            centerx=target.gamerect.centerx,
+                            centery=target.gamerect.centery)
+                        self.score_increment_textsprite.set_text('{:+n}'.format(scoreincrement))
+
+                        if self.game_globals['multicolor_high_score'] < self.score:
+                            self.game_globals['multicolor_high_score'] = self.score
+
                     self.target_previously_collected_number = target.number
 
                     frame_outbound_triggers.append('game_crystal_collected')
