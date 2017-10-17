@@ -1202,10 +1202,16 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             level_templates_list,
             reaction_prompts_settings,
             game_element_opacity=255,
+            game_globals=None,
             **kwargs):
         GameScreen.__init__(self, screen, screenstack)
         self.name = 'gameplay-adaptive'
         self.step_kwargs = kwargs
+        self.game_globals = game_globals
+
+        # init high score if there is none
+        if not self.game_globals.has_key('multicolor_high_score'):
+            game_globals['multicolor_high_score'] = 0
 
         if game_element_opacity > 255:
             game_element_opacity = 255
@@ -1271,7 +1277,12 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             bottom=960)
 
         self.status_score_textsprite = TextSprite(
-            status_font, "0000", status_color,
+            status_font, "Score: 00000", status_color,
+            x=0,
+            bottom=960)
+
+        self.status_highscore_textsprite = TextSprite(
+            status_font, "High Score: 00000", status_color,
             x=virtualdisplay.GAME_AREA.width/2,
             bottom=960)
 
@@ -1284,6 +1295,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             self.status_asteroids_textsprite,
             self.status_time_textsprite,
             self.status_score_textsprite,
+            self.status_highscore_textsprite,
             self.notice_textsprite]
 
         self.sound_death = load_sound('DeathFlash.wav')
@@ -1431,7 +1443,8 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         if self.multicolor_crystal_scoring:
             self.status_asteroids_textsprite.set_text('')
             self.status_time_textsprite.set_text('')
-            self.status_score_textsprite.set_text('%05d' % self.score)
+            self.status_score_textsprite.set_text('Score: %05d' % self.score)
+            self.status_highscore_textsprite.set_text('High Score: %05d' % self.game_globals['multicolor_high_score'])
         else:
             self.status_asteroids_textsprite.set_text('%d/%d collected' % (self.targets_collected, self.target_collection_target))
             self.status_time_textsprite.set_text('%2.2f' % (self.level_millis / 1000.))
@@ -1533,6 +1546,8 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                                 target.number-1][-1]
                     # todo: it'd be nice to flash on screen the score change either by the cursor or by the score
                     self.score += scoreincrement
+                    if self.game_globals['multicolor_high_score'] < self.score:
+                        self.game_globals['multicolor_high_score'] = self.score
                     self.target_previously_collected_number = target.number
 
                     frame_outbound_triggers.append('game_crystal_collected')

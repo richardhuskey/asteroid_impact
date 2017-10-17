@@ -137,6 +137,8 @@ class GameModeManager(object):
         # assume error happened if we didn't reach end of __init__
         self.skipgame = True
 
+        self.game_globals = {}
+
         self.max_asteroid_count = 12
 
         if self.args.script_json != None:
@@ -869,7 +871,7 @@ class GameModeManager(object):
                     step['reaction_prompts'],
                     **kwargs))
         elif step['action'] == 'game-adaptive':
-            kwargs = {}
+            kwargs = dict(game_globals=self.game_globals)
             if step.has_key('start_level'):
                 kwargs['start_level'] = step['start_level']
 
