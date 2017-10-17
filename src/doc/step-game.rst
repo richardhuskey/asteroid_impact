@@ -138,6 +138,8 @@ __________________________
 
 The game-adaptive mode has a new alternate means of gameplay that changes how crystals work. Where in the standard modes crystals have one appearance, stay visible until you collect them, and appear only when the previous crystal is collected, this mode changes things.
 
+.. image:: images/gameplay-adaptive-multicolor-screenshot.png
+
 The normal green diamond on yellow circle crystal does not appear, instead the crystals are the 5 listed below. The numbers are the numbers used for configuration below.
 
  1. Red triangle crystal
