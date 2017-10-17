@@ -54,44 +54,6 @@ class GameScreen(object):
         """Clean up after screen is closed, and perform additional logging"""
         pass
 
-class TextSprite(object):
-    """
-    Sprite-like object for text that helps positioning text in game coordinates, and
-    keeping text in position when text changes.
-    """
-    def __init__(self, font, text, color, **kwargs):
-        """
-        Create new TextSprite()
-        
-        Keyword arguments are transformed from game space to screen space and used to specify
-        position of rasterized text.
-        """
-        self.font = font
-        self.color = color
-        self.text = None
-        for arg in kwargs.keys():
-            # convert some args from game coordinate space to screen coordinate space
-            if arg == 'x' or arg == 'left' or arg == 'right' or arg == 'centerx':
-                kwargs[arg] = virtualdisplay.screenpoint_from_gamepoint((kwargs[arg], 0))[0]
-            elif arg == 'y' or arg == 'top' or arg == 'bottom' or arg == 'centery':
-                kwargs[arg] = virtualdisplay.screenpoint_from_gamepoint((0, kwargs[arg]))[1]
-            else:
-                raise ValueError(
-                    "TextSprite() doesn't implement support for rect keword arg '%s'" % arg)
-        self.textsurf_get_rect_args = kwargs
-        self.set_text(text)
-
-    def set_text(self, text):
-        """Set and render new text"""
-        if text != self.text:
-            self.text = text
-            self.textsurf = self.font.render(self.text, 1, self.color)
-            self.textrect = self.textsurf.get_rect(**self.textsurf_get_rect_args)
-
-    def draw(self, screen):
-        """Draw text on screen"""
-        screen.blit(self.textsurf, self.textrect)
-
 class BlackScreen(GameScreen):
     """
     Black screen. Shown to the player while other things are happening in other parts of
@@ -1291,11 +1253,19 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             centerx=virtualdisplay.GAME_AREA.centerx,
             centery=virtualdisplay.GAME_AREA.centery)
 
+        # positioned on top of picked up crystal to show score change
+        self.score_increment_textsprite = TextSprite(
+            status_font, '', status_color,
+            x=0, y=0)
+        # timer to disappear text after delay
+        self.score_increment_elapsed_ms = 10000
+
         self.textsprites = [
             self.status_asteroids_textsprite,
             self.status_time_textsprite,
             self.status_score_textsprite,
             self.status_highscore_textsprite,
+            self.score_increment_textsprite,
             self.notice_textsprite]
 
         self.sound_death = load_sound('DeathFlash.wav')
@@ -1546,6 +1516,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                                 target.number-1][-1]
                     # todo: it'd be nice to flash on screen the score change either by the cursor or by the score
                     self.score += scoreincrement
+
+                    # show player score change:
+                    self.score_increment_elapsed_ms = 0
+                    self.score_increment_textsprite.set_position(
+                        centerx=target.gamerect.centerx,
+                        centery=target.gamerect.centery)
+                    self.score_increment_textsprite.set_text('{:+n}'.format(scoreincrement))
+
                     if self.game_globals['multicolor_high_score'] < self.score:
                         self.game_globals['multicolor_high_score'] = self.score
                     self.target_previously_collected_number = target.number
@@ -1591,6 +1569,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                         break
 
         self.update_status_text()
+
+        self.score_increment_elapsed_ms += millis
+        if self.score_increment_elapsed_ms > 350:
+            # hide score change
+            self.score_increment_textsprite.set_position(
+                centerx=-9000,
+                centery=-9000)
+
         logrowdetails['level_millis'] = self.level_millis
         logrowdetails['level_name'] = self.current_level['level_name']
         logrowdetails['level_attempt'] = self.level_attempt + 1

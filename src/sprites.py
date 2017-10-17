@@ -624,3 +624,47 @@ class ReactionTimePrompt(VirtualGameSprite):
                 newreactionlogrow[col] = logrowdetails[col]
         reactionlogger.log(newreactionlogrow)
 
+class TextSprite(object):
+    """
+    Sprite-like object for text that helps positioning text in game coordinates, and
+    keeping text in position when text changes.
+    """
+    def __init__(self, font, text, color, **kwargs):
+        """
+        Create new TextSprite()
+        
+        Keyword arguments are transformed from game space to screen space and used to specify
+        position of rasterized text.
+        """
+        self.font = font
+        self.color = color
+        self.text = None
+        self.textsurf = None
+        self.set_position(**kwargs)
+        self.set_text(text)
+
+    def set_position(self, **kwargs):
+        for arg in kwargs.keys():
+            # convert some args from game coordinate space to screen coordinate space
+            if arg == 'x' or arg == 'left' or arg == 'right' or arg == 'centerx':
+                kwargs[arg] = virtualdisplay.screenpoint_from_gamepoint((kwargs[arg], 0))[0]
+            elif arg == 'y' or arg == 'top' or arg == 'bottom' or arg == 'centery':
+                kwargs[arg] = virtualdisplay.screenpoint_from_gamepoint((0, kwargs[arg]))[1]
+            else:
+                raise ValueError(
+                    "TextSprite() doesn't implement support for rect keword arg '%s'" % arg)
+        self.textsurf_get_rect_args = kwargs
+        if self.textsurf:
+            self.textrect = self.textsurf.get_rect(**self.textsurf_get_rect_args)
+
+    def set_text(self, text):
+        """Set and render new text"""
+        if text != self.text:
+            self.text = text
+            self.textsurf = self.font.render(self.text, 1, self.color)
+        self.textrect = self.textsurf.get_rect(**self.textsurf_get_rect_args)
+
+    def draw(self, screen):
+        """Draw text on screen"""
+        screen.blit(self.textsurf, self.textrect)
+
