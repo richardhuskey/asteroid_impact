@@ -1294,16 +1294,24 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.target_collection_target = 3 # was length of targets for level
         self.target_next_index = 0
         self.show_target_score = True
-        self.target_list = []
+        target_list_new = []
         for t in level_target_list:
             sprite = ScoredTarget(diameter=t['diameter'],
                 left=t['left'],
                 top=t['top'],
                 # todo: when acting like "classic" behavior, use 'crystal.png'
                 imagefile='Crystal_%i.png' % t['color'],
-                number=t['color'])
-            self.target_list.append(sprite)
-        # I'm not sure the LayeredDirty group is ordered so its its own thing
+                number=t['color'],
+                lifetime_millis_max = 10000)
+            target_list_new.append(sprite)
+        
+        if first or died_previously:
+            # I'm not sure the LayeredDirty group is ordered so its its own thing
+            self.target_list = target_list_new
+        else:
+            # include existing active targets in front of new list
+            self.target_list = [t for t in self.target_list if t.active]
+            self.target_list.extend(target_list_new)
         self.targetsprites = pygame.sprite.LayeredDirty(self.target_list)
         self.show_required_targets()
 
