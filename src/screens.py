@@ -1599,8 +1599,12 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         logrowdetails['adaptive_level_score'] = self.level_list.level_score
 
         logrowdetails['targets_collected'] = self.targets_collected
-        logrowdetails['target_x'] = 'todo' # now there's more than one target_x.  was self.target.gamerect.centerx
-        logrowdetails['target_y'] = 'todo' # now there's more than one target_y.  was self.target.gamerect.centery
+        for t in self.target_list:
+            if t.active:
+                # record position of first active target:
+                logrowdetails['target_x'] = t.gamerect.centerx
+                logrowdetails['target_y'] = t.gamerect.centery
+                break
 
         #active powerup (none, shield, slow)
         logrowdetails['active_powerup'] = 'none'
