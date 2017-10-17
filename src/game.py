@@ -625,7 +625,7 @@ class GameModeManager(object):
                     return
                 step['level_templates_list'] = self.load_level_templates(step)
 
-                # float options
+                # simpler options options
                 if step.has_key('start_level'):
                     step['start_level'] = float(step['start_level'])
                 if step.has_key('level_completion_increment'):
@@ -634,6 +634,8 @@ class GameModeManager(object):
                     step['level_death_decrement'] = float(step['level_death_decrement'])
                 if step.has_key('continuous_asteroids_on_same_level'):
                     step['continuous_asteroids_on_same_level'] = bool(step['continuous_asteroids_on_same_level'])
+                if step.has_key('adaptive_asteroid_size_locked_to_initial'):
+                    step['adaptive_asteroid_size_locked_to_initial'] = bool(step['adaptive_asteroid_size_locked_to_initial'])
                 if step.has_key('show_advance_countdown'):
                     step['show_advance_countdown'] = bool(step['show_advance_countdown'])
             elif step['action'] == 'parallel_port_test':
@@ -758,6 +760,8 @@ class GameModeManager(object):
                 kwargs['level_death_decrement'] = step['level_death_decrement']
             if step.has_key('continuous_asteroids_on_same_level'):
                 kwargs['continuous_asteroids_on_same_level'] = step['continuous_asteroids_on_same_level']
+            if step.has_key('adaptive_asteroid_size_locked_to_initial'):
+                kwargs['adaptive_asteroid_size_locked_to_initial'] = step['adaptive_asteroid_size_locked_to_initial']
             if step.has_key('show_advance_countdown'):
                 kwargs['show_advance_countdown'] = step['show_advance_countdown']
 

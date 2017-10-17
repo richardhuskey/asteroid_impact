@@ -125,6 +125,7 @@ Sample: ::
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
           "continuous_asteroids_on_same_level": false,
+          "adaptive_asteroid_size_locked_to_initial": false,
           "show_advance_countdown": false,
           "level_templates": [
             {
@@ -355,6 +356,7 @@ Sample trigger-driven JSON: ::
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
           "continuous_asteroids_on_same_level": false,
+          "adaptive_asteroid_size_locked_to_initial": false,
           "show_advance_countdown": false,
           "level_templates": [
             {
@@ -526,6 +528,8 @@ The ``start_level`` is a float value that specifies the initial value used to ch
 ``level_death_decrement`` is a float value for the amount the level score is reduced when the player dies. This is distinct from the ``level_completion_increment`` so that the steady state reached when the player is near their effective difficulty can be tuned. The value should be a positive or zero.
 
 ``continuous_asteroids_on_same_level`` of ``true`` will keep the asteroids moving in their existing size and pattern when a player dying or completing a level does not advance all the way to a different level in the list. ``false`` is the default.
+
+``adaptive_asteroid_size_locked_to_initial`` of ``true`` will keep the visible asteroids the same size as when they first appeared as long as the player doesn't touch an asteroid and start over. The asteroids can still change speed and direction after a level change, and new asteroids can still appear or disappear. This defaults to ``false`` so that asteroids can change size between levels.
 
 ``show_advance_countdown`` of ``true`` will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to ``false``.
 
