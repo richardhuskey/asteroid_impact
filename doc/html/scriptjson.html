@@ -90,6 +90,7 @@
       <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
       <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
       <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+      <span class="s2">&quot;game_element_opacity&quot;</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span>
       <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
           <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -139,6 +140,7 @@
     <span class="p">{</span>
       <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
       <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s2">This is a second paragraph.</span><span class="se">\n\n</span><span class="s2">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional Instructions&quot;</span><span class="p">,</span>
       <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
     <span class="p">},</span>
     <span class="p">{</span>
@@ -164,6 +166,7 @@
       <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
       <span class="s2">&quot;continuous_asteroids_on_same_level&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;show_advance_countdown&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;game_element_opacity&quot;</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span>
       <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
           <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -231,6 +234,7 @@
     <span class="p">{</span>
         <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
         <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s2">This is a second paragraph.</span><span class="se">\n\n</span><span class="s2">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional Instructions&quot;</span><span class="p">,</span>
         <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
     <span class="p">},</span>
     <span class="p">{</span>
@@ -365,6 +369,7 @@
     <span class="p">{</span>
       <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
       <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Custom instructions can appear here. They can be split into paragraphs by escaping newlines.</span><span class="se">\n\n</span><span class="s2">This is a second paragraph.</span><span class="se">\n\n</span><span class="s2">The next step after this one is a 5 second black screen.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional Instructions&quot;</span><span class="p">,</span>
       <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span>
     <span class="p">},</span>
     <span class="p">{</span>
@@ -505,6 +510,7 @@
 <h3><code class="docutils literal"><span class="pre">game</span></code><a class="headerlink" href="#game" title="Permalink to this headline">¶</a></h3>
 <p>A null <code class="docutils literal"><span class="pre">duration</span></code> for the game step will prevent the player from advancing to the next step.</p>
 <p>The <code class="docutils literal"><span class="pre">levels</span></code> value is required. It must point to a levels list json file.</p>
+<p>Optional <code class="docutils literal"><span class="pre">game_element_opacity</span></code> specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).</p>
 </div>
 <div class="section" id="instructions">
 <h3><code class="docutils literal"><span class="pre">instructions</span></code><a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h3>
@@ -514,11 +520,13 @@
 <div class="section" id="text">
 <h3><code class="docutils literal"><span class="pre">text</span></code><a class="headerlink" href="#text" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">text</span></code> step will display text specified in the <code class="docutils literal"><span class="pre">text</span></code> attribute on the screen for the specified duration with no available interaction to the player. The <code class="docutils literal"><span class="pre">duration</span></code> must be specified.</p>
+<p>An optional <code class="docutils literal"><span class="pre">&quot;title&quot;</span></code> attribute can be specified to show a title at the otp of the screen.</p>
 <p>The text will be wrapped to fit on screen, but you can include newlines in the string and they will be included on string. Newlines in JSON must be escaped like <code class="docutils literal"><span class="pre">\n</span></code>.</p>
 <p>For example, here is text step with two lines of text with a blank line in between using two newline characters.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
     <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;First Line</span><span class="se">\n\n</span><span class="s2">Second Line&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional Instructions&quot;</span><span class="p">,</span>
     <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span>
 <span class="p">},</span>
 </pre></div>
@@ -538,6 +546,7 @@
 <p><code class="docutils literal"><span class="pre">continuous_asteroids_on_same_level</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will keep the asteroids moving in their existing size and pattern when a player dying or completing a level does not advance all the way to a different level in the list. <code class="docutils literal"><span class="pre">false</span></code> is the default.</p>
 <p><code class="docutils literal"><span class="pre">show_advance_countdown</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to <code class="docutils literal"><span class="pre">false</span></code>.</p>
 <p>The <code class="docutils literal"><span class="pre">levels</span></code> value is required. It must be a list of level parameters (which are different than for the <code class="docutils literal"><span class="pre">game</span></code> mode) or a string filename for a json file that contains a list of level parameters.</p>
+<p>Optional <code class="docutils literal"><span class="pre">game_element_opacity</span></code> specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).</p>
 </div>
 </div>
 <div class="section" id="game-adaptive-levels-list">
@@ -794,6 +803,38 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="step-shuffling">
+<h2>Step Shuffling<a class="headerlink" href="#step-shuffling" title="Permalink to this headline">¶</a></h2>
+<p>A new option allows the game to shuffle the steps list each time the game is started. The log continues to record the original step number.</p>
+<p>Here’s an example script JSON with this new option:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;step_shuffle_groups&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">]</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">&quot;step_shuffle_groups&quot;</span></code> is a list of lists of step numbers (1-based) that are shuffled together. In the example above, steps 1 and 2 are shuffled, then steps 3 and 4 are shuffled.</p>
+</div>
 </div>
 
 
@@ -822,6 +863,7 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#reaction-prompt-elements">Reaction Prompt Elements</a></li>
+<li><a class="reference internal" href="#step-shuffling">Step Shuffling</a></li>
 </ul>
 </li>
 </ul>

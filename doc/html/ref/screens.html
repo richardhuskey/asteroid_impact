@@ -47,7 +47,7 @@
 <span class="target" id="module-screens"></span><p>Game screens for AsteroidImpact</p>
 <dl class="class">
 <dt id="screens.AsteroidImpactGameplayScreen">
-<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>levellist</em>, <em>reaction_prompts_settings</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>levellist</em>, <em>reaction_prompts_settings</em>, <em>game_element_opacity=255</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactGameplayScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
 <p>Gameplay logic for the Asteroid Impact game.</p>
 <dl class="method">
@@ -100,7 +100,7 @@
 
 <dl class="class">
 <dt id="screens.AsteroidImpactInfiniteGameplayScreen">
-<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>level_templates_list</em>, <em>reaction_prompts_settings</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteGameplayScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>screenstack</em>, <em>level_templates_list</em>, <em>reaction_prompts_settings</em>, <em>game_element_opacity=255</em>, <em>game_globals=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
 <p>Gameplay logic for the Asteroid Impact game.</p>
 <dl class="method">
@@ -125,6 +125,11 @@
 <code class="descname">setup_level</code><span class="sig-paren">(</span><em>first=True</em>, <em>died_previously=False</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.setup_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup for the current level</p>
 </dd></dl>
+
+<dl class="method">
+<dt id="screens.AsteroidImpactInfiniteGameplayScreen.show_required_targets">
+<code class="descname">show_required_targets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteGameplayScreen.show_required_targets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="method">
 <dt id="screens.AsteroidImpactInfiniteGameplayScreen.update_always">
@@ -153,7 +158,7 @@
 
 <dl class="class">
 <dt id="screens.AsteroidImpactInfiniteLevelMaker">
-<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteLevelMaker</code><span class="sig-paren">(</span><em>level_templates_list</em>, <em>start_level=0.0</em>, <em>level_completion_increment=1.0</em>, <em>level_death_decrement=1.0</em>, <em>continuous_asteroids_on_same_level=False</em>, <em>show_advance_countdown=False</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">AsteroidImpactInfiniteLevelMaker</code><span class="sig-paren">(</span><em>level_templates_list, start_level=0.0, level_completion_increment=1.0, level_death_decrement=1.0, continuous_asteroids_on_same_level=False, show_advance_countdown=False, multicolor_crystal_scoring=False, multicolor_crystal_numbers=[-1], **kwargs_ignored</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.AsteroidImpactInfiniteLevelMaker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>List-like class that generates new levels as they are requested</p>
 <dl class="method">
@@ -375,28 +380,8 @@ gameplay while this screen is visible.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="screens.TextSprite">
-<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">TextSprite</code><span class="sig-paren">(</span><em>font</em>, <em>text</em>, <em>color</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.TextSprite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
-<p>Sprite-like object for text that helps positioning text in game coordinates, and
-keeping text in position when text changes.</p>
-<dl class="method">
-<dt id="screens.TextSprite.draw">
-<code class="descname">draw</code><span class="sig-paren">(</span><em>screen</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.TextSprite.draw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Draw text on screen</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="screens.TextSprite.set_text">
-<code class="descname">set_text</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.TextSprite.set_text" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set and render new text</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="screens.UserTextScreen">
-<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">UserTextScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em>, <em>click_to_continue=True</em>, <em>text='[No text value was specified]'</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">screens.</code><code class="descname">UserTextScreen</code><span class="sig-paren">(</span><em>screen</em>, <em>gamescreenstack</em>, <em>click_to_continue=True</em>, <em>text='[No text value was specified]'</em>, <em>title=''</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#screens.GameScreen" title="screens.GameScreen"><code class="xref py py-class docutils literal"><span class="pre">screens.GameScreen</span></code></a></p>
 <p>Text Screen. Displays text specified in step.</p>
 <dl class="method">
@@ -406,7 +391,7 @@ keeping text in position when text changes.</p>
 
 <dl class="method">
 <dt id="screens.UserTextScreen.init_text">
-<code class="descname">init_text</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen.init_text" title="Permalink to this definition">¶</a></dt>
+<code class="descname">init_text</code><span class="sig-paren">(</span><em>text</em>, <em>title</em><span class="sig-paren">)</span><a class="headerlink" href="#screens.UserTextScreen.init_text" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
