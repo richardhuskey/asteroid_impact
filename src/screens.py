@@ -1563,10 +1563,13 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
     def show_required_targets(self):
         # show targets if not enough are visible
         visible_target_count = len([t for t in self.target_list if t.active])
+        next_crystal_lifetime_adjustment = 1.0
         while visible_target_count < self.simultaneous_targets:
-            self.target_list[self.target_next_index].activate()
+            self.target_list[self.target_next_index].activate(life_multiplier = next_crystal_lifetime_adjustment)
             self.target_next_index = (self.target_next_index + 1) % len(self.target_list)
             visible_target_count += 1
+            # so more than one crystal shown on same frame don't turn off at exactly the same time
+            next_crystal_lifetime_adjustment += 0.3
 
     def after_close(self, logrowdetails, reactionlogger, surveylogger):
         # halt all pending sounds

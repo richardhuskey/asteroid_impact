@@ -94,7 +94,14 @@ class Target(VirtualGameSprite):
 
 class ScoredTarget(VirtualGameSprite):
     """Targets (Crystals) don't move, but do play a sound when collected"""
-    def __init__(self, diameter=32, left=20, top=20, imagefile='crystal.png', number='x'):
+    def __init__(self,
+                 diameter=32,
+                 left=20,
+                 top=20,
+                 imagefile='crystal.png',
+                 number='x',
+                 # None or milliseconds until crystal disappears on its own:
+                 lifetime_millis_max = None):
         # todo: options for start/fadeout/end times
         # todo: option for scoring-number
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -112,9 +119,24 @@ class ScoredTarget(VirtualGameSprite):
         self.flashing = False
         self.flashing_counter = 0
 
-    def activate(self):
+        # max time this crystal remains active
+        self.lifetime_millis_max = lifetime_millis_max
+        # current elapsed millis this crystal has ben active
+        self.lifetime_millis_elapsed = 0
+
+    def activate(self, life_multiplier=1):
         self.active = True
         self.visible = 1
+        self.lifetime_millis_elapsed = 0
+        if life_multiplier > 1 and self.lifetime_millis_max != None:
+            # make this one appearance last n times as long by offsetting start of life
+            self.lifetime_millis_elapsed -= int((life_multiplier - 1) * self.lifetime_millis_max)
+        self.flashing = False
+        self.flashing_counter = 0
+
+    def deactivate(self):
+        self.active = False
+        self.visible = 0
 
     def stop_audio(self):
         self.pickup_sound.stop()
@@ -122,18 +144,29 @@ class ScoredTarget(VirtualGameSprite):
     def pickedup(self):
         """Play pick up sound"""
         self.pickup_sound.play()
-        self.visible = 0
-        self.active = False
+        self.deactivate()
 
     def update(self, millis):
         # hit test done in AsteroidImpactGameplayScreen
-        pass
-        #if self.flashing:
-        #    self.flashing_counter = (self.flashing_counter + 1) % 8
-        #    self.visible = 1 if self.flashing_counter < 4 else 0
-        #elif self.active:
-        #    self.flashing_counter = 0
-        #    self.visible = 1
+        if self.active:
+            self.lifetime_millis_elapsed += millis
+
+            # start flashing before end of self.lifetime_millis_max
+            if (not self.flashing 
+                and self.lifetime_millis_max != None 
+                and self.lifetime_millis_max < self.lifetime_millis_elapsed + 2000):
+                self.flashing = True
+
+            if self.flashing:
+                self.flashing_counter = (self.flashing_counter + 1) % 8
+                self.visible = 1 if self.flashing_counter < 4 else 0
+            elif self.active:
+                self.flashing_counter = 0
+                self.visible = 1
+
+            if self.lifetime_millis_max != None and self.lifetime_millis_elapsed > self.lifetime_millis_max:
+                # deactivate myself
+                self.deactivate()
 
 def map_range(value, from_low, from_high, to_low, to_high):
     'return value in range [from_low, from_high] mapped to range [to_low, to_high]'
