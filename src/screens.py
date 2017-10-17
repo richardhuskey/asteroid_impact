@@ -1605,6 +1605,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 logrowdetails['target_x'] = t.gamerect.centerx
                 logrowdetails['target_y'] = t.gamerect.centery
                 break
+        logrowdetails['multicolor_crystal_score'] = self.score
 
         #active powerup (none, shield, slow)
         logrowdetails['active_powerup'] = 'none'
