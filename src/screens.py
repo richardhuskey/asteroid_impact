@@ -14,7 +14,7 @@ from sprites import *
 from resources import load_font, load_image, mute_music, unmute_music
 from pygame.locals import *
 import virtualdisplay
-from makelevel import make_level
+from makelevel import make_level, TARGET_SIZE
 import string
 import random
 import parallelportwrapper
@@ -1065,13 +1065,27 @@ class AsteroidImpactInfiniteLevelMaker(object):
             level_completion_increment = 1.0,
             level_death_decrement = 1.0,
             continuous_asteroids_on_same_level = False,
-            show_advance_countdown = False):
+            show_advance_countdown = False,
+            multicolor_crystal_scoring = False,
+            multicolor_crystal_numbers = [-1],
+            **kwargs_ignored):
         print start_level, level_completion_increment, level_death_decrement
         self.level_score = start_level
         self.level_completion_increment = level_completion_increment
         self.level_death_decrement = level_death_decrement
         self.continuous_asteroids_on_same_level = continuous_asteroids_on_same_level
         self.show_advance_countdown = show_advance_countdown
+        self.multicolor_crystal_scoring = multicolor_crystal_scoring
+        
+        # validate multicolor_crystal_numbers
+        self.multicolor_crystal_numbers = multicolor_crystal_numbers
+        if self.multicolor_crystal_scoring:
+            if not self.multicolor_crystal_numbers or self.multicolor_crystal_numbers[0] == -1:
+                # only the first color
+                self.multicolor_crystal_numbers = [1]
+        else:
+            # only the original color when not using multicolor scoring
+            self.multicolor_crystal_numbers = [-1]
 
         self.level_args_list = level_templates_list
         self.level_used_count_list = [0] * len(level_templates_list)
@@ -1119,12 +1133,28 @@ class AsteroidImpactInfiniteLevelMaker(object):
         rnd = random.Random(level_hash)
         for i in xrange(100*self.level_used_count_list[level_index]):
             rnd.random()
-        
+
         level_args = self.level_args_list[level_index].copy()
         level_args['rnd'] = rnd
+        target_count_real = level_args['target_count']
+        if self.multicolor_crystal_scoring:
+            # override target count so we get enough to show in multiple colors and having them disappear
+            level_args['target_count'] = 5 * (level_args['target_count'] + len(self.multicolor_crystal_numbers))
         level = make_level(**level_args)
         self.level_used_count_list[level_index] += 1
         level['level_name']  = 'dynamic-' + str(level_index)
+        
+        # reset target count
+        level_args['target_count'] = target_count_real
+        level['target_count'] = target_count_real
+
+        level_target_list = []
+        for p in level['target_positions']:
+            level_target_list.append(dict(left= p[0],
+                top= p[1],
+                diameter= TARGET_SIZE,
+                color=rnd.choice(self.multicolor_crystal_numbers)))
+        level['level_target_list'] = level_target_list
 
         # debug print
         #print 'previous level_index', self.level_index_previous, 'new', level_index
@@ -1175,12 +1205,39 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             **kwargs):
         GameScreen.__init__(self, screen, screenstack)
         self.name = 'gameplay-adaptive'
+        self.step_kwargs = kwargs
 
         if game_element_opacity > 255:
             game_element_opacity = 255
         if game_element_opacity < 1:
             game_element_opacity = 1
         self.game_element_opacity = game_element_opacity
+
+        # multicolor scoring properties
+        self.multicolor_crystal_scoring = False
+        if kwargs.has_key('multicolor_crystal_scoring'): 
+            self.multicolor_crystal_scoring = kwargs['multicolor_crystal_scoring']
+
+        self.multicolor_crystal_num_showing = 1
+        self.multicolor_crystal_lifetime_ms = None
+        # score table to find score as player collects crystal
+        # row: current crystal color
+        # column: previously collected crystal color. If no previous, use 6th cell.
+        self.multicolor_crystal_score_table = [[0]*6]*5
+
+        if self.multicolor_crystal_scoring:
+            # load multicolor-crystal-scoring specific options:
+            if kwargs.has_key('multicolor_crystal_num_showing'):
+                self.multicolor_crystal_num_showing = kwargs['multicolor_crystal_num_showing']
+
+            if kwargs.has_key('multicolor_crystal_lifetime_ms'):
+                self.multicolor_crystal_lifetime_ms = kwargs['multicolor_crystal_lifetime_ms']            
+
+            if kwargs.has_key('multicolor_crystal_score_table'):
+                self.multicolor_crystal_score_table = kwargs['multicolor_crystal_score_table']
+            else:
+                # all tens
+                self.multicolor_crystal_score_table = [[10 for s in row] for row in self.multicolor_crystal_score_table]
 
         self.blackbackground = pygame.Surface(self.screen.get_size())
         self.blackbackground = self.blackbackground.convert()
@@ -1273,36 +1330,21 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         if first:
             self.cursor = Cursor(game_bounds=virtualdisplay.GAME_PLAY_AREA)
 
-        # all target sprites are created/positioned at load time! just not shown
-
-        # todo: modify makelevel.py to output this only for adaptive sometimes
-        # instead of building it here
-        rnd = random.Random()
-        level_target_list = []
-        for n in range(30):
-            level_target_list.append(dict(left= rnd.randrange(0, 640 * 2 - 32),
-                top= rnd.randrange(0, 480 * 2 - 32 - 64),
-                diameter= 32,
-                color= rnd.randint(1,5)))
-        self.simultaneous_targets = 2
-        # score for collecting p color after q color is self.target_score_by_previous_number[p][q]
-        # score for collecting p color after no previous color is self.target_score_by_previous_number[p][-1]
-        # expect 5 rows, and each row to have 6 numbers
-        # hack: just use 10 for all scores
-        self.target_score_by_previous_number = [[10]*6]*5
+        self.simultaneous_targets = self.multicolor_crystal_num_showing
         self.targets_collected = 0
-        self.target_collection_target = 3 # was length of targets for level
+        self.target_collection_target = self.current_level['target_count']
         self.target_next_index = 0
-        self.show_target_score = True
+
+        # all target sprites are created/positioned at load time! just not shown
         target_list_new = []
-        for t in level_target_list:
+        for t in self.current_level['level_target_list']:
             sprite = ScoredTarget(diameter=t['diameter'],
                 left=t['left'],
                 top=t['top'],
-                # todo: when acting like "classic" behavior, use 'crystal.png'
-                imagefile='Crystal_%i.png' % t['color'],
+                # when acting like "classic" behavior, use 'crystal.png'
+                imagefile='Crystal_%i.png' % t['color'] if t['color'] >= 1 else 'crystal.png',
                 number=t['color'],
-                lifetime_millis_max = 10000)
+                lifetime_millis_max = self.multicolor_crystal_lifetime_ms)
             target_list_new.append(sprite)
         
         if first or died_previously:
@@ -1315,9 +1357,11 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.targetsprites = pygame.sprite.LayeredDirty(self.target_list)
         self.show_required_targets()
 
-        if (first):
-            self.asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
+        if first or died_previously:
             self.score = 0
+
+        if first:
+            self.asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
             self.target_previously_collected_number = 'x'
         else:
             if (self.current_level['level_index_changed_from_previous']
@@ -1383,7 +1427,8 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
     def update_status_text(self):
         """Update numbers in status text sprites"""
-        if self.show_target_score:
+
+        if self.multicolor_crystal_scoring:
             self.status_asteroids_textsprite.set_text('')
             self.status_time_textsprite.set_text('')
             self.status_score_textsprite.set_text('%05d' % self.score)
@@ -1477,14 +1522,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
                     # increment score
                     scoreincrement = 0
-                    if isinstance(target.number, int):
+                    if isinstance(target.number, int) and target.number > 0:
                         if isinstance(self.target_previously_collected_number, int):
                             # use "nth" column
-                            scoreincrement = self.target_score_by_previous_number[
+                            scoreincrement = self.multicolor_crystal_score_table[
                                 target.number-1][self.target_previously_collected_number-1]
                         else:
                             # use last column
-                            scoreincrement = self.target_score_by_previous_number[
+                            scoreincrement = self.multicolor_crystal_score_table[
                                 target.number-1][-1]
                     # todo: it'd be nice to flash on screen the score change either by the cursor or by the score
                     self.score += scoreincrement

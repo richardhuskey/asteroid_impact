@@ -133,6 +133,237 @@ Each time you complete a level your "level score" is increased by ``"level_compl
 
 So this can be configured to act like the normal gameplay, with increment of 1.0 and decrement of 0.0, but this configuration exists because I felt that would ratchet the difficutly up to the point where you fail continuously, instead of you reaching a happy flow state where you make a few mintues of progress before being set back some.
 
+Multicolor Crystal Scoring
+__________________________
+
+The game-adaptive mode has a new alternate means of gameplay that changes how crystals work. Where in the standard modes crystals have one appearance, stay visible until you collect them, and appear only when the previous crystal is collected, this mode changes things.
+
+The normal green diamond on yellow circle crystal does not appear, instead the crystals are the 5 listed below. The numbers are the numbers used for configuration below.
+
+ 1. Red triangle crystal
+ 2. Green square crystal
+ 3. Yellow diamond crystal
+ 4. Orange hexagon crystal
+ 5. Blue octagon crystal
+
+Next, a score appears on the bottom of the screen. When a crystal is collected, the configurable amount added to the score depends not just on the color of the crystal collected, but on the color of the one last collected. This allows scores such as "25 points for every crystal collected except 0 when collecting the same color twice in a row"
+
+To allow the player to choose which order they want to collect crystals in, crystals can be configured expire after a few seconds on their own, and/or more than one crystal can be visible at a time.
+
+The "Level Score" continues to apply as before. After the player collects the level-specific ``"target_count"`` they may be advanced to the next more difficult level if the "Level Score" is incremented high enough.
+
+Below is a sample script JSON will all multicolor crystal scoring options specified ::
+
+    {
+      "steps": [
+        {
+          "action": "game-adaptive",
+          "start_level": 3.5,
+          "level_completion_increment": 0.4,
+          "level_death_decrement": 0.3,
+          "continuous_asteroids_on_same_level": false,
+          "show_advance_countdown": false,
+          "game_element_opacity": 255,
+    
+          "multicolor_crystal_scoring": true,
+          "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+          "multicolor_crystal_num_showing": 2,
+          "multicolor_crystal_lifetime_ms": 5000,
+    
+          "multicolor_crystal_score_table": [
+            [ 25, 25, 25, 25, 25, 25 ],
+            [ 50, 50, 50, 50, 50, 50 ],
+            [ 100, 100, 100, 100, 100, 100 ],
+            [ 200, 200, 200, 200, 200, 200 ],
+            [ 500, 500, 500, 500, 500, 500 ]
+          ],
+    
+          "level_templates": [
+            {
+              "asteroid_count": 1,
+              "asteroid_speeds": "slow",
+              "powerup_count": 0,
+              "target_count": 1
+            },
+            {
+              "asteroid_count": 1,
+              "asteroid_speeds": "medium",
+              "powerup_count": 0,
+              "target_count": 2
+            },
+            {
+              "asteroid_count": 3,
+              "asteroid_sizes": "varied",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "slow"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 3,
+              "asteroid_sizes": "varied",
+              "asteroid_speeds": "slow",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "slow"
+              ],
+              "target_count": 4
+            },
+            {
+              "asteroid_count": 2,
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "shield"
+              ],
+              "target_count": 5
+            },
+            {
+              "asteroid_count": 3,
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "shield"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 3,
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "slow"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 2,
+              "asteroid_speeds": "fast",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "slow"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 4,
+              "asteroid_sizes": "medium",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 2.0,
+              "powerup_types": [
+                "slow",
+                "shield"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 4,
+              "asteroid_sizes": "medium",
+              "asteroid_speeds": "fast",
+              "powerup_count": 10,
+              "powerup_delay": 2.0,
+              "powerup_types": [
+                "slow",
+                "shield"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 6,
+              "asteroid_sizes": "small",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 2.0,
+              "powerup_types": [
+                "slow",
+                "shield"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 8,
+              "asteroid_sizes": "varied",
+              "asteroid_speeds": "medium",
+              "powerup_count": 10,
+              "powerup_delay": 2.0,
+              "powerup_types": [
+                "slow",
+                "shield"
+              ],
+              "target_count": 3
+            },
+            {
+              "asteroid_count": 5,
+              "asteroid_speeds": "extreme",
+              "powerup_count": 10,
+              "powerup_delay": 0.5,
+              "powerup_types": [
+                "shield"
+              ],
+              "target_count": 3
+            }
+          ]
+        }
+      ]
+    }
+
+
+The multicolor-specific options are as follows:
+
+``"multicolor_crystal_scoring"``
+    Set this to ``true`` to enable the new multicolor scoring behaviors.
+``"multicolor_crystal_numbers"``
+    Set this to a list of numbers 1-5 corresponding to the crystal colors you want to see on this step. For example, if you want to see only the red triangle and orange hexagon, use ``"multicolor_crystal_numbers": [1, 4],``. If not specified, defaults to just shwoing the red triangle.
+``"multicolor_crystal_num_showing"``
+    The number of crystals to have active on screen at a time. To show two crystals on screen at all times, set this to ``2``. This defaults to ``1``.
+``"multicolor_crystal_lifetime_ms"``
+    The duration in milliseconds a crystal remains before it goes away on its own. Leave out this option, or set it to ``null`` make the crystals persistent forever. Set to ``5000`` to make crystals automatically go away after 5 seconds.
+``"multicolor_crystal_score_table"``
+    5 rows of point values, with 6 scores per row. This is a table used to find the number of points to award when a crystal is collected. The row corresponds to the color of the crystal the player is collecting now, such as the red triangle for the first row. The entry within the inner list corresponds to the color of the previously selected crystal, for example the first inner points value corresponds to having previously collected a red triangle. The 6th points value is used when no crystal was collected previously.
+
+
+Here's a score table that always awards 25 points for red triangle, 50 for green square and so-on. ::
+
+      "multicolor_crystal_score_table": [
+        [ 25, 25, 25, 25, 25, 25 ],
+        [ 50, 50, 50, 50, 50, 50 ],
+        [ 75, 75, 75, 75, 75, 75 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 125, 125, 125, 125, 125, 125 ]
+      ],
+
+
+
+Here's the same table as above, modified to award 0 points when you collect the same color after itself ::
+
+      "multicolor_crystal_score_table": [
+        [ 0, 25, 25, 25, 25, 25 ],
+        [ 50, 0, 50, 50, 50, 50 ],
+        [ 75, 75, 0, 75, 75, 75 ],
+        [ 100, 100, 100, 0, 100, 100 ],
+        [ 125, 125, 125, 125, 0, 125 ]
+      ],
+
+
+And here's another table that awards 10 points for everything, and 500 points when you collect a green square after a red triangle. ::
+
+      "multicolor_crystal_score_table": [
+        [ 10, 10, 10, 10, 10, 10 ],
+        [ 500, 10, 10, 10, 10, 10 ],
+        [ 10, 10, 10, 10, 10, 10 ],
+        [ 10, 10, 10, 10, 10, 10 ],
+        [ 10, 10, 10, 10, 10, 10 ]
+      ],
+
 
 Level List Options
 __________________

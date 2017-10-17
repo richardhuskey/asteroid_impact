@@ -679,16 +679,77 @@ class GameModeManager(object):
                 # other options
                 if step.has_key('start_level'):
                     step['start_level'] = float(step['start_level'])
+
                 if step.has_key('level_completion_increment'):
                     step['level_completion_increment'] = float(step['level_completion_increment'])
+
                 if step.has_key('level_death_decrement'):
                     step['level_death_decrement'] = float(step['level_death_decrement'])
+
                 if step.has_key('continuous_asteroids_on_same_level'):
                     step['continuous_asteroids_on_same_level'] = bool(step['continuous_asteroids_on_same_level'])
+
                 if step.has_key('show_advance_countdown'):
                     step['show_advance_countdown'] = bool(step['show_advance_countdown'])
+
                 if step.has_key('game_element_opacity'):
                     step['game_element_opacity'] = int(step['game_element_opacity'])
+
+                if step.has_key('multicolor_crystal_scoring'):
+                    step['multicolor_crystal_scoring'] = bool(step['multicolor_crystal_scoring'])
+                else:
+                    step['multicolor_crystal_scoring'] = false
+
+                if step.has_key('multicolor_crystal_numbers'):
+                    # should be list of integers 1 <= n <= 5 for Crystal_1 through Crystal_5 graphics
+                    if not isinstance(step['multicolor_crystal_numbers'], list):
+                        print 'Error: game-adaptive multicolor_crystal_numbers must be a list of integers 1-5'
+                        return
+                    for n in step['multicolor_crystal_numbers']:
+                        if not isinstance(n, int) or n < 1 or n > 5:
+                            print 'Error: game-adaptive multicolor_crystal_numbers must be a list of integers 1-5'
+                            print repr(n), 'is invalid'
+                            return
+
+                if step.has_key('multicolor_crystal_num_showing'):
+                    step['multicolor_crystal_num_showing'] = int(step['multicolor_crystal_num_showing'])
+
+                if step.has_key('multicolor_crystal_lifetime_ms'):
+                    if (isinstance(step['multicolor_crystal_lifetime_ms'], float) or
+                        isinstance(step['multicolor_crystal_lifetime_ms'], int)):
+                        step['multicolor_crystal_lifetime_ms'] = int(step['multicolor_crystal_lifetime_ms'])
+                    else:
+                        step['multicolor_crystal_lifetime_ms'] = None
+
+                if step.has_key('multicolor_crystal_score_table'):
+                    if not isinstance(step['multicolor_crystal_score_table'], list):
+                        print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                        return
+                    # require 5 rows for the 5 different colors
+                    if len(step['multicolor_crystal_score_table']) != 5:
+                        print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                        print 'expected 5 rows, found', len(step['multicolor_crystal_score_table'])
+                        return
+                    for score_row in step['multicolor_crystal_score_table']:
+                        if not isinstance(score_row, list):
+                            print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                            print 'score row should be list of scores, but found non-list'
+                            return
+                        # require 6 rows for the 5 different colors the player collected previously, plus the score if they hadn't collected any previously
+                        if len(score_row) != 6:
+                            print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                            print 'score row should have 6 elements. One for each color, plus one for when no previous crystal was collected'
+                            print 'expected 6 elements in inner list, found', len(score_row)
+                            return
+                        for score_cell in score_row:
+                            if not isinstance(score_cell, int) and not isinstance(score_cell, float):
+                                print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                                # expected int
+                                print repr(score_cell), 'is an invalid score'
+                                return
+                    # convert scores into ints
+                    step['multicolor_crystal_score_table'] = [[int(cell) for cell in row] for row in step['multicolor_crystal_score_table']]
+
             elif step['action'] == 'parallel_port_test':
                 # nothing else to validate
                 pass
@@ -811,14 +872,36 @@ class GameModeManager(object):
             kwargs = {}
             if step.has_key('start_level'):
                 kwargs['start_level'] = step['start_level']
+
             if step.has_key('level_completion_increment'):
                 kwargs['level_completion_increment'] = step['level_completion_increment']
+
             if step.has_key('level_death_decrement'):
                 kwargs['level_death_decrement'] = step['level_death_decrement']
+
             if step.has_key('continuous_asteroids_on_same_level'):
                 kwargs['continuous_asteroids_on_same_level'] = step['continuous_asteroids_on_same_level']
+
             if step.has_key('show_advance_countdown'):
                 kwargs['show_advance_countdown'] = step['show_advance_countdown']
+
+            if step.has_key('multicolor_crystal_scoring'):
+                kwargs['multicolor_crystal_scoring'] = step['multicolor_crystal_scoring']
+            else:
+                kwargs['multicolor_crystal_scoring'] = false
+
+            if step.has_key('multicolor_crystal_numbers'):
+                kwargs['multicolor_crystal_numbers'] = step['multicolor_crystal_numbers']
+
+            if step.has_key('multicolor_crystal_num_showing'):
+                kwargs['multicolor_crystal_num_showing'] = step['multicolor_crystal_num_showing']
+
+            if step.has_key('multicolor_crystal_lifetime_ms'):
+                kwargs['multicolor_crystal_lifetime_ms'] = step['multicolor_crystal_lifetime_ms']
+
+            if step.has_key('multicolor_crystal_score_table'):
+                kwargs['multicolor_crystal_score_table'] = step['multicolor_crystal_score_table']
+
             if step.has_key('game_element_opacity'):
                 kwargs['game_element_opacity'] = step['game_element_opacity']
 
