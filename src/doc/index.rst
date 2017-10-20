@@ -25,6 +25,7 @@ Contents:
    leveljson
    makelevelpy
    codeintro
+   build
    timing
    ref/game
    ref/logger
