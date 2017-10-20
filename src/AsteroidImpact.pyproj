@@ -52,6 +52,7 @@
     <Content Include="doc\step-instructions.rst" />
     <Content Include="doc\step-survey.rst" />
     <Content Include="doc\step-text.rst" />
+    <Content Include="doc\timing.rst" />
     <Content Include="LICENSE.txt" />
     <Content Include="raw_data\asteroid.svg" />
     <Content Include="raw_data\background.jpg" />
