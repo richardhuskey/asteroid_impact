@@ -462,10 +462,8 @@ class SurveyQuestionScreen(GameScreen):
         button.selected = True
 
     def next_button_clicked(self):
-        # validate that a single option is selected
-        if 1 == len([b for b in self.option_buttons if b.selected]):
-            # todo: log selected button
-            self.screenstack.pop()
+        # always close survey step:
+        self.screenstack.pop()
 
     def after_close(self, logrowdetails, reactionlogger, surveylogger):
         """Clean up after screen is closed, and perform additional logging"""

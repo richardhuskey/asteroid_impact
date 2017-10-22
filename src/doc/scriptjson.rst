@@ -566,7 +566,7 @@ The levels list is a list of objects with the following options:
 
 The ``survey`` step will display a configurable prompt and list of options for the player. The player may click on one of the options to select it. If the player then clicks on a different option, the first is deselected.
 
-If there is no ``duration`` or ``trigger_count`` attribute, the step will show a "Next" button to advance to the next step. The "Next" button does not become active to a until one of the survey options are selected.
+If there is no ``duration`` or ``trigger_count`` attribute, the step will show a "Next" button to advance to the next step.
 
 Long text on the ``prompt`` option is fine. It will wrap to multiple lines.
 
