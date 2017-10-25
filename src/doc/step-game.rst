@@ -152,7 +152,8 @@ The adaptive gameplay level list entries have the following options:
     Delay between when one power-up is used and when the next appears, in seconds.
 ``"powerup_types"``
     The types of power-ups to make available. ``"shield"``, ``"slow"``, ``"all"`` or ``"none"``
-
+``"seed"```
+    Number used to seed the random number generator that chooses sizes, positions, and speeds of targets, asteroids, and power-ups. This is automatically auto-generated from a hash of the other level parameters if omitted. May be any number.
 
 Reaction Prompt
 ===============
