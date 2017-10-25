@@ -25,9 +25,9 @@ Below is sample JSON for a survey step will all the options specified.
 
 
 ``duration``
-   The number of seconds to show the step for. When omitted, a "Next" button is added below the bottom option that allows the player to advance to the next step after selecting a survey option.
+   The number of seconds to show the step for. When omitted, a "Next" button is added below the bottom option that allows the player to advance to the next step.
 ``trigger_count``
-    The number of incoming trigger pulses until this step automatically advances. See :doc:`Trigger Inputs <input-trigger>` for how to configure input triggers. When omitted, a "Next" button is added below the bottom option that allows the player to advance to the next step after selecting a survey option.
+    The number of incoming trigger pulses until this step automatically advances. See :doc:`Trigger Inputs <input-trigger>` for how to configure input triggers. When omitted, a "Next" button is added below the bottom option that allows the player to advance to the next step.
 ``prompt``
    The survey question. This can contain newlines and blank lines and will display them. No other special formatting is available.
 ``options``
