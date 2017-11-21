@@ -103,7 +103,7 @@ don't mean the same thing when the powerup is active.
 Reaction Prompts
 ================
 
-When there is an active (visible or audible) reaction prompt, the state wil change from blank to "waiting". If the player presses the corresponding button the state will change to "complete". Otherwise, on the frame the prompt disappears the state changes to "timeout". If the step ends before the reaction prompt is completed or times out naturally the state changes to "timeout_step_end"
+When there is an active (visible or audible) reaction prompt, the state will change from blank to "waiting". If the player presses the corresponding button the state will change to "complete". Otherwise, on the frame the prompt disappears the state changes to "timeout". If the step ends before the reaction prompt is completed or times out naturally the state changes to "timeout_step_end"
 
 ``reaction_prompt_millis`` is the time since the prompt appeared.
 

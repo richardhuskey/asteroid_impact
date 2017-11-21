@@ -165,6 +165,7 @@
       <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
       <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
       <span class="s2">&quot;continuous_asteroids_on_same_level&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_asteroid_size_locked_to_initial&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;show_advance_countdown&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;game_element_opacity&quot;</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span>
       <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -394,6 +395,7 @@
       <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
       <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
       <span class="s2">&quot;continuous_asteroids_on_same_level&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;adaptive_asteroid_size_locked_to_initial&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;show_advance_countdown&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
@@ -544,6 +546,7 @@
 <p><code class="docutils literal"><span class="pre">level_completion_increment</span></code> is a float value for the amount the level score is incremented when the player completes a level. This can be under <code class="docutils literal"><span class="pre">1.0</span></code> which would usually mean that the player would have to complete another level with the same options before advancing to the next level in the list.</p>
 <p><code class="docutils literal"><span class="pre">level_death_decrement</span></code> is a float value for the amount the level score is reduced when the player dies. This is distinct from the <code class="docutils literal"><span class="pre">level_completion_increment</span></code> so that the steady state reached when the player is near their effective difficulty can be tuned. The value should be a positive or zero.</p>
 <p><code class="docutils literal"><span class="pre">continuous_asteroids_on_same_level</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will keep the asteroids moving in their existing size and pattern when a player dying or completing a level does not advance all the way to a different level in the list. <code class="docutils literal"><span class="pre">false</span></code> is the default.</p>
+<p><code class="docutils literal"><span class="pre">adaptive_asteroid_size_locked_to_initial</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will keep the visible asteroids the same size as when they first appeared. The asteroids can still change speed and direction after a level change, and new asteroids can still appear or disappear. This defaults to <code class="docutils literal"><span class="pre">false</span></code> so that asteroids can change size between levels.</p>
 <p><code class="docutils literal"><span class="pre">show_advance_countdown</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to <code class="docutils literal"><span class="pre">false</span></code>.</p>
 <p>The <code class="docutils literal"><span class="pre">levels</span></code> value is required. It must be a list of level parameters (which are different than for the <code class="docutils literal"><span class="pre">game</span></code> mode) or a string filename for a json file that contains a list of level parameters.</p>
 <p>Optional <code class="docutils literal"><span class="pre">game_element_opacity</span></code> specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).</p>
@@ -554,10 +557,10 @@
 <p>The levels list is a list of objects with the following options:</p>
 <table border="1" class="docutils">
 <colgroup>
+<col width="20%" />
 <col width="22%" />
-<col width="24%" />
-<col width="7%" />
-<col width="47%" />
+<col width="6%" />
+<col width="53%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Option</th>
@@ -607,12 +610,17 @@
 <td>“all”</td>
 <td>Types of powerups that are in level.</td>
 </tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">seed</span></code></td>
+<td>integer</td>
+<td>not specified</td>
+<td>Number used to seed random position/speed generator. If not provided, the other level options are hashed into a single number for this.</td>
+</tr>
 </tbody>
 </table>
 <div class="section" id="survey">
 <h3><code class="docutils literal"><span class="pre">survey</span></code><a class="headerlink" href="#survey" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">survey</span></code> step will display a configurable prompt and list of options for the player. The player may click on one of the options to select it. If the player then clicks on a different option, the first is deselected.</p>
-<p>If there is no <code class="docutils literal"><span class="pre">duration</span></code> or <code class="docutils literal"><span class="pre">trigger_count</span></code> attribute, the step will show a “Next” button to advance to the next step. The “Next” button does not become active to a until one of the survey options are selected.</p>
+<p>If there is no <code class="docutils literal"><span class="pre">duration</span></code> or <code class="docutils literal"><span class="pre">trigger_count</span></code> attribute, the step will show a “Next” button to advance to the next step.</p>
 <p>Long text on the <code class="docutils literal"><span class="pre">prompt</span></code> option is fine. It will wrap to multiple lines.</p>
 <p>Sample Survey Step with 20s duration and no Next button:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>

@@ -127,6 +127,7 @@ Sample: ::
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
           "continuous_asteroids_on_same_level": false,
+          "adaptive_asteroid_size_locked_to_initial": false,
           "show_advance_countdown": false,
           "game_element_opacity": 255,
           "level_templates": [
@@ -360,6 +361,7 @@ Sample trigger-driven JSON: ::
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
           "continuous_asteroids_on_same_level": false,
+          "adaptive_asteroid_size_locked_to_initial": false,
           "show_advance_countdown": false,
           "level_templates": [
             {
@@ -537,6 +539,8 @@ The ``start_level`` is a float value that specifies the initial value used to ch
 
 ``continuous_asteroids_on_same_level`` of ``true`` will keep the asteroids moving in their existing size and pattern when a player dying or completing a level does not advance all the way to a different level in the list. ``false`` is the default.
 
+``adaptive_asteroid_size_locked_to_initial`` of ``true`` will keep the visible asteroids the same size as when they first appeared. The asteroids can still change speed and direction after a level change, and new asteroids can still appear or disappear. This defaults to ``false`` so that asteroids can change size between levels.
+
 ``show_advance_countdown`` of ``true`` will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to ``false``.
 
 The ``levels`` value is required. It must be a list of level parameters (which are different than for the ``game`` mode) or a string filename for a json file that contains a list of level parameters. 
@@ -549,32 +553,34 @@ game-adaptive levels list
 
 The levels list is a list of objects with the following options:
 
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| Option                                            | Values                                                 | Default        | Description                                                                                                  |
-+===================================================+========================================================+================+==============================================================================================================+
-| ``target_count``                                  | integer                                                | 5              | Number of crystals to pick up.                                                                               |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| ``asteroid_count``                                | integer                                                | 5              | Number of asteroids to avoid.                                                                                |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| ``asteroid_sizes``                                | one of the strings {"small","medium","large","varied"} | "large"        | Approximate size of asteroids.                                                                               |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| ``asteroid_speeds``                               | one of the strings {"slow","medium","fast","extreme"}  | "slow"         | Approximate speed of asteroids.                                                                              |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| ``powerup_count``                                 | integer                                                | 5              | Number of distinct power-ups to create for the player to pick up.                                            |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| ``powerup_initial_delay``                         | float                                                  | 0.0            | Delay in seconds before first powerup is available.                                                          |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| ``powerup_delay``                                 | float                                                  | 1.0            | Delay in seconds after powerup is used before next one becomes available.                                    |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
-| ``powerup_types``                                 | one of the strings {"shield","slow","all","none"}      | "all"          | Types of powerups that are in level.                                                                         |
-+---------------------------------------------------+--------------------------------------------------------+----------------+--------------------------------------------------------------------------------------------------------------+
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| Option                                            | Values                                                 | Default        | Description                                                                                                                             |
++===================================================+========================================================+================+=========================================================================================================================================+
+| ``target_count``                                  | integer                                                | 5              | Number of crystals to pick up.                                                                                                          |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``asteroid_count``                                | integer                                                | 5              | Number of asteroids to avoid.                                                                                                           |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``asteroid_sizes``                                | one of the strings {"small","medium","large","varied"} | "large"        | Approximate size of asteroids.                                                                                                          |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``asteroid_speeds``                               | one of the strings {"slow","medium","fast","extreme"}  | "slow"         | Approximate speed of asteroids.                                                                                                         |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``powerup_count``                                 | integer                                                | 5              | Number of distinct power-ups to create for the player to pick up.                                                                       |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``powerup_initial_delay``                         | float                                                  | 0.0            | Delay in seconds before first powerup is available.                                                                                     |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``powerup_delay``                                 | float                                                  | 1.0            | Delay in seconds after powerup is used before next one becomes available.                                                               |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``powerup_types``                                 | one of the strings {"shield","slow","all","none"}      | "all"          | Types of powerups that are in level.                                                                                                    |
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| ``seed``                                          | integer                                                | not specified  | Number used to seed random position/speed generator. If not provided, the other level options are hashed into a single number for this. | 
++---------------------------------------------------+--------------------------------------------------------+----------------+-----------------------------------------------------------------------------------------------------------------------------------------+
 
 ``survey``
 ----------------
 
 The ``survey`` step will display a configurable prompt and list of options for the player. The player may click on one of the options to select it. If the player then clicks on a different option, the first is deselected.
 
-If there is no ``duration`` or ``trigger_count`` attribute, the step will show a "Next" button to advance to the next step. The "Next" button does not become active to a until one of the survey options are selected.
+If there is no ``duration`` or ``trigger_count`` attribute, the step will show a "Next" button to advance to the next step.
 
 Long text on the ``prompt`` option is fine. It will wrap to multiple lines.
 

@@ -1,0 +1,468 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Game Timing &#8212; Asteroid Impact 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="game" href="ref/game.html" />
+    <link rel="prev" title="Compiling Asteroid Impact" href="build.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="game-timing">
+<h1>Game Timing<a class="headerlink" href="#game-timing" title="Permalink to this headline">¶</a></h1>
+<p>This page descirbes how time passes in Asteroid Impact, and how the recorded values may not match what the player experiences.</p>
+<div class="section" id="game-loop">
+<h2>Game Loop<a class="headerlink" href="#game-loop" title="Permalink to this headline">¶</a></h2>
+<p>Asteroid Impact’s internal game loop works as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Wait for current time to reach next increment of 16ms using pygame.time.Clock.tick_busy_loop which keeps the CPU busy</li>
+<li>Do input processing</li>
+<li>Update game elements</li>
+<li>Redraw screen</li>
+<li>Loop</li>
+</ul>
+</div></blockquote>
+<p>What this means in practice is that the game should report every frame happened 16ms after the previous frame. Also, because pygame doesn’t have a mechanism to synchronize with the display vertical sync the frames will not consistently equal the display refresh.</p>
+</div>
+<div class="section" id="input-and-display-latency">
+<h2>Input and Display Latency<a class="headerlink" href="#input-and-display-latency" title="Permalink to this headline">¶</a></h2>
+<p>There is a measurable amount of time between when a key is pressed and when the game is notified of the key being pressed. There is also a measurable amount of time beetween when the game considers the frame “rendered” and the pictured image on a screen or projector changes.</p>
+<p>The typical latency between when a key is pressed, it’s processed by the game, and a different set of pixels appear on screen can vary from 30ms to 150ms or more depending on your keyboard, graphics card, display and video processing settings.</p>
+<p>I’ve described how to measure your input latency using a 120fps capable camera (such as a recent smartphone or gopro) and an Arduino Leonardo acting as a keyboard. This is described in the next section.</p>
+</div>
+<div class="section" id="measuring-input-and-display-latency">
+<h2>Measuring Input and Display Latency<a class="headerlink" href="#measuring-input-and-display-latency" title="Permalink to this headline">¶</a></h2>
+<p>Because the input and display latency vary with different monitors and settings, below is a description of how you can measure it for yourself.</p>
+<p>You need:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Your computer to test, preferably with speakers so you can measure audio lag also.</li>
+<li>Something to act as a keyboard that lights up when a key is pressed. I used an Arduino Leonardo and Sparkfun Danger Shield but you might want a Adafruit Proto Shield or just a breadboard and wires.</li>
+<li>A video camera that can record 120fps or higher. Recent smart phones in “slow motion” are fine. Same with recent GoPro.</li>
+<li>A tripod would be helpful but is not required.</li>
+</ul>
+</div></blockquote>
+<p>The process is roughly as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Configure a batch file to run the game saving a log file for every frame, and for in game reaction prompts.</li>
+<li>Record video of the display and your “light-up keyboard”, as well as clapping a couple times in front of the camera.</li>
+<li>Manually record the frames that keys were pressed and the reaction prompts showed up and disappeared from the screen.</li>
+<li>Manually record the offset between the clap sound and the hands coming together.</li>
+<li>Manually record the frame numbers where the reaction prompt sound starts</li>
+</ol>
+</div></blockquote>
+<p>Arduino Leonardo Sketch</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">/*</span>
+  <span class="n">Keyboard</span> <span class="n">test</span><span class="p">,</span> <span class="n">lights</span> <span class="n">LEDs</span> <span class="n">when</span> <span class="n">keyboard</span> <span class="n">butons</span> <span class="n">are</span> <span class="n">pressed</span>
+
+  <span class="n">inputs</span> <span class="n">press</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="ow">or</span> <span class="mi">3</span> <span class="n">key</span> <span class="n">on</span> <span class="n">keyboard</span><span class="o">.</span>
+
+  <span class="n">Note</span> <span class="k">if</span> <span class="n">you</span> <span class="n">hold</span> <span class="n">the</span> <span class="n">buttons</span> <span class="n">down</span> <span class="n">the</span> <span class="n">keys</span> <span class="n">will</span> <span class="n">repeat</span><span class="o">.</span>
+
+  <span class="n">Circuit</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">Arduino</span> <span class="n">Leonardo</span> <span class="ow">or</span> <span class="n">Micro</span>
+  <span class="o">-</span> <span class="n">wire</span> <span class="n">to</span> <span class="n">connect</span> <span class="n">D2</span> <span class="n">to</span> <span class="n">ground</span>
+<span class="o">*/</span>
+
+<span class="c1">#include &quot;Keyboard.h&quot;</span>
+
+<span class="nb">int</span> <span class="n">but_pin_1</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">but_pin_2</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">but_pin_3</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">led_pin_1</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">led_pin_2</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">led_pin_3</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+
+<span class="n">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">make</span> <span class="n">but_pin_1</span> <span class="n">an</span> <span class="nb">input</span> <span class="ow">and</span> <span class="n">turn</span> <span class="n">on</span> <span class="n">the</span> <span class="n">pull</span><span class="o">-</span><span class="n">up</span> <span class="n">resistor</span> <span class="n">so</span> <span class="n">it</span> <span class="n">goes</span> <span class="n">high</span> <span class="n">unless</span>
+  <span class="o">//</span> <span class="n">connected</span> <span class="n">to</span> <span class="n">ground</span><span class="p">:</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">but_pin_1</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">but_pin_2</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">but_pin_3</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">led_pin_1</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">led_pin_2</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">led_pin_3</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_1</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_2</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_3</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="n">Keyboard</span><span class="o">.</span><span class="n">begin</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="o">//</span> <span class="n">wait</span> <span class="n">a</span> <span class="n">couple</span> <span class="n">seconds</span> <span class="n">before</span> <span class="n">starting</span> <span class="n">after</span> <span class="n">reset</span><span class="p">:</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+
+  <span class="k">while</span><span class="p">(</span><span class="n">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">but_pin_1</span><span class="p">)</span> <span class="o">==</span> <span class="n">LOW</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Keyboard</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_1</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_1</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+      <span class="n">Keyboard</span><span class="o">.</span><span class="n">releaseAll</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">but_pin_2</span><span class="p">)</span> <span class="o">==</span> <span class="n">LOW</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Keyboard</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="s1">&#39;2&#39;</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_2</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_2</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+      <span class="n">Keyboard</span><span class="o">.</span><span class="n">releaseAll</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">but_pin_3</span><span class="p">)</span> <span class="o">==</span> <span class="n">LOW</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Keyboard</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_3</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+      <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">led_pin_3</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+      <span class="n">Keyboard</span><span class="o">.</span><span class="n">releaseAll</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Test script JSON: <code class="docutils literal"><span class="pre">lagtest.json</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">500.5</span><span class="p">,</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+          <span class="s2">&quot;position_list&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span> <span class="p">]</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;triangle.png&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;sound&quot;</span><span class="p">:</span> <span class="s2">&quot;tone440.wav&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;showtimes_millis&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">7000</span><span class="p">,</span> <span class="mi">9000</span><span class="p">,</span> <span class="mi">11000</span><span class="p">,</span> <span class="mi">13000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">17000</span><span class="p">,</span> <span class="mi">19000</span><span class="p">,</span> <span class="mi">21000</span><span class="p">,</span> <span class="mi">23000</span><span class="p">,</span> <span class="mi">25000</span><span class="p">,</span> <span class="mi">27000</span><span class="p">,</span> <span class="mi">29000</span><span class="p">,</span> <span class="mi">31000</span><span class="p">,</span> <span class="mi">33000</span><span class="p">,</span> <span class="mi">35000</span><span class="p">,</span> <span class="mi">37000</span><span class="p">,</span> <span class="mi">39000</span><span class="p">,</span> <span class="mi">41000</span><span class="p">,</span> <span class="mi">43000</span><span class="p">,</span> <span class="mi">45000</span><span class="p">,</span> <span class="mi">47000</span><span class="p">,</span> <span class="mi">49000</span><span class="p">,</span> <span class="mi">51000</span><span class="p">,</span> <span class="mi">53000</span><span class="p">,</span> <span class="mi">55000</span><span class="p">,</span> <span class="mi">57000</span><span class="p">,</span> <span class="mi">59000</span><span class="p">,</span> <span class="mi">61000</span><span class="p">,</span> <span class="mi">63000</span><span class="p">,</span> <span class="mi">65000</span><span class="p">,</span> <span class="mi">67000</span><span class="p">,</span> <span class="mi">69000</span><span class="p">,</span> <span class="mi">71000</span><span class="p">,</span> <span class="mi">73000</span><span class="p">,</span> <span class="mi">75000</span><span class="p">,</span> <span class="mi">77000</span><span class="p">,</span> <span class="mi">79000</span><span class="p">,</span> <span class="mi">81000</span><span class="p">,</span> <span class="mi">83000</span><span class="p">,</span> <span class="mi">85000</span><span class="p">,</span> <span class="mi">87000</span><span class="p">,</span> <span class="mi">89000</span><span class="p">,</span> <span class="mi">91000</span><span class="p">,</span> <span class="mi">93000</span><span class="p">,</span> <span class="mi">95000</span><span class="p">,</span> <span class="mi">97000</span><span class="p">,</span> <span class="mi">99000</span><span class="p">,</span> <span class="mi">101000</span><span class="p">,</span> <span class="mi">103000</span><span class="p">,</span> <span class="mi">105000</span><span class="p">,</span> <span class="mi">107000</span><span class="p">,</span> <span class="mi">109000</span><span class="p">,</span> <span class="mi">111000</span><span class="p">,</span> <span class="mi">113000</span><span class="p">,</span> <span class="mi">115000</span><span class="p">,</span> <span class="mi">117000</span><span class="p">,</span> <span class="mi">119000</span><span class="p">,</span> <span class="mi">121000</span><span class="p">,</span> <span class="mi">123000</span><span class="p">,</span> <span class="mi">125000</span><span class="p">,</span> <span class="mi">127000</span><span class="p">,</span> <span class="mi">129000</span><span class="p">,</span> <span class="mi">131000</span><span class="p">,</span> <span class="mi">133000</span><span class="p">,</span> <span class="mi">135000</span><span class="p">,</span> <span class="mi">137000</span><span class="p">,</span> <span class="mi">139000</span><span class="p">,</span> <span class="mi">141000</span><span class="p">,</span> <span class="mi">143000</span><span class="p">,</span> <span class="mi">145000</span><span class="p">,</span> <span class="mi">147000</span><span class="p">,</span> <span class="mi">149000</span><span class="p">,</span> <span class="mi">151000</span><span class="p">,</span> <span class="mi">153000</span><span class="p">,</span> <span class="mi">155000</span><span class="p">,</span> <span class="mi">157000</span><span class="p">,</span> <span class="mi">159000</span><span class="p">,</span> <span class="mi">161000</span><span class="p">,</span> <span class="mi">163000</span><span class="p">,</span> <span class="mi">165000</span><span class="p">,</span> <span class="mi">167000</span><span class="p">,</span> <span class="mi">169000</span><span class="p">,</span> <span class="mi">171000</span><span class="p">,</span> <span class="mi">173000</span><span class="p">,</span> <span class="mi">175000</span><span class="p">,</span> <span class="mi">177000</span><span class="p">,</span> <span class="mi">179000</span><span class="p">,</span> <span class="mi">181000</span><span class="p">,</span> <span class="mi">183000</span><span class="p">,</span> <span class="mi">185000</span><span class="p">,</span> <span class="mi">187000</span><span class="p">,</span> <span class="mi">189000</span><span class="p">,</span> <span class="mi">191000</span><span class="p">,</span> <span class="mi">193000</span><span class="p">,</span> <span class="mi">195000</span><span class="p">,</span> <span class="mi">197000</span><span class="p">,</span> <span class="mi">199000</span> <span class="p">],</span>
+          <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Execute batch file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">game</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">music</span><span class="o">-</span><span class="n">volume</span> <span class="mf">0.0</span> <span class="o">--</span><span class="n">script</span><span class="o">-</span><span class="n">json</span> <span class="s2">&quot;%~dp0\lagtest.json&quot;</span> <span class="o">--</span><span class="n">window</span><span class="o">-</span><span class="n">x</span> <span class="mi">0</span> <span class="o">--</span><span class="n">window</span><span class="o">-</span><span class="n">y</span> <span class="mi">596</span> <span class="o">--</span><span class="n">effects</span><span class="o">-</span><span class="n">volume</span> <span class="mf">0.5</span> <span class="o">--</span><span class="n">reaction</span><span class="o">-</span><span class="n">log</span> <span class="s2">&quot;%~dp0</span><span class="se">\r</span><span class="s2">eactions-calibration.csv&quot;</span> <span class="o">--</span><span class="n">log</span><span class="o">-</span><span class="n">filename</span> <span class="s2">&quot;%~dp0\log.csv&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-video-recording">
+<h2>The video recording<a class="headerlink" href="#the-video-recording" title="Permalink to this headline">¶</a></h2>
+<p>Frame your camera so both your “light-up keyboard” and display are in focus and looking good. Make sure your camera is in the slow motion mode when you do this because the cropping changes in different modes.</p>
+<p>Start recording, clap in view of the camera, then press your “keyboard” button in response to each reaction prompt.</p>
+</div>
+<div class="section" id="processing-the-video">
+<h2>Processing the video<a class="headerlink" href="#processing-the-video" title="Permalink to this headline">¶</a></h2>
+<p>I reviewed the video in Blender because I’m familiar with it and it lets me step through the video frame by frame with the audio waveform besides. I’m sure a video editing tool would allow the same, but I don’t have experience with Premiere or similar to know how to make it work with 120fps video. This isn’t a full introduction to the Blender UI because I expect you to either be familiar with it, or another video editing tool to get the same results.</p>
+<dl class="docutils">
+<dt>From a new file:</dt>
+<dd><ol class="first last arabic simple">
+<li>Change the resolution scale to 100%</li>
+<li>Change the framerate to your video framerate</li>
+<li>Switch from the default screen layout to video editing</li>
+</ol>
+</dd>
+</dl>
+<img alt="_images/reaction-timing-blender-1.PNG" src="_images/reaction-timing-blender-1.PNG" />
+<p>Then:</p>
+<blockquote>
+<div><ol class="arabic simple" start="4">
+<li>Load your video file (add-&gt;movie then browse to it)</li>
+<li>Rotate your video if needed (flip both x and y to rotate 180 degrees). Right click on the lower (blue) track to select it first.</li>
+<li>Zoom with ctrl+mmb in video window. Zooming is in two different directions so you can make the waveform visible and the reaction prompt tone take up enough screen space.</li>
+<li>Turn on the audio waveform on the audio track. Right click on it to select it, then turn on “Draw Waveform” option.</li>
+</ol>
+</div></blockquote>
+<img alt="_images/reaction-timing-blender-2.PNG" src="_images/reaction-timing-blender-2.PNG" />
+<img alt="_images/reaction-timing-blender-3.PNG" src="_images/reaction-timing-blender-3.PNG" />
+<img alt="_images/reaction-timing-blender-4.PNG" src="_images/reaction-timing-blender-4.PNG" />
+<img alt="_images/reaction-timing-blender-5.PNG" src="_images/reaction-timing-blender-5.PNG" />
+<p>Next you can use the left/right arrow keys when the cursor is above the video window to go to the previous/next frames.</p>
+<p>The important things to measure are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The delay between hands hitting in a clap, and the audio peak. This is the offset of the two in your recorded video.</li>
+<li>The delay between when the reaction prompt key is pressed and when it disappears from the screen. This has the same duration as the input latency, and is also how much extra time is recorded with every reaction time prompt to the log.</li>
+<li>The delay between when the reaction prompt appears on screen and the tone is heard. This, when corected for your recording audio offset, is your audio lag.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="input-and-display-latency-results">
+<h2>Input and Display Latency Results<a class="headerlink" href="#input-and-display-latency-results" title="Permalink to this headline">¶</a></h2>
+<p>First test was with:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Desktop with Intel i7 7700k Running Windows 10 1703</li>
+<li>Nvidia GTX 1070 graphics card</li>
+<li>Dell U2211H display connected via DisplayPort</li>
+<li>Onboard Realtek Audio</li>
+<li>Car speakers amplified with cheap TPA3116D2 amplifier</li>
+<li>“keyboard” for this was an Arduino Leonardo with Sparkfun Danger Shield for button and LED</li>
+</ul>
+</div></blockquote>
+<p>Results:
+Audio as recorded was 9 frames behind video. (When clapping, the hands touched 9 frames before the sound)</p>
+<p>Video was recorded at 120FPS on iPhone 5S, so video times have a resolution of about 8.3ms.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="21%" />
+<col width="17%" />
+<col width="20%" />
+<col width="19%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">reaction_prompt_millis in game log</th>
+<th class="head">Video measured reaction time (ms)</th>
+<th class="head">video reaction time  - log</th>
+<th class="head">keyboard to LCD update delay ms</th>
+<th class="head">Video Prompt audio delay (ms)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>304</td>
+<td>258.3</td>
+<td>-45.7</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+<tr class="row-odd"><td>304</td>
+<td>258.3</td>
+<td>-45.7</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+<tr class="row-even"><td>288</td>
+<td>241.7</td>
+<td>-46.3</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+<tr class="row-odd"><td>288</td>
+<td>241.7</td>
+<td>-46.3</td>
+<td>41.7</td>
+<td>25.0</td>
+</tr>
+<tr class="row-even"><td>176</td>
+<td>125.0</td>
+<td>-51.0</td>
+<td>41.7</td>
+<td>25.0</td>
+</tr>
+<tr class="row-odd"><td>176</td>
+<td>125.0</td>
+<td>-51.0</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+<tr class="row-even"><td>240</td>
+<td>191.7</td>
+<td>-48.3</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+<tr class="row-odd"><td>224</td>
+<td>175.0</td>
+<td>-49.0</td>
+<td>41.7</td>
+<td>25.0</td>
+</tr>
+<tr class="row-even"><td>256</td>
+<td>200.0</td>
+<td>-56.0</td>
+<td>50.0</td>
+<td>25.0</td>
+</tr>
+<tr class="row-odd"><td>128</td>
+<td>75.0</td>
+<td>-53.0</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+</tbody>
+</table>
+<p>The second test was the same, except the sound card was replaced with a cheap 2-channel out microphone in generic USB sound adapter.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="21%" />
+<col width="17%" />
+<col width="20%" />
+<col width="19%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">reaction_prompt_millis in game log</th>
+<th class="head">Video measured reaction time (ms)</th>
+<th class="head">video reaction time  - log</th>
+<th class="head">keyboard to LCD update delay ms</th>
+<th class="head">Video prompt audio delay (ms)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>912</td>
+<td>866.7</td>
+<td>-45.3</td>
+<td>41.7</td>
+<td>33.3</td>
+</tr>
+<tr class="row-odd"><td>544</td>
+<td>500.0</td>
+<td>-44.0</td>
+<td>33.3</td>
+<td>16.7</td>
+</tr>
+<tr class="row-even"><td>368</td>
+<td>316.7</td>
+<td>-51.3</td>
+<td>50.0</td>
+<td>33.3</td>
+</tr>
+<tr class="row-odd"><td>320</td>
+<td>275.0</td>
+<td>-45.0</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+<tr class="row-even"><td>320</td>
+<td>266.7</td>
+<td>-53.3</td>
+<td>50.0</td>
+<td>16.7</td>
+</tr>
+<tr class="row-odd"><td>272</td>
+<td>225.0</td>
+<td>-47.0</td>
+<td>41.7</td>
+<td>25.0</td>
+</tr>
+<tr class="row-even"><td>432</td>
+<td>383.3</td>
+<td>-48.7</td>
+<td>50.0</td>
+<td>33.3</td>
+</tr>
+<tr class="row-odd"><td>176</td>
+<td>125.0</td>
+<td>-51.0</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+<tr class="row-even"><td>288</td>
+<td>233.3</td>
+<td>-54.7</td>
+<td>50.0</td>
+<td>8.3</td>
+</tr>
+<tr class="row-odd"><td>288</td>
+<td>241.7</td>
+<td>-46.3</td>
+<td>41.7</td>
+<td>16.7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Game Timing</a><ul>
+<li><a class="reference internal" href="#game-loop">Game Loop</a></li>
+<li><a class="reference internal" href="#input-and-display-latency">Input and Display Latency</a></li>
+<li><a class="reference internal" href="#measuring-input-and-display-latency">Measuring Input and Display Latency</a></li>
+<li><a class="reference internal" href="#the-video-recording">The video recording</a></li>
+<li><a class="reference internal" href="#processing-the-video">Processing the video</a></li>
+<li><a class="reference internal" href="#input-and-display-latency-results">Input and Display Latency Results</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="build.html" title="previous chapter">Compiling Asteroid Impact</a></li>
+      <li>Next: <a href="ref/game.html" title="next chapter">game</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/timing.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Nick Winters.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/timing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
