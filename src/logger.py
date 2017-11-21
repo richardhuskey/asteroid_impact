@@ -13,7 +13,7 @@ from sets import Set
 
 def csv_escape(value):
     """return escaped and quoted as needed to be in a comma-separated CSV"""
-    if ',' in value:
+    if ',' in value or '\n' in value:
         # quote value
         return '"%s"'%value.replace('"', '""')
     return value
