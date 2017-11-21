@@ -31,6 +31,7 @@
     <Content Include="data\shield.png" />
     <Content Include="data\square.png" />
     <Content Include="data\triangle.png" />
+    <Content Include="doc\build.rst" />
     <Content Include="doc\codeintro.rst" />
     <Content Include="doc\images\blackscreen-screenshot.png" />
     <Content Include="doc\images\gameplay-adaptive-screenshot.png" />
@@ -52,6 +53,7 @@
     <Content Include="doc\step-instructions.rst" />
     <Content Include="doc\step-survey.rst" />
     <Content Include="doc\step-text.rst" />
+    <Content Include="doc\timing.rst" />
     <Content Include="LICENSE.txt" />
     <Content Include="raw_data\asteroid.svg" />
     <Content Include="raw_data\background.jpg" />

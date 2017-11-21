@@ -55,6 +55,7 @@ The ``game-adaptive`` step has the same settings as ``game`` except levels work 
           "level_completion_increment": 0.3,
           "level_death_decrement": 0.4,
           "continuous_asteroids_on_same_level": false,
+          "adaptive_asteroid_size_locked_to_initial": false,
           "show_advance_countdown": false,
           "level_templates": [
             {
@@ -112,6 +113,8 @@ The ``game-adaptive`` step has the same settings as ``game`` except levels work 
     When the player dies and fails to complete a level, their "level score" is reduced by this amount. See the "level score" section below.
 ``"continuous_asteroids_on_same_level"``
     When the player dies or picks up enough crystals to change the "level score", it doesn't always advance to the next more or less difficult level. When ``"continuous_asteroids_on_same_level"`` is set to true, and they don't advance to the next or previous level the asteroids continue moving in the same pattern with the same sizes they had before. This defaults to ``false``.
+``"adaptive_asteroid_size_locked_to_initial"``
+    Instead of allowing the asteroids to change size on level transitions, when this is ``true`` asteroids are stuck at the size they are first shown with. New asteroids can continue to appear with their own size, asteroids can still go away if the level has fewer asteroids. This defaults to ``false``.
 ``"show_advance_countdown"``
     When ``true`` and the player advances to the next more difficult level, they are invulnerable for a few seconds while the beginning-of-level countdown happens again. This defaults to ``false``
 ``"levels"``
@@ -149,7 +152,8 @@ The adaptive gameplay level list entries have the following options:
     Delay between when one power-up is used and when the next appears, in seconds.
 ``"powerup_types"``
     The types of power-ups to make available. ``"shield"``, ``"slow"``, ``"all"`` or ``"none"``
-
+``"seed"```
+    Number used to seed the random number generator that chooses sizes, positions, and speeds of targets, asteroids, and power-ups. This is automatically auto-generated from a hash of the other level parameters if omitted. May be any number.
 
 Reaction Prompt
 ===============

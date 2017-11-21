@@ -90,6 +90,7 @@
   <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
   <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
   <span class="s2">&quot;continuous_asteroids_on_same_level&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;adaptive_asteroid_size_locked_to_initial&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;show_advance_countdown&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">{</span>
@@ -148,6 +149,8 @@
 <dd>When the player dies and fails to complete a level, their “level score” is reduced by this amount. See the “level score” section below.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;continuous_asteroids_on_same_level&quot;</span></code></dt>
 <dd>When the player dies or picks up enough crystals to change the “level score”, it doesn’t always advance to the next more or less difficult level. When <code class="docutils literal"><span class="pre">&quot;continuous_asteroids_on_same_level&quot;</span></code> is set to true, and they don’t advance to the next or previous level the asteroids continue moving in the same pattern with the same sizes they had before. This defaults to <code class="docutils literal"><span class="pre">false</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;adaptive_asteroid_size_locked_to_initial&quot;</span></code></dt>
+<dd>Instead of allowing the asteroids to change size on level transitions, when this is <code class="docutils literal"><span class="pre">true</span></code> asteroids are stuck at the size they are first shown with. New asteroids can continue to appear with their own size, asteroids can still go away if the level has fewer asteroids. This defaults to <code class="docutils literal"><span class="pre">false</span></code>.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;show_advance_countdown&quot;</span></code></dt>
 <dd>When <code class="docutils literal"><span class="pre">true</span></code> and the player advances to the next more difficult level, they are invulnerable for a few seconds while the beginning-of-level countdown happens again. This defaults to <code class="docutils literal"><span class="pre">false</span></code></dd>
 <dt><code class="docutils literal"><span class="pre">&quot;levels&quot;</span></code></dt>
@@ -180,6 +183,8 @@
 <dd>Delay between when one power-up is used and when the next appears, in seconds.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;powerup_types&quot;</span></code></dt>
 <dd>The types of power-ups to make available. <code class="docutils literal"><span class="pre">&quot;shield&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;slow&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;all&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code></dd>
+<dt><code class="docutils literal"><span class="pre">&quot;seed&quot;`</span></code></dt>
+<dd>Number used to seed the random number generator that chooses sizes, positions, and speeds of targets, asteroids, and power-ups. This is automatically auto-generated from a hash of the other level parameters if omitted. May be any number.</dd>
 </dl>
 </div>
 </div>

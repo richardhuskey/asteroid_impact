@@ -462,10 +462,8 @@ class SurveyQuestionScreen(GameScreen):
         button.selected = True
 
     def next_button_clicked(self):
-        # validate that a single option is selected
-        if 1 == len([b for b in self.option_buttons if b.selected]):
-            # todo: log selected button
-            self.screenstack.pop()
+        # always close survey step:
+        self.screenstack.pop()
 
     def after_close(self, logrowdetails, reactionlogger, surveylogger):
         """Clean up after screen is closed, and perform additional logging"""
@@ -1030,12 +1028,14 @@ class AsteroidImpactInfiniteLevelMaker(object):
             level_completion_increment = 1.0,
             level_death_decrement = 1.0,
             continuous_asteroids_on_same_level = False,
+            adaptive_asteroid_size_locked_to_initial = False,
             show_advance_countdown = False):
         print start_level, level_completion_increment, level_death_decrement
         self.level_score = start_level
         self.level_completion_increment = level_completion_increment
         self.level_death_decrement = level_death_decrement
         self.continuous_asteroids_on_same_level = continuous_asteroids_on_same_level
+        self.adaptive_asteroid_size_locked_to_initial = adaptive_asteroid_size_locked_to_initial
         self.show_advance_countdown = show_advance_countdown
 
         self.level_args_list = level_templates_list
@@ -1238,6 +1238,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 # update asteroid speeds and sizes:
                 new_asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
                 # transition existing asteroid list into new asteroid list
+                prev_asteroid_count = len(self.asteroids)
                 if (len(new_asteroids) < len(self.asteroids)):
                     # reduce asteroid count by scaling down size. They are removed in update()
                     for i in xrange(len(new_asteroids),len(self.asteroids)):
@@ -1249,7 +1250,6 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                         disappearing_asteroid.dxnew = disappearing_asteroid.dx
                         disappearing_asteroid.dynew = disappearing_asteroid.dy
                 elif (len(self.asteroids) < len(new_asteroids)):
-                    prev_asteroid_count = len(self.asteroids)
                     # duplicate asteroids to increase count
                     for i in range(len(self.asteroids), len(new_asteroids)):
                         new_asteroid = Asteroid()
@@ -1259,10 +1259,18 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 for i, newasteroid in enumerate(new_asteroids):
                     # set up transition to new size, angle
                     asteroid = self.asteroids[i]
-                    asteroid.gamediameternew_start_diameter = asteroid.gamediameter
-                    asteroid.gamediameternew_end_diameter = newasteroid.gamediameter
-                    asteroid.gamediameternew_transition_duration_millis = 2000
-                    asteroid.gamediameternew_transition_remaining_millis = 2000
+                    if self.level_list.adaptive_asteroid_size_locked_to_initial and i < prev_asteroid_count:
+                        # keep same size
+                        asteroid.gamediameternew_start_diameter = asteroid.gamediameter
+                        asteroid.gamediameternew_end_diameter = asteroid.gamediameter
+                        asteroid.gamediameternew_transition_duration_millis = 50
+                        asteroid.gamediameternew_transition_remaining_millis = 50
+                    else:
+                        # transition to new size
+                        asteroid.gamediameternew_start_diameter = asteroid.gamediameter
+                        asteroid.gamediameternew_end_diameter = newasteroid.gamediameter
+                        asteroid.gamediameternew_transition_duration_millis = 2000
+                        asteroid.gamediameternew_transition_remaining_millis = 2000
                     asteroid.dxnew = newasteroid.dx
                     asteroid.dynew = newasteroid.dy
         
