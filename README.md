@@ -71,10 +71,12 @@ This allows the operator to specify a parallel port connection and values to loo
 
 As with all experimental software, please use <em>Asteroid Impact</em> at your own risk, and after sufficient testing on your own hardware. The software does not come with any warranty. 
 
-<em>Asteroid Impact</em> Has undergone extensive testing in Windows7, Windows10, and OS X 10.10.5 environments. Known bugs are listed below:
+<em>Asteroid Impact</em> Has undergone extensive testing in Windows7, Windows10, and OS X 10.10.5 environments. Known issues are listed below:
 <ul>
 <li>Trigger Latency: TTL triggers connected with a USB or serial port experience a small latency depending on hardware. See the "Trigger Latency" section in the HTLM documentation for more details on how to test for this on your hardware.</li>
-<li>Event Timer: When using a Mac OS, the "total_millis" column in the .csv output does not tick correctly (not ticking every 16ms). This is due to a known limitation in PyGame 1.9.1 and we currently do not see a workaround for this issue. To our knowledge, the log records all game events, it is just that clock is not recording the timings correctly. For Mac users, this makes time-locked content analysis unreliable.</li>
+<li>Event Timer: When using a Mac OS, the "total_millis" column in the .csv output does not tick correctly (not ticking every 16ms). This is due to a known limitation in PyGame 1.9.1 and we currently do not see a workaround for this issue. To our knowledge, the log records all game events, it is just that clock is not recording the timings correctly. For Mac users, this makes time-locked content analysis unreliable.
+
+On Windows systems, depending on hardware and the way your .json script is configured, you may experience issues where the timing does not tick for the standard 16ms. This usually happens on a game state change (e.g., from instructions to gameplay), and only happens once. All subsequent timing ticks are 16 ms. As far as we can tell, the overall clock is still correct, so the timing files should still be accurate. However, for users who truly require 16ms precision, we recommend additional validation.</li>
 <li>Parallel Port: The parallel port feature only works with Windows operating systems and was never developed to work with Mac or Linux.</li>
 <li>Reaction Time: The visual and auditory reaction time prompts experience a small latency and this is hardware dependent. See the "Game Timing" section in the HTML documentation for more details on this latency and how to test this on your own hardware. Note, this is true of all reaction time software, and Asteroid Impact's latencies seem similar to other major experimental packages (see e.g., http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0067769). Still, it is recommended that users do their own testing on their own systems to validate the software.</li>
 </ul>
