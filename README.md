@@ -45,33 +45,27 @@ The src directory contains the game files.
 
 For Mac users. In order to get Asteroid Impact to work on OS X Sierra (10.12), updated versions of PyGame and PySerial must be installed. PyGame cannot be installed through pip on Mac, so you can follow [these instructions](https://jamesfriend.com.au/installing-pygame-python-3-mac-os-yosemite). Alternately, you can use an integrated development environment (IDE) such as [PyCharm](https://www.jetbrains.com/pycharm/). 
 
-<h1>Features in Development</h1>
+<h1>New Features</h1>
 
 <h2>Questionnaire Block Development</h2>
 
-A new survey question step will display configurable text (a question) and a configurable list of answers. The player selects an answer by clicking on it with their mouse. There will be a provision so that double-clicking doesn't select answers for two consecutive survey questions. The answers are recorded to a new file, with columns like this:
-<ul>
-<li>Participant number</li>
-<li>Run number</li>
-<li>question (text)</li>
-<li>selected answer (text)</li>
-</ul>
+A new survey question step will display configurable text (a question) and a configurable list of answers. The player selects an answer by clicking on it with their mouse. There is a provision so that double-clicking doesn't select answers for two consecutive survey questions. The answers are recorded to a new output file.
 
 <h2>Reaction Time Element</h2>
 
-This is a new gameplay element where the player is expected to press a button when they see the icon and/or hear the tone as quickly as possible, and their reaction time will be recorded. From the player's point of view these icons/sounds will happen at random times. From the operator's point of view, all players see the same sequence of delays between reaction time tests. The operator can configure the starting time of each reaction test prompt, and more than one will likely appear during a single session. Each subject will see the same delays happen from the start of a step to when the reaction time prompts appear. The reaction test may prompt with one or both of: (a) graphic appearing on screen, (b) sound playing. There will be at least 2 different reaction time prompt graphics. Each reaction time prompt configured in the step JSON will have a list of times at which it appears. The reaction time results will be logged in the same per-frame log file, but also optionally another log file that has just the reaction-time results.
+This is a new gameplay element where the player is expected to press a button when they see the icon and/or hear the tone as quickly as possible, and their reaction time is be recorded. From the player's point of view these icons/sounds will happen at random times. From the operator's point of view, all players see the same sequence of delays between reaction time tests. The operator can configure the starting time of each reaction test prompt, and more than one will likely appear during a single session. Each subject will see the same delays happen from the start of a step to when the reaction time prompts appear. The reaction test may prompt with one or both of: (a) graphic appearing on screen, (b) sound playing. There are 3 different reaction time prompt graphics and tones, although operators can add more. Each reaction time prompt configured in the step JSON will have a list of times at which it appears. The reaction time results will be logged in the same per-frame log file, but also optionally another log file that has just the reaction-time results.
 
 <h2>Parallel Port Programming</h2>
 
-On a configurable list of game events, such as the start of the gameplay step, or difficulty increasing in the adaptive gameplay mode, output a pulse of 50-100ms over the parallel port. This will be captured by another computer that is recording other subject physiological information to capture the game state transitions with the other subject information. The JSON configuration will have new settings to specify where to find the parallel port, and which numbers to send to the parallel port for which desired game events. The PC running Asteroid Impact is running Windows 7 or Windows 10.
+On a configurable list of game events, such as the start of the gameplay step, or difficulty increasing in the adaptive gameplay mode, output a pulse of 50-100ms over the parallel port. This will be captured by another computer that is recording other subject physiological information to capture the game state transitions with the other subject information. The JSON configuration has new settings to specify where to find the parallel port, and which numbers to send to the parallel port for which desired game events. The PC running Asteroid Impact is running Windows 7 or Windows 10 and this feature does NOT work with Mac or Linux.
 
 <h2>Extend Parallel Port to Serial Output</h2>
 
-Once the parallel port pulse output is added, extending it to talk over a serial port. This would add new configuration options to configure the serial port connection, and instead of pulsing all parallel port pins at once then resetting, would output a configurable sequence of bytes when each of the configured events occur. For serial, this won't send a second "zero" message after a delay the way it is required to trigger a pulse over parallel.
+The above features are extended to a serial port. This adds new configuration options to configure the serial port connection, and instead of pulsing all parallel port pins at once then resetting, outputs a configurable sequence of bytes when each of the configured events occur. For serial, this won't send a second "zero" message after a delay the way it is required to trigger a pulse over parallel.
 
 <h2>Parallel Port Trigger</h2>
 
-This would allow you to specify a parallel port connection and values to look for each frame to advance to the next step like how a byte over serial or a keypress can be configured now. The serial port will be checked each frame, and if the incoming value seen matches the configured value, and didn't on the previous frame, the counter will be increased. This means that incoming pulses need to be at least 2-frames wide, preferably 50milliseconds or so.
+This allows the operator to specify a parallel port connection and values to look for each frame to advance to the next step like how a byte over serial or a keypress can be configured now. The serial port will be checked each frame, and if the incoming value seen matches the configured value, and didn't on the previous frame, the counter will be increased. This means that incoming pulses need to be at least 2-frames wide, preferably 50milliseconds or so.
 
 <h1>! Known Issues</h1>
 
