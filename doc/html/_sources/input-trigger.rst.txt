@@ -137,6 +137,7 @@ Below is a sample script JSON with input triggers configured. ::
         {
           "action": "text",
           "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+          "title": "Additional Instructions",
           "trigger_count": 10
         },
         {
@@ -233,11 +234,13 @@ Below is a sample script JSON with only serial input triggers configured and two
         {
           "action": "text",
           "text": "Text step 1"
+          "title": "",
           "trigger_count": 10
         },
         {
           "action": "text",
           "text": "Text step 2"
+          "title": "",
           "trigger_count": 10
         }
       ]
@@ -275,11 +278,13 @@ Below is a sample script JSON with only keyboard input triggers configured and t
         {
           "action": "text",
           "text": "Text step 1"
+          "title": "",
           "trigger_count": 10
         },
         {
           "action": "text",
           "text": "Text step 2"
+          "title": "",
           "trigger_count": 10
         }
       ]
@@ -393,11 +398,13 @@ Below is a sample script JSON with only serial input triggers configured and two
         {
           "action": "text",
           "text": "Text step 1"
+          "title": "",
           "trigger_count": 10
         },
         {
           "action": "text",
           "text": "Text step 2"
+          "title": "",
           "trigger_count": 10
         }
       ]
@@ -489,3 +496,4 @@ Keyboard Latency test sketch for Arduino Leonardo ::
         delay(DELAY_MILLIS - BLINK_MILLIS);
       }
     }
+

@@ -53,6 +53,7 @@
   <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
   <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
   <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+  <span class="s2">&quot;game_element_opacity&quot;</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span>
   <span class="s2">&quot;reaction_prompts&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">{</span>
       <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -78,6 +79,8 @@
 <dd>The number of incoming trigger pulses until this step automatically advances. When omitted, gameplay will continue until the game is forced to quit with alt+f4 or cmd+q.</dd>
 <dt><code class="docutils literal"><span class="pre">&quot;levels&quot;</span></code></dt>
 <dd>The filename for the JSON file with the list of levels. See <a class="reference internal" href="makelevelpy.html"><span class="doc">makelevel.py</span></a> for information about creating levelss, and <a class="reference internal" href="leveljson.html"><span class="doc">Single Level JSON</span></a> for information about the JSON format for levels themselves.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_element_opacity&quot;</span></code></dt>
+<dd>The apparent opacity of the game elements, from 0 (completely invisible) to 255 (fully opaque, default). 64 is pretty dim but still sort of playable.</dd>
 </dl>
 </div>
 <div class="section" id="json-configuration-for-game-adaptive-step">
@@ -92,6 +95,7 @@
   <span class="s2">&quot;continuous_asteroids_on_same_level&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;adaptive_asteroid_size_locked_to_initial&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;show_advance_countdown&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;game_element_opacity&quot;</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span>
   <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">{</span>
       <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -155,6 +159,8 @@
 <dd>When <code class="docutils literal"><span class="pre">true</span></code> and the player advances to the next more difficult level, they are invulnerable for a few seconds while the beginning-of-level countdown happens again. This defaults to <code class="docutils literal"><span class="pre">false</span></code></dd>
 <dt><code class="docutils literal"><span class="pre">&quot;levels&quot;</span></code></dt>
 <dd>This is either a filename for a JSON file that contains the list of adaptive level parameters (which aren’t compatible with the normal gameplay level options) or is the list itself. The “Adaptive Level Options” section below describes the options in more detail.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;game_element_opacity&quot;</span></code></dt>
+<dd>The apparent opacity of the game elements, from 0 (completely invisible) to 255 (fully opaque, default). 64 is pretty dim but still sort of playable.</dd>
 </dl>
 <div class="section" id="level-score">
 <h3>Level Score<a class="headerlink" href="#level-score" title="Permalink to this headline">¶</a></h3>
@@ -162,6 +168,231 @@
 <p>These are configurable. Your “level score” starts at <code class="docutils literal"><span class="pre">&quot;start_level&quot;</span></code> where 0.0 to 0.99 is the first level in the list, 1.0 through 1.99 is the second level and so-on.</p>
 <p>Each time you complete a level your “level score” is increased by <code class="docutils literal"><span class="pre">&quot;level_completion_increment&quot;</span></code>, and when you touch an asteroid and die your “level score” is decreased by <code class="docutils literal"><span class="pre">&quot;level_death_decrement&quot;</span></code>.</p>
 <p>So this can be configured to act like the normal gameplay, with increment of 1.0 and decrement of 0.0, but this configuration exists because I felt that would ratchet the difficutly up to the point where you fail continuously, instead of you reaching a happy flow state where you make a few mintues of progress before being set back some.</p>
+</div>
+<div class="section" id="multicolor-crystal-scoring">
+<h3>Multicolor Crystal Scoring<a class="headerlink" href="#multicolor-crystal-scoring" title="Permalink to this headline">¶</a></h3>
+<p>The game-adaptive mode has a new alternate means of gameplay that changes how crystals work. Where in the standard modes crystals have one appearance, stay visible until you collect them, and appear only when the previous crystal is collected, this mode changes things.</p>
+<img alt="_images/gameplay-adaptive-multicolor-screenshot.png" src="_images/gameplay-adaptive-multicolor-screenshot.png" />
+<p>The normal green diamond on yellow circle crystal does not appear, instead the crystals are the 5 listed below. The numbers are the numbers used for configuration below.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Red triangle crystal</li>
+<li>Green square crystal</li>
+<li>Yellow diamond crystal</li>
+<li>Orange hexagon crystal</li>
+<li>Blue octagon crystal</li>
+</ol>
+</div></blockquote>
+<p>Next, a score appears on the bottom of the screen. When a crystal is collected, the configurable amount added to the score depends not just on the color of the crystal collected, but on the color of the one last collected. This allows scores such as “25 points for every crystal collected except 0 when collecting the same color twice in a row”</p>
+<p>To allow the player to choose which order they want to collect crystals in, crystals can be configured expire after a few seconds on their own, and/or more than one crystal can be visible at a time.</p>
+<p>The “Level Score” continues to apply as before. After the player collects the level-specific <code class="docutils literal"><span class="pre">&quot;target_count&quot;</span></code> they may be advanced to the next more difficult level if the “Level Score” is incremented high enough.</p>
+<p>Below is a sample script JSON will all multicolor crystal scoring options specified</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game-adaptive&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;start_level&quot;</span><span class="p">:</span> <span class="mf">3.5</span><span class="p">,</span>
+      <span class="s2">&quot;level_completion_increment&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+      <span class="s2">&quot;level_death_decrement&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+      <span class="s2">&quot;continuous_asteroids_on_same_level&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;show_advance_countdown&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;game_element_opacity&quot;</span><span class="p">:</span> <span class="mi">255</span><span class="p">,</span>
+
+      <span class="s2">&quot;multicolor_crystal_scoring&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+      <span class="s2">&quot;multicolor_crystal_numbers&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="p">],</span>
+      <span class="s2">&quot;multicolor_crystal_num_showing&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="s2">&quot;multicolor_crystal_lifetime_ms&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span>
+
+      <span class="s2">&quot;multicolor_crystal_score_table&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">[</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span> <span class="p">]</span>
+      <span class="p">],</span>
+
+      <span class="s2">&quot;level_templates&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">2</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">4</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">5</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;fast&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;fast&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;small&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_sizes&quot;</span><span class="p">:</span> <span class="s2">&quot;varied&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;slow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;asteroid_count&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+          <span class="s2">&quot;asteroid_speeds&quot;</span><span class="p">:</span> <span class="s2">&quot;extreme&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_delay&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+          <span class="s2">&quot;powerup_types&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;shield&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;target_count&quot;</span><span class="p">:</span> <span class="mi">3</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The multicolor-specific options are as follows:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">&quot;multicolor_crystal_scoring&quot;</span></code></dt>
+<dd>Set this to <code class="docutils literal"><span class="pre">true</span></code> to enable the new multicolor scoring behaviors.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;multicolor_crystal_numbers&quot;</span></code></dt>
+<dd>Set this to a list of numbers 1-5 corresponding to the crystal colors you want to see on this step. For example, if you want to see only the red triangle and orange hexagon, use <code class="docutils literal"><span class="pre">&quot;multicolor_crystal_numbers&quot;:</span> <span class="pre">[1,</span> <span class="pre">4],</span></code>. If not specified, defaults to just shwoing the red triangle.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;multicolor_crystal_num_showing&quot;</span></code></dt>
+<dd>The number of crystals to have active on screen at a time. To show two crystals on screen at all times, set this to <code class="docutils literal"><span class="pre">2</span></code>. This defaults to <code class="docutils literal"><span class="pre">1</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;multicolor_crystal_lifetime_ms&quot;</span></code></dt>
+<dd>The duration in milliseconds a crystal remains before it goes away on its own. Leave out this option, or set it to <code class="docutils literal"><span class="pre">null</span></code> make the crystals persistent forever. Set to <code class="docutils literal"><span class="pre">5000</span></code> to make crystals automatically go away after 5 seconds.</dd>
+<dt><code class="docutils literal"><span class="pre">&quot;multicolor_crystal_score_table&quot;</span></code></dt>
+<dd>5 rows of point values, with 6 scores per row. This is a table used to find the number of points to award when a crystal is collected. The row corresponds to the color of the crystal the player is collecting now, such as the red triangle for the first row. The entry within the inner list corresponds to the color of the previously selected crystal, for example the first inner points value corresponds to having previously collected a red triangle. The 6th points value is used when no crystal was collected previously.</dd>
+</dl>
+<p>Here’s a score table that always awards 25 points for red triangle, 50 for green square and so-on.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;multicolor_crystal_score_table&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="p">[</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span> <span class="p">]</span>
+<span class="p">],</span>
+</pre></div>
+</div>
+<p>Here’s the same table as above, modified to award 0 points when you collect the same color after itself</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;multicolor_crystal_score_table&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">75</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">125</span> <span class="p">]</span>
+<span class="p">],</span>
+</pre></div>
+</div>
+<p>And here’s another table that awards 10 points for everything, and 500 points when you collect a green square after a red triangle.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;multicolor_crystal_score_table&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="p">],</span>
+  <span class="p">[</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span> <span class="p">]</span>
+<span class="p">],</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="level-list-options">
 <h3>Level List Options<a class="headerlink" href="#level-list-options" title="Permalink to this headline">¶</a></h3>
@@ -330,6 +561,7 @@
 <li><a class="reference internal" href="#json-configuration-for-game-step">JSON Configuration for <code class="docutils literal"><span class="pre">game</span></code> Step</a></li>
 <li><a class="reference internal" href="#json-configuration-for-game-adaptive-step">JSON Configuration for <code class="docutils literal"><span class="pre">game-adaptive</span></code> Step</a><ul>
 <li><a class="reference internal" href="#level-score">Level Score</a></li>
+<li><a class="reference internal" href="#multicolor-crystal-scoring">Multicolor Crystal Scoring</a></li>
 <li><a class="reference internal" href="#level-list-options">Level List Options</a></li>
 </ul>
 </li>

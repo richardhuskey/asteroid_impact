@@ -23,6 +23,7 @@ from __future__ import absolute_import, division
 import argparse
 import os
 from os import path
+import random # step shuffling
 import json
 import pygame
 from pygame.locals import *
@@ -135,6 +136,8 @@ class GameModeManager(object):
         self.args = args
         # assume error happened if we didn't reach end of __init__
         self.skipgame = True
+
+        self.game_globals = {}
 
         self.max_asteroid_count = 12
 
@@ -481,12 +484,53 @@ class GameModeManager(object):
                 print 'output_trigger_settings mode of',output_settings['mode'],'not recognized'
                 return
 
-           
+        # number steps in original order:
+        for i,s in enumerate(self.gamesteps):
+            s['stepnumber'] = i+1
+        if self.script_json.has_key('step_shuffle_groups'):
+            if not isinstance(self.script_json['step_shuffle_groups'], list):
+                print 'step_shuffle_groups must be list of list of numbers'
+                print 'exiting.'
+                return
+
+            for sg in self.script_json['step_shuffle_groups']:
+                if not isinstance(sg, list):
+                    print 'step_shuffle_groups must be list of list of numbers'
+                    print 'exiting.'
+                    return
+
+            # step_shuffle_groups specifies a list of "shuffle groups"
+            # each shuffle groups is a list of step numbers, 1-based indexes for original step position
+            # first we number the steps
+            # then we iterate through each group:
+            #     and shuffle only steps with those original step numbers
+            rnd = random.Random()
+            # todo: verify self.script_json['step_randomization_groups'] is list of list of numbers
+            gamesteps_old = self.gamesteps
+            for g_numbers in self.script_json['step_shuffle_groups']:
+                gamesteps_new = []
+                g_steps = [s for s in self.gamesteps if s['stepnumber'] in g_numbers]
+                if g_steps:
+                    for s in gamesteps_old:
+                        if s['stepnumber'] in g_numbers:
+                            # choose random step to replace it from remaing g_steps
+                            step_random = rnd.choice(g_steps)
+                            g_steps.remove(step_random)
+                            gamesteps_new.append(step_random)
+                        else:
+                            gamesteps_new.append(s)
+                else:
+                    gamesteps_new = gamesteps_old
+
+                gamesteps_old = gamesteps_new
+
+            self.gamesteps = gamesteps_old
+            print 'Step order after shuffle(s):', ', '.join(str(s['stepnumber']) for s in self.gamesteps)
 
         if self.args.parallel_test_address:
             # try to parse parallel port address
             pport_debug_addr = int(self.args.parallel_test_address, 16)
-            
+
             # ignore step list and replace with just parallel port test step
             self.gamesteps = [
                 dict(action='parallel_port_test',
@@ -597,6 +641,11 @@ class GameModeManager(object):
                 if not step.has_key('text'):
                     print ('ERROR: "text" step must have "text" attribute with string value.')
                     return
+                # 'title' is optional
+                if step.has_key('title'):
+                    pass
+                else:
+                    step['title'] = ''
             elif step['action'] == 'survey':
                 # 'prompt' is required
                 if not step.has_key('prompt'):
@@ -617,6 +666,10 @@ class GameModeManager(object):
                     return
 
                 step['levellist'] = self.load_levels(step)
+
+                # other options
+                if step.has_key('game_element_opacity'):
+                    step['game_element_opacity'] = int(step['game_element_opacity'])
             elif step['action'] == 'game-adaptive':
                 if not step.has_key('level_templates'):
                     print ('ERROR: "game" action must have level_templates attribute ' +
@@ -628,16 +681,78 @@ class GameModeManager(object):
                 # simpler options options
                 if step.has_key('start_level'):
                     step['start_level'] = float(step['start_level'])
+
                 if step.has_key('level_completion_increment'):
                     step['level_completion_increment'] = float(step['level_completion_increment'])
+
                 if step.has_key('level_death_decrement'):
                     step['level_death_decrement'] = float(step['level_death_decrement'])
+
                 if step.has_key('continuous_asteroids_on_same_level'):
                     step['continuous_asteroids_on_same_level'] = bool(step['continuous_asteroids_on_same_level'])
                 if step.has_key('adaptive_asteroid_size_locked_to_initial'):
                     step['adaptive_asteroid_size_locked_to_initial'] = bool(step['adaptive_asteroid_size_locked_to_initial'])
                 if step.has_key('show_advance_countdown'):
                     step['show_advance_countdown'] = bool(step['show_advance_countdown'])
+
+                if step.has_key('game_element_opacity'):
+                    step['game_element_opacity'] = int(step['game_element_opacity'])
+
+                if step.has_key('multicolor_crystal_scoring'):
+                    step['multicolor_crystal_scoring'] = bool(step['multicolor_crystal_scoring'])
+                else:
+                    step['multicolor_crystal_scoring'] = False
+
+                if step.has_key('multicolor_crystal_numbers'):
+                    # should be list of integers 1 <= n <= 5 for Crystal_1 through Crystal_5 graphics
+                    if not isinstance(step['multicolor_crystal_numbers'], list):
+                        print 'Error: game-adaptive multicolor_crystal_numbers must be a list of integers 1-5'
+                        return
+                    for n in step['multicolor_crystal_numbers']:
+                        if not isinstance(n, int) or n < 1 or n > 5:
+                            print 'Error: game-adaptive multicolor_crystal_numbers must be a list of integers 1-5'
+                            print repr(n), 'is invalid'
+                            return
+
+                if step.has_key('multicolor_crystal_num_showing'):
+                    step['multicolor_crystal_num_showing'] = int(step['multicolor_crystal_num_showing'])
+
+                if step.has_key('multicolor_crystal_lifetime_ms'):
+                    if (isinstance(step['multicolor_crystal_lifetime_ms'], float) or
+                        isinstance(step['multicolor_crystal_lifetime_ms'], int)):
+                        step['multicolor_crystal_lifetime_ms'] = int(step['multicolor_crystal_lifetime_ms'])
+                    else:
+                        step['multicolor_crystal_lifetime_ms'] = None
+
+                if step.has_key('multicolor_crystal_score_table'):
+                    if not isinstance(step['multicolor_crystal_score_table'], list):
+                        print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                        return
+                    # require 5 rows for the 5 different colors
+                    if len(step['multicolor_crystal_score_table']) != 5:
+                        print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                        print 'expected 5 rows, found', len(step['multicolor_crystal_score_table'])
+                        return
+                    for score_row in step['multicolor_crystal_score_table']:
+                        if not isinstance(score_row, list):
+                            print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                            print 'score row should be list of scores, but found non-list'
+                            return
+                        # require 6 rows for the 5 different colors the player collected previously, plus the score if they hadn't collected any previously
+                        if len(score_row) != 6:
+                            print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                            print 'score row should have 6 elements. One for each color, plus one for when no previous crystal was collected'
+                            print 'expected 6 elements in inner list, found', len(score_row)
+                            return
+                        for score_cell in score_row:
+                            if not isinstance(score_cell, int) and not isinstance(score_cell, float):
+                                print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
+                                # expected int
+                                print repr(score_cell), 'is an invalid score'
+                                return
+                    # convert scores into ints
+                    step['multicolor_crystal_score_table'] = [[int(cell) for cell in row] for row in step['multicolor_crystal_score_table']]
+
             elif step['action'] == 'parallel_port_test':
                 # nothing else to validate
                 pass
@@ -726,7 +841,8 @@ class GameModeManager(object):
                     self.screen,
                     self.gamescreenstack,
                     click_to_continue=click_to_continue,
-                    text=step['text']))
+                    text=step['text'],
+                    title=step['title']))
         elif step['action'] == 'survey':
             click_to_continue = True
             if step.has_key('duration') and step['duration'] != None:
@@ -744,26 +860,54 @@ class GameModeManager(object):
         elif step['action'] == 'blackscreen':
             self.gamescreenstack.append(BlackScreen(self.screen, self.gamescreenstack))
         elif step['action'] == 'game':
+            kwargs = {}
+            if step.has_key('game_element_opacity'):
+                kwargs['game_element_opacity'] = step['game_element_opacity']
+
             self.gamescreenstack.append(
                 AsteroidImpactGameplayScreen(
                     self.screen,
                     self.gamescreenstack,
                     step['levellist'],
-                    step['reaction_prompts']))
+                    step['reaction_prompts'],
+                    **kwargs))
         elif step['action'] == 'game-adaptive':
-            kwargs = {}
+            kwargs = dict(game_globals=self.game_globals)
             if step.has_key('start_level'):
                 kwargs['start_level'] = step['start_level']
+
             if step.has_key('level_completion_increment'):
                 kwargs['level_completion_increment'] = step['level_completion_increment']
+
             if step.has_key('level_death_decrement'):
                 kwargs['level_death_decrement'] = step['level_death_decrement']
+
             if step.has_key('continuous_asteroids_on_same_level'):
                 kwargs['continuous_asteroids_on_same_level'] = step['continuous_asteroids_on_same_level']
             if step.has_key('adaptive_asteroid_size_locked_to_initial'):
                 kwargs['adaptive_asteroid_size_locked_to_initial'] = step['adaptive_asteroid_size_locked_to_initial']
             if step.has_key('show_advance_countdown'):
                 kwargs['show_advance_countdown'] = step['show_advance_countdown']
+
+            if step.has_key('multicolor_crystal_scoring'):
+                kwargs['multicolor_crystal_scoring'] = step['multicolor_crystal_scoring']
+            else:
+                kwargs['multicolor_crystal_scoring'] = False
+
+            if step.has_key('multicolor_crystal_numbers'):
+                kwargs['multicolor_crystal_numbers'] = step['multicolor_crystal_numbers']
+
+            if step.has_key('multicolor_crystal_num_showing'):
+                kwargs['multicolor_crystal_num_showing'] = step['multicolor_crystal_num_showing']
+
+            if step.has_key('multicolor_crystal_lifetime_ms'):
+                kwargs['multicolor_crystal_lifetime_ms'] = step['multicolor_crystal_lifetime_ms']
+
+            if step.has_key('multicolor_crystal_score_table'):
+                kwargs['multicolor_crystal_score_table'] = step['multicolor_crystal_score_table']
+
+            if step.has_key('game_element_opacity'):
+                kwargs['game_element_opacity'] = step['game_element_opacity']
 
             self.gamescreenstack.append(
                 AsteroidImpactInfiniteGameplayScreen(
@@ -927,9 +1071,8 @@ class GameModeManager(object):
                 logrowdetails.clear()
                 logrowdetails['subject_number'] = self.args.subject_number
                 logrowdetails['subject_run'] = self.args.subject_run
-                logrowdetails['step_number'] = self.stepindex + 1
+                logrowdetails['step_number'] = self.gamesteps[self.stepindex]['stepnumber']
                 logrowdetails['total_millis'] = self.total_millis
-                logrowdetails['step_number'] = self.stepindex + 1
                 logrowdetails['step_millis'] = self.step_millis
                 logrowdetails['top_screen'] = self.gamescreenstack[-1].name
 

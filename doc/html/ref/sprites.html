@@ -141,6 +141,39 @@
 </dd></dl>
 
 <dl class="class">
+<dt id="sprites.ScoredTarget">
+<em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">ScoredTarget</code><span class="sig-paren">(</span><em>diameter=32</em>, <em>left=20</em>, <em>top=20</em>, <em>imagefile='crystal.png'</em>, <em>number='x'</em>, <em>lifetime_millis_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ScoredTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sprites.VirtualGameSprite" title="sprites.VirtualGameSprite"><code class="xref py py-class docutils literal"><span class="pre">sprites.VirtualGameSprite</span></code></a></p>
+<p>Targets (Crystals) don’t move, but do play a sound when collected</p>
+<dl class="method">
+<dt id="sprites.ScoredTarget.activate">
+<code class="descname">activate</code><span class="sig-paren">(</span><em>life_multiplier=1</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ScoredTarget.activate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.ScoredTarget.deactivate">
+<code class="descname">deactivate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ScoredTarget.deactivate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.ScoredTarget.pickedup">
+<code class="descname">pickedup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ScoredTarget.pickedup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play pick up sound</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sprites.ScoredTarget.stop_audio">
+<code class="descname">stop_audio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ScoredTarget.stop_audio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.ScoredTarget.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>millis</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ScoredTarget.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="sprites.ShieldPowerup">
 <em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">ShieldPowerup</code><span class="sig-paren">(</span><em>diameter=32</em>, <em>left=80</em>, <em>top=80</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.ShieldPowerup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#sprites.BasePowerup" title="sprites.BasePowerup"><code class="xref py py-class docutils literal"><span class="pre">sprites.BasePowerup</span></code></a></p>
@@ -219,9 +252,34 @@ collisions with asteroids.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="sprites.TextSprite">
+<em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">TextSprite</code><span class="sig-paren">(</span><em>font</em>, <em>text</em>, <em>color</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.TextSprite" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Sprite-like object for text that helps positioning text in game coordinates, and
+keeping text in position when text changes.</p>
+<dl class="method">
+<dt id="sprites.TextSprite.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><em>screen</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.TextSprite.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw text on screen</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sprites.TextSprite.set_position">
+<code class="descname">set_position</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.TextSprite.set_position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sprites.TextSprite.set_text">
+<code class="descname">set_text</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="headerlink" href="#sprites.TextSprite.set_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set and render new text</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="sprites.VirtualGameSprite">
 <em class="property">class </em><code class="descclassname">sprites.</code><code class="descname">VirtualGameSprite</code><a class="headerlink" href="#sprites.VirtualGameSprite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pygame.sprite.Sprite</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">pygame.sprite.DirtySprite</span></code></p>
 <p>Sprite with higher resolution game position/size (gamerect) than on-screen
 position/size (rect)</p>
 <dl class="method">

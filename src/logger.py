@@ -82,6 +82,8 @@ class AsteroidLogger(object):
             'powerup_y',
             'powerup_diameter',
             'powerup_type',
+            # adaptive-only multicolor-only score
+            'multicolor_crystal_score',
 
             'cursor_x',
             'cursor_y',

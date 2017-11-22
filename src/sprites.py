@@ -15,13 +15,14 @@ from resources import load_image, load_sound, NoneSound
 import virtualdisplay
 import math
 
-class VirtualGameSprite(pygame.sprite.Sprite):
+class VirtualGameSprite(pygame.sprite.DirtySprite):
     """
     Sprite with higher resolution game position/size (gamerect) than on-screen
     position/size (rect)
     """
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self) #call Sprite initializer
+        pygame.sprite.DirtySprite.__init__(self) #call Sprite initializer
+        self.dirty = 2 # always redraw
         self.gamerect = pygame.Rect(0, 0, 1, 1)
 
     def stop_audio(self):
@@ -91,6 +92,81 @@ class Target(VirtualGameSprite):
         # hit test done in AsteroidImpactGameplayScreen
         pass
 
+class ScoredTarget(VirtualGameSprite):
+    """Targets (Crystals) don't move, but do play a sound when collected"""
+    def __init__(self,
+                 diameter=32,
+                 left=20,
+                 top=20,
+                 imagefile='crystal.png',
+                 number='x',
+                 # None or milliseconds until crystal disappears on its own:
+                 lifetime_millis_max = None):
+        # todo: options for start/fadeout/end times
+        # todo: option for scoring-number
+        VirtualGameSprite.__init__(self) #call Sprite initializer
+        self.gamediameter = diameter
+        self.gamerect = pygame.Rect(left, top, diameter, diameter)
+        self.update_rect()
+        self.image = load_image(
+            imagefile,
+            (self.rect.width, self.rect.height),
+            convert_alpha=True)
+        self.number = number
+        self.visible = 0
+        self.active = False
+        self.pickup_sound = load_sound('ring_inventory.wav')
+        self.flashing = False
+        self.flashing_counter = 0
+
+        # max time this crystal remains active
+        self.lifetime_millis_max = lifetime_millis_max
+        # current elapsed millis this crystal has ben active
+        self.lifetime_millis_elapsed = 0
+
+    def activate(self, life_multiplier=1):
+        self.active = True
+        self.visible = 1
+        self.lifetime_millis_elapsed = 0
+        if life_multiplier > 1 and self.lifetime_millis_max != None:
+            # make this one appearance last n times as long by offsetting start of life
+            self.lifetime_millis_elapsed -= int((life_multiplier - 1) * self.lifetime_millis_max)
+        self.flashing = False
+        self.flashing_counter = 0
+
+    def deactivate(self):
+        self.active = False
+        self.visible = 0
+
+    def stop_audio(self):
+        self.pickup_sound.stop()
+
+    def pickedup(self):
+        """Play pick up sound"""
+        self.pickup_sound.play()
+        self.deactivate()
+
+    def update(self, millis):
+        # hit test done in AsteroidImpactGameplayScreen
+        if self.active:
+            self.lifetime_millis_elapsed += millis
+
+            # start flashing before end of self.lifetime_millis_max
+            if (not self.flashing 
+                and self.lifetime_millis_max != None 
+                and self.lifetime_millis_max < self.lifetime_millis_elapsed + 2000):
+                self.flashing = True
+
+            if self.flashing:
+                self.flashing_counter = (self.flashing_counter + 1) % 8
+                self.visible = 1 if self.flashing_counter < 4 else 0
+            elif self.active:
+                self.flashing_counter = 0
+                self.visible = 1
+
+            if self.lifetime_millis_max != None and self.lifetime_millis_elapsed > self.lifetime_millis_max:
+                # deactivate myself
+                self.deactivate()
 
 def map_range(value, from_low, from_high, to_low, to_high):
     'return value in range [from_low, from_high] mapped to range [to_low, to_high]'
@@ -547,4 +623,48 @@ class ReactionTimePrompt(VirtualGameSprite):
             if logrowdetails.has_key(col):
                 newreactionlogrow[col] = logrowdetails[col]
         reactionlogger.log(newreactionlogrow)
+
+class TextSprite(object):
+    """
+    Sprite-like object for text that helps positioning text in game coordinates, and
+    keeping text in position when text changes.
+    """
+    def __init__(self, font, text, color, **kwargs):
+        """
+        Create new TextSprite()
+        
+        Keyword arguments are transformed from game space to screen space and used to specify
+        position of rasterized text.
+        """
+        self.font = font
+        self.color = color
+        self.text = None
+        self.textsurf = None
+        self.set_position(**kwargs)
+        self.set_text(text)
+
+    def set_position(self, **kwargs):
+        for arg in kwargs.keys():
+            # convert some args from game coordinate space to screen coordinate space
+            if arg == 'x' or arg == 'left' or arg == 'right' or arg == 'centerx':
+                kwargs[arg] = virtualdisplay.screenpoint_from_gamepoint((kwargs[arg], 0))[0]
+            elif arg == 'y' or arg == 'top' or arg == 'bottom' or arg == 'centery':
+                kwargs[arg] = virtualdisplay.screenpoint_from_gamepoint((0, kwargs[arg]))[1]
+            else:
+                raise ValueError(
+                    "TextSprite() doesn't implement support for rect keword arg '%s'" % arg)
+        self.textsurf_get_rect_args = kwargs
+        if self.textsurf:
+            self.textrect = self.textsurf.get_rect(**self.textsurf_get_rect_args)
+
+    def set_text(self, text):
+        """Set and render new text"""
+        if text != self.text:
+            self.text = text
+            self.textsurf = self.font.render(self.text, 1, self.color)
+        self.textrect = self.textsurf.get_rect(**self.textsurf_get_rect_args)
+
+    def draw(self, screen):
+        """Draw text on screen"""
+        screen.blit(self.textsurf, self.textrect)
 

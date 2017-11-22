@@ -52,6 +52,7 @@ Sample: ::
           "action": "game",
           "levels": "levels/standardlevels.json",
           "duration": 20.0,
+          "game_element_opacity": 255,
           "reaction_prompts": [
             {
               "diameter": 80,
@@ -101,6 +102,7 @@ Sample: ::
         {
           "action": "text",
           "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+          "title": "Additional Instructions",
           "duration": 20.0
         },
         {
@@ -127,6 +129,7 @@ Sample: ::
           "continuous_asteroids_on_same_level": false,
           "adaptive_asteroid_size_locked_to_initial": false,
           "show_advance_countdown": false,
+          "game_element_opacity": 255,
           "level_templates": [
             {
               "asteroid_count": 1,
@@ -196,6 +199,7 @@ Such a JSON file would look like this: ::
         {
             "action": "text",
             "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+            "title": "Additional Instructions",
             "duration": 20.0
         },
         {
@@ -332,6 +336,7 @@ Sample trigger-driven JSON: ::
         {
           "action": "text",
           "text": "Custom instructions can appear here. They can be split into paragraphs by escaping newlines.\n\nThis is a second paragraph.\n\nThe next step after this one is a 5 second black screen.",
+          "title": "Additional Instructions",
           "trigger_count": 10
         },
         {
@@ -486,6 +491,8 @@ A null ``duration`` for the game step will prevent the player from advancing to 
 
 The ``levels`` value is required. It must point to a levels list json file. 
 
+Optional ``game_element_opacity`` specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).
+
 ``instructions``
 ----------------
 
@@ -498,6 +505,8 @@ A null ``duration`` for the instructions step will show a "Click to continue" me
 
 The ``text`` step will display text specified in the ``text`` attribute on the screen for the specified duration with no available interaction to the player. The ``duration`` must be specified.
 
+An optional ``"title"`` attribute can be specified to show a title at the otp of the screen.
+
 The text will be wrapped to fit on screen, but you can include newlines in the string and they will be included on string. Newlines in JSON must be escaped like ``\n``.
 
 For example, here is text step with two lines of text with a blank line in between using two newline characters. ::
@@ -505,6 +514,7 @@ For example, here is text step with two lines of text with a blank line in betwe
         {
             "action": "text",
             "text": "First Line\n\nSecond Line",
+            "title": "Additional Instructions",
             "duration": 20.0
         },
 
@@ -534,6 +544,8 @@ The ``start_level`` is a float value that specifies the initial value used to ch
 ``show_advance_countdown`` of ``true`` will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to ``false``.
 
 The ``levels`` value is required. It must be a list of level parameters (which are different than for the ``game`` mode) or a string filename for a json file that contains a list of level parameters. 
+
+Optional ``game_element_opacity`` specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).
 
 
 game-adaptive levels list
@@ -763,3 +775,36 @@ Sample game step with reaction prompts::
     K_UP
     K_a through K_z
 
+Step Shuffling
+==============
+
+A new option allows the game to shuffle the steps list each time the game is started. The log continues to record the original step number.
+
+Here's an example script JSON with this new option::
+
+  {
+    "step_shuffle_groups": [
+      [ 1, 2 ],
+      [ 3, 4 ]
+    ],
+    "steps": [
+      {
+        "action": "text",
+        "text": "1"
+      },
+      {
+        "action": "text",
+        "text": "2"
+      },
+      {
+        "action": "text",
+        "text": "3"
+      },
+      {
+        "action": "text",
+        "text": "4"
+      }
+    ]
+  }
+
+The ``"step_shuffle_groups"`` is a list of lists of step numbers (1-based) that are shuffled together. In the example above, steps 1 and 2 are shuffled, then steps 3 and 4 are shuffled.
