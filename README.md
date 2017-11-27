@@ -69,7 +69,7 @@ This allows the operator to specify a parallel port connection and values to loo
 
 <h2>Multiple Targets and New Scoring Option</h2>
 
-It is not possible to configure the game so that it allows crystals to be worth varying amounts of points depending on their color or on which crystals were collected previously. Rather than there simply being one type of crystal, a researcher can implement up to five types.
+It is now possible to configure the game so that it allows crystals (targets) to be worth varying amounts of points depending on their color or on which crystals were collected previously. Rather than there simply being one type of crystal, a researcher can implement up to five types.
 
 <h2>Modify Perceptual Load</h2>
 
