@@ -29,8 +29,6 @@ We will update the citation once the manuscript is in press.
 
 In terms of experimental manipulation, researchers can specify different levels of difficulty <em>a priori</em> as well as a time duration for how long a given level will last. <em>Asteroid Impact</em> also features an adaptive mode where the game automatically increases or decreases in difficulty depending on player performance. Each of these game states can be separated by a black screen or set of instructions. These different game states can be scripted together in any sequence the researcher may choose, thereby allowing the development of sophisticated experimental paradigms. The game's artwork can easily be manipulated and the game scales to fit in both full-screen and windowed modes across a variety of screen resolutions. The game is also designed to interface with TTL triggers, a feature which allows for synchronizing game states with psychophysiological and neurophysiological measurement equipment.
 
-In the latest update of the game, two new manipulations were added. The first allows for crystals to be worth varying amounts of points depending on their color or on which crystals were collected previously. Rather than there simply being one type of crystal, a researcher can implement up to five types. Additonally, a manipulation was introduced wherein the perceptual load of the game environment can be changed through the reduction of foreground opacity. These manipulations allow for the independent manipulation of cogntive load (as a 1-back rule maintenance task) and perceptual load. Both of these changes can be implemented through specifying a custom JSON file on startup.
-
 <em>Asteroid Impact</em> is written in Python and carries a fully open source license (CC BY-SA 4.0). This means that the game can be modified to suit the  needs of any given research lab. Moreover, the game is platform agnostic and can be used on Windows, OS X, or Linux (see known bugs below). The game requires minimal computational power and can run on low-cost computer systems. Taken together, these features provide the research community with a highly flexible tool that overcomes the issues discussed earlier. Moreover, the game conforms to the latest trends in open-science by providing a free tool that allows for replication.
 
 <h1>Getting Started</h1>
@@ -68,6 +66,18 @@ The above features are extended to a serial port. This adds new configuration op
 <h2>Parallel Port Trigger</h2>
 
 This allows the operator to specify a parallel port connection and values to look for each frame to advance to the next step like how a byte over serial or a keypress can be configured now. The serial port will be checked each frame, and if the incoming value seen matches the configured value, and didn't on the previous frame, the counter will be increased. This means that incoming pulses need to be at least 2-frames wide, preferably 50milliseconds or so.
+
+<h2>Multiple Targets and New Scoring Option</h2>
+
+It is not possible to configure the game so that it allows crystals to be worth varying amounts of points depending on their color or on which crystals were collected previously. Rather than there simply being one type of crystal, a researcher can implement up to five types.
+
+<h2>Modify Perceptual Load</h2>
+
+The perceptual load of the game environment can be changed through the reduction of foreground opacity. These manipulations allow for the independent manipulation of cognitive load (e.g., a 1-back rule maintenance task) and perceptual load.
+
+<h2>Randomization Feature</h2>
+
+It is now possible to randomize experimental blocks within a .json object.
 
 <h1>! Known Issues</h1>
 
