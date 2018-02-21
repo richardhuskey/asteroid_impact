@@ -156,7 +156,7 @@ if __name__ == '__main__':
                         help='Number of asteroids to avoid.')
     parser.add_argument('--asteroid-sizes', choices=['small', 'medium', 'large', 'varied'], default='large',
                         help='Approximate size of asteroids.')
-    parser.add_argument('--asteroid-speeds', choices=['slow', 'medium', 'fast', 'extreme', 'plaid'], default='slow',
+    parser.add_argument('--asteroid-speeds', choices=['veryslow', 'slow', 'medium', 'fast', 'extreme', 'plaid'], default='slow',
                         help='Approximate speed of asteroids.')
     parser.add_argument('--powerup-count', type=int, default=5,
                         help='Number of distinct power-ups to create for the player to pick up.')
