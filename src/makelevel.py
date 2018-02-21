@@ -23,10 +23,12 @@ MEDIUM_SIZES = [110, 120, 150, 120, 140, 130]
 LARGE_SIZES = [200, 160, 170, 220, 210, 220]
 VARIED_SIZES = SMALL_SIZES + MEDIUM_SIZES + LARGE_SIZES
 
+VERYSLOW_SPEEDS = [1, 1, 1, 1]
 SLOW_SPEEDS = [2, 3, 3, 4]
 MEDIUM_SPEEDS = [4, 6, 6, 7]
 FAST_SPEEDS = [10, 12, 12, 14]
 EXTREME_SPEEDS = [16, 20, 20, 22]
+PLAID_SPEEDS = [26, 28, 30, 32]
 
 TARGET_SIZE = 32
 
@@ -68,7 +70,9 @@ def make_level(seed=None,
     if isinstance(asteroid_sizes, str):
         raise ValueError('asteroid_sizes of unknown string value: "%s"'%asteroid_sizes)
 
-    if asteroid_speeds == 'slow':
+    if asteroid_speeds == 'veryslow':
+        asteroid_speeds = VERYSLOW_SPEEDS
+    elif asteroid_speeds == 'slow':
         asteroid_speeds = SLOW_SPEEDS
     elif asteroid_speeds == 'medium':
         asteroid_speeds = MEDIUM_SPEEDS
@@ -76,6 +80,8 @@ def make_level(seed=None,
         asteroid_speeds = FAST_SPEEDS
     elif asteroid_speeds == 'extreme':
         asteroid_speeds = EXTREME_SPEEDS
+    elif asteroid_speeds == 'plaid':
+        asteroid_speeds = PLAID_SPEEDS
 
     if isinstance(asteroid_speeds, str):
         raise ValueError('asteroid_speeds of unknown string value: "%s"'%asteroid_speeds)
@@ -150,7 +156,7 @@ if __name__ == '__main__':
                         help='Number of asteroids to avoid.')
     parser.add_argument('--asteroid-sizes', choices=['small', 'medium', 'large', 'varied'], default='large',
                         help='Approximate size of asteroids.')
-    parser.add_argument('--asteroid-speeds', choices=['slow', 'medium', 'fast', 'extreme'], default='slow',
+    parser.add_argument('--asteroid-speeds', choices=['slow', 'medium', 'fast', 'extreme', 'plaid'], default='slow',
                         help='Approximate speed of asteroids.')
     parser.add_argument('--powerup-count', type=int, default=5,
                         help='Number of distinct power-ups to create for the player to pick up.')
