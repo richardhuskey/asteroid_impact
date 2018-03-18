@@ -467,6 +467,8 @@ class ReactionTimePrompt(VirtualGameSprite):
             showtimes_trigger_counts=[],
             timeout_millis = 5000,
             stay_visible = False,
+            score_pass = None,
+            score_fail = None,
             **kwargs_extra):
         #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -501,6 +503,8 @@ class ReactionTimePrompt(VirtualGameSprite):
             timeout_millis = None
         self.timeout_millis = timeout_millis
         self.stay_visible = stay_visible
+        self.score_pass = score_pass
+        self.score_fail = score_fail
         self.active = False
         self.visible = False
         self.total_elapsed = 0
@@ -547,6 +551,7 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.prompt_sound.fadeout(100)
 
     def update(self, millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count):
+        endingtype = None # or 'pass' or 'fail', returned at the end
         old_total_elapsed = self.total_elapsed
         self.total_elapsed += millis
 
@@ -586,6 +591,7 @@ class ReactionTimePrompt(VirtualGameSprite):
 
                         # log completed
                         self.logme(logrowdetails, reactionlogger)
+                        endingtype = 'pass'
             else:
                 # no longer active because key was already pressed.
                 logrowdetails['reaction_prompt_state'] = 'after_complete'
@@ -601,10 +607,12 @@ class ReactionTimePrompt(VirtualGameSprite):
 
                         # log timed out
                         self.logme(logrowdetails, reactionlogger)
+                        endingtype = 'fail'
 
                     self.deactivate_and_hide()
 
         self.step_trigger_count_last = step_trigger_count
+        return endingtype
 
     def step_end_deactivate(self, logrowdetails, reactionlogger):
         if self.visible:

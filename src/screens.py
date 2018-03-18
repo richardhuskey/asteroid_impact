@@ -1449,7 +1449,42 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
+        for prompt in self.reaction_prompts:
+            prompt_gamerect_before = prompt.gamerect
+            endingtype = prompt.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
+            if endingtype == 'pass' and prompt.score_pass != None:
+                self.score += prompt.score_pass
+
+                # show score change
+                self.score_increment_elapsed_ms = 0
+                self.score_increment_textsprite.set_position(
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery)
+                self.score_increment_textsprite.set_text('{:+n}'.format(prompt.score_pass))
+
+                # todo: update high score?
+                if self.game_globals['multicolor_high_score'] < self.score:
+                    self.game_globals['multicolor_high_score'] = self.score
+            elif endingtype == 'fail' and prompt.score_fail != None:
+                self.score += prompt.score_fail
+
+                # show score change
+                self.score_increment_elapsed_ms = 0
+                self.score_increment_textsprite.set_position(
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery)
+                self.score_increment_textsprite.set_text('{:+n}'.format(prompt.score_fail))
+
+                # todo: update high score?
+                if self.game_globals['multicolor_high_score'] < self.score:
+                    self.game_globals['multicolor_high_score'] = self.score
+
+        # todo: refactor above to run prompt update in two passes
+        # - check for correct key press
+        # - check for incorrect key press
+        # handle prompt end:
+        #  if score enabled, adjust score and show corresponding score change
+        #  if sound enabled, play new sound
 
     def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""

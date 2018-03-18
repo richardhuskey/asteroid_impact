@@ -629,6 +629,31 @@ class GameModeManager(object):
                             except:
                                 print "ERROR: reaction_prompts timeout_millis value of %s should be a \"never\" or a number"%repr(reaction_prompt_options['timeout_millis'])
                                 return
+
+                    # score_pass should be number, or null/None
+                    if reaction_prompt_options.has_key('score_pass'):
+                        if reaction_prompt_options['score_pass'] == None:
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['score_pass'])
+                            except:
+                                print "ERROR: reaction_prompts score_pass value of %s should be null or a number"%repr(reaction_prompt_options['score_pass'])
+                                return
+
+                    # score_fail should be number, or null/None
+                    if reaction_prompt_options.has_key('score_fail'):
+                        if reaction_prompt_options['score_fail'] == None:
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['score_fail'])
+                            except:
+                                print "ERROR: reaction_prompts score_fail value of %s should be null or a number"%repr(reaction_prompt_options['score_fail'])
+                                return
+
             else:
                 step['reaction_prompts'] = None
 

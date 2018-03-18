@@ -417,7 +417,9 @@ the ``reaction_prompts`` list is filled with entries like the one below ::
       "showtimes_trigger_counts": [ 1, 3 ],
       "input_key": "K_2",
       "timeout_millis": 1500,
-      "stay_visible": false
+      "stay_visible": false,
+      "score_pass": 100,
+      "score_fail": -90
     }
 
 ``"diameter"``
@@ -436,6 +438,10 @@ the ``reaction_prompts`` list is filled with entries like the one below ::
     After this duration the prompt will go away on its own. Set to ``"none"`` to continue showing/sounding the reaction prompt
 ``"stay_visible"``
     ``true`` to have the image and sound continue playing for the entire ``timeout_millis`` duration.
+``"score_pass"``
+    Integer number of points to award (or negative to subtract) when prompt is responded to with the correct key in time. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
+``"score_fail"``
+    Integer number of points to award (or negative to subtract) when prompt is responded to with the incorrect key or too late. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
 ``"input_key"``
     is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below.
 
