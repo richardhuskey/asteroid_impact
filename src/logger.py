@@ -108,7 +108,11 @@ class AsteroidLogger(object):
             # "timeout": player didn't press button in time
             # "timeout_step_end": player didn't press button in time, and the prompt ended early because the step advanced
             'reaction_prompt_state',
-            'reaction_prompt_millis'
+            'reaction_prompt_millis',
+            # true/false/blank for whether reaction prompt was passed
+            'reaction_prompt_passed',
+            # what key passed or failed the reaction prompt
+            'reaction_prompt_pressed_key'
             ]
             
         for i in xrange(1, max_asteroid_count+1):
@@ -258,7 +262,11 @@ class ReactionLogger(object):
             # "complete": player pressed button to dismiss reaction prompt
             # "timeout": player didn't press button in time
             'reaction_prompt_state',
-            'reaction_prompt_millis'
+            'reaction_prompt_millis',
+            # true/false/blank for whether reaction prompt was passed
+            'reaction_prompt_passed',
+            # what key passed or failed the reaction prompt
+            'reaction_prompt_pressed_key'
             ]
             
         self.columns_set = Set(self.columns)

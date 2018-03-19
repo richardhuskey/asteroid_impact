@@ -15,6 +15,9 @@ from resources import load_image, load_sound, NoneSound
 import virtualdisplay
 import math
 
+CODE_BY_PYGAME_CONSTANT = {k:getattr(pygame,k) for k in dir(pygame) if k.startswith('K_')}
+PYGAME_CONSTANT_BY_CODE = {getattr(pygame,k):k for k in dir(pygame) if k.startswith('K_')}
+
 class QuitGame(Exception):
     """Exception to raise in update_xxx() to quit the game"""
     def __init__(self, value):
@@ -538,7 +541,7 @@ class ReactionTimePrompt(VirtualGameSprite):
             pygame_key_constant = getattr(pygame, input_key, None)
             if not pygame_key_constant:
                 print 'input_key of "%s" not found. Please use one of the following'%input_key
-                print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')]+['K_MOUSE1','K_MOUSE2','K_MOUSE3'])
+                print ', '.join(['"'+s+'"' for s in CODE_BY_PYGAME_CONSTANT.keys()]+['K_MOUSE1','K_MOUSE2','K_MOUSE3'])
                 raise QuitGame('input_key of "%s" not found. '%input_key)
             self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
 
@@ -571,6 +574,19 @@ class ReactionTimePrompt(VirtualGameSprite):
         # fadeout avoids "click" at end, but I wish I could do shorter duration
         self.prompt_sound.fadeout(100)
 
+    def key_from_event(self, event):
+        #todo
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            return 'K_MOUSE%d'%(event.button)
+        elif event.type == pygame.KEYDOWN:
+            # todo: convert this back into a constant
+            if PYGAME_CONSTANT_BY_CODE.has_key(event.key):
+                return PYGAME_CONSTANT_BY_CODE[event.key]
+            return "Unknown"
+        else:
+            # todo: what can I do here?
+            return "Unknown"
+
     def update(self, millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count):
         endingtype = None # or 'pass' or 'fail', returned at the end
         old_total_elapsed = self.total_elapsed
@@ -601,9 +617,12 @@ class ReactionTimePrompt(VirtualGameSprite):
                 # showing now and waiting keypress
                 for event in events:
                     if self.dismiss_test(event):
+                        # correct key pressed
                         logrowdetails['reaction_prompt_state'] = 'complete'
                         logrowdetails['reaction_prompt_millis'] = visible_ms
-                        # correct key pressed
+                        logrowdetails['reaction_prompt_passed'] = 'true'
+                        logrowdetails['reaction_prompt_pressed_key'] = self.key_from_event(event)
+
                         if self.stay_visible:
                             # just deactivate, don't hide or stop playing sounds until timeout
                             self.active = False
@@ -618,7 +637,9 @@ class ReactionTimePrompt(VirtualGameSprite):
                         # failed on incorrect key presss
                         logrowdetails['reaction_prompt_state'] = 'failed'
                         logrowdetails['reaction_prompt_millis'] = visible_ms
-                        # wrong key pressed
+                        logrowdetails['reaction_prompt_passed'] = 'false'
+                        logrowdetails['reaction_prompt_pressed_key'] = self.key_from_event(event)
+                        
                         if self.stay_visible:
                             # just deactivate, don't hide or stop playing sounds until timeout
                             self.active = False
@@ -641,6 +662,7 @@ class ReactionTimePrompt(VirtualGameSprite):
                         # still waiting for key that didn't happen in time, log it
                         logrowdetails['reaction_prompt_state'] = 'timeout'
                         logrowdetails['reaction_prompt_millis'] = visible_ms
+                        logrowdetails['reaction_prompt_passed'] = 'false'
 
                         # log timed out
                         self.logme(logrowdetails, reactionlogger)
