@@ -20,15 +20,6 @@ import random
 import parallelportwrapper
 
 # screens.py
-class QuitGame(Exception):
-    """Exception to raise in update_xxx() to quit the game"""
-    def __init__(self, value):
-        """Create new QuitGame exception"""
-        Exception.__init__(self)
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
-
 class GameScreen(object):
     """Base class for AsteroidImpact game screens"""
     def __init__(self, screen, screenstack):
@@ -796,16 +787,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
         
         # reaction time prompts are independent of level list
         # load their settings from step JSON
-        if reaction_prompts_settings:
-            new_reaction_prompts = []
-            for rp in reaction_prompts_settings:
-                new_reaction_prompts.append(
-                    ReactionTimePrompt(**rp))
-        else:
-            new_reaction_prompts = []
-
-        self.reaction_prompts = pygame.sprite.OrderedUpdates(
-            new_reaction_prompts)
+        self.reaction_prompts = ReactionTimePromptGroup(reaction_prompts_settings)
 
     def setup_level(self):
         """Setup for the current level"""
@@ -1284,16 +1266,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         # reaction time prompts are independent of level list
         # load their settings from step JSON
-        if reaction_prompts_settings:
-            new_reaction_prompts = []
-            for rp in reaction_prompts_settings:
-                new_reaction_prompts.append(
-                    ReactionTimePrompt(**rp))
-        else:
-            new_reaction_prompts = []
-        
-        self.reaction_prompts = pygame.sprite.OrderedUpdates(
-            new_reaction_prompts)
+        self.reaction_prompts = ReactionTimePromptGroup(reaction_prompts_settings)
 
     def setup_level(self, first=True, died_previously=False):
         """Setup for the current level"""
@@ -1449,42 +1422,22 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        for prompt in self.reaction_prompts:
-            prompt_gamerect_before = prompt.gamerect
-            endingtype = prompt.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
-            if endingtype == 'pass' and prompt.score_pass != None:
-                self.score += prompt.score_pass
+        score_changes = self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
+
+        if self.multicolor_crystal_scoring:
+            for score_change in score_changes:
+                self.score += score_change['change']
 
                 # show score change
                 self.score_increment_elapsed_ms = 0
                 self.score_increment_textsprite.set_position(
-                    centerx=prompt_gamerect_before.centerx,
-                    centery=prompt_gamerect_before.centery)
-                self.score_increment_textsprite.set_text('{:+n}'.format(prompt.score_pass))
+                    centerx=score_change['centerx'],
+                    centery=score_change['centery'])
+                self.score_increment_textsprite.set_text('{:+n}'.format(score_change['change']))
 
-                # todo: update high score?
+                # update high score
                 if self.game_globals['multicolor_high_score'] < self.score:
                     self.game_globals['multicolor_high_score'] = self.score
-            elif endingtype == 'fail' and prompt.score_fail != None:
-                self.score += prompt.score_fail
-
-                # show score change
-                self.score_increment_elapsed_ms = 0
-                self.score_increment_textsprite.set_position(
-                    centerx=prompt_gamerect_before.centerx,
-                    centery=prompt_gamerect_before.centery)
-                self.score_increment_textsprite.set_text('{:+n}'.format(prompt.score_fail))
-
-                # todo: update high score?
-                if self.game_globals['multicolor_high_score'] < self.score:
-                    self.game_globals['multicolor_high_score'] = self.score
-
-        # todo: refactor above to run prompt update in two passes
-        # - check for correct key press
-        # - check for incorrect key press
-        # handle prompt end:
-        #  if score enabled, adjust score and show corresponding score change
-        #  if sound enabled, play new sound
 
     def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""

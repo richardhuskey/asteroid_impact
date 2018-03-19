@@ -654,6 +654,27 @@ class GameModeManager(object):
                                 print "ERROR: reaction_prompts score_fail value of %s should be null or a number"%repr(reaction_prompt_options['score_fail'])
                                 return
 
+                    # score_miss should be number, or null/None
+                    if reaction_prompt_options.has_key('score_miss'):
+                        if reaction_prompt_options['score_miss'] == None:
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['score_miss'])
+                            except:
+                                print "ERROR: reaction_prompts score_miss value of %s should be null or a number"%repr(reaction_prompt_options['score_miss'])
+                                return
+
+                    # fail_on_wrong_key should be either True or False
+                    if reaction_prompt_options.has_key('fail_on_wrong_key'):
+                        if reaction_prompt_options['fail_on_wrong_key'] == True or reaction_prompt_options['fail_on_wrong_key'] == False :
+                            pass
+                            # valid
+                        else:
+                            print "ERROR: reaction_prompts fail_on_wrong_key value should be true or false"
+                            return
+
             else:
                 step['reaction_prompts'] = None
 

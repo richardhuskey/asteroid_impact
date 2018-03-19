@@ -667,7 +667,8 @@ Sample game step with reaction prompts::
           "timeout_millis": "never",
           "stay_visible": false,
           "score_pass": 100,
-          "score_fail": -90
+          "score_fail": -90,
+          "score_miss": -10
         }
       ]
     },
@@ -691,7 +692,9 @@ Sample game step with reaction prompts::
 ``"score_pass"``
     Integer number of points to award (or negative to subtract) when prompt is responded to with the correct key in time. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
 ``"score_fail"``
-    Integer number of points to award (or negative to subtract) when prompt is responded to with the incorrect key or too late. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
+    Integer number of points to award (or negative to subtract) when prompt is responded to with the incorrect key. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
+``"score_miss"``
+    Integer number of points to award (or negative to subtract) when prompt is missed or responded to too late. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
 ``"stay_visible"``
     ``false`` (default) or ``true``. A value of ``true`` indicates that the sound and image should continue to appear after the player presses the key corresponding to the prompt.
 ``"input_key"``

@@ -419,7 +419,8 @@ the ``reaction_prompts`` list is filled with entries like the one below ::
       "timeout_millis": 1500,
       "stay_visible": false,
       "score_pass": 100,
-      "score_fail": -90
+      "score_fail": -90,
+      "score_miss": -10
     }
 
 ``"diameter"``

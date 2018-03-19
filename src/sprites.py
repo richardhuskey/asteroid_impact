@@ -15,6 +15,15 @@ from resources import load_image, load_sound, NoneSound
 import virtualdisplay
 import math
 
+class QuitGame(Exception):
+    """Exception to raise in update_xxx() to quit the game"""
+    def __init__(self, value):
+        """Create new QuitGame exception"""
+        Exception.__init__(self)
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 class VirtualGameSprite(pygame.sprite.DirtySprite):
     """
     Sprite with higher resolution game position/size (gamerect) than on-screen
@@ -469,6 +478,8 @@ class ReactionTimePrompt(VirtualGameSprite):
             stay_visible = False,
             score_pass = None,
             score_fail = None,
+            score_miss = None,
+            fail_on_wrong_key = False,
             **kwargs_extra):
         #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -505,6 +516,8 @@ class ReactionTimePrompt(VirtualGameSprite):
         self.stay_visible = stay_visible
         self.score_pass = score_pass
         self.score_fail = score_fail
+        self.score_miss = score_miss
+        self.fail_on_wrong_key = fail_on_wrong_key
         self.active = False
         self.visible = False
         self.total_elapsed = 0
@@ -516,7 +529,7 @@ class ReactionTimePrompt(VirtualGameSprite):
             elif input_key == 'K_MOUSE2': mousebutton_index = 1 # middle mouse
             elif input_key == 'K_MOUSE3': mousebutton_index = 2 # right mouse
             else:
-                raise QuitGame('mouse button for input_key for reaction propmt of %s is not recognized'%input_key)
+                raise QuitGame('mouse button for input_key for reaction prompt of %s is not recognized'%input_key)
                 raise QuitGame()
 
             self.dismiss_test = lambda evt: evt.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[mousebutton_index]
@@ -525,9 +538,17 @@ class ReactionTimePrompt(VirtualGameSprite):
             pygame_key_constant = getattr(pygame, input_key, None)
             if not pygame_key_constant:
                 print 'input_key of "%s" not found. Please use one of the following'%input_key
-                print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
-                raise QuitGame()
+                print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')]+['K_MOUSE1','K_MOUSE2','K_MOUSE3'])
+                raise QuitGame('input_key of "%s" not found. '%input_key)
             self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
+
+    def isactive_and_dismiss_test(self, event):
+        '''
+        Returns True when prompt is active and the event matches the configured key/mouse button
+        '''
+        return (self.visible and
+                self.active and
+                self.dismiss_test(event))
 
     def activate_and_show(self):
         # prepare for next position:
@@ -592,6 +613,22 @@ class ReactionTimePrompt(VirtualGameSprite):
                         # log completed
                         self.logme(logrowdetails, reactionlogger)
                         endingtype = 'pass'
+                        break
+                    elif self.fail_on_wrong_key:
+                        # failed on incorrect key presss
+                        logrowdetails['reaction_prompt_state'] = 'failed'
+                        logrowdetails['reaction_prompt_millis'] = visible_ms
+                        # wrong key pressed
+                        if self.stay_visible:
+                            # just deactivate, don't hide or stop playing sounds until timeout
+                            self.active = False
+                        else:
+                            self.deactivate_and_hide()
+
+                        # log completed
+                        self.logme(logrowdetails, reactionlogger)
+                        endingtype = 'fail'
+                        break
             else:
                 # no longer active because key was already pressed.
                 logrowdetails['reaction_prompt_state'] = 'after_complete'
@@ -607,7 +644,7 @@ class ReactionTimePrompt(VirtualGameSprite):
 
                         # log timed out
                         self.logme(logrowdetails, reactionlogger)
-                        endingtype = 'fail'
+                        endingtype = 'timeout'
 
                     self.deactivate_and_hide()
 
@@ -631,6 +668,91 @@ class ReactionTimePrompt(VirtualGameSprite):
             if logrowdetails.has_key(col):
                 newreactionlogrow[col] = logrowdetails[col]
         reactionlogger.log(newreactionlogrow)
+
+
+class ReactionTimePromptGroup(pygame.sprite.OrderedUpdates):
+    def __init__(self, prompt_settings_list):
+        if prompt_settings_list == None:
+            prompt_settings_list = []
+        pygame.sprite.OrderedUpdates.__init__(self)
+
+        # todo: add a score change sprite?
+
+        for rp in prompt_settings_list:
+            new_reaction_prompt = ReactionTimePrompt(**rp)
+            self.add(new_reaction_prompt)
+
+    # draw() implmented in superclass
+
+    def update(self, millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count):
+        '''
+        update all contained reaction prompts.
+
+        returns list of score change dictionary entries:
+            [{change=123,centerx=456.0,centery=789.0},{change=-10,centerx=123.0,centery=123.0}]
+
+        The events sent to each prompt are pre-processed to either include 
+        events that trigger that prompt, or ones that didn't match another
+        prompt. This is so that when multiple prompts are active, and pressing
+        the wrong key is configured to fail them both, pressing the key for 
+        just one of the prompts does not fail the other.
+        '''
+        score_changes = []
+
+        # filter events to only key down or mouse button down
+        events_filtered = []
+        for evt in events:
+            if (evt.type == pygame.MOUSEBUTTONDOWN or evt.type == pygame.KEYDOWN):
+                events_filtered.append(evt)
+
+        # pass 1: filter event list for each prompt
+        events_by_prompt_index = [None]*len(self)
+        events_matched_all = [] # all events that matched one or more active prompt
+        for i,prompt in enumerate(self):
+            matching_event_list = [evt for evt in events if prompt.isactive_and_dismiss_test(evt)]
+            if len(matching_event_list) == 0:
+                # use unprocessed events
+                # is filled below
+                events_by_prompt_index[i] = None
+            else:
+                # use only matching events
+                events_by_prompt_index[i] = matching_event_list
+                events_matched_all.extend(matching_event_list)
+
+        events_unmatched = [evt for evt in events_filtered if evt not in events_matched_all]
+        # replace None entries with events_unmatched in events_by_prompt_index
+        events_by_prompt_index = [evt or events_unmatched for evt in events_by_prompt_index]
+
+        # pass 2: respond to correct or incorrect keypresses
+        for i,prompt in enumerate(self):
+            prompt_events = events_by_prompt_index[i]
+            prompt_gamerect_before = prompt.gamerect
+            endingtype = prompt.update(
+                millis,
+                logrowdetails,
+                reactionlogger,
+                frame_outbound_triggers,
+                prompt_events,
+                step_trigger_count)
+            if endingtype == 'pass' and prompt.score_pass != None:
+                score_changes.append(dict(
+                    change=prompt.score_pass,
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery))
+
+            elif endingtype == 'fail' and prompt.score_fail != None:
+                score_changes.append(dict(
+                    change=prompt.score_fail,
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery))
+
+            elif endingtype == 'timeout' and prompt.score_fail != None:
+                score_changes.append(dict(
+                    change=prompt.score_miss,
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery))
+
+        return score_changes
 
 class TextSprite(object):
     """

@@ -104,7 +104,9 @@ class AsteroidLogger(object):
             # blank: no active reaction prompt
             # "waiting": active reaction prompt is visible
             # "complete": player pressed button to dismiss reaction prompt
+            # "failed": player pressed the wrong key, and prompt configured with fail_on_wrong_key true
             # "timeout": player didn't press button in time
+            # "timeout_step_end": player didn't press button in time, and the prompt ended early because the step advanced
             'reaction_prompt_state',
             'reaction_prompt_millis'
             ]
