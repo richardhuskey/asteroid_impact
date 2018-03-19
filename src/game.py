@@ -675,6 +675,15 @@ class GameModeManager(object):
                             print "ERROR: reaction_prompts fail_on_wrong_key value should be true or false"
                             return
 
+                    # pass_fail_sounds should be either True or False
+                    if reaction_prompt_options.has_key('pass_fail_sounds'):
+                        if reaction_prompt_options['pass_fail_sounds'] == True or reaction_prompt_options['pass_fail_sounds'] == False :
+                            pass
+                            # valid
+                        else:
+                            print "ERROR: reaction_prompts pass_fail_sounds value should be true or false"
+                            return
+
             else:
                 step['reaction_prompts'] = None
 

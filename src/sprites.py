@@ -483,6 +483,7 @@ class ReactionTimePrompt(VirtualGameSprite):
             score_fail = None,
             score_miss = None,
             fail_on_wrong_key = False,
+            pass_fail_sounds = False,
             **kwargs_extra):
         #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -509,6 +510,13 @@ class ReactionTimePrompt(VirtualGameSprite):
         else:
             self.prompt_sound = NoneSound()
             self.sound_name = 'none'
+
+        if pass_fail_sounds:
+            self.pass_sound = load_sound('prompt_correct.wav', mixing_group='reaction')
+            self.fail_sound = load_sound('prompt_error.wav', mixing_group='reaction')
+        else:
+            self.pass_sound = NoneSound()
+            self.fail_sound = NoneSound()
 
         self.showtimes_millis = showtimes_millis
         # todo: implement trigger showing
@@ -629,6 +637,8 @@ class ReactionTimePrompt(VirtualGameSprite):
                         else:
                             self.deactivate_and_hide()
 
+                        self.pass_sound.play()
+
                         # log completed
                         self.logme(logrowdetails, reactionlogger)
                         endingtype = 'pass'
@@ -645,6 +655,8 @@ class ReactionTimePrompt(VirtualGameSprite):
                             self.active = False
                         else:
                             self.deactivate_and_hide()
+
+                        self.fail_sound.play()
 
                         # log completed
                         self.logme(logrowdetails, reactionlogger)
@@ -663,6 +675,8 @@ class ReactionTimePrompt(VirtualGameSprite):
                         logrowdetails['reaction_prompt_state'] = 'timeout'
                         logrowdetails['reaction_prompt_millis'] = visible_ms
                         logrowdetails['reaction_prompt_passed'] = 'false'
+
+                        self.fail_sound.play()
 
                         # log timed out
                         self.logme(logrowdetails, reactionlogger)
