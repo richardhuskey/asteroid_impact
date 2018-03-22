@@ -104,7 +104,9 @@ Below is a sample script JSON with input triggers configured. ::
               "showtimes_trigger_counts": [],
               "input_key": "K_1",
               "timeout_millis": 1500,
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             },
             {
               "diameter": 80,
@@ -117,7 +119,9 @@ Below is a sample script JSON with input triggers configured. ::
               "showtimes_trigger_counts": [],
               "input_key": "K_2",
               "timeout_millis": 1500,
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             },
             {
               "diameter": 80,
@@ -130,7 +134,9 @@ Below is a sample script JSON with input triggers configured. ::
               "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
               "input_key": "K_MOUSE1",
               "timeout_millis": "never",
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             }
           ]
         },

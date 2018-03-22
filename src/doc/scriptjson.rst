@@ -69,7 +69,9 @@ Sample: ::
               "showtimes_trigger_counts": [],
               "input_key": "K_1",
               "timeout_millis": 1500,
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             },
             {
               "diameter": 80,
@@ -82,7 +84,9 @@ Sample: ::
               "showtimes_trigger_counts": [],
               "input_key": "K_2",
               "timeout_millis": 1500,
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             },
             {
               "diameter": 80,
@@ -95,7 +99,9 @@ Sample: ::
               "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
               "input_key": "K_MOUSE1",
               "timeout_millis": "never",
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             }
           ]
         },
@@ -303,7 +309,9 @@ Sample trigger-driven JSON: ::
               "showtimes_trigger_counts": [],
               "input_key": "K_1",
               "timeout_millis": 1500,
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             },
             {
               "diameter": 80,
@@ -316,7 +324,9 @@ Sample trigger-driven JSON: ::
               "showtimes_trigger_counts": [],
               "input_key": "K_2",
               "timeout_millis": 1500,
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             },
             {
               "diameter": 80,
@@ -329,7 +339,9 @@ Sample trigger-driven JSON: ::
               "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
               "input_key": "K_MOUSE1",
               "timeout_millis": "never",
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             }
           ]
         },
@@ -639,7 +651,12 @@ Sample game step with reaction prompts::
           "showtimes_trigger_counts": [],
           "input_key": "K_1",
           "timeout_millis": 1500,
-          "stay_visible": false
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false,
+          "score_pass": 100,
+          "score_fail": -90,
+          "score_miss": -10
         },
         {
           "diameter": 80,
@@ -652,7 +669,12 @@ Sample game step with reaction prompts::
           "showtimes_trigger_counts": [],
           "input_key": "K_2",
           "timeout_millis": 1500,
-          "stay_visible": false
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false,
+          "score_pass": 100,
+          "score_fail": -90,
+          "score_miss": -10
         },
         {
           "diameter": 80,
@@ -666,6 +688,8 @@ Sample game step with reaction prompts::
           "input_key": "K_MOUSE1",
           "timeout_millis": "never",
           "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false,
           "score_pass": 100,
           "score_fail": -90,
           "score_miss": -10
@@ -689,14 +713,18 @@ Sample game step with reaction prompts::
      A list of numbers to indicate which trigger pulses inside this step trigger this reaction prompt. A 1 in this list would trigger the reaction prompt to appear when the game receives the first trigger pulse after starting this ``game`` or ``game-adaptive`` step.
 ``"timeout_millis"``
      How many milliseconds the prompt should remain visible and audible once it appears if the player doesn't press the key to dismiss the prompt.
-``"score_pass"``
-    Integer number of points to award (or negative to subtract) when prompt is responded to with the correct key in time. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
-``"score_fail"``
-    Integer number of points to award (or negative to subtract) when prompt is responded to with the incorrect key. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
-``"score_miss"``
-    Integer number of points to award (or negative to subtract) when prompt is missed or responded to too late. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
 ``"stay_visible"``
     ``false`` (default) or ``true``. A value of ``true`` indicates that the sound and image should continue to appear after the player presses the key corresponding to the prompt.
+``"fail_on_wrong_key"``
+    ``false`` (default) or ``true``. A value of ``true`` changes the prompt to be failed immedately if the wrong key or mouse button is pressed.
+``"pass_fail_sounds"``
+    ``false`` (default) or ``true``. A value of ``true`` enables playing a success chime or a fail buzz when the prompt ends by pressing the correct key, wrong key, or timing out.
+``"score_pass"``
+    Integer number of points to award (or negative to subtract) when prompt is responded to with the correct key in time. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points. Scores only are shown when the multi-color crystal scoring is configured on the game-adaptive step.
+``"score_fail"``
+    Integer number of points to award (or negative to subtract) when prompt is responded to with the incorrect key. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points. Scores only are shown when the multi-color crystal scoring is configured on the game-adaptive step.
+``"score_miss"``
+    Integer number of points to award (or negative to subtract) when prompt is missed or responded to too late. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points. Scores only are shown when the multi-color crystal scoring is configured on the game-adaptive step.
 ``"input_key"``
     Is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below.
 

@@ -31,7 +31,9 @@ Below is a sample of the full JSON configuration for a ``game`` step. ::
               "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
               "input_key": "K_MOUSE1",
               "timeout_millis": "never",
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             }
           ]
         },
@@ -418,6 +420,8 @@ the ``reaction_prompts`` list is filled with entries like the one below ::
       "input_key": "K_2",
       "timeout_millis": 1500,
       "stay_visible": false,
+      "fail_on_wrong_key": false,
+      "pass_fail_sounds": false,
       "score_pass": 100,
       "score_fail": -90,
       "score_miss": -10
@@ -439,6 +443,10 @@ the ``reaction_prompts`` list is filled with entries like the one below ::
     After this duration the prompt will go away on its own. Set to ``"none"`` to continue showing/sounding the reaction prompt
 ``"stay_visible"``
     ``true`` to have the image and sound continue playing for the entire ``timeout_millis`` duration.
+``"fail_on_wrong_key"``
+    Set this to true to fail this reaction prompt if the wrong key is pressed.
+``"pass_fail_sounds"``
+    Set this to true to enable different pass or fail sounds that play when the prompt is responded to correctly, or incorrectly/missed.
 ``"score_pass"``
     Integer number of points to award (or negative to subtract) when prompt is responded to with the correct key in time. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
 ``"score_fail"``
