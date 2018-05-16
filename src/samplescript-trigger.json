@@ -149,6 +149,7 @@
       "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
       "multicolor_crystal_num_showing": 3,
       "multicolor_crystal_lifetime_ms": 5000,
+      "multicolor_crystal_negative_score_buzzer": true,
 
       "multicolor_crystal_score_table": [
         [ 0, 25, 25, 25, 25, 25 ],

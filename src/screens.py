@@ -1189,6 +1189,10 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 # all tens
                 self.multicolor_crystal_score_table = [[10 for s in row] for row in self.multicolor_crystal_score_table]
 
+        self.multicolor_crystal_negative_score_buzzer = False
+        if kwargs.has_key('multicolor_crystal_negative_score_buzzer'): 
+            self.multicolor_crystal_negative_score_buzzer = kwargs['multicolor_crystal_negative_score_buzzer']
+
         self.blackbackground = pygame.Surface(self.screen.get_size())
         self.blackbackground = self.blackbackground.convert()
         self.blackbackground.fill((0, 0, 0))
@@ -1299,7 +1303,8 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 # when acting like "classic" behavior, use 'crystal.png'
                 imagefile='Crystal_%i.png' % t['color'] if t['color'] >= 1 else 'crystal.png',
                 number=t['color'],
-                lifetime_millis_max = self.multicolor_crystal_lifetime_ms)
+                lifetime_millis_max = self.multicolor_crystal_lifetime_ms,
+                play_buzzer_on_negative_score = self.multicolor_crystal_negative_score_buzzer)
             target_list_new.append(sprite)
         
         if first or died_previously:
@@ -1495,10 +1500,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             for target in self.target_list:
                 if target.active and circularspritesoverlap(self.cursor, target):
                     # hit.
-                    target.pickedup()
-
-                    # increment counter of targets hit
-                    self.targets_collected += 1
+                    scoreincrement = 1
 
                     # increment score
                     if self.multicolor_crystal_scoring:
@@ -1524,6 +1526,12 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
                         if self.game_globals['multicolor_high_score'] < self.score:
                             self.game_globals['multicolor_high_score'] = self.score
+
+                    target.pickedup(score = scoreincrement)
+
+                    # increment counter of targets hit
+                    self.targets_collected += 1
+
 
                     self.target_previously_collected_number = target.number
 

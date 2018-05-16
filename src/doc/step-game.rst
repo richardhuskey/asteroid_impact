@@ -176,6 +176,7 @@ Below is a sample script JSON will all multicolor crystal scoring options specif
           "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
           "multicolor_crystal_num_showing": 2,
           "multicolor_crystal_lifetime_ms": 5000,
+          "multicolor_crystal_negative_score_buzzer": true,
     
           "multicolor_crystal_score_table": [
             [ 25, 25, 25, 25, 25, 25 ],
@@ -334,6 +335,8 @@ The multicolor-specific options are as follows:
     The number of crystals to have active on screen at a time. To show two crystals on screen at all times, set this to ``2``. This defaults to ``1``.
 ``"multicolor_crystal_lifetime_ms"``
     The duration in milliseconds a crystal remains before it goes away on its own. Leave out this option, or set it to ``null`` make the crystals persistent forever. Set to ``5000`` to make crystals automatically go away after 5 seconds.
+``"multicolor_crystal_negative_score_buzzer"``
+    When set to true, collecting a crystal that awards negative points or zero points will play an alternate buzzer sound instead of the chime that normally plays when collecting a crystal.
 ``"multicolor_crystal_score_table"``
     5 rows of point values, with 6 scores per row. This is a table used to find the number of points to award when a crystal is collected. The row corresponds to the color of the crystal the player is collecting now, such as the red triangle for the first row. The entry within the inner list corresponds to the color of the previously selected crystal, for example the first inner points value corresponds to having previously collected a red triangle. The 6th points value is used when no crystal was collected previously.
 

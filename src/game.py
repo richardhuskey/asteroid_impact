@@ -779,6 +779,11 @@ class GameModeManager(object):
                     else:
                         step['multicolor_crystal_lifetime_ms'] = None
 
+                if step.has_key('multicolor_crystal_negative_score_buzzer'):
+                    step['multicolor_crystal_negative_score_buzzer'] = bool(step['multicolor_crystal_negative_score_buzzer'])
+                else:
+                    step['multicolor_crystal_negative_score_buzzer'] = False
+
                 if step.has_key('multicolor_crystal_score_table'):
                     if not isinstance(step['multicolor_crystal_score_table'], list):
                         print 'Error: game-adaptive multicolor_crystal_score_table must be a list of 5 lists of 6 score numbers'
@@ -960,6 +965,9 @@ class GameModeManager(object):
 
             if step.has_key('multicolor_crystal_score_table'):
                 kwargs['multicolor_crystal_score_table'] = step['multicolor_crystal_score_table']
+
+            if step.has_key('multicolor_crystal_negative_score_buzzer'):
+                kwargs['multicolor_crystal_negative_score_buzzer'] = step['multicolor_crystal_negative_score_buzzer']
 
             if step.has_key('game_element_opacity'):
                 kwargs['game_element_opacity'] = step['game_element_opacity']

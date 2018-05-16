@@ -113,7 +113,8 @@ class ScoredTarget(VirtualGameSprite):
                  imagefile='crystal.png',
                  number='x',
                  # None or milliseconds until crystal disappears on its own:
-                 lifetime_millis_max = None):
+                 lifetime_millis_max = None,
+                 play_buzzer_on_negative_score = False):
         # todo: options for start/fadeout/end times
         # todo: option for scoring-number
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -128,6 +129,7 @@ class ScoredTarget(VirtualGameSprite):
         self.visible = 0
         self.active = False
         self.pickup_sound = load_sound('ring_inventory.wav')
+        self.pickup_sound_negative = load_sound('crystal_buzzer.wav')
         self.flashing = False
         self.flashing_counter = 0
 
@@ -135,6 +137,9 @@ class ScoredTarget(VirtualGameSprite):
         self.lifetime_millis_max = lifetime_millis_max
         # current elapsed millis this crystal has ben active
         self.lifetime_millis_elapsed = 0
+
+        self.play_buzzer_on_negative_score = play_buzzer_on_negative_score
+
 
     def activate(self, life_multiplier=1):
         self.active = True
@@ -152,10 +157,14 @@ class ScoredTarget(VirtualGameSprite):
 
     def stop_audio(self):
         self.pickup_sound.stop()
+        self.pickup_sound_negative.stop()
 
-    def pickedup(self):
+    def pickedup(self, score=1):
         """Play pick up sound"""
-        self.pickup_sound.play()
+        if self.play_buzzer_on_negative_score and score <= 0:
+            self.pickup_sound_negative.play()
+        else:
+            self.pickup_sound.play()
         self.deactivate()
 
     def update(self, millis):
