@@ -19,7 +19,7 @@ Richard Huskey, Nick Winters, Justin Keene, Jacob Fisher, Britney Craighead, and
 
 If you use Asteroid Impact in your research, please cite:
 
-Huskey, R., Craighead, B., Miller, M. B., Weber, R. (under review). <em>Intrinsic Reward Motivates Shifts BetweenCognitive Control and Default Mode Networks During Task Performance.</em>
+Huskey, R., Craighead, B., Miller, M. B., Weber, R. (2018). Does Intrinsic Reward Motivate Cognitive Control? A Naturalistic-fMRI Study Based on the Synchronization Theory of Flow. <em>Cognitive, Affective, and Behavioral Neuroscience.</em> doi: 10.3758/s13415-018-0612-6
 
 We will update the citation once the manuscript is in press.
 
