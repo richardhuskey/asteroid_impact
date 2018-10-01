@@ -47,6 +47,7 @@ if not pygame.mixer:
 
 from screens import (
     AsteroidImpactInstructionsScreen,
+    AsteroidImpactInstructionsScreenAlt,
     UserTextScreen,
     SurveyQuestionScreen,
     AsteroidImpactGameplayScreen,
@@ -889,6 +890,19 @@ class GameModeManager(object):
                     self.screen,
                     self.gamescreenstack,
                     click_to_continue=click_to_continue))
+        elif step['action'] == 'instructions_alt':
+            click_to_continue = True
+            if step.has_key('duration') and step['duration'] != None:
+                click_to_continue = False
+            if step.has_key('trigger_count') and step['trigger_count'] != None:
+                click_to_continue = False
+
+            self.gamescreenstack.append(
+                AsteroidImpactInstructionsScreenAlt(
+                    self.screen,
+                    self.gamescreenstack,
+                    click_to_continue=click_to_continue))
+
         elif step['action'] == 'text':
             click_to_continue = True
             if step.has_key('duration') and step['duration'] != None:

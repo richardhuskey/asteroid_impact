@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b84263a4-008a-4db7-a062-ca182c529793" name="Default" comment="" />
+    <list default="true" id="b84263a4-008a-4db7-a062-ca182c529793" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/data/Crystal_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Crystal_1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Crystal_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Crystal_2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Crystal_3.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Crystal_3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Crystal_4.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Crystal_4.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Crystal_5.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/Crystal_5.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/DeathFlash.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/DeathFlash.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/FreeSansBold.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/data/FreeSansBold.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/Thumbs.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/Thumbs.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/asteroid.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/asteroid.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/background4x3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/background4x3.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/circle.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/circle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/clock.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/clock.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/crystal.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/crystal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cursor.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/cursor.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/parallel_debug.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/parallel_debug.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/prompt_correct.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/prompt_correct.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/prompt_error.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/prompt_error.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ring_inventory.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/ring_inventory.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/shield end.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/shield end.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/shield start.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/shield start.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/shield.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/shield.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/slow end.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/slow end.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/slow start.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/slow start.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/square.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/square.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/through space.ogg" beforeDir="false" afterPath="$PROJECT_DIR$/data/through space.ogg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tone146.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/tone146.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tone440.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/tone440.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tone659.wav" beforeDir="false" afterPath="$PROJECT_DIR$/data/tone659.wav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/transparent.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/transparent.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/triangle.png" beforeDir="false" afterPath="$PROJECT_DIR$/data/triangle.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens.py" beforeDir="false" afterPath="$PROJECT_DIR$/screens.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -10,23 +43,37 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="screens.py" pinned="false" current-in-tab="true">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="screens.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/screens.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-324" />
+            <state relative-caret-position="756">
+              <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
+            </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="game.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/game.py">
-          <provider selected="true" editor-type-id="text-editor" />
+      <file leaf-file-name="game.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/game.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="630">
+              <caret line="989" column="53" lean-forward="true" selection-start-line="989" selection-start-column="53" selection-end-line="989" selection-end-column="53" />
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/screens.py" />
+        <option value="$PROJECT_DIR$/game.py" />
+      </list>
+    </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="2115" />
@@ -47,6 +94,11 @@
               <item name="src" type="b2602c69:ProjectViewProjectNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="src" type="b2602c69:ProjectViewProjectNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -54,9 +106,9 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/game.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/screens.py" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
-    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/game.py" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/screens.py" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -75,21 +127,22 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="0" width="1920" height="1200" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="Structure" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -101,12 +154,21 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/game.py">
+    <entry file="file://$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/screens.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/../../../inprogress/cogperc_fmri_1/ai/src/screens.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-324" />
+        <state relative-caret-position="756">
+          <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/game.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="989" column="53" lean-forward="true" selection-start-line="989" selection-start-column="53" selection-end-line="989" selection-end-column="53" />
+        </state>
       </provider>
     </entry>
   </component>
