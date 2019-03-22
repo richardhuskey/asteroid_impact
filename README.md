@@ -47,25 +47,25 @@ As an alternative for macOS users, you may consider using a conda environment. T
 
 1. Open a terminal and run this command:
 
-	'''$ conda create -n ai python=2.7'''
+	```$ conda create -n ai python=2.7```
 
 2. Activate the environment:
 
-	'''$ conda activate ai'''
+	```$ conda activate ai```
 
 3. Install dependencies:
 
-	'''$ pip install pygame'''
+	```$ pip install pygame```
 
-	'''$ pip install pyserial'''
+	```$ pip install pyserial```
 
 4. Run Asteroid Impact (make sure you are in the 'src' directory that contains game.py:
 
-	'''$ python game.py'''
+	```$ python game.py```
 
 5. Deactivate your conda virtual environment when done:
 
-	'''$ conda deactivate'''
+	```$ conda deactivate```
 
 <h1>New Features</h1>
 
