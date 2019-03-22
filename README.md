@@ -43,6 +43,30 @@ The src directory contains the game files.
 
 For Mac users. In order to get Asteroid Impact to work on OS X Sierra (10.12), updated versions of PyGame and PySerial must be installed. PyGame cannot be installed through pip on Mac, so you can follow [these instructions](https://jamesfriend.com.au/installing-pygame-python-3-mac-os-yosemite). Alternately, you can use an integrated development environment (IDE) such as [PyCharm](https://www.jetbrains.com/pycharm/). 
 
+As an alternative for macOS users, you may consider using a conda environment. To do this you will need [Anaconda 3](https://www.anaconda.com/) installed. From there, follow these steps:
+
+1. Open a terminal and run this command:
+
+	'''$ conda create -n ai python=2.7'''
+
+2. Activate the environment:
+
+	'''$ conda activate ai'''
+
+3. Install dependencies:
+
+	'''$ pip install pygame'''
+
+	'''$ pip install pyserial'''
+
+4. Run Asteroid Impact (make sure you are in the 'src' directory that contains game.py:
+
+	'''$ python game.py'''
+
+5. Deactivate your conda virtual environment when done:
+
+	'''$ conda deactivate'''
+
 <h1>New Features</h1>
 
 <h2>Questionnaire Block Development</h2>
