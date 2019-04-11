@@ -689,7 +689,7 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
         self.sprites.add(s)
         self.textsprites.append(TextSprite(
             self.font,
-            "Press the blue button when you see a triangle",
+            "Press z when you see a triangle",
             black, left=240, top=660))
 
         s = ReactionTimePrompt(image="square.png")
@@ -698,7 +698,7 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
         self.sprites.add(s)
         self.textsprites.append(TextSprite(
             self.font,
-            "Press the green button when you see a square",
+            "Press x when you see a square",
             black, left=240, top= 740))
 
         if self.click_to_continue:

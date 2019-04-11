@@ -129,7 +129,7 @@ class ScoredTarget(VirtualGameSprite):
         self.visible = 0
         self.active = False
         self.pickup_sound = load_sound('ring_inventory.wav')
-        self.pickup_sound_negative = load_sound('crystal_buzzer.wav')
+        self.pickup_sound_negative = load_sound('prompt_error.wav')
         self.flashing = False
         self.flashing_counter = 0
 
@@ -161,7 +161,7 @@ class ScoredTarget(VirtualGameSprite):
 
     def pickedup(self, score=1):
         """Play pick up sound"""
-        if self.play_buzzer_on_negative_score and score <= 0:
+        if self.play_buzzer_on_negative_score and score < 0:
             self.pickup_sound_negative.play()
         else:
             self.pickup_sound.play()
