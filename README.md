@@ -1,6 +1,8 @@
 # Asteroid Impact
 Asteroid Impact is an open-source video game stimulus for conducting experimental research on human subjects.
 
+You can read the full documentation for Asteroid Impact [here](https://medianeuroscience.github.io/asteroid_impact).
+
 Questions? Contact Jacob Fisher (jacobtfisher@ucsb.edu), or Richard Huskey (huskey.29@osu.edu)
 
 # License
@@ -43,13 +45,13 @@ The html documentation files specify necessary software dependencies and how to 
 
 The src directory contains the game files.
 
-For Mac users. In order to get Asteroid Impact to work on OS X Sierra (10.12), updated versions of PyGame and PySerial must be installed. PyGame cannot be installed through pip on Mac, so you can follow [these instructions](https://jamesfriend.com.au/installing-pygame-python-3-mac-os-yosemite). Alternately, you can use an integrated development environment (IDE) such as [PyCharm](https://www.jetbrains.com/pycharm/). 
+For Mac users. In order to get Asteroid Impact to work on OS X Sierra (10.12), updated versions of PyGame and PySerial must be installed. PyGame cannot be installed through pip on Mac, so you can follow [these instructions](https://jamesfriend.com.au/installing-pygame-python-3-mac-os-yosemite). Alternately, you can use an integrated development environment (IDE) such as [PyCharm](https://www.jetbrains.com/pycharm/).
 
 <h1>New Features</h1>
 
 ## Step Shuffling
 
-As of April 2019, it is now possible to shuffle the order of game steps (instructions, levels, survey questions, etc) at the individual level or at the block level by specifying `step_shuffle_groups` or `group shuffle groups` in your JSON file. 
+As of April 2019, it is now possible to shuffle the order of game steps (instructions, levels, survey questions, etc) at the individual level or at the block level by specifying `step_shuffle_groups` or `group shuffle groups` in your JSON file.
 
 <h2>Questionnaire Block Development</h2>
 
@@ -81,7 +83,7 @@ The perceptual load of the game environment can be changed through the reduction
 
 <h1>! Known Issues</h1>
 
-As with all experimental software, please use <em>Asteroid Impact</em> at your own risk, and after sufficient testing on your own hardware. The software does not come with any warranty. 
+As with all experimental software, please use <em>Asteroid Impact</em> at your own risk, and after sufficient testing on your own hardware. The software does not come with any warranty.
 
 <em>Asteroid Impact</em> Has undergone extensive testing in Windows7, Windows10, and OS X 10.10.5 environments. Known issues are listed below:
 <ul>
