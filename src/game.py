@@ -143,16 +143,6 @@ class GameModeManager(object):
         self.max_asteroid_count = 12
 
         if self.args.script_json != None:
-            # with open(self.args.script_json) as f:
-            #     self.script_json = json.load(f)
-            #
-            #     # allow script_json to be list of steps
-            #     # or object with 'steps' attribute
-            #     if isinstance(self.script_json, list):
-            #         self.gamesteps = self.script_json
-            #         self.script_json = dict(steps=self.gamesteps)
-            #     else:
-            #         self.gamesteps = self.script_json['steps']
 
             with open(self.args.script_json) as f:
                 self.script_json = json.load(f)
@@ -188,6 +178,7 @@ class GameModeManager(object):
                 levelsjson = [self.args.single_level_json]
 
             # use these steps when the steps aren't specified on the console:
+            self.stepgroups = []
             self.gamesteps = [
                 dict(action='instructions',
                      duration=None),
@@ -502,8 +493,9 @@ class GameModeManager(object):
                 return
 
         # number steps in original order:
-        for i, s in enumerate(self.stepgroups):
-            s['groupnumber'] = i + 1
+        if self.stepgroups:
+            for i, s in enumerate(self.stepgroups):
+                s['groupnumber'] = i + 1
         for i, s in enumerate(self.gamesteps):
             s['stepnumber'] = i + 1
         if self.script_json.has_key('group_shuffle_groups'):
@@ -1178,7 +1170,7 @@ class GameModeManager(object):
         return levels
 
     def gameloop(self):
-        "run the game frame/tick loop"
+        # run the game frame/tick loop
 
         if self.skipgame:
             # exit
