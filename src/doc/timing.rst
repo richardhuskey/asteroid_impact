@@ -133,7 +133,9 @@ Test script JSON: ``lagtest.json`` ::
               "showtimes_trigger_counts": [],
               "input_key": "K_1",
               "timeout_millis": 1500,
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             }
           ]
         }

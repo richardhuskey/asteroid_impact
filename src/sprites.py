@@ -15,6 +15,18 @@ from resources import load_image, load_sound, NoneSound
 import virtualdisplay
 import math
 
+CODE_BY_PYGAME_CONSTANT = {k:getattr(pygame,k) for k in dir(pygame) if k.startswith('K_')}
+PYGAME_CONSTANT_BY_CODE = {getattr(pygame,k):k for k in dir(pygame) if k.startswith('K_')}
+
+class QuitGame(Exception):
+    """Exception to raise in update_xxx() to quit the game"""
+    def __init__(self, value):
+        """Create new QuitGame exception"""
+        Exception.__init__(self)
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 class VirtualGameSprite(pygame.sprite.DirtySprite):
     """
     Sprite with higher resolution game position/size (gamerect) than on-screen
@@ -101,7 +113,8 @@ class ScoredTarget(VirtualGameSprite):
                  imagefile='crystal.png',
                  number='x',
                  # None or milliseconds until crystal disappears on its own:
-                 lifetime_millis_max = None):
+                 lifetime_millis_max = None,
+                 play_buzzer_on_negative_score = False):
         # todo: options for start/fadeout/end times
         # todo: option for scoring-number
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -116,6 +129,7 @@ class ScoredTarget(VirtualGameSprite):
         self.visible = 0
         self.active = False
         self.pickup_sound = load_sound('ring_inventory.wav')
+        self.pickup_sound_negative = load_sound('prompt_error.wav')
         self.flashing = False
         self.flashing_counter = 0
 
@@ -123,6 +137,9 @@ class ScoredTarget(VirtualGameSprite):
         self.lifetime_millis_max = lifetime_millis_max
         # current elapsed millis this crystal has ben active
         self.lifetime_millis_elapsed = 0
+
+        self.play_buzzer_on_negative_score = play_buzzer_on_negative_score
+
 
     def activate(self, life_multiplier=1):
         self.active = True
@@ -140,10 +157,14 @@ class ScoredTarget(VirtualGameSprite):
 
     def stop_audio(self):
         self.pickup_sound.stop()
+        self.pickup_sound_negative.stop()
 
-    def pickedup(self):
+    def pickedup(self, score=1):
         """Play pick up sound"""
-        self.pickup_sound.play()
+        if self.play_buzzer_on_negative_score and score < 0:
+            self.pickup_sound_negative.play()
+        else:
+            self.pickup_sound.play()
         self.deactivate()
 
     def update(self, millis):
@@ -467,6 +488,11 @@ class ReactionTimePrompt(VirtualGameSprite):
             showtimes_trigger_counts=[],
             timeout_millis = 5000,
             stay_visible = False,
+            score_pass = None,
+            score_fail = None,
+            score_miss = None,
+            fail_on_wrong_key = False,
+            pass_fail_sounds = False,
             **kwargs_extra):
         #if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self) #call Sprite initializer
@@ -494,6 +520,13 @@ class ReactionTimePrompt(VirtualGameSprite):
             self.prompt_sound = NoneSound()
             self.sound_name = 'none'
 
+        if pass_fail_sounds:
+            self.pass_sound = load_sound('prompt_correct.wav', mixing_group='reaction')
+            self.fail_sound = load_sound('prompt_error.wav', mixing_group='reaction')
+        else:
+            self.pass_sound = NoneSound()
+            self.fail_sound = NoneSound()
+
         self.showtimes_millis = showtimes_millis
         # todo: implement trigger showing
         self.showtimes_trigger_counts = showtimes_trigger_counts
@@ -501,6 +534,10 @@ class ReactionTimePrompt(VirtualGameSprite):
             timeout_millis = None
         self.timeout_millis = timeout_millis
         self.stay_visible = stay_visible
+        self.score_pass = score_pass
+        self.score_fail = score_fail
+        self.score_miss = score_miss
+        self.fail_on_wrong_key = fail_on_wrong_key
         self.active = False
         self.visible = False
         self.total_elapsed = 0
@@ -512,7 +549,7 @@ class ReactionTimePrompt(VirtualGameSprite):
             elif input_key == 'K_MOUSE2': mousebutton_index = 1 # middle mouse
             elif input_key == 'K_MOUSE3': mousebutton_index = 2 # right mouse
             else:
-                raise QuitGame('mouse button for input_key for reaction propmt of %s is not recognized'%input_key)
+                raise QuitGame('mouse button for input_key for reaction prompt of %s is not recognized'%input_key)
                 raise QuitGame()
 
             self.dismiss_test = lambda evt: evt.type == pygame.MOUSEBUTTONDOWN and pygame.mouse.get_pressed()[mousebutton_index]
@@ -521,9 +558,17 @@ class ReactionTimePrompt(VirtualGameSprite):
             pygame_key_constant = getattr(pygame, input_key, None)
             if not pygame_key_constant:
                 print 'input_key of "%s" not found. Please use one of the following'%input_key
-                print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
-                raise QuitGame()
+                print ', '.join(['"'+s+'"' for s in CODE_BY_PYGAME_CONSTANT.keys()]+['K_MOUSE1','K_MOUSE2','K_MOUSE3'])
+                raise QuitGame('input_key of "%s" not found. '%input_key)
             self.dismiss_test = lambda evt: evt.type == pygame.KEYDOWN and evt.key == pygame_key_constant
+
+    def isactive_and_dismiss_test(self, event):
+        '''
+        Returns True when prompt is active and the event matches the configured key/mouse button
+        '''
+        return (self.visible and
+                self.active and
+                self.dismiss_test(event))
 
     def activate_and_show(self):
         # prepare for next position:
@@ -546,7 +591,21 @@ class ReactionTimePrompt(VirtualGameSprite):
         # fadeout avoids "click" at end, but I wish I could do shorter duration
         self.prompt_sound.fadeout(100)
 
+    def key_from_event(self, event):
+        #todo
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            return 'K_MOUSE%d'%(event.button)
+        elif event.type == pygame.KEYDOWN:
+            # todo: convert this back into a constant
+            if PYGAME_CONSTANT_BY_CODE.has_key(event.key):
+                return PYGAME_CONSTANT_BY_CODE[event.key]
+            return "Unknown"
+        else:
+            # todo: what can I do here?
+            return "Unknown"
+
     def update(self, millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count):
+        endingtype = None # or 'pass' or 'fail', returned at the end
         old_total_elapsed = self.total_elapsed
         self.total_elapsed += millis
 
@@ -575,17 +634,43 @@ class ReactionTimePrompt(VirtualGameSprite):
                 # showing now and waiting keypress
                 for event in events:
                     if self.dismiss_test(event):
+                        # correct key pressed
                         logrowdetails['reaction_prompt_state'] = 'complete'
                         logrowdetails['reaction_prompt_millis'] = visible_ms
-                        # correct key pressed
+                        logrowdetails['reaction_prompt_passed'] = 'true'
+                        logrowdetails['reaction_prompt_pressed_key'] = self.key_from_event(event)
+
                         if self.stay_visible:
                             # just deactivate, don't hide or stop playing sounds until timeout
                             self.active = False
                         else:
                             self.deactivate_and_hide()
 
+                        self.pass_sound.play()
+
                         # log completed
                         self.logme(logrowdetails, reactionlogger)
+                        endingtype = 'pass'
+                        break
+                    elif self.fail_on_wrong_key:
+                        # failed on incorrect key presss
+                        logrowdetails['reaction_prompt_state'] = 'failed'
+                        logrowdetails['reaction_prompt_millis'] = visible_ms
+                        logrowdetails['reaction_prompt_passed'] = 'false'
+                        logrowdetails['reaction_prompt_pressed_key'] = self.key_from_event(event)
+                        
+                        if self.stay_visible:
+                            # just deactivate, don't hide or stop playing sounds until timeout
+                            self.active = False
+                        else:
+                            self.deactivate_and_hide()
+
+                        self.fail_sound.play()
+
+                        # log completed
+                        self.logme(logrowdetails, reactionlogger)
+                        endingtype = 'fail'
+                        break
             else:
                 # no longer active because key was already pressed.
                 logrowdetails['reaction_prompt_state'] = 'after_complete'
@@ -598,13 +683,18 @@ class ReactionTimePrompt(VirtualGameSprite):
                         # still waiting for key that didn't happen in time, log it
                         logrowdetails['reaction_prompt_state'] = 'timeout'
                         logrowdetails['reaction_prompt_millis'] = visible_ms
+                        logrowdetails['reaction_prompt_passed'] = 'false'
+
+                        self.fail_sound.play()
 
                         # log timed out
                         self.logme(logrowdetails, reactionlogger)
+                        endingtype = 'timeout'
 
                     self.deactivate_and_hide()
 
         self.step_trigger_count_last = step_trigger_count
+        return endingtype
 
     def step_end_deactivate(self, logrowdetails, reactionlogger):
         if self.visible:
@@ -623,6 +713,91 @@ class ReactionTimePrompt(VirtualGameSprite):
             if logrowdetails.has_key(col):
                 newreactionlogrow[col] = logrowdetails[col]
         reactionlogger.log(newreactionlogrow)
+
+
+class ReactionTimePromptGroup(pygame.sprite.OrderedUpdates):
+    def __init__(self, prompt_settings_list):
+        if prompt_settings_list == None:
+            prompt_settings_list = []
+        pygame.sprite.OrderedUpdates.__init__(self)
+
+        # todo: add a score change sprite?
+
+        for rp in prompt_settings_list:
+            new_reaction_prompt = ReactionTimePrompt(**rp)
+            self.add(new_reaction_prompt)
+
+    # draw() implmented in superclass
+
+    def update(self, millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count):
+        '''
+        update all contained reaction prompts.
+
+        returns list of score change dictionary entries:
+            [{change=123,centerx=456.0,centery=789.0},{change=-10,centerx=123.0,centery=123.0}]
+
+        The events sent to each prompt are pre-processed to either include 
+        events that trigger that prompt, or ones that didn't match another
+        prompt. This is so that when multiple prompts are active, and pressing
+        the wrong key is configured to fail them both, pressing the key for 
+        just one of the prompts does not fail the other.
+        '''
+        score_changes = []
+
+        # filter events to only key down or mouse button down
+        events_filtered = []
+        for evt in events:
+            if (evt.type == pygame.MOUSEBUTTONDOWN or evt.type == pygame.KEYDOWN):
+                events_filtered.append(evt)
+
+        # pass 1: filter event list for each prompt
+        events_by_prompt_index = [None]*len(self)
+        events_matched_all = [] # all events that matched one or more active prompt
+        for i,prompt in enumerate(self):
+            matching_event_list = [evt for evt in events if prompt.isactive_and_dismiss_test(evt)]
+            if len(matching_event_list) == 0:
+                # use unprocessed events
+                # is filled below
+                events_by_prompt_index[i] = None
+            else:
+                # use only matching events
+                events_by_prompt_index[i] = matching_event_list
+                events_matched_all.extend(matching_event_list)
+
+        events_unmatched = [evt for evt in events_filtered if evt not in events_matched_all]
+        # replace None entries with events_unmatched in events_by_prompt_index
+        events_by_prompt_index = [evt or events_unmatched for evt in events_by_prompt_index]
+
+        # pass 2: respond to correct or incorrect keypresses
+        for i,prompt in enumerate(self):
+            prompt_events = events_by_prompt_index[i]
+            prompt_gamerect_before = prompt.gamerect
+            endingtype = prompt.update(
+                millis,
+                logrowdetails,
+                reactionlogger,
+                frame_outbound_triggers,
+                prompt_events,
+                step_trigger_count)
+            if endingtype == 'pass' and prompt.score_pass != None:
+                score_changes.append(dict(
+                    change=prompt.score_pass,
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery))
+
+            elif endingtype == 'fail' and prompt.score_fail != None:
+                score_changes.append(dict(
+                    change=prompt.score_fail,
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery))
+
+            elif endingtype == 'timeout' and prompt.score_fail != None:
+                score_changes.append(dict(
+                    change=prompt.score_miss,
+                    centerx=prompt_gamerect_before.centerx,
+                    centery=prompt_gamerect_before.centery))
+
+        return score_changes
 
 class TextSprite(object):
     """
