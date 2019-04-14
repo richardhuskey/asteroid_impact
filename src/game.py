@@ -1,11 +1,11 @@
 # Asteroid Impact (c) Media Neuroscience Lab, Rene Weber
 # Authored by Nick Winters
-# 
+#
 # Asteroid Impact is licensed under a
 # Creative Commons Attribution-ShareAlike 4.0 International License.
-# 
+#
 # You should have received a copy of the license along with this
-# work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>. 
+# work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
 """
 Game loop and screen management for Asteroid Impact game.
 """
@@ -13,22 +13,21 @@ Game loop and screen management for Asteroid Impact game.
 # to make python3 porting easier:
 # see http://lucumr.pocoo.org/2011/1/22/forwards-compatible-python/
 from __future__ import absolute_import, division
-#>>> 6 / 7
-#1
-#>>> from __future__ import division
-#>>> 6 / 7
-#1.2857142857142858
-
 
 import argparse
-import os
-from os import path
-import random # step shuffling
 import json
+import os
+import random  # step shuffling
+from os import path
+
 import pygame
 from pygame.locals import *
 
-import sys
+# >>> 6 / 7
+# 1
+# >>> from __future__ import division
+# >>> 6 / 7
+# 1.2857142857142858
 
 try:
     import serial
@@ -37,8 +36,8 @@ except ImportError as e:
     print 'install pyserial, typicially by running `pip install pyserial`'
     print 'otherwise, see https://pypi.python.org/pypi/pyserial'
     import sys
-    sys.exit(1)
 
+    sys.exit(1)
 
 if not pygame.font:
     print 'Warning, fonts disabled'
@@ -47,6 +46,7 @@ if not pygame.mixer:
 
 from screens import (
     AsteroidImpactInstructionsScreen,
+    AsteroidImpactInstructionsScreenAlt,
     UserTextScreen,
     SurveyQuestionScreen,
     AsteroidImpactGameplayScreen,
@@ -61,16 +61,16 @@ from logger import AsteroidLogger, SurveyLogger, ReactionLogger
 import parallelportwrapper
 
 ALL_TRIGGERS = [
-    'step_begin', # on begin of any step
-    'game_level_begin', # in either game mode, when the level begins
-    'game_level_complete', # in either game mode, when the player collects the last diamond
-    'game_death', # in either game mode, when the player touches an asteroid and dies
-    'game_crystal_collected', # in either game mode, when the player collects any diamond
-    'game_shield_activate', # in either game mode, when the player activates a shield
-    'game_slow_activate', # in either game mode, when the player activates the slowdown powerup
-    'adaptive_difficulty_increase', # adaptive, when collecting the last diamond increases to the next level template
-    'adaptive_difficulty_decrease' # adaptive, when dying goes back to an earlier level template
-    ]
+    'step_begin',  # on begin of any step
+    'game_level_begin',  # in either game mode, when the level begins
+    'game_level_complete',  # in either game mode, when the player collects the last diamond
+    'game_death',  # in either game mode, when the player touches an asteroid and dies
+    'game_crystal_collected',  # in either game mode, when the player collects any diamond
+    'game_shield_activate',  # in either game mode, when the player activates a shield
+    'game_slow_activate',  # in either game mode, when the player activates the slowdown powerup
+    'adaptive_difficulty_increase',  # adaptive, when collecting the last diamond increases to the next level template
+    'adaptive_difficulty_decrease'  # adaptive, when dying goes back to an earlier level template
+]
 
 # command-line arguments:
 parser = argparse.ArgumentParser(description='Run Asteroid Impact game.')
@@ -132,6 +132,7 @@ class GameModeManager(object):
      * Duration: After this many seconds move to the next step, regardless of what the
        player is doing now.
     """
+
     def __init__(self, args):
         self.args = args
         # assume error happened if we didn't reach end of __init__
@@ -142,17 +143,22 @@ class GameModeManager(object):
         self.max_asteroid_count = 12
 
         if self.args.script_json != None:
+
             with open(self.args.script_json) as f:
                 self.script_json = json.load(f)
-                
+
                 # allow script_json to be list of steps
                 # or object with 'steps' attribute
                 if isinstance(self.script_json, list):
                     self.gamesteps = self.script_json
                     self.script_json = dict(steps=self.gamesteps)
                 else:
-                    self.gamesteps = self.script_json['steps']
-                
+                    self.stepgroups = self.script_json['stepgroups']
+                    self.gamesteps = []
+                    for stepgroup in self.stepgroups:
+                        for step in stepgroup['steps']:
+                            self.gamesteps.append(step)
+
             if self.args.levels_json != None or self.args.single_level_json != None:
                 print ('Error: When specifying script json you must specify levels in ' +
                        'script, not command-line argument.')
@@ -161,7 +167,7 @@ class GameModeManager(object):
             levelsjson = 'levels/standardlevels.json'
             if self.args.levels_json != None:
                 if not path.exists(self.args.levels_json):
-                    print 'Error: Could not find file at "%s"'%self.args.levels_json
+                    print 'Error: Could not find file at "%s"' % self.args.levels_json
                     return
                 elif self.args.single_level_json != None:
                     print 'Error: Invalid arguments. Do not specify both --levels-json and --single-level-json'
@@ -172,6 +178,7 @@ class GameModeManager(object):
                 levelsjson = [self.args.single_level_json]
 
             # use these steps when the steps aren't specified on the console:
+            self.stepgroups = []
             self.gamesteps = [
                 dict(action='instructions',
                      duration=None),
@@ -179,7 +186,7 @@ class GameModeManager(object):
                      levels=levelsjson,
                      duration=None)]
             self.script_json = dict(steps=self.gamesteps)
-        
+
         # load/validate trigger options:
         self.trigger_mode = None
         self.trigger_key = None
@@ -196,18 +203,18 @@ class GameModeManager(object):
                 self.trigger_key = getattr(pygame, keyboard_settings['trigger_key'], None)
                 if not self.trigger_key:
                     print 'trigger_key not found. Please use one of the following'
-                    print ', '.join(['"'+s+'"' for s in dir(pygame) if s.startswith('K_')])
+                    print ', '.join(['"' + s + '"' for s in dir(pygame) if s.startswith('K_')])
                     return
             elif trigger_settings['mode'] == 'serial':
                 self.trigger_mode = 'serial'
                 serial_settings = trigger_settings['serial_options']
-                
+
                 if not serial_settings.has_key('trigger_byte_value'):
-                    print('for serial port, serial_options needs a trigger_byte_value '+
-                          'attribute whose value is the value of the character sent over'+
+                    print('for serial port, serial_options needs a trigger_byte_value ' +
+                          'attribute whose value is the value of the character sent over' +
                           'serial, such as 53 for Ascii "5"')
                 self.trigger_serialport_byte_value = int(serial_settings['trigger_byte_value'])
-                
+
                 serialport_options = dict(
                     port=serial_settings['port'],
                     timeout=0.0,
@@ -230,9 +237,9 @@ class GameModeManager(object):
                         serialport_options['parity'] = parity_options[serial_settings['parity']]
                     else:
                         print ('serial_options parity value of "' + serial_settings['parity']
-                            + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
+                               + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
                         return
-                        
+
                 # try opening serial port
                 try:
                     print 'opening serialport with options:', serialport_options
@@ -257,20 +264,20 @@ class GameModeManager(object):
                 # required: port address
                 if not parallel_options.has_key('port_address_hex'):
                     print 'Invalid script JSON'
-                    print 'trigger_settings parallel_options must have port_address_hex key' 
+                    print 'trigger_settings parallel_options must have port_address_hex key'
                     return
                 try:
                     self.trigger_parallel_port_address = int(parallel_options['port_address_hex'], 16)
                 except ValueError as e:
                     print 'Invalid script JSON'
-                    print 'trigger_settings parallel_options port_address_hex must be valid base-16 number' 
+                    print 'trigger_settings parallel_options port_address_hex must be valid base-16 number'
                     print e
                     return
 
                 # required: ["inactive"] value for status port
                 if not parallel_options.has_key('common_status_value_hex'):
                     print 'Invalid script JSON'
-                    print 'trigger_settings parallel_options must have common_status_value_hex key' 
+                    print 'trigger_settings parallel_options must have common_status_value_hex key'
                     return
                 try:
                     self.trigger_parallel_port_off_value = int(parallel_options['common_status_value_hex'], 16)
@@ -281,29 +288,28 @@ class GameModeManager(object):
                     return
                 # status port shouldn't have lower 3 bits set, nor exceed 8 bits
                 if (self.trigger_parallel_port_off_value < 0 or
-                    255 < self.trigger_parallel_port_off_value or
-                    (self.trigger_parallel_port_off_value & 0x07) != 0):
+                        255 < self.trigger_parallel_port_off_value or
+                        (self.trigger_parallel_port_off_value & 0x07) != 0):
                     print 'Invalid script JSON'
                     print 'trigger_settings parallel_options common_status_value_hex must be valid base-16 number between 0x08 and 0xF8 and with the bottom 3 bits zero'
                     return
 
-
                 # required: ["active"] value for status port:
                 if not parallel_options.has_key('trigger_status_value_hex'):
                     print 'Invalid script JSON'
-                    print 'trigger_settings parallel_options must have trigger_status_value_hex key' 
+                    print 'trigger_settings parallel_options must have trigger_status_value_hex key'
                     return
                 try:
                     self.trigger_parallel_port_on_value = int(parallel_options['trigger_status_value_hex'], 16)
                 except ValueError as e:
                     print 'Invalid script JSON'
-                    print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number' 
+                    print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number'
                     print e
                     return
                 # status port shouldn't have lower 3 bits set, nor exceed 8 bits
                 if (self.trigger_parallel_port_on_value < 0 or
-                    255 < self.trigger_parallel_port_on_value or
-                    (self.trigger_parallel_port_on_value & 0x07) != 0):
+                        255 < self.trigger_parallel_port_on_value or
+                        (self.trigger_parallel_port_on_value & 0x07) != 0):
                     print 'Invalid script JSON'
                     print 'trigger_settings parallel_options trigger_status_value_hex must be valid base-16 number between 0x08 and 0xF8 and with the bottom 3 bits zero'
                     return
@@ -313,14 +319,14 @@ class GameModeManager(object):
                     print 'trigger_settings parallel_options trigger_status_value_hex and common_status_value_hex must have different values'
                     return
 
-
-                self.prev_parallel_trigger_status_value = 0xFF # an impossible value
+                self.prev_parallel_trigger_status_value = 0xFF  # an impossible value
             elif trigger_settings['mode'] == 'none':
                 self.trigger_mode = None
             else:
-                print 'trigger_settings mode of "' + trigger_settings['mode'] + '" should be one of keyboard, serial or none'
+                print 'trigger_settings mode of "' + trigger_settings[
+                    'mode'] + '" should be one of keyboard, serial or none'
                 return
-        
+
         self.output_trigger_mode = None
         self.output_trigger_serial_port = None
         self.output_trigger_parallel_port_address = 0x0000
@@ -328,7 +334,7 @@ class GameModeManager(object):
         self.output_trigger_parallel_port_on_frames = 3
         # used to hold output HIGH for # frames
         self.output_trigger_parallel_frame_countdown = 0
-        
+
         self.output_trigger_parallel_send_byte_by_trigger = {}
         self.output_trigger_serial_send_strings_by_trigger = {}
 
@@ -339,7 +345,7 @@ class GameModeManager(object):
                 # todo: implement serial output trigger
                 # todo: handle using same serial port for input/output trigger
                 serial_settings = output_settings['serial_options']
-                
+
                 serialport_options = dict(
                     port=serial_settings['port'],
                     timeout=0.0,
@@ -362,9 +368,9 @@ class GameModeManager(object):
                         serialport_options['parity'] = parity_options[serial_settings['parity']]
                     else:
                         print ('serial_options parity value of "' + serial_settings['parity']
-                            + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
+                               + '" was not one of the expected values: ' + json.dumps(parity_options.keys()))
                         return
-                        
+
                 if self.trigger_serialport and serialport_options == self.trigger_serialport_options:
                     print 're-using incoming trigger serial port for output'
                     self.output_trigger_serial_port = self.trigger_serialport
@@ -381,7 +387,8 @@ class GameModeManager(object):
 
                 # load list of triggers
                 # if none supplied, error
-                if self.output_trigger_mode != None and not output_settings.has_key('parallel_trigger_hex_values_by_event'):
+                if self.output_trigger_mode != None and not output_settings.has_key(
+                        'parallel_trigger_hex_values_by_event'):
                     print 'Invalid script JSON'
                     print 'output_trigger_settings must have serial_trigger_strings_by_event dictionary of strings/strings'
                     print 'please see the documentation for a sample file'
@@ -394,10 +401,10 @@ class GameModeManager(object):
                     return
 
                 # validate trigger list entries are all known triggers
-                for option,string_val in output_settings['serial_trigger_strings_by_event'].iteritems():
+                for option, string_val in output_settings['serial_trigger_strings_by_event'].iteritems():
                     if not option in ALL_TRIGGERS:
                         print 'Invalid script JSON'
-                        print 'output_trigger_settings trigger_list option of "%s" is not a known outbound trigger'%option
+                        print 'output_trigger_settings trigger_list option of "%s" is not a known outbound trigger' % option
                         return
                     string_val = str(string_val)
                     self.output_trigger_serial_send_strings_by_trigger[option] = string_val
@@ -414,26 +421,26 @@ class GameModeManager(object):
                 # required: port address
                 if not parallel_options.has_key('port_address_hex'):
                     print 'Invalid script JSON'
-                    print 'output_trigger_settings parallel_options must have port_address_hex key' 
+                    print 'output_trigger_settings parallel_options must have port_address_hex key'
                     return
                 try:
                     self.output_trigger_parallel_port_address = int(parallel_options['port_address_hex'], 16)
                 except ValueError as e:
                     print 'Invalid script JSON'
-                    print 'output_trigger_settings parallel_options port_address_hex must be valid base-16 number' 
+                    print 'output_trigger_settings parallel_options port_address_hex must be valid base-16 number'
                     print e
                     return
 
                 # required: ["inactive"] value for data pins
                 if not parallel_options.has_key('common_data_value_hex'):
                     print 'Invalid script JSON'
-                    print 'output_trigger_settings parallel_options must have common_data_value_hex key' 
+                    print 'output_trigger_settings parallel_options must have common_data_value_hex key'
                     return
                 try:
                     self.output_trigger_parallel_port_off_value = int(parallel_options['common_data_value_hex'], 16)
                 except ValueError as e:
                     print 'Invalid script JSON'
-                    print 'output_trigger_settings parallel_options common_data_value_hex must be valid base-16 number' 
+                    print 'output_trigger_settings parallel_options common_data_value_hex must be valid base-16 number'
                     print e
                     return
 
@@ -443,13 +450,14 @@ class GameModeManager(object):
                         self.output_trigger_parallel_port_on_frames = int(parallel_options['trigger_frames'])
                     except ValueError as e:
                         print 'Invalid script JSON'
-                        print 'output_trigger_settings parallel_options trigger_frames must be valid base-10 number' 
+                        print 'output_trigger_settings parallel_options trigger_frames must be valid base-10 number'
                         print e
                         return
 
                 # load list of triggers
                 # if none supplied, error
-                if self.output_trigger_mode != None and not output_settings.has_key('parallel_trigger_hex_values_by_event'):
+                if self.output_trigger_mode != None and not output_settings.has_key(
+                        'parallel_trigger_hex_values_by_event'):
                     print 'Invalid script JSON'
                     print 'output_trigger_settings must have parallel_trigger_hex_values_by_event dictionary of strings/strings'
                     print 'please see the documentation for a sample file'
@@ -462,10 +470,10 @@ class GameModeManager(object):
                     return
 
                 # validate trigger list entries are all known triggers
-                for option,byte_val_string in output_settings['parallel_trigger_hex_values_by_event'].iteritems():
+                for option, byte_val_string in output_settings['parallel_trigger_hex_values_by_event'].iteritems():
                     if not option in ALL_TRIGGERS:
                         print 'Invalid script JSON'
-                        print 'output_trigger_settings trigger_list option of "%s" is not a known outbound trigger'%option
+                        print 'output_trigger_settings trigger_list option of "%s" is not a known outbound trigger' % option
                         return
                     # parse byte value
                     if byte_val_string.startswith('0x'):
@@ -475,57 +483,148 @@ class GameModeManager(object):
                     except ValueError as e:
                         print e
                         print 'Invalid script JSON'
-                        print '"%s" is not a valid base-16 integer'%byte_val_string
+                        print '"%s" is not a valid base-16 integer' % byte_val_string
                         return
                     self.output_trigger_parallel_send_byte_by_trigger[option] = byte_val
             elif output_settings['mode'] == 'none':
                 pass
             else:
-                print 'output_trigger_settings mode of',output_settings['mode'],'not recognized'
+                print 'output_trigger_settings mode of', output_settings['mode'], 'not recognized'
                 return
 
         # number steps in original order:
-        for i,s in enumerate(self.gamesteps):
-            s['stepnumber'] = i+1
-        if self.script_json.has_key('step_shuffle_groups'):
-            if not isinstance(self.script_json['step_shuffle_groups'], list):
-                print 'step_shuffle_groups must be list of list of numbers'
-                print 'exiting.'
-                return
+        if self.stepgroups:
+            for i, s in enumerate(self.stepgroups):
+                s['groupnumber'] = i + 1
+        for i, s in enumerate(self.gamesteps):
+            s['stepnumber'] = i + 1
+        if self.script_json.has_key('group_shuffle_groups'):
+            if not isinstance(self.script_json['group_shuffle_groups'], list):
+                print
+                'group_shuffle_groups must be list of list of numbers'
+                print
+                'exiting.'
 
-            for sg in self.script_json['step_shuffle_groups']:
-                if not isinstance(sg, list):
-                    print 'step_shuffle_groups must be list of list of numbers'
-                    print 'exiting.'
-                    return
-
-            # step_shuffle_groups specifies a list of "shuffle groups"
-            # each shuffle groups is a list of step numbers, 1-based indexes for original step position
-            # first we number the steps
-            # then we iterate through each group:
-            #     and shuffle only steps with those original step numbers
+            for grp in self.script_json['group_shuffle_groups']:
+                if not isinstance(grp, list):
+                    print
+                    'group_shuffle_groups must be list of lists of numbers'
+                    print
+                    'exiting.'
+            # group_shuffle_groups specifies a list of "shuffle groups" for groups in the json (defined using 'stepgroups')
+            # each shuffle group is a list of group numbers, 1-based indexes for original group position in the json
+            # first we number the groups, then we iterate through each group of groups and shuffle only groups with those original group numbers
             rnd = random.Random()
             # todo: verify self.script_json['step_randomization_groups'] is list of list of numbers
-            gamesteps_old = self.gamesteps
-            for g_numbers in self.script_json['step_shuffle_groups']:
-                gamesteps_new = []
-                g_steps = [s for s in self.gamesteps if s['stepnumber'] in g_numbers]
+            stepgroups_old = self.stepgroups
+            for g_numbers in self.script_json['group_shuffle_groups']:
+                stepgroups_new = []
+                g_steps = [s for s in self.stepgroups if s['groupnumber'] in g_numbers]
                 if g_steps:
-                    for s in gamesteps_old:
-                        if s['stepnumber'] in g_numbers:
-                            # choose random step to replace it from remaing g_steps
-                            step_random = rnd.choice(g_steps)
-                            g_steps.remove(step_random)
-                            gamesteps_new.append(step_random)
+                    for s in stepgroups_old:
+                        if s['groupnumber'] in g_numbers:
+                            # choose random step to replace it from remaining g_steps
+                            group_random = rnd.choice(g_steps)
+                            g_steps.remove(group_random)
+                            stepgroups_new.append(group_random)
                         else:
-                            gamesteps_new.append(s)
+                            stepgroups_new.append(s)
                 else:
-                    gamesteps_new = gamesteps_old
+                    stepgroups_new = stepgroups_old
 
-                gamesteps_old = gamesteps_new
+                stepgroups_old = stepgroups_new
 
-            self.gamesteps = gamesteps_old
-            print 'Step order after shuffle(s):', ', '.join(str(s['stepnumber']) for s in self.gamesteps)
+            self.stepgroups = stepgroups_old
+            print 'Group order after shuffle(s):', ', '.join(str(s['groupnumber']) for s in self.stepgroups)
+
+            if self.script_json.has_key('step_shuffle_groups'):
+                if not isinstance(self.script_json['step_shuffle_groups'], list):
+                    print
+                    'step_shuffle_groups must be list of list of numbers'
+                    print
+                    'exiting.'
+
+                for sg in self.script_json['step_shuffle_groups']:
+                    if not isinstance(sg, list):
+                        print
+                        'step_shuffle_groups must be list of lists of numbers'
+                        print
+                        'exiting.'
+                # step_shuffle_groups specifies a list of "shuffle groups" for steps in the JSON (defined using 'steps')
+                # each shuffle group is a list of step numbers, 1-based indexes for original step position
+                # first we number the steps
+                # then we iterate through each group and shuffle only steps with those original step numbers
+                rnd = random.Random()
+                # todo: verify self.script_json['step_randomization_groups'] is list of list of numbers
+                gamesteps_old = self.gamesteps
+                for g_numbers in script_json['step_shuffle_groups']:
+                    gamesteps_new = []
+                    g_steps = [s for s in self.gamesteps if s['stepnumber'] in g_numbers]
+                    if g_steps:
+                        for s in gamesteps_old:
+                            if s['stepnumber'] in g_numbers:
+                                # choose random step to replace it from remaining g_steps
+                                step_random = rnd.choice(g_steps)
+                                g_steps.remove(step_random)
+                                gamesteps_new.append(step_random)
+                            else:
+                                gamesteps_new.append(s)
+                    else:
+                        gamesteps_new = gamesteps_old
+
+                    gamesteps_old = gamesteps_new
+
+                self.gamesteps = gamesteps_old
+                print 'Step order after shuffle(s):', ', '.join(str(s['stepnumber']) for s in self.gamesteps)
+            else:
+                gamesteps_new = []
+                for stepgroup in self.stepgroups:
+                    for step in stepgroup['steps']:
+                        gamesteps_new.append(step)
+                self.gamesteps = gamesteps_new
+                print 'Step order after shuffle(s):', ', '.join(str(s['stepnumber']) for s in self.gamesteps)
+        else:
+            print 'No shuffling. Step order:', ', '.join(str(s['stepnumber']) for s in self.gamesteps)
+        # for i,s in enumerate(self.gamesteps):
+        #     s['stepnumber'] = i+1
+        # if self.script_json.has_key('step_shuffle_groups'):
+        #     if not isinstance(self.script_json['step_shuffle_groups'], list):
+        #         print 'step_shuffle_groups must be list of list of numbers'
+        #         print 'exiting.'
+        #         return
+        #
+        #     for sg in self.script_json['step_shuffle_groups']:
+        #         if not isinstance(sg, list):
+        #             print 'step_shuffle_groups must be list of lists of numbers'
+        #             print 'exiting.'
+        #             return
+        #
+        #     # step_shuffle_groups specifies a list of "shuffle groups"
+        #     # each shuffle group is a list of step numbers, 1-based indexes for original step position
+        #     # first we number the steps
+        #     # then we iterate through each group and shuffle only steps with those original step numbers
+        #     rnd = random.Random()
+        #     # todo: verify self.script_json['step_randomization_groups'] is list of list of numbers
+        #     gamesteps_old = self.gamesteps
+        #     for g_numbers in self.script_json['step_shuffle_groups']:
+        #         gamesteps_new = []
+        #         g_steps = [s for s in self.gamesteps if s['stepnumber'] in g_numbers]
+        #         if g_steps:
+        #             for s in gamesteps_old:
+        #                 if s['stepnumber'] in g_numbers:
+        #                     # choose random step to replace it from remaining g_steps
+        #                     step_random = rnd.choice(g_steps)
+        #                     g_steps.remove(step_random)
+        #                     gamesteps_new.append(step_random)
+        #                 else:
+        #                     gamesteps_new.append(s)
+        #         else:
+        #             gamesteps_new = gamesteps_old
+        #
+        #         gamesteps_old = gamesteps_new
+        #
+        #     self.gamesteps = gamesteps_old
+        #     print 'Step order after shuffle(s):', ', '.join(str(s['stepnumber']) for s in self.gamesteps)
 
         if self.args.parallel_test_address:
             # try to parse parallel port address
@@ -536,7 +635,6 @@ class GameModeManager(object):
                 dict(action='parallel_port_test',
                      parallel_test_address=pport_debug_addr,
                      duration=None)]
-
 
         # validate steps and load levels:
         for i, step in enumerate(self.gamesteps):
@@ -563,7 +661,8 @@ class GameModeManager(object):
                         try:
                             reaction_prompt_options['diameter'] = float(reaction_prompt_options['diameter'])
                         except:
-                            print "ERROR: reaction_prompts diameter value of %s should be a number"%repr(reaction_prompt_options['diameter'])
+                            print "ERROR: reaction_prompts diameter value of %s should be a number" % repr(
+                                reaction_prompt_options['diameter'])
                             return
 
                     # position_list should look like [ [0,10], [10,20] ]
@@ -581,7 +680,7 @@ class GameModeManager(object):
                                 return
                             try:
                                 left, top = pos
-                                left += 5 # number-like check
+                                left += 5  # number-like check
                                 top += 5
                             except:
                                 print "ERROR: reaction_prompts position_list should be list of 2-element lists of numbers"
@@ -598,11 +697,10 @@ class GameModeManager(object):
                             return
                         for n in reaction_prompt_options['showtimes_millis']:
                             try:
-                                n += 5 # number-like check
+                                n += 5  # number-like check
                             except:
                                 print "ERROR: reaction_prompts showtimes_millis should be list of numbers"
                                 return
-
 
                     # showtimes_trigger_counts should be list of numbers
                     if reaction_prompt_options.has_key('showtimes_trigger_counts'):
@@ -611,7 +709,7 @@ class GameModeManager(object):
                             return
                         for n in reaction_prompt_options['showtimes_trigger_counts']:
                             try:
-                                n += 5 # number-like check
+                                n += 5  # number-like check
                             except:
                                 print "ERROR: reaction_prompts showtimes_trigger_counts should be list of numbers"
                                 return
@@ -627,12 +725,72 @@ class GameModeManager(object):
                             try:
                                 d = float(reaction_prompt_options['timeout_millis'])
                             except:
-                                print "ERROR: reaction_prompts timeout_millis value of %s should be a \"never\" or a number"%repr(reaction_prompt_options['timeout_millis'])
+                                print "ERROR: reaction_prompts timeout_millis value of %s should be a \"never\" or a number" % repr(
+                                    reaction_prompt_options['timeout_millis'])
                                 return
+
+                    # score_pass should be number, or null/None
+                    if reaction_prompt_options.has_key('score_pass'):
+                        if reaction_prompt_options['score_pass'] == None:
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['score_pass'])
+                            except:
+                                print "ERROR: reaction_prompts score_pass value of %s should be null or a number" % repr(
+                                    reaction_prompt_options['score_pass'])
+                                return
+
+                    # score_fail should be number, or null/None
+                    if reaction_prompt_options.has_key('score_fail'):
+                        if reaction_prompt_options['score_fail'] == None:
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['score_fail'])
+                            except:
+                                print "ERROR: reaction_prompts score_fail value of %s should be null or a number" % repr(
+                                    reaction_prompt_options['score_fail'])
+                                return
+
+                    # score_miss should be number, or null/None
+                    if reaction_prompt_options.has_key('score_miss'):
+                        if reaction_prompt_options['score_miss'] == None:
+                            pass
+                            # valid
+                        else:
+                            try:
+                                d = float(reaction_prompt_options['score_miss'])
+                            except:
+                                print "ERROR: reaction_prompts score_miss value of %s should be null or a number" % repr(
+                                    reaction_prompt_options['score_miss'])
+                                return
+
+                    # fail_on_wrong_key should be either True or False
+                    if reaction_prompt_options.has_key('fail_on_wrong_key'):
+                        if reaction_prompt_options['fail_on_wrong_key'] == True or reaction_prompt_options[
+                            'fail_on_wrong_key'] == False:
+                            pass
+                            # valid
+                        else:
+                            print "ERROR: reaction_prompts fail_on_wrong_key value should be true or false"
+                            return
+
+                    # pass_fail_sounds should be either True or False
+                    if reaction_prompt_options.has_key('pass_fail_sounds'):
+                        if reaction_prompt_options['pass_fail_sounds'] == True or reaction_prompt_options[
+                            'pass_fail_sounds'] == False:
+                            pass
+                            # valid
+                        else:
+                            print "ERROR: reaction_prompts pass_fail_sounds value should be true or false"
+                            return
+
             else:
                 step['reaction_prompts'] = None
 
-                
             if step['action'] == 'instructions':
                 # nothing extra to validate
                 pass
@@ -673,8 +831,8 @@ class GameModeManager(object):
             elif step['action'] == 'game-adaptive':
                 if not step.has_key('level_templates'):
                     print ('ERROR: "game" action must have level_templates attribute ' +
-                        'with a list of level options or a string filename for a level ' +
-                        'options json file, .')
+                           'with a list of level options or a string filename for a level ' +
+                           'options json file, .')
                     return
                 step['level_templates_list'] = self.load_level_templates(step)
 
@@ -691,7 +849,8 @@ class GameModeManager(object):
                 if step.has_key('continuous_asteroids_on_same_level'):
                     step['continuous_asteroids_on_same_level'] = bool(step['continuous_asteroids_on_same_level'])
                 if step.has_key('adaptive_asteroid_size_locked_to_initial'):
-                    step['adaptive_asteroid_size_locked_to_initial'] = bool(step['adaptive_asteroid_size_locked_to_initial'])
+                    step['adaptive_asteroid_size_locked_to_initial'] = bool(
+                        step['adaptive_asteroid_size_locked_to_initial'])
                 if step.has_key('show_advance_countdown'):
                     step['show_advance_countdown'] = bool(step['show_advance_countdown'])
 
@@ -719,10 +878,16 @@ class GameModeManager(object):
 
                 if step.has_key('multicolor_crystal_lifetime_ms'):
                     if (isinstance(step['multicolor_crystal_lifetime_ms'], float) or
-                        isinstance(step['multicolor_crystal_lifetime_ms'], int)):
+                            isinstance(step['multicolor_crystal_lifetime_ms'], int)):
                         step['multicolor_crystal_lifetime_ms'] = int(step['multicolor_crystal_lifetime_ms'])
                     else:
                         step['multicolor_crystal_lifetime_ms'] = None
+
+                if step.has_key('multicolor_crystal_negative_score_buzzer'):
+                    step['multicolor_crystal_negative_score_buzzer'] = bool(
+                        step['multicolor_crystal_negative_score_buzzer'])
+                else:
+                    step['multicolor_crystal_negative_score_buzzer'] = False
 
                 if step.has_key('multicolor_crystal_score_table'):
                     if not isinstance(step['multicolor_crystal_score_table'], list):
@@ -751,7 +916,8 @@ class GameModeManager(object):
                                 print repr(score_cell), 'is an invalid score'
                                 return
                     # convert scores into ints
-                    step['multicolor_crystal_score_table'] = [[int(cell) for cell in row] for row in step['multicolor_crystal_score_table']]
+                    step['multicolor_crystal_score_table'] = [[int(cell) for cell in row] for row in
+                                                              step['multicolor_crystal_score_table']]
 
             elif step['action'] == 'parallel_port_test':
                 # nothing else to validate
@@ -777,7 +943,7 @@ class GameModeManager(object):
         virtualdisplay.set_screensize(screensize)
 
         pygame.init()
-        
+
         if not pygame.mixer.get_init():
             print 'Warning, could not initialize mixer. Game will have no sound.'
 
@@ -799,14 +965,14 @@ class GameModeManager(object):
         # Init sequence of steps:
         self.stepindex = 0
         self.init_step()
-        
+
         self.skipgame = False
 
     def init_step(self):
         "setup for next game mode step"
         self.step_millis = 0
         self.step_trigger_count = 0
-        self.step_max_trigger_count = 2**64
+        self.step_max_trigger_count = 2 ** 64
         self.step_max_millis = None
         step = self.gamesteps[self.stepindex]
 
@@ -829,6 +995,19 @@ class GameModeManager(object):
                     self.screen,
                     self.gamescreenstack,
                     click_to_continue=click_to_continue))
+        elif step['action'] == 'instructions_alt':
+            click_to_continue = True
+            if step.has_key('duration') and step['duration'] != None:
+                click_to_continue = False
+            if step.has_key('trigger_count') and step['trigger_count'] != None:
+                click_to_continue = False
+
+            self.gamescreenstack.append(
+                AsteroidImpactInstructionsScreenAlt(
+                    self.screen,
+                    self.gamescreenstack,
+                    click_to_continue=click_to_continue))
+
         elif step['action'] == 'text':
             click_to_continue = True
             if step.has_key('duration') and step['duration'] != None:
@@ -906,6 +1085,9 @@ class GameModeManager(object):
             if step.has_key('multicolor_crystal_score_table'):
                 kwargs['multicolor_crystal_score_table'] = step['multicolor_crystal_score_table']
 
+            if step.has_key('multicolor_crystal_negative_score_buzzer'):
+                kwargs['multicolor_crystal_negative_score_buzzer'] = step['multicolor_crystal_negative_score_buzzer']
+
             if step.has_key('game_element_opacity'):
                 kwargs['game_element_opacity'] = step['game_element_opacity']
 
@@ -923,7 +1105,7 @@ class GameModeManager(object):
                     self.gamescreenstack,
                     port_address=step['parallel_test_address']))
         else:
-            raise ValueError('Unknown step action "%s"'%step['action'])
+            raise ValueError('Unknown step action "%s"' % step['action'])
 
     def load_levels(self, step):
         "Load level details for game step from inline JSON or file"
@@ -952,9 +1134,9 @@ class GameModeManager(object):
         for level in levels:
             self.max_asteroid_count = max(
                 self.max_asteroid_count, len(level['asteroids']))
-                
+
         return levels
-    
+
     def load_level_templates(self, step):
         "Load level templates for game-adaptive step from inline JSON or file"
         if isinstance(step['level_templates'], list):
@@ -988,7 +1170,7 @@ class GameModeManager(object):
         return levels
 
     def gameloop(self):
-        "run the game frame/tick loop"
+        # run the game frame/tick loop
 
         if self.skipgame:
             # exit
@@ -1001,7 +1183,8 @@ class GameModeManager(object):
             resources.unmute_music()
             pygame.mixer.music.play(-1)
 
-        asteroidlogger = AsteroidLogger(self.args.log_filename, self.args.log_overwrite == 'true', self.max_asteroid_count)
+        asteroidlogger = AsteroidLogger(self.args.log_filename, self.args.log_overwrite == 'true',
+                                        self.max_asteroid_count)
         surveylogger = SurveyLogger(self.args.survey_log_filename, self.args.log_overwrite == 'true')
         reactionlogger = ReactionLogger(self.args.reaction_log_filename, self.args.log_overwrite == 'true')
         logrowdetails = {}
@@ -1011,16 +1194,15 @@ class GameModeManager(object):
         # cheesy 'framerate' display
         # mostly used to indicate if I'm getting 60fps or 30fps
         fps_display_enable = False
-        import sprites
         fps_sprite = Target(diameter=8)
         fps_sprite.rect.top = 0
         fps_sprite_group = pygame.sprite.Group([fps_sprite])
-        
+
         # trigger blink sprite
         trigger_blink_sprite = Target(diameter=32)
-        trigger_blink_sprite.rect.top = 480-24
-        trigger_blink_sprite.rect.left = 640-230
-        
+        trigger_blink_sprite.rect.top = 480 - 24
+        trigger_blink_sprite.rect.left = 640 - 230
+
         if self.args.trigger_blink == 'true':
             trigger_blink_sprites = pygame.sprite.Group([trigger_blink_sprite])
         else:
@@ -1029,9 +1211,9 @@ class GameModeManager(object):
         if self.args.parallel_test_address:
             # try to parse parallel port address
             pport_debug_addr = int(self.args.parallel_test_address, 16)
-            
+
             # ignore step list and just launch my new window
-# hack todo: replace step list with just this step
+            # hack todo: replace step list with just this step
             self.gamescreenstack = []
             self.gamescreenstack.append(
                 ParallelPortTestScreen(
@@ -1041,7 +1223,7 @@ class GameModeManager(object):
         else:
             pport_debug_addr = None
 
-        #Main Loop
+        # Main Loop
         first_update = True
         next_frame_outbound_triggers = []
         while 1:
@@ -1049,14 +1231,14 @@ class GameModeManager(object):
             real_millis = clock.tick_busy_loop(60)
             trigger_received_this_tick = False
             # less repeatable, less cpu:
-            #real_millis = clock.tick(60)
+            # real_millis = clock.tick(60)
 
             if real_millis >= 25:
                 # if we're not getting 60fps, then run update() extra times
                 # find new frame durations that add-up to real_millis:
                 frames = int(round(real_millis * .001 * 60))
                 millis_list = [16] * frames
-                millis_list[-1] = real_millis - 16 * (frames-1)
+                millis_list[-1] = real_millis - 16 * (frames - 1)
             else:
                 millis_list = (real_millis,)
 
@@ -1083,13 +1265,13 @@ class GameModeManager(object):
                     frame_outbound_triggers.append('step_begin')
 
                 events = pygame.event.get()
-                #Handle Keyboard triggers
+                # Handle Keyboard triggers
                 for event in events:
                     # check for keyboard trigger
                     if (self.trigger_mode == 'keyboard'
-                        and self.trigger_key != None 
-                        and event.type == KEYDOWN 
-                        and event.key == self.trigger_key):
+                            and self.trigger_key != None
+                            and event.type == KEYDOWN
+                            and event.key == self.trigger_key):
                         self.step_trigger_count += 1
                         trigger_received_this_tick = True
 
@@ -1104,30 +1286,32 @@ class GameModeManager(object):
                         # debug print:
                         print ">", repr(serial_input)
                         sys.stdout.flush()
-                
+
                 # check for parallel port trigger
                 if self.trigger_mode == 'parallel':
                     current_parallel_trigger_status_value = self.get_parallel_trigger_status_value()
                     if (self.prev_parallel_trigger_status_value == self.trigger_parallel_port_off_value and
-                        current_parallel_trigger_status_value == self.trigger_parallel_port_on_value):
+                            current_parallel_trigger_status_value == self.trigger_parallel_port_on_value):
                         self.step_trigger_count += 1
                         trigger_received_this_tick = True
                     self.prev_parallel_trigger_status_value = current_parallel_trigger_status_value
-                
+
                 logrowdetails['step_trigger_count'] = self.step_trigger_count
-                    
+
                 try:
                     if len(self.gamescreenstack) > 0:
                         # update frontmost screen
-                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count, reactionlogger)
+                        self.gamescreenstack[-1].update_frontmost(millis, logrowdetails, frame_outbound_triggers,
+                                                                  events, self.step_trigger_count, reactionlogger)
                         # update all screens in stack front to back
                         for screen in reversed(self.gamescreenstack):
-                            screen.update_always(millis, logrowdetails, frame_outbound_triggers, events, self.step_trigger_count, reactionlogger)
+                            screen.update_always(millis, logrowdetails, frame_outbound_triggers, events,
+                                                 self.step_trigger_count, reactionlogger)
                 except QuitGame as e:
                     print e
                     return
 
-                #Handle Global Input Events
+                # Handle Global Input Events
                 for event in events:
                     if event.type == QUIT:
                         quitgame = True
@@ -1136,7 +1320,7 @@ class GameModeManager(object):
                           and (event.mod & pygame.KMOD_META)):
                         print 'CMD+Q Pressed. Exiting'
                         quitgame = True
-                    elif (event.type == KEYDOWN 
+                    elif (event.type == KEYDOWN
                           and event.key == K_F4
                           and (event.mod & pygame.KMOD_ALT)):
                         print 'ALT+F4 Pressed. Exiting'
@@ -1162,7 +1346,7 @@ class GameModeManager(object):
                 if self.step_max_millis != None and self.step_max_millis < self.step_millis:
                     # end this step:
                     self.gamescreenstack = []
-                
+
                 # Check if max trigger count on this step has expired
                 if self.step_max_trigger_count != None and self.step_max_trigger_count <= self.step_trigger_count:
                     # end this step
@@ -1176,7 +1360,7 @@ class GameModeManager(object):
                 asteroidlogger.log(logrowdetails)
 
                 self.update_outbound_triggers(frame_outbound_triggers)
-                
+
                 if len(self.gamescreenstack) == 0:
                     self.stepindex += 1
                     if self.stepindex >= len(self.gamesteps):
@@ -1191,10 +1375,9 @@ class GameModeManager(object):
                 if quitgame:
                     return
 
-
             # draw topmost opaque screen and everything above it
             topopaquescreenindex = -1
-            for i in range(-1, -1-len(self.gamescreenstack), -1):
+            for i in range(-1, -1 - len(self.gamescreenstack), -1):
                 topopaquescreenindex = i
                 if self.gamescreenstack[i].opaque:
                     break
@@ -1204,10 +1387,10 @@ class GameModeManager(object):
 
             # cheesy 'no text' FPS display
             fps_sprite.rect.left = real_millis
-            fps_sprite.rect.top = 16 * (int(round(real_millis * .001 * 60))-1)
+            fps_sprite.rect.top = 16 * (int(round(real_millis * .001 * 60)) - 1)
             if fps_display_enable:
                 fps_sprite_group.draw(self.screen)
-            
+
             if trigger_received_this_tick:
                 trigger_blink_sprites.draw(self.screen)
 
@@ -1254,9 +1437,9 @@ class GameModeManager(object):
                 # then combines all changed bits from parallel_trigger_bytes corresponding to triggers this frame
                 changed_bits = 0x00
                 for b in parallel_trigger_bytes:
-                    changed_bits = (changed_bits | 
-                        # xor to find bits that this trigger changed from "off" byte value
-                        (b ^ self.output_trigger_parallel_port_off_value))
+                    changed_bits = (changed_bits |
+                                    # xor to find bits that this trigger changed from "off" byte value
+                                    (b ^ self.output_trigger_parallel_port_off_value))
                 active_value = self.output_trigger_parallel_port_off_value ^ changed_bits
 
                 # start now
@@ -1274,7 +1457,8 @@ class GameModeManager(object):
                             self.output_trigger_parallel_port_address,
                             self.output_trigger_parallel_port_off_value)
         elif self.output_trigger_mode != None:
-            raise QuitGame('output trigger mode of %s is not implemented'%self.output_trigger_mode)
+            raise QuitGame('output trigger mode of %s is not implemented' % self.output_trigger_mode)
+
 
 def main():
     "parse console arguments and start game"
@@ -1282,6 +1466,7 @@ def main():
 
     game_step_manager = GameModeManager(args)
     game_step_manager.gameloop()
+
 
 if __name__ == '__main__':
     main()
