@@ -4,47 +4,41 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Game Script JSON &#8212; Asteroid Impact 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Single Level JSON" href="leveljson.html" />
     <link rel="prev" title="Output Triggers" href="output-trigger.html" />
-   
+
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
+
+
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body>
-  
+  </head><body>
+
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+
+
           <div class="body" role="main">
-            
+
   <div class="section" id="game-script-json">
 <h1>Game Script JSON<a class="headerlink" href="#game-script-json" title="Permalink to this headline">¶</a></h1>
 <p>AsteroidImpact will optionally run a sequence of modes specified in script.json. This can be used to advance the player between multiple lists of levels, with blank screens inbetween. Advancing to the next step happens after a specified duration, or for the instructions screen when the user clicks with the mouse.</p>
 <p>Sample:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
 
@@ -107,7 +101,9 @@
           <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
           <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
-          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
           <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -120,7 +116,9 @@
           <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
           <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
-          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
           <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -133,7 +131,9 @@
           <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
           <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
           <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">}</span>
       <span class="p">]</span>
     <span class="p">},</span>
@@ -222,7 +222,7 @@
 <h2>Steps List<a class="headerlink" href="#steps-list" title="Permalink to this headline">¶</a></h2>
 <p>Previous versions specified only the steps list in JSON. This continues to work, but you will not be able to use the trigger advance options.</p>
 <p>Such a JSON file would look like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">{</span>
         <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;instructions&quot;</span><span class="p">,</span>
         <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mf">10.0</span>
@@ -254,9 +254,9 @@
 <div class="section" id="trigger-advance-options">
 <h2>Trigger Advance Options<a class="headerlink" href="#trigger-advance-options" title="Permalink to this headline">¶</a></h2>
 <p>Rather than advancing steps after a duration, they can be advanced after receiving a number of “trigger” pulses. The pulses can come as key presses or as characters over a serial port. The step advances to the next step after receiving the number of pulses specified for the trigger_count attribute.</p>
-<p>You can visualize trigger pulses on screen by using the <code class="docutils literal"><span class="pre">--trigger-blink</span> <span class="pre">true</span></code> command-line option.</p>
+<p>You can visualize trigger pulses on screen by using the <code class="docutils literal notranslate"><span class="pre">--trigger-blink</span> <span class="pre">true</span></code> command-line option.</p>
 <p>Sample trigger-driven JSON:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;keyboard&quot;</span><span class="p">,</span>
 
@@ -337,7 +337,9 @@
           <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
           <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
-          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
           <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -350,7 +352,9 @@
           <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
           <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
-          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">},</span>
         <span class="p">{</span>
           <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -363,7 +367,9 @@
           <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
           <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
           <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span>
         <span class="p">}</span>
       <span class="p">]</span>
     <span class="p">},</span>
@@ -447,17 +453,17 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The serial trigger mode opens a serial port on the computer and when a byte is received with the value matching <code class="docutils literal"><span class="pre">trigger_byte_value</span></code> increases the trigger count. The <code class="docutils literal"><span class="pre">port</span></code> setting is the serial port, typically <code class="docutils literal"><span class="pre">COM1</span></code> through <code class="docutils literal"><span class="pre">COM16</span></code> on Windows, or <code class="docutils literal"><span class="pre">/dev/cu.usbmodem1234</span></code> or similar on OSX. If you have python and pyserial installed, you can list serial ports from the command-line by running <code class="docutils literal"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">serial.tools.list_ports</span></code> which will print out serial ports on your computer. You can also specify the <code class="docutils literal"><span class="pre">baudrate</span></code> for serial connections. The <code class="docutils literal"><span class="pre">trigger_byte_value</span></code> of 53 is the ASCII code for the character “5”.</p>
+<p>The serial trigger mode opens a serial port on the computer and when a byte is received with the value matching <code class="docutils literal notranslate"><span class="pre">trigger_byte_value</span></code> increases the trigger count. The <code class="docutils literal notranslate"><span class="pre">port</span></code> setting is the serial port, typically <code class="docutils literal notranslate"><span class="pre">COM1</span></code> through <code class="docutils literal notranslate"><span class="pre">COM16</span></code> on Windows, or <code class="docutils literal notranslate"><span class="pre">/dev/cu.usbmodem1234</span></code> or similar on OSX. If you have python and pyserial installed, you can list serial ports from the command-line by running <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">serial.tools.list_ports</span></code> which will print out serial ports on your computer. You can also specify the <code class="docutils literal notranslate"><span class="pre">baudrate</span></code> for serial connections. The <code class="docutils literal notranslate"><span class="pre">trigger_byte_value</span></code> of 53 is the ASCII code for the character “5”.</p>
 </div>
 <div class="section" id="output-trigger-settings">
 <h2>Output Trigger Settings<a class="headerlink" href="#output-trigger-settings" title="Permalink to this headline">¶</a></h2>
 <p>The game can be configured to output signals over a serial port or parallel port on certain game events.</p>
-<p>For serial output triggers, <code class="docutils literal"><span class="pre">serial_trigger_strings_by_event</span></code> is a lookup from game event to the string to send over serial. Configure this dictionary to contain only the events you wish to be notified about.</p>
-<p>For parallel output triggers, <code class="docutils literal"><span class="pre">parallel_trigger_hex_values_by_event</span></code> is a lookup from game event to the value to change the parallel port data byte to for <code class="docutils literal"><span class="pre">trigger_frames</span></code> frames. One frame is about 1/60 second.</p>
-<p>See :doc:<code class="docutils literal"><span class="pre">parallelport</span></code> for information about parallel ports.</p>
+<p>For serial output triggers, <code class="docutils literal notranslate"><span class="pre">serial_trigger_strings_by_event</span></code> is a lookup from game event to the string to send over serial. Configure this dictionary to contain only the events you wish to be notified about.</p>
+<p>For parallel output triggers, <code class="docutils literal notranslate"><span class="pre">parallel_trigger_hex_values_by_event</span></code> is a lookup from game event to the value to change the parallel port data byte to for <code class="docutils literal notranslate"><span class="pre">trigger_frames</span></code> frames. One frame is about 1/60 second.</p>
+<p>See :doc:<code class="docutils literal notranslate"><span class="pre">parallelport</span></code> for information about parallel ports.</p>
 <p>The full list of available game events to send an ouput trigger on are listed in the sample below.</p>
 <p>Sample</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;output_trigger_settings&quot;</span><span class="p">:</span> <span class="p">{</span>
   <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;serial&quot;</span><span class="p">,</span>
 
   <span class="s2">&quot;serial_trigger_strings_by_event&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -500,32 +506,32 @@
 <h2>Common Step Attributes<a class="headerlink" href="#common-step-attributes" title="Permalink to this headline">¶</a></h2>
 <p>Each step has the following attributes:</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">&quot;action&quot;</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;action&quot;</span></code></dt>
 <dd>The name of the action. Should be “instructions”, “game”, “text” or “blackscreen”</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;duration&quot;</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;duration&quot;</span></code></dt>
 <dd>The duration in seconds (such as 12.5) after which to automatically advance to the next step. This can be null for some actions, see below.</dd>
 </dl>
 </div>
 <div class="section" id="available-step-actions">
 <h2>Available step actions<a class="headerlink" href="#available-step-actions" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="game">
-<h3><code class="docutils literal"><span class="pre">game</span></code><a class="headerlink" href="#game" title="Permalink to this headline">¶</a></h3>
-<p>A null <code class="docutils literal"><span class="pre">duration</span></code> for the game step will prevent the player from advancing to the next step.</p>
-<p>The <code class="docutils literal"><span class="pre">levels</span></code> value is required. It must point to a levels list json file.</p>
-<p>Optional <code class="docutils literal"><span class="pre">game_element_opacity</span></code> specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).</p>
+<h3><code class="docutils literal notranslate"><span class="pre">game</span></code><a class="headerlink" href="#game" title="Permalink to this headline">¶</a></h3>
+<p>A null <code class="docutils literal notranslate"><span class="pre">duration</span></code> for the game step will prevent the player from advancing to the next step.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">levels</span></code> value is required. It must point to a levels list json file.</p>
+<p>Optional <code class="docutils literal notranslate"><span class="pre">game_element_opacity</span></code> specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).</p>
 </div>
 <div class="section" id="instructions">
-<h3><code class="docutils literal"><span class="pre">instructions</span></code><a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">instructions</span></code> step displays instructions on how to play the game and each sprite the player will interact with.</p>
-<p>A null <code class="docutils literal"><span class="pre">duration</span></code> for the instructions step will show a “Click to continue” message and allow the player to advance to the next step by clicking with their mouse. If a duration is specified the player will have to wait for that time to complete to move on to the next step.</p>
+<h3><code class="docutils literal notranslate"><span class="pre">instructions</span></code><a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">instructions</span></code> step displays instructions on how to play the game and each sprite the player will interact with.</p>
+<p>A null <code class="docutils literal notranslate"><span class="pre">duration</span></code> for the instructions step will show a “Click to continue” message and allow the player to advance to the next step by clicking with their mouse. If a duration is specified the player will have to wait for that time to complete to move on to the next step.</p>
 </div>
 <div class="section" id="text">
-<h3><code class="docutils literal"><span class="pre">text</span></code><a class="headerlink" href="#text" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">text</span></code> step will display text specified in the <code class="docutils literal"><span class="pre">text</span></code> attribute on the screen for the specified duration with no available interaction to the player. The <code class="docutils literal"><span class="pre">duration</span></code> must be specified.</p>
-<p>An optional <code class="docutils literal"><span class="pre">&quot;title&quot;</span></code> attribute can be specified to show a title at the otp of the screen.</p>
-<p>The text will be wrapped to fit on screen, but you can include newlines in the string and they will be included on string. Newlines in JSON must be escaped like <code class="docutils literal"><span class="pre">\n</span></code>.</p>
+<h3><code class="docutils literal notranslate"><span class="pre">text</span></code><a class="headerlink" href="#text" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">text</span></code> step will display text specified in the <code class="docutils literal notranslate"><span class="pre">text</span></code> attribute on the screen for the specified duration with no available interaction to the player. The <code class="docutils literal notranslate"><span class="pre">duration</span></code> must be specified.</p>
+<p>An optional <code class="docutils literal notranslate"><span class="pre">&quot;title&quot;</span></code> attribute can be specified to show a title at the otp of the screen.</p>
+<p>The text will be wrapped to fit on screen, but you can include newlines in the string and they will be included on string. Newlines in JSON must be escaped like <code class="docutils literal notranslate"><span class="pre">\n</span></code>.</p>
 <p>For example, here is text step with two lines of text with a blank line in between using two newline characters.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
     <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;First Line</span><span class="se">\n\n</span><span class="s2">Second Line&quot;</span><span class="p">,</span>
     <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional Instructions&quot;</span><span class="p">,</span>
@@ -535,21 +541,21 @@
 </div>
 </div>
 <div class="section" id="blackscreen">
-<h3><code class="docutils literal"><span class="pre">blackscreen</span></code><a class="headerlink" href="#blackscreen" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">blackscreen</span></code> step will display a black screen with no available interaction to the player. The <code class="docutils literal"><span class="pre">duration</span></code> must be specified.</p>
+<h3><code class="docutils literal notranslate"><span class="pre">blackscreen</span></code><a class="headerlink" href="#blackscreen" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">blackscreen</span></code> step will display a black screen with no available interaction to the player. The <code class="docutils literal notranslate"><span class="pre">duration</span></code> must be specified.</p>
 </div>
 <div class="section" id="game-adaptive">
-<h3><code class="docutils literal"><span class="pre">game-adaptive</span></code><a class="headerlink" href="#game-adaptive" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">game-adaptive</span></code> step will seamlessly transition between generated levels, advancing further in the level list as the player completes levels, and going backwards down the list as they fail. The intention is to tune the levels and how far back the list the player is put so that the player gets into a comfortable amount of difficulty and stays around there.</p>
-<p>A null <code class="docutils literal"><span class="pre">duration</span></code> for the game step will prevent the player from advancing to the next step.</p>
-<p>The <code class="docutils literal"><span class="pre">start_level</span></code> is a float value that specifies the initial value used to choose the current level. <code class="docutils literal"><span class="pre">0.0</span></code> would start at the first level and <code class="docutils literal"><span class="pre">1.0</span></code> would start at the second level. The floor (integer part) of player’s level score is used to index into the level options list.</p>
-<p><code class="docutils literal"><span class="pre">level_completion_increment</span></code> is a float value for the amount the level score is incremented when the player completes a level. This can be under <code class="docutils literal"><span class="pre">1.0</span></code> which would usually mean that the player would have to complete another level with the same options before advancing to the next level in the list.</p>
-<p><code class="docutils literal"><span class="pre">level_death_decrement</span></code> is a float value for the amount the level score is reduced when the player dies. This is distinct from the <code class="docutils literal"><span class="pre">level_completion_increment</span></code> so that the steady state reached when the player is near their effective difficulty can be tuned. The value should be a positive or zero.</p>
-<p><code class="docutils literal"><span class="pre">continuous_asteroids_on_same_level</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will keep the asteroids moving in their existing size and pattern when a player dying or completing a level does not advance all the way to a different level in the list. <code class="docutils literal"><span class="pre">false</span></code> is the default.</p>
-<p><code class="docutils literal"><span class="pre">adaptive_asteroid_size_locked_to_initial</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will keep the visible asteroids the same size as when they first appeared. The asteroids can still change speed and direction after a level change, and new asteroids can still appear or disappear. This defaults to <code class="docutils literal"><span class="pre">false</span></code> so that asteroids can change size between levels.</p>
-<p><code class="docutils literal"><span class="pre">show_advance_countdown</span></code> of <code class="docutils literal"><span class="pre">true</span></code> will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to <code class="docutils literal"><span class="pre">false</span></code>.</p>
-<p>The <code class="docutils literal"><span class="pre">levels</span></code> value is required. It must be a list of level parameters (which are different than for the <code class="docutils literal"><span class="pre">game</span></code> mode) or a string filename for a json file that contains a list of level parameters.</p>
-<p>Optional <code class="docutils literal"><span class="pre">game_element_opacity</span></code> specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).</p>
+<h3><code class="docutils literal notranslate"><span class="pre">game-adaptive</span></code><a class="headerlink" href="#game-adaptive" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">game-adaptive</span></code> step will seamlessly transition between generated levels, advancing further in the level list as the player completes levels, and going backwards down the list as they fail. The intention is to tune the levels and how far back the list the player is put so that the player gets into a comfortable amount of difficulty and stays around there.</p>
+<p>A null <code class="docutils literal notranslate"><span class="pre">duration</span></code> for the game step will prevent the player from advancing to the next step.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">start_level</span></code> is a float value that specifies the initial value used to choose the current level. <code class="docutils literal notranslate"><span class="pre">0.0</span></code> would start at the first level and <code class="docutils literal notranslate"><span class="pre">1.0</span></code> would start at the second level. The floor (integer part) of player’s level score is used to index into the level options list.</p>
+<p><code class="docutils literal notranslate"><span class="pre">level_completion_increment</span></code> is a float value for the amount the level score is incremented when the player completes a level. This can be under <code class="docutils literal notranslate"><span class="pre">1.0</span></code> which would usually mean that the player would have to complete another level with the same options before advancing to the next level in the list.</p>
+<p><code class="docutils literal notranslate"><span class="pre">level_death_decrement</span></code> is a float value for the amount the level score is reduced when the player dies. This is distinct from the <code class="docutils literal notranslate"><span class="pre">level_completion_increment</span></code> so that the steady state reached when the player is near their effective difficulty can be tuned. The value should be a positive or zero.</p>
+<p><code class="docutils literal notranslate"><span class="pre">continuous_asteroids_on_same_level</span></code> of <code class="docutils literal notranslate"><span class="pre">true</span></code> will keep the asteroids moving in their existing size and pattern when a player dying or completing a level does not advance all the way to a different level in the list. <code class="docutils literal notranslate"><span class="pre">false</span></code> is the default.</p>
+<p><code class="docutils literal notranslate"><span class="pre">adaptive_asteroid_size_locked_to_initial</span></code> of <code class="docutils literal notranslate"><span class="pre">true</span></code> will keep the visible asteroids the same size as when they first appeared. The asteroids can still change speed and direction after a level change, and new asteroids can still appear or disappear. This defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code> so that asteroids can change size between levels.</p>
+<p><code class="docutils literal notranslate"><span class="pre">show_advance_countdown</span></code> of <code class="docutils literal notranslate"><span class="pre">true</span></code> will show the same countdown that happens when the player starts a level, but every time the difficulty increases. This defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">levels</span></code> value is required. It must be a list of level parameters (which are different than for the <code class="docutils literal notranslate"><span class="pre">game</span></code> mode) or a string filename for a json file that contains a list of level parameters.</p>
+<p>Optional <code class="docutils literal notranslate"><span class="pre">game_element_opacity</span></code> specifies the opacity of all moving game elements. This can range from 0 (completely invsible) to 255 (opaque, default).</p>
 </div>
 </div>
 <div class="section" id="game-adaptive-levels-list">
@@ -570,47 +576,47 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">target_count</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">target_count</span></code></td>
 <td>integer</td>
 <td>5</td>
 <td>Number of crystals to pick up.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">asteroid_count</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">asteroid_count</span></code></td>
 <td>integer</td>
 <td>5</td>
 <td>Number of asteroids to avoid.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">asteroid_sizes</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">asteroid_sizes</span></code></td>
 <td>one of the strings {“small”,”medium”,”large”,”varied”}</td>
 <td>“large”</td>
 <td>Approximate size of asteroids.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">asteroid_speeds</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">asteroid_speeds</span></code></td>
 <td>one of the strings {“slow”,”medium”,”fast”,”extreme”}</td>
 <td>“slow”</td>
 <td>Approximate speed of asteroids.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">powerup_count</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">powerup_count</span></code></td>
 <td>integer</td>
 <td>5</td>
 <td>Number of distinct power-ups to create for the player to pick up.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">powerup_initial_delay</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">powerup_initial_delay</span></code></td>
 <td>float</td>
 <td>0.0</td>
 <td>Delay in seconds before first powerup is available.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">powerup_delay</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">powerup_delay</span></code></td>
 <td>float</td>
 <td>1.0</td>
 <td>Delay in seconds after powerup is used before next one becomes available.</td>
 </tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">powerup_types</span></code></td>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">powerup_types</span></code></td>
 <td>one of the strings {“shield”,”slow”,”all”,”none”}</td>
 <td>“all”</td>
 <td>Types of powerups that are in level.</td>
 </tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">seed</span></code></td>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">seed</span></code></td>
 <td>integer</td>
 <td>not specified</td>
 <td>Number used to seed random position/speed generator. If not provided, the other level options are hashed into a single number for this.</td>
@@ -618,12 +624,12 @@
 </tbody>
 </table>
 <div class="section" id="survey">
-<h3><code class="docutils literal"><span class="pre">survey</span></code><a class="headerlink" href="#survey" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal"><span class="pre">survey</span></code> step will display a configurable prompt and list of options for the player. The player may click on one of the options to select it. If the player then clicks on a different option, the first is deselected.</p>
-<p>If there is no <code class="docutils literal"><span class="pre">duration</span></code> or <code class="docutils literal"><span class="pre">trigger_count</span></code> attribute, the step will show a “Next” button to advance to the next step.</p>
-<p>Long text on the <code class="docutils literal"><span class="pre">prompt</span></code> option is fine. It will wrap to multiple lines.</p>
+<h3><code class="docutils literal notranslate"><span class="pre">survey</span></code><a class="headerlink" href="#survey" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">survey</span></code> step will display a configurable prompt and list of options for the player. The player may click on one of the options to select it. If the player then clicks on a different option, the first is deselected.</p>
+<p>If there is no <code class="docutils literal notranslate"><span class="pre">duration</span></code> or <code class="docutils literal notranslate"><span class="pre">trigger_count</span></code> attribute, the step will show a “Next” button to advance to the next step.</p>
+<p>Long text on the <code class="docutils literal notranslate"><span class="pre">prompt</span></code> option is fine. It will wrap to multiple lines.</p>
 <p>Sample Survey Step with 20s duration and no Next button:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
   <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Which of these is a better number?&quot;</span><span class="p">,</span>
   <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">],</span>
@@ -632,7 +638,7 @@
 </pre></div>
 </div>
 <p>Sample Survey Step with 5 pulse duration and no Next button:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
   <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Which of these is a better number?&quot;</span><span class="p">,</span>
   <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">],</span>
@@ -641,7 +647,7 @@
 </pre></div>
 </div>
 <p>Sample Survey Step with no duration a Next button:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;survey&quot;</span><span class="p">,</span>
   <span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Which of these is a better number?&quot;</span><span class="p">,</span>
   <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span> <span class="s2">&quot;three&quot;</span><span class="p">,</span> <span class="s2">&quot;four&quot;</span><span class="p">,</span> <span class="s2">&quot;five&quot;</span> <span class="p">]</span>
@@ -652,9 +658,9 @@
 </div>
 <div class="section" id="reaction-prompt-elements">
 <h2>Reaction Prompt Elements<a class="headerlink" href="#reaction-prompt-elements" title="Permalink to this headline">¶</a></h2>
-<p>During the <code class="docutils literal"><span class="pre">game</span></code> and <code class="docutils literal"><span class="pre">game-adaptive</span></code> steps you can also configure reaction-time prompts to appear.</p>
+<p>During the <code class="docutils literal notranslate"><span class="pre">game</span></code> and <code class="docutils literal notranslate"><span class="pre">game-adaptive</span></code> steps you can also configure reaction-time prompts to appear.</p>
 <p>Sample game step with reaction prompts:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;game&quot;</span><span class="p">,</span>
   <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="s2">&quot;levels/standardlevels.json&quot;</span><span class="p">,</span>
   <span class="s2">&quot;trigger_count&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
@@ -674,7 +680,12 @@
       <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
       <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_1&quot;</span><span class="p">,</span>
       <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
-      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;score_pass&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+      <span class="s2">&quot;score_fail&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span>
+      <span class="s2">&quot;score_miss&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span>
     <span class="p">},</span>
     <span class="p">{</span>
       <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -687,7 +698,12 @@
       <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[],</span>
       <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_2&quot;</span><span class="p">,</span>
       <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="mi">1500</span><span class="p">,</span>
-      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;score_pass&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+      <span class="s2">&quot;score_fail&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span>
+      <span class="s2">&quot;score_miss&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span>
     <span class="p">},</span>
     <span class="p">{</span>
       <span class="s2">&quot;diameter&quot;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
@@ -700,34 +716,49 @@
       <span class="s2">&quot;showtimes_trigger_counts&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="p">],</span>
       <span class="s2">&quot;input_key&quot;</span><span class="p">:</span> <span class="s2">&quot;K_MOUSE1&quot;</span><span class="p">,</span>
       <span class="s2">&quot;timeout_millis&quot;</span><span class="p">:</span> <span class="s2">&quot;never&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span>
+      <span class="s2">&quot;stay_visible&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;fail_on_wrong_key&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;pass_fail_sounds&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;score_pass&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+      <span class="s2">&quot;score_fail&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span>
+      <span class="s2">&quot;score_miss&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">10</span>
     <span class="p">}</span>
   <span class="p">]</span>
 <span class="p">},</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">&quot;reaction_prompts&quot;</span></code> holds a list of entries. Each one has the following attributes:</p>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;reaction_prompts&quot;</span></code> holds a list of entries. Each one has the following attributes:</p>
 <dl class="docutils">
-<dt><code class="docutils literal"><span class="pre">&quot;diameter&quot;</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;diameter&quot;</span></code></dt>
 <dd>The game-unit width and height of the icon on screen.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;position_list&quot;</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;position_list&quot;</span></code></dt>
 <dd>A list of 2-element positions. Each 2-element list is the [left, top] coordinate of the position of the image on screen in game coordinates. The first appearance is at the first entry in the list, second at the second entry and so-on, looping back to the first after the last.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;image&quot;</span></code></dt>
-<dd><code class="docutils literal"><span class="pre">&quot;none&quot;</span></code> or the filename of an image in the data directory. I’ve created <code class="docutils literal"><span class="pre">&quot;trinagle.png&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;circle.png&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;square.png&quot;</span></code> but you may add your own transparent PNG images to the data directory and use them. Use “none” to create audio-only reaction prompts.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;sound&quot;</span></code></dt>
-<dd>The filename of a wav file or “none” to play no sound when the reaction prompt is visible, or <code class="docutils literal"><span class="pre">&quot;none&quot;</span></code></dd>
-<dt><code class="docutils literal"><span class="pre">&quot;showtimes_millis&quot;</span></code></dt>
-<dd>A list of milliseconds into the <code class="docutils literal"><span class="pre">game</span></code> step to make the reaction prompt visible and audible.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;showtimes_trigger_counts&quot;</span></code></dt>
-<dd>A list of numbers to indicate which trigger pulses inside this step trigger this reaction prompt. A 1 in this list would trigger the reaction prompt to appear when the game receives the first trigger pulse after starting this <code class="docutils literal"><span class="pre">game</span></code> or <code class="docutils literal"><span class="pre">game-adaptive</span></code> step.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;timeout_millis&quot;</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;image&quot;</span></code></dt>
+<dd><code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code> or the filename of an image in the data directory. I’ve created <code class="docutils literal notranslate"><span class="pre">&quot;trinagle.png&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;circle.png&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;square.png&quot;</span></code> but you may add your own transparent PNG images to the data directory and use them. Use “none” to create audio-only reaction prompts.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;sound&quot;</span></code></dt>
+<dd>The filename of a wav file or “none” to play no sound when the reaction prompt is visible, or <code class="docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code></dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;showtimes_millis&quot;</span></code></dt>
+<dd>A list of milliseconds into the <code class="docutils literal notranslate"><span class="pre">game</span></code> step to make the reaction prompt visible and audible.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;showtimes_trigger_counts&quot;</span></code></dt>
+<dd>A list of numbers to indicate which trigger pulses inside this step trigger this reaction prompt. A 1 in this list would trigger the reaction prompt to appear when the game receives the first trigger pulse after starting this <code class="docutils literal notranslate"><span class="pre">game</span></code> or <code class="docutils literal notranslate"><span class="pre">game-adaptive</span></code> step.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;timeout_millis&quot;</span></code></dt>
 <dd>How many milliseconds the prompt should remain visible and audible once it appears if the player doesn’t press the key to dismiss the prompt.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;stay_visible&quot;</span></code></dt>
-<dd><code class="docutils literal"><span class="pre">false</span></code> (default) or <code class="docutils literal"><span class="pre">true</span></code>. A value of <code class="docutils literal"><span class="pre">true</span></code> indicates that the sound and image should continue to appear after the player presses the key corresponding to the prompt.</dd>
-<dt><code class="docutils literal"><span class="pre">&quot;input_key&quot;</span></code></dt>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;stay_visible&quot;</span></code></dt>
+<dd><code class="docutils literal notranslate"><span class="pre">false</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">true</span></code>. A value of <code class="docutils literal notranslate"><span class="pre">true</span></code> indicates that the sound and image should continue to appear after the player presses the key corresponding to the prompt.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;fail_on_wrong_key&quot;</span></code></dt>
+<dd><code class="docutils literal notranslate"><span class="pre">false</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">true</span></code>. A value of <code class="docutils literal notranslate"><span class="pre">true</span></code> changes the prompt to be failed immedately if the wrong key or mouse button is pressed.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;pass_fail_sounds&quot;</span></code></dt>
+<dd><code class="docutils literal notranslate"><span class="pre">false</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">true</span></code>. A value of <code class="docutils literal notranslate"><span class="pre">true</span></code> enables playing a success chime or a fail buzz when the prompt ends by pressing the correct key, wrong key, or timing out.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;score_pass&quot;</span></code></dt>
+<dd>Integer number of points to award (or negative to subtract) when prompt is responded to with the correct key in time. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points. Scores only are shown when the multi-color crystal scoring is configured on the game-adaptive step.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;score_fail&quot;</span></code></dt>
+<dd>Integer number of points to award (or negative to subtract) when prompt is responded to with the incorrect key. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points. Scores only are shown when the multi-color crystal scoring is configured on the game-adaptive step.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;score_miss&quot;</span></code></dt>
+<dd>Integer number of points to award (or negative to subtract) when prompt is missed or responded to too late. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points. Scores only are shown when the multi-color crystal scoring is configured on the game-adaptive step.</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">&quot;input_key&quot;</span></code></dt>
 <dd>Is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below.</dd>
 </dl>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">K_MOUSE1</span> <span class="o">--</span> <span class="n">Left</span> <span class="n">mouse</span> <span class="n">button</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">K_MOUSE1</span> <span class="o">--</span> <span class="n">Left</span> <span class="n">mouse</span> <span class="n">button</span>
 <span class="n">K_MOUSE2</span> <span class="o">--</span> <span class="n">Middle</span> <span class="n">mouse</span> <span class="n">button</span>
 <span class="n">K_MOUSE3</span> <span class="o">--</span> <span class="n">Right</span> <span class="n">mouse</span> <span class="n">button</span>
 <span class="n">K_0</span> <span class="n">through</span> <span class="n">K_9</span>
@@ -815,7 +846,7 @@
 <h2>Step Shuffling<a class="headerlink" href="#step-shuffling" title="Permalink to this headline">¶</a></h2>
 <p>A new option allows the game to shuffle the steps list each time the game is started. The log continues to record the original step number.</p>
 <p>Here’s an example script JSON with this new option:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;step_shuffle_groups&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">],</span>
     <span class="p">[</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">]</span>
@@ -841,40 +872,151 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">&quot;step_shuffle_groups&quot;</span></code> is a list of lists of step numbers (1-based) that are shuffled together. In the example above, steps 1 and 2 are shuffled, then steps 3 and 4 are shuffled.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;step_shuffle_groups&quot;</span></code> is a list of lists of step numbers (1-based) that are shuffled together. In the example above, steps 1 and 2 are shuffled, then steps 3 and 4 are shuffled.</p>
+</div>
+<div class="section" id="id1">
+<h2>Step Shuffling<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><em>Asteroid Impact</em> can to shuffle the steps list each time the game is started. The log continues to record the original step number.</p>
+<p>Here’s an example script JSON with this new option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;step_shuffle_groups&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">],</span>
+    <span class="p">[</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">]</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;step_shuffle_groups&quot;</span></code> is a list of lists of step numbers (1-indexed) that are shuffled together. In the example above, steps 1 and 2 are shuffled, then steps 3 and 4 are shuffled.</p>
+</div>
+<div class="section" id="group-shuffling">
+<h2>Group Shuffling<a class="headerlink" href="#group-shuffling" title="Permalink to this headline">¶</a></h2>
+<p>A new option allows the game to shuffle the steps within groups. This allows for shuffling of groups of steps, where the order of the groups varies but the order of the steps within each group remains the same. This is ideal for situations in which one wishes to randomize the order of conditions, while keeping instruction screens paired with conditions. In order to take advantage of this option, you must add a layer to your JSON file called “stepgroups,” nesting steps that you want to remain together and in correct order within each stepgroup. The log continues to record the original step number.</p>
+<p>Here’s an example script JSON with this new option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;group_shuffle_groups&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;stepgroups&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+    <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span>
+      <span class="p">}</span>
+     <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span>
+        <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;steps&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;6&quot;</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The item <code class="docutils literal notranslate"><span class="pre">&quot;group_shuffle_groups&quot;</span></code> is a list of lists of stepgroup numbers (1-indexed) that are shuffled together. In the example above, stepgroup 1, is presented first, and stepgroups 2 and 3 are shuffled.</p>
+<p>If interested, <code class="docutils literal notranslate"><span class="pre">&quot;group_shuffle_groups&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;step_shuffle_groups&quot;</span></code> can be combined in order to create more custom randomizations.</p>
 </div>
 </div>
 
 
           </div>
+
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Game Script JSON</a><ul>
-<li><a class="reference internal" href="#steps-list">Steps List</a></li>
-<li><a class="reference internal" href="#trigger-advance-options">Trigger Advance Options</a></li>
-<li><a class="reference internal" href="#output-trigger-settings">Output Trigger Settings</a></li>
-<li><a class="reference internal" href="#common-step-attributes">Common Step Attributes</a></li>
-<li><a class="reference internal" href="#available-step-actions">Available step actions</a><ul>
-<li><a class="reference internal" href="#game"><code class="docutils literal"><span class="pre">game</span></code></a></li>
-<li><a class="reference internal" href="#instructions"><code class="docutils literal"><span class="pre">instructions</span></code></a></li>
-<li><a class="reference internal" href="#text"><code class="docutils literal"><span class="pre">text</span></code></a></li>
-<li><a class="reference internal" href="#blackscreen"><code class="docutils literal"><span class="pre">blackscreen</span></code></a></li>
-<li><a class="reference internal" href="#game-adaptive"><code class="docutils literal"><span class="pre">game-adaptive</span></code></a></li>
+<h1 class="logo"><a href="index.html">Asteroid Impact</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Asteroid Impact Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step-game.html">Gameplay Step and Adaptive Gameplay Step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step-instructions.html">Instructions Step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step-text.html">Text Step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step-survey.html">Survey Step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="step-blackscreen.html">Black Screen Step</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logcolumns.html">Log Columns</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parallelport.html">Parallel Port Connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input-trigger.html">Input Triggers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output-trigger.html">Output Triggers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Game Script JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#steps-list">Steps List</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#trigger-advance-options">Trigger Advance Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-trigger-settings">Output Trigger Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-step-attributes">Common Step Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#available-step-actions">Available step actions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#game-adaptive-levels-list">game-adaptive levels list</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reaction-prompt-elements">Reaction Prompt Elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-shuffling">Step Shuffling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Step Shuffling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#group-shuffling">Group Shuffling</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#game-adaptive-levels-list">game-adaptive levels list</a><ul>
-<li><a class="reference internal" href="#survey"><code class="docutils literal"><span class="pre">survey</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="leveljson.html">Single Level JSON</a></li>
+<li class="toctree-l1"><a class="reference internal" href="makelevelpy.html">makelevel.py</a></li>
+<li class="toctree-l1"><a class="reference internal" href="codeintro.html">Asteroid Impact Code Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Compiling Asteroid Impact</a></li>
+<li class="toctree-l1"><a class="reference internal" href="timing.html">Game Timing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/game.html">game</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/logger.html">logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/makelevel.html">makelevel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/makestandardlevels.html">makestandardlevels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/resources.html">resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/screens.html">screens</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/sprites.html">sprites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ref/virtualdisplay.html">virtualdisplay</a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#reaction-prompt-elements">Reaction Prompt Elements</a></li>
-<li><a class="reference internal" href="#step-shuffling">Step Shuffling</a></li>
-</ul>
-</li>
-</ul>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -884,41 +1026,44 @@
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/scriptjson.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
     <div class="footer">
       &copy;2015, Nick Winters.
-      
+
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.4</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
-      
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+
       |
       <a href="_sources/scriptjson.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
-    
 
-    
+
+
   </body>
 </html>

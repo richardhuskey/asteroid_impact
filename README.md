@@ -1,9 +1,11 @@
-# asteroid_impact
+# Asteroid Impact
 Asteroid Impact is an open-source video game stimulus for conducting experimental research on human subjects.
 
-Questions? Contact Richard Huskey (huskey.29@osu.edu)
+You can read the full documentation for Asteroid Impact [here](https://medianeuroscience.github.io/asteroid_impact).
 
-<h1>License</h1>
+Questions? Contact Jacob Fisher (jacobtfisher@ucsb.edu), or Richard Huskey (huskey.29@osu.edu)
+
+# License
 
 Asteroid Impact was developed in the Media Neuroscience Lab (http://www.medianeuroscience.org/) Rene Weber, PI and the Cognitive Communication Science Lab (http://cogcommscience.com/) Richard Huskey, PI.
 
@@ -15,21 +17,21 @@ Key Contributors include:
 
 Richard Huskey, Nick Winters, Justin Keene, Jacob Fisher, Britney Craighead, and Rene Weber
 
-<h1>How to cite</h1>
+## How to cite
 
 If you use Asteroid Impact in your research, please cite:
 
-Huskey, R., Craighead, B., Miller, M. B., Weber, R. (2018). Does Intrinsic Reward Motivate Cognitive Control? A Naturalistic-fMRI Study Based on the Synchronization Theory of Flow. <em>Cognitive, Affective, and Behavioral Neuroscience.</em> doi: [10.3758/s13415-018-0612-6](https://rdcu.be/01lH)
+Huskey, R., Craighead, B., Miller, M. B., & Weber, R. (2018). Does Intrinsic Reward Motivate Cognitive Control? A Naturalistic-fMRI Study Based on the Synchronization Theory of Flow. *Cognitive, Affective, and Behavioral Neuroscience, 18*(5), 902-924. doi: 10.3758/s13415-018-0612-6
 
-<h1>Introduction</h1>
+# Introduction
 
-<em>Asteroid Impact</em> is a point-and-click style video game where subjects use a cursor to collect crystal-shaped targets that are displayed at different locations while avoiding asteroids that bounce around the screen. Game difficulty is manipulated by altering the number of targets a subject needs to collect, the number of objects to be avoided, and the rate at which these objects move. The stimulus provides tremendous experimental control in that all random aspects of the game are removed; any differences in game experience are the result of player intervention. To help resolve this potential confound, the stimulus provides a high resolution content analysis of <em>all</em> events in the game (e.g., when a crystal is collected, x/y position of the player's cursor, time when player dies) with a 16ms temporal resolution. This content analysis is exported to a .csv file that allows for subsequent computation using a wide variety of analysis packages.
+*Asteroid Impact* is a point-and-click style video game where subjects use a cursor to collect crystal-shaped targets that are displayed at different locations while avoiding asteroids that bounce around the screen. Game difficulty is manipulated by altering the number of targets a subject needs to collect, the number of objects to be avoided, and the rate at which these objects move. The stimulus provides tremendous experimental control in that all random aspects of the game are removed; any differences in game experience are the result of player intervention. To help resolve this potential confound, the stimulus provides a high resolution content analysis of <em>all</em> events in the game (e.g., when a crystal is collected, x/y position of the player's cursor, time when player dies) with a 16ms temporal resolution. This content analysis is exported to a .csv file that allows for subsequent computation using a wide variety of analysis packages.
 
-In terms of experimental manipulation, researchers can specify different levels of difficulty <em>a priori</em> as well as a time duration for how long a given level will last. <em>Asteroid Impact</em> also features an adaptive mode where the game automatically increases or decreases in difficulty depending on player performance. Each of these game states can be separated by a black screen or set of instructions. These different game states can be scripted together in any sequence the researcher may choose, thereby allowing the development of sophisticated experimental paradigms. The game's artwork can easily be manipulated and the game scales to fit in both full-screen and windowed modes across a variety of screen resolutions. The game is also designed to interface with TTL triggers, a feature which allows for synchronizing game states with psychophysiological and neurophysiological measurement equipment.
+In terms of experimental manipulation, researchers can specify different levels of difficulty _a priori_ as well as a time duration for how long a given level will last. _Asteroid Impact_ also features an adaptive mode where the game automatically increases or decreases in difficulty depending on player performance. Each of these game states can be separated by a black screen or set of instructions. These different game states can be scripted together in any sequence the researcher may choose, thereby allowing the development of sophisticated experimental paradigms. The game's artwork can easily be manipulated and the game scales to fit in both full-screen and windowed modes across a variety of screen resolutions. The game is also designed to interface with TTL triggers, a feature which allows for synchronizing game states with psychophysiological and neurophysiological measurement equipment.
 
-<em>Asteroid Impact</em> is written in Python and carries a fully open source license (CC BY-SA 4.0). This means that the game can be modified to suit the  needs of any given research lab. Moreover, the game is platform agnostic and can be used on Windows, OS X, or Linux (see known bugs below). The game requires minimal computational power and can run on low-cost computer systems. Taken together, these features provide the research community with a highly flexible tool that overcomes the issues discussed earlier. Moreover, the game conforms to the latest trends in open-science by providing a free tool that allows for replication.
+_Asteroid Impact_ is written in Python and carries a fully open source license (CC BY-SA 4.0). This means that the game can be modified to suit the  needs of any given research lab. Moreover, the game is platform agnostic and can be used on Windows, OS X, or Linux (see known bugs below). The game requires minimal computational power and can run on low-cost computer systems. Taken together, these features provide the research community with a highly flexible tool that overcomes the issues discussed earlier. Moreover, the game conforms to the latest trends in open-science by providing a free tool that allows for replication.
 
-<h1>Getting Started</h1>
+# Getting Started
 
 Download:
 <ul>
@@ -41,9 +43,37 @@ The html documentation files specify necessary software dependencies and how to 
 
 The src directory contains the game files.
 
-For Mac users. In order to get Asteroid Impact to work on OS X Sierra (10.12), updated versions of PyGame and PySerial must be installed. PyGame cannot be installed through pip on Mac, so you can follow [these instructions](https://jamesfriend.com.au/installing-pygame-python-3-mac-os-yosemite). Alternately, you can use an integrated development environment (IDE) such as [PyCharm](https://www.jetbrains.com/pycharm/). 
+For Mac users. In order to get Asteroid Impact to work on OS X Sierra (10.12), updated versions of PyGame and PySerial must be installed. PyGame cannot be installed through pip on Mac, so you can follow [these instructions](https://jamesfriend.com.au/installing-pygame-python-3-mac-os-yosemite). Alternately, you can use an integrated development environment (IDE) such as [PyCharm](https://www.jetbrains.com/pycharm/).
+
+As an alternative for macOS users, you may consider using a conda environment. To do this you will need [Anaconda 3](https://www.anaconda.com/) installed. From there, follow these steps:
+
+1. Open a terminal and run this command:
+
+	```$ conda create -n ai python=2.7```
+
+2. Activate the environment:
+
+	```$ conda activate ai```
+
+3. Install dependencies:
+
+	```$ pip install pygame```
+
+	```$ pip install pyserial```
+
+4. Run Asteroid Impact (make sure you are in the 'src' directory that contains game.py:
+
+	```$ python game.py```
+
+5. Deactivate your conda virtual environment when done:
+
+	```$ conda deactivate```
 
 <h1>New Features</h1>
+
+## Step Shuffling
+
+As of April 2019, it is now possible to shuffle the order of game steps (instructions, levels, survey questions, etc) at the individual level or at the block level by specifying `step_shuffle_groups` or `group shuffle groups` in your JSON file.
 
 <h2>Questionnaire Block Development</h2>
 
@@ -73,13 +103,9 @@ It is now possible to configure the game so that it allows crystals (targets) to
 
 The perceptual load of the game environment can be changed through the reduction of foreground opacity. These manipulations allow for the independent manipulation of cognitive load (e.g., a 1-back rule maintenance task) and perceptual load.
 
-<h2>Randomization Feature</h2>
-
-It is now possible to randomize experimental blocks within a .json object.
-
 <h1>! Known Issues</h1>
 
-As with all experimental software, please use <em>Asteroid Impact</em> at your own risk, and after sufficient testing on your own hardware. The software does not come with any warranty. 
+As with all experimental software, please use <em>Asteroid Impact</em> at your own risk, and after sufficient testing on your own hardware. The software does not come with any warranty.
 
 <em>Asteroid Impact</em> Has undergone extensive testing in Windows7, Windows10, and OS X 10.10.5 environments. Known issues are listed below:
 <ul>

@@ -31,7 +31,9 @@ Below is a sample of the full JSON configuration for a ``game`` step. ::
               "showtimes_trigger_counts": [ 1, 2, 3, 4, 5, 6 ],
               "input_key": "K_MOUSE1",
               "timeout_millis": "never",
-              "stay_visible": false
+              "stay_visible": false,
+              "fail_on_wrong_key": false,
+              "pass_fail_sounds": false
             }
           ]
         },
@@ -174,6 +176,7 @@ Below is a sample script JSON will all multicolor crystal scoring options specif
           "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
           "multicolor_crystal_num_showing": 2,
           "multicolor_crystal_lifetime_ms": 5000,
+          "multicolor_crystal_negative_score_buzzer": true,
     
           "multicolor_crystal_score_table": [
             [ 25, 25, 25, 25, 25, 25 ],
@@ -332,6 +335,8 @@ The multicolor-specific options are as follows:
     The number of crystals to have active on screen at a time. To show two crystals on screen at all times, set this to ``2``. This defaults to ``1``.
 ``"multicolor_crystal_lifetime_ms"``
     The duration in milliseconds a crystal remains before it goes away on its own. Leave out this option, or set it to ``null`` make the crystals persistent forever. Set to ``5000`` to make crystals automatically go away after 5 seconds.
+``"multicolor_crystal_negative_score_buzzer"``
+    When set to true, collecting a crystal that awards negative points or zero points will play an alternate buzzer sound instead of the chime that normally plays when collecting a crystal.
 ``"multicolor_crystal_score_table"``
     5 rows of point values, with 6 scores per row. This is a table used to find the number of points to award when a crystal is collected. The row corresponds to the color of the crystal the player is collecting now, such as the red triangle for the first row. The entry within the inner list corresponds to the color of the previously selected crystal, for example the first inner points value corresponds to having previously collected a red triangle. The 6th points value is used when no crystal was collected previously.
 
@@ -417,7 +422,12 @@ the ``reaction_prompts`` list is filled with entries like the one below ::
       "showtimes_trigger_counts": [ 1, 3 ],
       "input_key": "K_2",
       "timeout_millis": 1500,
-      "stay_visible": false
+      "stay_visible": false,
+      "fail_on_wrong_key": false,
+      "pass_fail_sounds": false,
+      "score_pass": 100,
+      "score_fail": -90,
+      "score_miss": -10
     }
 
 ``"diameter"``
@@ -436,6 +446,14 @@ the ``reaction_prompts`` list is filled with entries like the one below ::
     After this duration the prompt will go away on its own. Set to ``"none"`` to continue showing/sounding the reaction prompt
 ``"stay_visible"``
     ``true`` to have the image and sound continue playing for the entire ``timeout_millis`` duration.
+``"fail_on_wrong_key"``
+    Set this to true to fail this reaction prompt if the wrong key is pressed.
+``"pass_fail_sounds"``
+    Set this to true to enable different pass or fail sounds that play when the prompt is responded to correctly, or incorrectly/missed.
+``"score_pass"``
+    Integer number of points to award (or negative to subtract) when prompt is responded to with the correct key in time. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
+``"score_fail"``
+    Integer number of points to award (or negative to subtract) when prompt is responded to with the incorrect key or too late. The score is only shown when enabled for the multicolor crystal scoring. Leave out this option, or specify a value of null to not add or subtract any points.
 ``"input_key"``
     is the name of the keyboard key or mouse button the player should press in response to this reaction prompt. The options are in the list below.
 

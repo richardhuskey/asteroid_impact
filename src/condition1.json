@@ -1,0 +1,2489 @@
+{
+  "steps": [
+    {
+      "action": "instructions_alt"
+    },
+    {
+      "action": "text",
+      "text": "First, you will play a brief practice round.",
+      "duration": 10
+    },
+    {
+      "action": "text",
+      "text": "The practice round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 60,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 255,
+
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+
+      "multicolor_crystal_score_table": [
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ]
+      ],
+
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [6761, 13779, 27387, 35989, 50060, 57043],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss": -200
+
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [15008, 51243],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":  1000,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [10000],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "Now that you've got the hang of it, let's get going!",
+      "duration": 10.0
+    },
+    {
+      "action": "text",
+      "text": "In this round, you may collect any crystal you wish. \n\n All crystals are worth the same amount of points",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 255,
+
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+
+      "multicolor_crystal_score_table": [
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ]
+      ],
+
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [10805, 12106, 26711, 38554, 43971, 51754, 62910, 72384, 89671, 96290, 101707, 117162, 128268, 132432, 149312, 157787, 161151, 178455, 189383, 199228, 210836, 218632, 225299, 234037],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [15992, 41352, 61103, 99826, 126862, 154440, 207442, 217999],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [2526, 127558],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, some of the crystals are dangerous!\n\nIf you collect two of the same crystal in a row \n\n you will lose 1000 points!",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 255,
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [
+        1, 2, 3, 4, 5
+      ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+      "multicolor_crystal_score_table": [
+        [-1000, 100, 100, 100, 100, 100],
+        [100, -1000, 100, 100, 100, 100],
+        [100, 100, -1000, 100, 100, 100],
+        [100, 100, 100, -1000, 100, 100],
+        [100, 100, 100, 100, -1000, 100]
+      ],
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [200, 200],
+            [400, 300],
+            [500, 400],
+            [600, 500],
+            [100, 600],
+            [700, 800],
+            [800, 700]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [1653, 12924, 21249, 39015, 47345, 52425, 63731, 78404, 86463, 100052, 101611, 112077, 125632, 133260, 146120, 158420, 163561, 180108, 188273, 197421, 204479, 219238, 230457, 240615],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [200, 200],
+            [400, 300],
+            [500, 400],
+            [600, 500],
+            [100, 600],
+            [700, 800],
+            [800, 700]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [28844, 32667, 68740, 115782, 144170, 175815, 204306, 217963],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss": 0
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [13402, 129999],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, you may collect any crystal you wish. \n\n All crystals are worth the same amount of points \n\n The game may be difficult to see. This is normal. Just play the best that you can!",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 60,
+
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+
+      "multicolor_crystal_score_table": [
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ]
+      ],
+
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [6308, 16051, 21320, 32579, 42188, 53592, 69189, 76428, 85015, 94051, 110801, 117381, 123621, 133931, 144328, 157823, 165331, 174304, 186003, 196125, 205016, 218930, 222184, 237549],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [13584, 42426, 77608, 110446, 144490, 158585, 191727, 236325],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [17534, 130380],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, you may collect any crystal you wish. \n\n All crystals are worth the same amount of points",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 255,
+
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+
+      "multicolor_crystal_score_table": [
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ]
+      ],
+
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [2653, 15289, 22545, 31540, 50264, 53386, 69498, 79464, 85407, 94051, 109492, 120932, 129549, 134791, 149959, 160007, 161102, 179279, 187723, 193041, 202651, 220942, 229165, 236087],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [3596, 31944, 64337, 100716, 149937, 173655, 193687, 230143],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [95522, 221680],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, some of the crystals are dangerous!\n\nIf you collect two of the same crystal in a row \n\n you will lose 1000 points!",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 255,
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [
+        1, 2, 3, 4, 5
+      ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+      "multicolor_crystal_score_table": [
+        [-1000, 100, 100, 100, 100, 100],
+        [100, -1000, 100, 100, 100, 100],
+        [100, 100, -1000, 100, 100, 100],
+        [100, 100, 100, -1000, 100, 100],
+        [100, 100, 100, 100, -1000, 100]
+      ],
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [200, 200],
+            [400, 300],
+            [500, 400],
+            [600, 500],
+            [100, 600],
+            [700, 800],
+            [800, 700]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [8375, 18251, 26345, 38294, 47091, 55475, 66556, 72724, 87930, 99943, 103744, 115520, 122683, 132913, 149906, 151816, 163106, 179621, 182644, 198302, 203378, 218222, 230006, 236950],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [200, 200],
+            [400, 300],
+            [500, 400],
+            [600, 500],
+            [100, 600],
+            [700, 800],
+            [800, 700]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [3596, 31944, 64337, 100716, 149937, 173655, 193687, 230143],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss": 0
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [20150, 229968],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, you may collect any crystal you wish. \n\n All crystals are worth the same amount of points \n\n The game may be difficult to see. This is normal. Just play the best that you can!",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 60,
+
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+
+      "multicolor_crystal_score_table": [
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ]
+      ],
+
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [3245, 17848, 30845, 38977, 43551, 51360, 64197, 72638, 90678, 91761, 101930, 119735, 126598, 135095, 149743, 154915, 168308, 174751, 181871, 200459, 210818, 219780, 224800, 238024],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [14274, 50242, 68816, 97421, 139301, 164848, 199529, 221601],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [107200, 158738],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, you may collect any crystal you wish. \n\n All crystals are worth the same amount of points",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 255,
+
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+
+      "multicolor_crystal_score_table": [
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ]
+      ],
+
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [6353, 15935, 24359, 38119, 48958, 52327, 68508, 71378, 82858, 94857, 109146, 119062, 123265, 135241, 145973, 160319, 161682, 176897, 190123, 192886, 206902, 211919, 223778, 238710],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [11317, 53855, 89634, 105039, 131562, 174012, 190301, 224893],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [6219, 223264],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, some of the crystals are dangerous!\n\nIf you collect two of the same crystal in a row \n\n you will lose 1000 points!",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 255,
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [
+        1, 2, 3, 4, 5
+      ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+      "multicolor_crystal_score_table": [
+        [-1000, 100, 100, 100, 100, 100],
+        [100, -1000, 100, 100, 100, 100],
+        [100, 100, -1000, 100, 100, 100],
+        [100, 100, 100, -1000, 100, 100],
+        [100, 100, 100, 100, -1000, 100]
+      ],
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [200, 200],
+            [400, 300],
+            [500, 400],
+            [600, 500],
+            [100, 600],
+            [700, 800],
+            [800, 700]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [4510, 19152, 28227, 35561, 48725, 59198, 67014, 80694, 81388, 96908, 108899, 115557, 128965, 133924, 141380, 153964, 161778, 179872, 189030, 192779, 209015, 218868, 230096, 234911],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [200, 200],
+            [400, 300],
+            [500, 400],
+            [600, 500],
+            [100, 600],
+            [700, 800],
+            [800, 700]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [5283, 57683, 61554, 100855, 145585, 175004, 210350, 217854],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss": 0
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [118955, 185221],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "In this round, you may collect any crystal you wish. \n\n All crystals are worth the same amount of points \n\n The game may be difficult to see. This is normal. Just play the best that you can!",
+      "duration": 20.0
+    },
+    {
+      "action": "text",
+      "text": "The next round will start soon.",
+      "trigger_count": 10
+    },
+    {
+      "action": "game-adaptive",
+      "duration": 240,
+      "start_level": 1,
+      "level_completion_increment": 0.2,
+      "level_death_decrement": 1,
+      "continuous_asteroids_on_same_level": true,
+      "show_advance_countdown": false,
+      "game_element_opacity": 60,
+
+      "multicolor_crystal_scoring": true,
+      "multicolor_crystal_numbers": [ 1, 2, 3, 4, 5 ],
+      "multicolor_crystal_num_showing": 3,
+      "multicolor_crystal_lifetime_ms": 5000,
+
+      "multicolor_crystal_score_table": [
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ],
+        [ 100, 100, 100, 100, 100, 100 ]
+      ],
+
+      "reaction_prompts": [
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "triangle.png",
+          "sound": "tone440.wav",
+          "showtimes_millis": [1729, 13855, 24972, 36827, 49145, 60299, 64542, 72459, 85391, 93593, 108546, 116961, 125719, 133509, 148803, 152948, 167833, 176710, 187522, 194915, 204702, 217549, 224307, 233205],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_1",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass":   10,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 100,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "square.png",
+          "sound": "tone659.wav",
+          "showtimes_millis": [17942, 46978, 83522, 107586, 150182, 173116, 184527, 222313],
+          "showtimes_trigger_counts": [],
+          "input_key": "K_3",
+          "timeout_millis": 10000,
+          "stay_visible": false,
+          "fail_on_wrong_key": true,
+          "pass_fail_sounds": true,
+          "score_pass": 1000,
+          "score_fail": -200,
+          "score_miss":    0
+
+        },
+        {
+          "diameter": 150,
+          "position_list": [
+            [ 200, 200 ],
+            [ 400, 300 ],
+            [ 500, 400 ],
+            [ 600, 500 ],
+            [ 100, 600 ],
+            [ 700, 800 ],
+            [ 800, 700 ]
+          ],
+          "image": "ufo.gif",
+          "sound": "lazer.wav",
+          "showtimes_millis": [23117, 220889],
+          "showtimes_trigger_counts": [],
+          "timeout_millis": 6000,
+          "stay_visible": false,
+          "fail_on_wrong_key": false,
+          "pass_fail_sounds": false
+
+        }
+      ],
+      "level_templates": [
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "slow",
+          "powerup_count":10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 1,
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 2,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "small",
+          "asteroid_speeds": "slow",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 3,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 1.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 4,
+          "asteroid_sizes": "medium",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 5,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "medium",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_sizes": "varied",
+          "asteroid_speeds": "fast",
+          "powerup_count": 10,
+          "powerup_delay": 2.0,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 6,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 7,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        },
+        {
+          "asteroid_count": 8,
+          "asteroid_speeds": "extreme",
+          "powerup_count": 10,
+          "powerup_delay": 0.5,
+          "target_count": 10
+        }
+      ]
+    },
+    {
+      "action": "text",
+      "text": "Thanks for playing! \n\n You will now complete the gambling task to earn extra money",
+      "duration": 10.0
+    }
+  ]
+}
+
