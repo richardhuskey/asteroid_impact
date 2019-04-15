@@ -102,14 +102,14 @@ def make_level(seed=None,
         rnd = random.Random(seed)
     level = {}
     target_positions = []
-    for i in xrange(target_count):
+    for i in range(target_count):
         target_positions.append(
             (rnd.randint(0, GAME_PLAY_AREA.width - TARGET_SIZE),
              rnd.randint(0, GAME_PLAY_AREA.height - TARGET_SIZE)))
     level['target_positions'] = target_positions
 
     asteroids = []
-    for i in xrange(asteroid_count):
+    for i in range(asteroid_count):
         diameter = rnd.choice(asteroid_sizes)
         speed = rnd.choice(asteroid_speeds)
         dx, dy = make_dir(speed, rnd)
@@ -123,7 +123,7 @@ def make_level(seed=None,
     if powerup_count > 0 and len(powerup_types) > 0:
         if powerup_initial_delay > 0:
             powerups.append(dict(type='none', duration=powerup_initial_delay))
-        for i in xrange(powerup_count):
+        for i in range(powerup_count):
             powerup_left, powerup_top = \
                 (rnd.randint(0, GAME_PLAY_AREA.width - TARGET_SIZE),
                  rnd.randint(0, GAME_PLAY_AREA.height - TARGET_SIZE))
@@ -183,9 +183,9 @@ if __name__ == '__main__':
     if args.file:
         with open(args.file, 'w') as f:
             json.dump(new_level, f)
-        print 'saved level to file "%s"' % args.file
+        print('saved level to file "%s"' % args.file)
     else:
-        print json.dumps(new_level)
+        print(json.dumps(new_level))
 
         # pretty printing:
         #print json.dumps(new_level, sort_keys=True, indent=4, separators=(',',': '))
