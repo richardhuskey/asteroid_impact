@@ -60,9 +60,7 @@ Activate the environment:
 
 Install dependencies:
 
-`$ pip install pygame`
-
-`$ pip install pyserial`
+`$ pip install pygame pyserial`
 
 Run Asteroid Impact (make sure you are in the 'src' directory that contains game.py:
 
