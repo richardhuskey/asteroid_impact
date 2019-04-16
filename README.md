@@ -50,27 +50,27 @@ For Mac users. In order to get Asteroid Impact to work on OS X Sierra (10.12), u
 
 The easiest way to get up and running is to create a conda environment from which to run *Asteroid Impact*. To do this you will need [Anaconda 3](https://www.anaconda.com/distribution/) installed. From there, follow these steps:
 
-    Open a terminal and run this command:
+Open a terminal and run this command:
 
-    `$ conda create -n ai python=3.6`
+`$ conda create -n ai python=3.6`
 
-    Activate the environment:
+Activate the environment:
 
-    `$ conda activate ai`
+`$ conda activate ai`
 
-    Install dependencies:
+Install dependencies:
 
-    `$ pip install pygame`
+`$ pip install pygame`
 
-    `$ pip install pyserial`
+`$ pip install pyserial`
 
-    Run Asteroid Impact (make sure you are in the 'src' directory that contains game.py:
+Run Asteroid Impact (make sure you are in the 'src' directory that contains game.py:
 
-    `$ python game.py`
+`$ python game.py`
 
-    Deactivate your conda virtual environment when done:
+Deactivate your conda virtual environment when done:
 
-    `$ conda deactivate`
+`$ conda deactivate`
 
 
 ## Step Shuffling
