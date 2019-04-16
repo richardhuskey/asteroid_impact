@@ -1,7 +1,6 @@
 # Asteroid Impact
 
-![img1](misc/ai_new1.png)
-![img1](misc/ai_new2.png)
+<img src="misc/ai_new1" width="240"> <img src="misc/ai_new2" width="240">
 
 Asteroid Impact is an open-source video game stimulus for conducting experimental research on human subjects.
 
