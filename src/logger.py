@@ -9,7 +9,6 @@
 """CSV logger for AsteroidImpact game"""
 
 import os
-from sets import Set
 
 def csv_escape(value):
     """return escaped and quoted as needed to be in a comma-separated CSV"""
@@ -32,7 +31,7 @@ class AsteroidLogger(object):
 
         if filename:
             if os.path.exists(filename) and not overwrite_file:
-                print 'Error: File "%s" exists and overwrite is not specified'%filename
+                print('Error: File "%s" exists and overwrite is not specified'%filename)
                 raise IOError('CSV Log file exists and overwrite not specified')
             self.logfile = open(filename, 'w')
         else:
@@ -115,14 +114,14 @@ class AsteroidLogger(object):
             'reaction_prompt_pressed_key'
             ]
             
-        for i in xrange(1, max_asteroid_count+1):
+        for i in range(1, max_asteroid_count+1):
             # asteroid columns
             prefix = ('asteroid_%d_' % i)
             self.columns.append(prefix + 'centerx')
             self.columns.append(prefix + 'centery')
             self.columns.append(prefix + 'diameter')
 
-        self.columns_set = Set(self.columns)
+        self.columns_set = set(self.columns)
 
         # write headers
         self.log({col:col for col in self.columns})
@@ -132,14 +131,14 @@ class AsteroidLogger(object):
         for i, key in enumerate(self.columns):
             if i > 0:
                 self.logfile.write(',')
-            if rowdict.has_key(key):
+            if key in rowdict:
                 self.logfile.write(csv_escape(str(rowdict[key])))
         self.logfile.write('\n')
 
         # validation: check for keys in rowdict that aren't in columns
-        for key in rowdict.keys():
+        for key in list(rowdict.keys()):
             if not key in self.columns_set:
-                print 'key "%s" not in known list of columns. Not included in log'%key
+                print('key "%s" not in known list of columns. Not included in log'%key)
 
 class SurveyLogger(object):
     """Survey response logger for for AsteroidImpact game"""
@@ -154,7 +153,7 @@ class SurveyLogger(object):
 
         if filename:
             if os.path.exists(filename) and not overwrite_file:
-                print 'Error: File "%s" exists and overwrite is not specified'%filename
+                print('Error: File "%s" exists and overwrite is not specified'%filename)
                 raise IOError('CSV Survey Log file exists and overwrite not specified')
             self.logfile = open(filename, 'w')
         else:
@@ -186,7 +185,7 @@ class SurveyLogger(object):
             'survey_answer_number',
             ]
 
-        self.columns_set = Set(self.columns)
+        self.columns_set = set(self.columns)
 
         # write headers
         self.log({col:col for col in self.columns})
@@ -196,14 +195,14 @@ class SurveyLogger(object):
         for i, key in enumerate(self.columns):
             if i > 0:
                 self.logfile.write(',')
-            if rowdict.has_key(key):
+            if key in rowdict:
                 self.logfile.write(csv_escape(str(rowdict[key])))
         self.logfile.write('\n')
 
         # validation: check for keys in rowdict that aren't in columns
-        for key in rowdict.keys():
+        for key in list(rowdict.keys()):
             if not key in self.columns_set:
-                print 'key "%s" not in known list of survey columns. Not included in log'%key
+                print('key "%s" not in known list of survey columns. Not included in log'%key)
 
 class ReactionLogger(object):
     """Reaction prompt logger for AsteroidImpact game"""
@@ -218,7 +217,7 @@ class ReactionLogger(object):
 
         if filename:
             if os.path.exists(filename) and not overwrite_file:
-                print 'Error: File "%s" exists and overwrite is not specified'%filename
+                print('Error: File "%s" exists and overwrite is not specified'%filename)
                 raise IOError('CSV Log file exists and overwrite not specified')
             self.logfile = open(filename, 'w')
         else:
@@ -269,7 +268,7 @@ class ReactionLogger(object):
             'reaction_prompt_pressed_key'
             ]
             
-        self.columns_set = Set(self.columns)
+        self.columns_set = set(self.columns)
 
         # write headers
         self.log({col:col for col in self.columns})
@@ -279,11 +278,11 @@ class ReactionLogger(object):
         for i, key in enumerate(self.columns):
             if i > 0:
                 self.logfile.write(',')
-            if rowdict.has_key(key):
+            if key in rowdict:
                 self.logfile.write(csv_escape(str(rowdict[key])))
         self.logfile.write('\n')
 
         # validation: check for keys in rowdict that aren't in columns
-        for key in rowdict.keys():
+        for key in list(rowdict.keys()):
             if not key in self.columns_set:
-                print 'key "%s" not in known list of columns. Not included in log'%key
+                print('key "%s" not in known list of columns. Not included in log'%key)
