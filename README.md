@@ -26,8 +26,6 @@ If you use Asteroid Impact in your research, please cite:
 
 Huskey, R., Craighead, B., Miller, M. B., & Weber, R. (2018). Does Intrinsic Reward Motivate Cognitive Control? A Naturalistic-fMRI Study Based on the Synchronization Theory of Flow. *Cognitive, Affective, and Behavioral Neuroscience, 18*(5), 902-924. doi: 10.3758/s13415-018-0612-6
 
-We will update the citation once the manuscript is in press.
-
 # Introduction
 
 *Asteroid Impact* is a point-and-click style video game where subjects use a cursor to collect crystal-shaped targets that are displayed at different locations while avoiding asteroids that bounce around the screen. Game difficulty is manipulated by altering the number of targets a subject needs to collect, the number of objects to be avoided, and the rate at which these objects move. The stimulus provides tremendous experimental control in that all random aspects of the game are removed; any differences in game experience are the result of player intervention. To help resolve this potential confound, the stimulus provides a high resolution content analysis of <em>all</em> events in the game (e.g., when a crystal is collected, x/y position of the player's cursor, time when player dies) with a 16ms temporal resolution. This content analysis is exported to a .csv file that allows for subsequent computation using a wide variety of analysis packages.
@@ -70,6 +68,31 @@ Deactivate your conda virtual environment when done:
 
 `$ conda deactivate`
 
+As an alternative for macOS users, you may consider using a conda environment. To do this you will need [Anaconda 3](https://www.anaconda.com/) installed. From there, follow these steps:
+
+1. Open a terminal and run this command:
+
+	```$ conda create -n ai python=2.7```
+
+2. Activate the environment:
+
+	```$ conda activate ai```
+
+3. Install dependencies:
+
+	```$ pip install pygame```
+
+	```$ pip install pyserial```
+
+4. Run Asteroid Impact (make sure you are in the 'src' directory that contains game.py:
+
+	```$ python game.py```
+
+5. Deactivate your conda virtual environment when done:
+
+	```$ conda deactivate```
+
+<h1>New Features</h1>
 
 ## Step Shuffling
 
