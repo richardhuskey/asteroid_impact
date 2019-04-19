@@ -14,7 +14,7 @@ move the same way. The game coordinate system is scaled up and down, and transla
 fit the available screen space.
 """
 
-from __future__ import absolute_import, division
+
 from pygame import Rect
 
 # virtual game area is always the same "resolution" and aspect ratio
