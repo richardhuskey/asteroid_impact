@@ -1,31 +1,27 @@
 # Asteroid Impact (c) Media Neuroscience Lab, Rene Weber
 # Authored by Nick Winters
-#
+# 
 # Asteroid Impact is licensed under a
 # Creative Commons Attribution-ShareAlike 4.0 International License.
-#
+# 
 # You should have received a copy of the license along with this
-# work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>.
+# work. If not, see <http://creativecommons.org/licenses/by-sa/4.0/>. 
 """
 Game screens for AsteroidImpact
 """
 
-import random
-import string
-
+from sprites import *
+from resources import load_font, load_image, mute_music, unmute_music
 from pygame.locals import *
-
-import parallelportwrapper
 import virtualdisplay
 from makelevel import make_level, TARGET_SIZE
-from resources import load_font, load_image, mute_music, unmute_music
-from sprites import *
-
+import string
+import random
+import parallelportwrapper
 
 # screens.py
 class GameScreen(object):
     """Base class for AsteroidImpact game screens"""
-
     def __init__(self, screen, screenstack):
         """Initialize the base members of GameScreen"""
         self.screen = screen
@@ -33,8 +29,7 @@ class GameScreen(object):
         self.opaque = True
         self.name = self.__class__.__name__
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Update the screen's game state when this screen is frontmost"""
         pass
 
@@ -50,13 +45,11 @@ class GameScreen(object):
         """Clean up after screen is closed, and perform additional logging"""
         pass
 
-
 class BlackScreen(GameScreen):
     """
     Black screen. Shown to the player while other things are happening in other parts of
-    the research. The player can't interact with the black screen.
+    the research. The player can't interact with the black sceen.
     """
-
     def __init__(self, screen, gamescreenstack):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.name = 'black'
@@ -69,8 +62,7 @@ class BlackScreen(GameScreen):
 
         self.first_update = True
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music during the black screen
@@ -80,10 +72,9 @@ class BlackScreen(GameScreen):
         # draw background
         self.screen.blit(self.background, (0, 0))
 
-
 def font_find_fitting_string_length(font, line, line_width_screenpx):
     """return the length (in characters) of the string that fits within lineWidth"""
-    for i in range(len(line), -1, -1):
+    for i in xrange(len(line), -1, -1):
         if font.size(line[0:i])[0] <= line_width_screenpx:
             return i
     return len(line)
@@ -93,7 +84,6 @@ def valid_breakpoint_character(c):
     """return true when c is a valid word-wrapping breakpoint character"""
     # whitespace:
     return c in string.whitespace
-
 
 def flow_text(text, bounds_rect, font, color, line_height, valign='middle'):
     """Flow text into rectangle. Returns list of text elements and rectangle bounds of result."""
@@ -114,8 +104,8 @@ def flow_text(text, bounds_rect, font, color, line_height, valign='middle'):
                 wrappedline = True
                 # find text breakpoint
                 breakpointlength = maxlength
-                while (breakpointlength > 0 and
-                       not valid_breakpoint_character(line[breakpointlength - 1])):
+                while (breakpointlength > 0 and 
+                        not valid_breakpoint_character(line[breakpointlength - 1])):
                     breakpointlength -= 1
                 if breakpointlength == 0:
                     # likely a long single word or URL. Just break where it fits
@@ -131,8 +121,8 @@ def flow_text(text, bounds_rect, font, color, line_height, valign='middle'):
 
     # add text blocks, but vertically center them all on screen
     y = bounds_rect.top
-    if valign == 'middle': y = bounds_rect.top + (bounds_rect.height - (len(wrapped_lines) * line_height)) / 2
-    if valign == 'bottom': y = bounds_rect.bottom - (len(wrapped_lines) * line_height)
+    if valign=='middle': y = bounds_rect.top + (bounds_rect.height - (len(wrapped_lines) * line_height)) / 2
+    if valign=='bottom': y = bounds_rect.bottom - (len(wrapped_lines) * line_height)
     top = y
     sprites = []
     for line in wrapped_lines:
@@ -143,14 +133,12 @@ def flow_text(text, bounds_rect, font, color, line_height, valign='middle'):
             x=bounds_rect.left + 50,
             y=y))
         y += line_height
-    return sprites, Rect(bounds_rect.left, top, bounds_rect.width, y - top)
-
+    return sprites, Rect(bounds_rect.left, top, bounds_rect.width, y-top)
 
 class UserTextScreen(GameScreen):
     """
     Text Screen. Displays text specified in step.
     """
-
     def __init__(self, screen, gamescreenstack, click_to_continue=True, text="[No text value was specified]", title=""):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.click_to_continue = click_to_continue
@@ -165,22 +153,22 @@ class UserTextScreen(GameScreen):
 
         big_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 72, 72)).height
-        self.font_big = load_font('Ubuntu-M.ttf', big_font_size)
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
         self.line_height_big = 81
 
-        self.line_height = 36  # game-space like font size below
+        self.line_height = 36 # game-space like font size below
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font = load_font('Ubuntu-M.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
 
-        self.text_color = (250, 250, 250)  # white
+        self.text_color = (250, 250, 250) # white
 
         self.init_text(text, title)
 
         if self.click_to_continue:
             self.textsprites.append(TextSprite(
                 self.font_big, "Click To Begin", self.text_color,
-                centerx=virtualdisplay.GAME_AREA.width / 2,
+                centerx=virtualdisplay.GAME_AREA.width/2,
                 bottom=virtualdisplay.GAME_AREA.height))
 
         self.first_update = True
@@ -218,8 +206,7 @@ class UserTextScreen(GameScreen):
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -238,21 +225,20 @@ class UserTextScreen(GameScreen):
             elif event.type is MOUSEBUTTONUP:
                 pass
 
-
 class SurveyButton:
     '''Push button for "next" or toggle/radio button'''
-
-    def __init__(self, gamerect, text, onclick, option_index=-1):
+    def __init__(self, gamerect, text, onclick, option_index = -1):
         self.gamerect = gamerect
         self.screenrect = virtualdisplay.screenrect_from_gamerect(gamerect)
 
         self.text = text
         self.option_index = option_index
 
-        self.color_normal = (68, 68, 68)  # gray
-        self.color_selected = (23, 100, 214)  # blue
-        self.color_highlight = (222, 199, 67)  # yellow
-        self.color_pressing = (231, 233, 35)  # yellow/orange
+        self.color_normal = (68, 68, 68) # gray
+        self.color_selected = (23, 100, 214) # blue
+        self.color_highlight = (222, 199, 67) # yellow
+        self.color_pressing = (231, 233, 35) # yellow/orange
+
 
         self.buttonbackground = pygame.Surface((self.screenrect.width, self.screenrect.height))
         self.buttonbackground = self.buttonbackground.convert()
@@ -266,8 +252,7 @@ class SurveyButton:
 
     def update(self, milliseconds):
         pos = pygame.mouse.get_pos()
-        overlapping_me = False
-        self.screenrect.collidepoint(pos)
+        overlapping_me = False = self.screenrect.collidepoint(pos)
 
         mouse_button_down = pygame.mouse.get_pressed()[0]
 
@@ -296,7 +281,7 @@ class SurveyButton:
             if self.mouse_button_was_down:
                 # mouse button released
                 if self.mouse_button_pressed_inside and overlapping_me:
-                    # self.selected = not self.selected
+                    #self.selected = not self.selected
                     if self.onclick: self.onclick(self)
 
             if overlapping_me:
@@ -311,24 +296,22 @@ class SurveyButton:
     def draw(self, screen):
         screen.blit(self.buttonbackground, (self.screenrect.left, self.screenrect.top))
 
-
 class SurveyQuestionScreen(GameScreen):
     """
     Survey Question Screen. Prompt the player for the answer to a single multiple-choice question.
     """
-
     def __init__(
-            self,
-            screen,
-            gamescreenstack,
-            prompt="[No prompt value was specified]",
-            survey_options=["[default choice]"],
-            click_to_continue=True):
+        self,
+        screen,
+        gamescreenstack,
+        prompt="[No prompt value was specified]",
+        survey_options=["[default choice]"],
+        click_to_continue=True):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.name = 'surveyquestion'
         self.prompt = prompt
         self.click_to_continue = click_to_continue
-        # self.survey_options = survey_options
+        #self.survey_options = survey_options
         self.opaque = True
         self.blackbackground = pygame.Surface(self.screen.get_size())
         self.blackbackground = self.blackbackground.convert()
@@ -344,15 +327,15 @@ class SurveyQuestionScreen(GameScreen):
 
         big_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 72, 72)).height
-        self.font_big = load_font('Ubuntu-M.ttf', big_font_size)
-
-        self.line_height = 36  # game-space like font size below
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
+        
+        self.line_height = 36 # game-space like font size below
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font = load_font('Ubuntu-M.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
 
-        self.text_color = (250, 250, 250)  # white
-        self.text_color_option = (250, 250, 250)  # white
+        self.text_color = (250, 250, 250) # white
+        self.text_color_option = (250, 250, 250) # white
 
         # init text for prompt
         lines, result_bounds = flow_text(
@@ -377,33 +360,33 @@ class SurveyQuestionScreen(GameScreen):
                 self.text_color_option,
                 self.line_height,
                 valign='bottom')
-            bottom_y -= (len(lines) + 1) * self.line_height
+            bottom_y -= (len(lines)+1)*self.line_height
             self.textsprites += lines
-            self.nextbutton = SurveyButton(option_bounds, next_text, lambda b: self.next_button_clicked())
+            self.nextbutton = SurveyButton(option_bounds, next_text, lambda b:self.next_button_clicked())
         else:
             self.nextbutton = None
 
         # add buttons for each survey option
         self.option_buttons = []
-        for option_index, option_text in reversed(list(enumerate(survey_options))):
+        for option_index,option_text in reversed(list(enumerate(survey_options))):
             lines, option_bounds = flow_text(
                 option_text,
                 pygame.Rect(
                     virtualdisplay.GAME_AREA.left,
                     virtualdisplay.GAME_AREA.top,
                     virtualdisplay.GAME_AREA.width,
-                    virtualdisplay.GAME_AREA.height - (virtualdisplay.GAME_AREA.bottom - bottom_y)),
+                    virtualdisplay.GAME_AREA.height - (virtualdisplay.GAME_AREA.bottom-bottom_y)),
                 self.font,
                 self.text_color_option,
                 self.line_height,
                 valign='bottom')
-            bottom_y -= (len(lines) + 1) * self.line_height
+            bottom_y -= (len(lines)+1)*self.line_height
             self.textsprites += lines
-            option_button = SurveyButton(option_bounds, option_text, lambda b: self.option_button_click(b),
-                                         option_index)
+            option_button = SurveyButton(option_bounds, option_text, lambda b:self.option_button_click(b), option_index)
             self.option_buttons.append(option_button)
 
         self.first_update = True
+
 
     def draw(self):
         # draw background
@@ -421,8 +404,7 @@ class SurveyQuestionScreen(GameScreen):
 
         self.sprites.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -458,7 +440,7 @@ class SurveyQuestionScreen(GameScreen):
         # also save every other log column that's known
         surveylogrow = {}
         for col in surveylogger.columns:
-            if col in logrowdetails:
+            if logrowdetails.has_key(col):
                 surveylogrow[col] = logrowdetails[col]
         surveylogger.log(surveylogrow)
 
@@ -467,7 +449,6 @@ class AsteroidImpactInstructionsScreen(GameScreen):
     """
     Instructions Screen. Displays the game objects (ship, crystal, etc) and rules to the player.
     """
-
     def __init__(self, screen, gamescreenstack, click_to_continue=True):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.click_to_continue = click_to_continue
@@ -477,7 +458,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         self.blackbackground = self.blackbackground.convert()
         self.blackbackground.fill((0, 0, 0))
 
-        self.gamebackground = load_image('background4x3_dark.jpg', size=virtualdisplay.screenarea.size)
+        self.gamebackground = load_image('background4x3.jpg', size=virtualdisplay.screenarea.size)
         # draw gamebackground on blackbackground to only have to draw black/game once per frame:
         self.blackbackground.blit(self.gamebackground, virtualdisplay.screenarea.topleft)
 
@@ -488,13 +469,13 @@ class AsteroidImpactInstructionsScreen(GameScreen):
             pygame.Rect(0, 0, 72, 72)).height
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font_big = load_font('Ubuntu-M.ttf', big_font_size)
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
         red = (250, 250, 10)
         black = (255, 255, 255)
-        self.font = load_font('Ubuntu-M.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
         self.textsprites.append(
             TextSprite(self.font_big, "How to Play", red,
-                       centerx=virtualdisplay.GAME_AREA.width / 2,
+                       centerx=virtualdisplay.GAME_AREA.width/2,
                        top=0))
 
         s = Cursor()
@@ -519,7 +500,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         s.gamerect.topleft = (120, 360)
         s.update_rect()
         self.sprites.add(s)
-        asteroidgamebounds = pygame.Rect(120, 400, 960 - 120 - 120, 160)
+        asteroidgamebounds = pygame.Rect(120, 400, 960-120-120, 160)
         self.asteroids = pygame.sprite.Group([
             Asteroid(diameter=64,
                      dx=1.5,
@@ -566,7 +547,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         if self.click_to_continue:
             self.textsprites.append(TextSprite(
                 self.font_big, "Click To Begin", red,
-                centerx=virtualdisplay.GAME_AREA.width / 2,
+                centerx=virtualdisplay.GAME_AREA.width/2,
                 bottom=virtualdisplay.GAME_AREA.height))
 
         self.first_update = True
@@ -580,8 +561,7 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         self.sprites.draw(self.screen)
         self.asteroids.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # play music during the instructions at specified volume:
@@ -604,12 +584,10 @@ class AsteroidImpactInstructionsScreen(GameScreen):
         for asteroid in self.asteroids:
             asteroid.update(millis)
 
-
 class AsteroidImpactInstructionsScreenAlt(GameScreen):
     """
     Instructions Screen. Displays the game objects (ship, crystal, etc) and rules to the player.
     """
-
     def __init__(self, screen, gamescreenstack, click_to_continue=True):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.click_to_continue = click_to_continue
@@ -619,7 +597,7 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
         self.blackbackground = self.blackbackground.convert()
         self.blackbackground.fill((0, 0, 0))
 
-        self.gamebackground = load_image('background4x3_dark.jpg', size=virtualdisplay.screenarea.size)
+        self.gamebackground = load_image('background4x3.jpg', size=virtualdisplay.screenarea.size)
         # draw gamebackground on blackbackground to only have to draw black/game once per frame:
         self.blackbackground.blit(self.gamebackground, virtualdisplay.screenarea.topleft)
 
@@ -630,13 +608,13 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
             pygame.Rect(0, 0, 72, 72)).height
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font_big = load_font('Ubuntu-M.ttf', big_font_size)
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
         red = (250, 250, 10)
         black = (255, 255, 255)
-        self.font = load_font('Ubuntu-M.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
         self.textsprites.append(
             TextSprite(self.font_big, "How to Play", red,
-                       centerx=virtualdisplay.GAME_AREA.width / 2,
+                       centerx=virtualdisplay.GAME_AREA.width/2,
                        top=10))
 
         s = Cursor()
@@ -661,7 +639,7 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
         s.gamerect.topleft = (120, 280)
         s.update_rect()
         self.sprites.add(s)
-        asteroidgamebounds = pygame.Rect(240, 340, 960 - 120 - 120, 160)
+        asteroidgamebounds = pygame.Rect(240, 340, 960-120-120, 160)
         self.asteroids = pygame.sprite.Group([
             Asteroid(diameter=64,
                      dx=1.5,
@@ -721,12 +699,12 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
         self.textsprites.append(TextSprite(
             self.font,
             "Press x when you see a square",
-            black, left=240, top=740))
+            black, left=240, top= 740))
 
         if self.click_to_continue:
             self.textsprites.append(TextSprite(
                 self.font_big, "Click To Begin", red,
-                centerx=virtualdisplay.GAME_AREA.width / 2,
+                centerx=virtualdisplay.GAME_AREA.width/2,
                 bottom=virtualdisplay.GAME_AREA.height - 50))
 
         self.first_update = True
@@ -740,8 +718,7 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
         self.sprites.draw(self.screen)
         self.asteroids.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # play music during the instructions at specified volume:
@@ -764,24 +741,22 @@ class AsteroidImpactInstructionsScreenAlt(GameScreen):
         for asteroid in self.asteroids:
             asteroid.update(millis)
 
-
 class LevelCompletedOverlayScreen(GameScreen):
     """
     Show a "Level Complete" message on top of the gameplay screen, pausing the
     gameplay while this screen is visible.
-
+    
     This screen automatically ends after a delay.
     """
-
     def __init__(self, screen, gamescreenstack):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.name = 'level_complete'
         self.opaque = False
         self.screenarea = self.screen.get_rect()
-        self.font = load_font('Ubuntu-M.ttf', 36)
+        self.font = load_font('FreeSansBold.ttf', 36)
         self.text = self.font.render("Level Completed", 1, (250, 10, 10))
         self.textpos = self.text.get_rect(
-            centerx=self.screenarea.width / 2, centery=self.screenarea.height / 2)
+            centerx=self.screenarea.width/2, centery=self.screenarea.height/2)
         self.elapsedmillis = 0
 
     def draw(self):
@@ -800,8 +775,7 @@ class LevelCompletedOverlayScreen(GameScreen):
         # remove 'level completed' screen
         topscreen = self.screenstack.pop()
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -809,29 +783,27 @@ class LevelCompletedOverlayScreen(GameScreen):
 
         for event in events:
             if event.type == MOUSEBUTTONDOWN:
-                # self.close()
+                #self.close()
                 pass
             elif event.type is MOUSEBUTTONUP:
                 pass
-
 
 class GameOverOverlayScreen(GameScreen):
     """
     Show a "Game Over" message on top of the gameplay screen, pausing the
     gameplay while this screen is visible.
-
+    
     This screen automatically ends after a delay.
     """
-
     def __init__(self, screen, gamescreenstack):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.name = 'game_over'
         self.opaque = False
         self.screenarea = self.screen.get_rect()
-        self.font = load_font('Ubuntu-M.ttf', 36)
+        self.font = load_font('FreeSansBold.ttf', 36)
         self.text = self.font.render("You Died!", 1, (250, 10, 10))
         self.textpos = self.text.get_rect(
-            centerx=self.screenarea.width / 2, centery=self.screenarea.height / 2)
+            centerx=self.screenarea.width/2, centery=self.screenarea.height/2)
         self.elapsedmillis = 0
 
     def draw(self):
@@ -847,12 +819,11 @@ class GameOverOverlayScreen(GameScreen):
         if (len(self.screenstack) > 1
                 and isinstance(self.screenstack[-2], AsteroidImpactInfiniteGameplayScreen)):
             # reload same level
-            self.screenstack[-2].setup_level(first=False, died_previously=True)
+            self.screenstack[-2].setup_level(first=False,died_previously=True)
         # remove 'game over' screen
         topscreen = self.screenstack.pop()
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         self.elapsedmillis += millis
 
         if self.elapsedmillis >= 1000:
@@ -861,7 +832,7 @@ class GameOverOverlayScreen(GameScreen):
         for event in events:
             if event.type == MOUSEBUTTONDOWN:
                 pass
-                # self.close()
+                #self.close()
             elif event.type is MOUSEBUTTONUP:
                 pass
 
@@ -869,7 +840,7 @@ class GameOverOverlayScreen(GameScreen):
 def circularspritesoverlap(a, b):
     """
     Returns true if two circular game sprites overlap.
-
+    
     The sprite overlap is checked using their ``gamerect`` to find the sprite position and diameter.
     """
     x1 = a.gamerect.centerx
@@ -879,8 +850,7 @@ def circularspritesoverlap(a, b):
     y2 = b.gamerect.centery
     d2 = b.gamerect.width
     # x1, y1, d1, x2, y2, d2
-    return ((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) < (.25 * (d1 + d2) * (d1 + d2))
-
+    return ((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)) < (.25*(d1 + d2)*(d1 + d2))
 
 def make_powerup(powerup_dict):
     """
@@ -895,14 +865,12 @@ def make_powerup(powerup_dict):
         return SlowPowerup(**powerup_dict)
     if powerup_type == 'none':
         return NonePowerup(**powerup_dict)
-    print('ERROR: Unknown type of powerup in level: ', powerup_type)
-
+    print 'ERROR: Unknown type of powerup in level: ', powerup_type
 
 class AsteroidImpactGameplayScreen(GameScreen):
     """
     Gameplay logic for the Asteroid Impact game.
     """
-
     def __init__(self,
                  screen,
                  screenstack,
@@ -923,21 +891,21 @@ class AsteroidImpactGameplayScreen(GameScreen):
         self.blackbackground = self.blackbackground.convert()
         self.blackbackground.fill((0, 0, 0))
 
-        self.gamebackground = load_image('background4x3.jpg', size=virtualdisplay.screenplayarea.size)
-        # draw game background on black background to only have to draw black/game once per frame:
+        self.gamebackground = load_image('background4x3.jpg', size=virtualdisplay.screenarea.size)
+        # draw gamebackground on blackbackground to only have to draw black/game once per frame:
         self.blackbackground.blit(self.gamebackground, virtualdisplay.screenarea.topleft)
 
         # draw outline around game area
-        # pygame.draw.rect(self.blackbackground, (250, 250, 250), virtualdisplay.screenplayarea, 1)
+        pygame.draw.rect(self.blackbackground, (250, 250, 250), virtualdisplay.screenplayarea, 1)
 
         status_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        status_font = load_font('Ubuntu-M.ttf', status_font_size)
+        status_font = load_font('FreeSansBold.ttf', status_font_size)
         status_color = (250, 250, 10)
 
         notice_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        notice_font = load_font('Ubuntu-M.ttf', notice_font_size)
+        notice_font = load_font('FreeSansBold.ttf', notice_font_size)
         notice_color = (250, 250, 10)
 
         self.status_asteroids_textsprite = TextSprite(
@@ -947,7 +915,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
 
         self.status_time_textsprite = TextSprite(
             status_font, "0.00s", status_color,
-            x=virtualdisplay.GAME_AREA.width / 2,
+            x=virtualdisplay.GAME_AREA.width/2,
             bottom=960)
 
         self.notice_textsprite = TextSprite(
@@ -962,18 +930,18 @@ class AsteroidImpactGameplayScreen(GameScreen):
 
         self.sound_death = load_sound('DeathFlash.wav')
 
-        # Display The Background
+        #Display The Background
         self.screen.blit(self.blackbackground, (0, 0))
         self.level_list = levellist
         if len(self.level_list) == 0:
-            print('ERROR: Level list is empty')
+            print 'ERROR: Level list is empty'
             raise QuitGame
         self.level_index = 0
         self.level_attempt = -1
         self.setup_level()
 
         self.first_update = True
-
+        
         # reaction time prompts are independent of level list
         # load their settings from step JSON
         self.reaction_prompts = ReactionTimePromptGroup(reaction_prompts_settings)
@@ -981,7 +949,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
     def setup_level(self):
         """Setup for the current level"""
         leveldetails = self.level_list[self.level_index]
-        self.level_millis = -2000  # for the 'get ready' and level countdown
+        self.level_millis = -2000 # for the 'get ready' and level countdown
 
         self.cursor = Cursor(game_bounds=virtualdisplay.GAME_PLAY_AREA)
         self.target_positions = leveldetails['target_positions']
@@ -1013,8 +981,8 @@ class AsteroidImpactGameplayScreen(GameScreen):
     def update_status_text(self):
         """Update numbers in status text sprites"""
         self.status_asteroids_textsprite.set_text(
-            '%d/%d collected' % (self.target_index, len(self.target_positions)))
-        self.status_time_textsprite.set_text('%2.2f' % (self.level_millis / 1000.))
+            '%d/%d collected'%(self.target_index, len(self.target_positions)))
+        self.status_time_textsprite.set_text('%2.2f'%(self.level_millis / 1000.))
 
     def update_notice_text(self, level_millis, oldlevel_millis):
         """Update level countdown text"""
@@ -1035,11 +1003,9 @@ class AsteroidImpactGameplayScreen(GameScreen):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events,
-                                     step_trigger_count)
+        self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""
 
         if self.level_first_update:
@@ -1082,7 +1048,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
                     self.powerupsprites.add(self.powerup)
                 self.next_powerup_list_index = \
                     (1 + self.next_powerup_list_index) % len(self.powerup_list)
-                # print 'new available powerup is', self.powerup, 'at', self.powerup.gamerect
+                #print 'new available powerup is', self.powerup, 'at', self.powerup.gamerect
             self.powerup.update(millis, frame_outbound_triggers, self.cursor, self.asteroids)
 
             # Check target collision:
@@ -1095,7 +1061,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
                 frame_outbound_triggers.append('game_crystal_collected')
 
                 if self.target_index >= len(self.target_positions):
-                    print('completed level')
+                    print 'completed level'
                     levelstate = 'completed'
                     self.screenstack.append(LevelCompletedOverlayScreen(
                         self.screen, self.screenstack))
@@ -1107,11 +1073,11 @@ class AsteroidImpactGameplayScreen(GameScreen):
                     self.target.update_rect()
 
             # Check powerup collision
-            if self.powerup != None \
-                    and circularspritesoverlap(self.cursor, self.powerup) \
-                    and not self.powerup.active \
-                    and not self.powerup.used:
-                print('activating powerup:', self.powerup)
+            if self.powerup != None\
+                and circularspritesoverlap(self.cursor, self.powerup)\
+                and not self.powerup.active\
+                and not self.powerup.used:
+                print 'activating powerup:', self.powerup
                 self.powerup.activate(self.cursor, self.asteroids, frame_outbound_triggers)
 
             # Check asteroid collision:
@@ -1122,7 +1088,7 @@ class AsteroidImpactGameplayScreen(GameScreen):
                             and isinstance(self.powerup, ShieldPowerup)
                             and self.powerup.active):
                         self.sound_death.play()
-                        print('dead', self.cursor.rect.left, self.cursor.rect.top)
+                        print 'dead', self.cursor.rect.left, self.cursor.rect.top
                         levelstate = 'dead'
                         self.screenstack.append(
                             GameOverOverlayScreen(self.screen, self.screenstack))
@@ -1139,12 +1105,12 @@ class AsteroidImpactGameplayScreen(GameScreen):
         logrowdetails['target_x'] = self.target.gamerect.centerx
         logrowdetails['target_y'] = self.target.gamerect.centery
 
-        # active powerup (none, shield, slow)
+        #active powerup (none, shield, slow)
         logrowdetails['active_powerup'] = 'none'
         if self.powerup and self.powerup.active:
             logrowdetails['active_powerup'] = self.powerup.type
 
-        # on-screen powerup (these get weird when active)
+        # on-screen powerup (these get weird when active) 
         logrowdetails['powerup_x'] = self.powerup.gamerect.centerx
         logrowdetails['powerup_y'] = self.powerup.gamerect.centery
         logrowdetails['powerup_diameter'] = self.powerup.gamediameter
@@ -1153,9 +1119,9 @@ class AsteroidImpactGameplayScreen(GameScreen):
         logrowdetails['cursor_x'] = self.cursor.gamerect.centerx
         logrowdetails['cursor_y'] = self.cursor.gamerect.centery
 
-        for i, asteroid in enumerate(self.asteroids):
+        for i,asteroid in enumerate(self.asteroids):
             # asteroid columns
-            prefix = 'asteroid_%d_' % (i + 1)
+            prefix = 'asteroid_%d_' % (i+1)
             logrowdetails[prefix + 'centerx'] = asteroid.gamerect.centerx
             logrowdetails[prefix + 'centery'] = asteroid.gamerect.centery
             logrowdetails[prefix + 'diameter'] = asteroid.gamediameter
@@ -1181,31 +1147,29 @@ class AsteroidImpactGameplayScreen(GameScreen):
             # overlay the background over game elements to easily simulate dropping their opacity:
             self.blackbackground.set_alpha(255 - self.game_element_opacity)
             self.screen.blit(self.blackbackground, (0, 0))
-            self.blackbackground.set_alpha(None)  # another way to be opaque
+            self.blackbackground.set_alpha(None) # another way to be opaque
 
         # draw all text blocks:
         for textsprite in self.textsprites:
             textsprite.draw(self.screen)
 
-
 class AsteroidImpactInfiniteLevelMaker(object):
     '''
     List-like class that generates new levels as they are requested
     '''
-
     def __init__(
             self,
             level_templates_list,
-            start_level=0.0,
-            level_completion_increment=1.0,
-            level_death_decrement=1.0,
-            continuous_asteroids_on_same_level=False,
-            adaptive_asteroid_size_locked_to_initial=False,
-            show_advance_countdown=False,
-            multicolor_crystal_scoring=False,
-            multicolor_crystal_numbers=[-1],
+            start_level = 0.0,
+            level_completion_increment = 1.0,
+            level_death_decrement = 1.0,
+            continuous_asteroids_on_same_level = False,
+            adaptive_asteroid_size_locked_to_initial = False,
+            show_advance_countdown = False,
+            multicolor_crystal_scoring = False,
+            multicolor_crystal_numbers = [-1],
             **kwargs_ignored):
-        print(start_level, level_completion_increment, level_death_decrement)
+        print start_level, level_completion_increment, level_death_decrement
         self.level_score = start_level
         self.level_completion_increment = level_completion_increment
         self.level_death_decrement = level_death_decrement
@@ -1213,7 +1177,7 @@ class AsteroidImpactInfiniteLevelMaker(object):
         self.adaptive_asteroid_size_locked_to_initial = adaptive_asteroid_size_locked_to_initial
         self.show_advance_countdown = show_advance_countdown
         self.multicolor_crystal_scoring = multicolor_crystal_scoring
-
+        
         # validate multicolor_crystal_numbers
         self.multicolor_crystal_numbers = multicolor_crystal_numbers
         if self.multicolor_crystal_scoring:
@@ -1234,23 +1198,22 @@ class AsteroidImpactInfiniteLevelMaker(object):
         return 2000000000
 
     def __getitem__(self, index):
-        level_index = int(self.level_score + 0.001)  # add some fudge to round correctly
+        level_index = int(self.level_score + 0.001) # add some fudge to round correctly
         level_index = min(level_index, len(self.level_args_list) - 1)
         level_args = self.level_args_list[level_index]
-        print('generating new level for index', level_index, ' # times previously generated:',
-              self.level_used_count_list[level_index])
-
+        print 'generating new level for index', level_index, ' # times prevoiusly generated:', self.level_used_count_list[level_index]
+        
         # create random from level args
         def make_level_hash(
-                seed=None,
-                target_count=5,
-                asteroid_count=3,
-                asteroid_sizes='large',
-                asteroid_speeds='slow',
-                powerup_count=10,
-                powerup_initial_delay=0.0,
-                powerup_delay=1.0,
-                powerup_types='all'):
+            seed=None,
+            target_count=5,
+            asteroid_count=3,
+            asteroid_sizes='large',
+            asteroid_speeds='slow',
+            powerup_count=10,
+            powerup_initial_delay=0.0,
+            powerup_delay=1.0,
+            powerup_types='all'):
             if seed != None:
                 return seed
             # convert arguments that might be lists to tuples:
@@ -1265,12 +1228,11 @@ class AsteroidImpactInfiniteLevelMaker(object):
                 powerup_count,
                 powerup_initial_delay,
                 powerup_types))
-
         level_hash = make_level_hash(**self.level_args_list[level_index])
-
+        
         # advance random some multiple of times of # level has been played
         rnd = random.Random(level_hash)
-        for i in range(100 * self.level_used_count_list[level_index]):
+        for i in xrange(100*self.level_used_count_list[level_index]):
             rnd.random()
 
         level_args = self.level_args_list[level_index].copy()
@@ -1281,61 +1243,59 @@ class AsteroidImpactInfiniteLevelMaker(object):
             level_args['target_count'] = 5 * (level_args['target_count'] + len(self.multicolor_crystal_numbers))
         level = make_level(**level_args)
         self.level_used_count_list[level_index] += 1
-        level['level_name'] = 'dynamic-' + str(level_index)
-
+        level['level_name']  = 'dynamic-' + str(level_index)
+        
         # reset target count
         level_args['target_count'] = target_count_real
         level['target_count'] = target_count_real
 
         level_target_list = []
         for p in level['target_positions']:
-            level_target_list.append(dict(left=p[0],
-                                          top=p[1],
-                                          diameter=TARGET_SIZE,
-                                          color=rnd.choice(self.multicolor_crystal_numbers)))
+            level_target_list.append(dict(left= p[0],
+                top= p[1],
+                diameter= TARGET_SIZE,
+                color=rnd.choice(self.multicolor_crystal_numbers)))
         level['level_target_list'] = level_target_list
 
         # debug print
-        # print 'previous level_index', self.level_index_previous, 'new', level_index
+        #print 'previous level_index', self.level_index_previous, 'new', level_index
         level['level_index_changed_from_previous'] = (level_index != self.level_index_previous)
 
         self.level_index_previous = level_index
 
         return level
-
+    
     def level_completed(self, level_millis, frame_outbound_triggers):
         "Increment level score based on level completion"
-        level_index_old = int(self.level_score + 0.001)  # add some fudge to round correctly
+        level_index_old = int(self.level_score + 0.001) # add some fudge to round correctly
 
         # increment difficulty
         self.level_score += self.level_completion_increment
         # keep from going too high
         self.level_score = min(max(0.0, self.level_score), len(self.level_args_list) + 1)
 
-        level_index_new = int(self.level_score + 0.001)  # add some fudge to round correctly
+        level_index_new = int(self.level_score + 0.001) # add some fudge to round correctly
         if level_index_old < level_index_new:
             frame_outbound_triggers.append('adaptive_difficulty_increase')
 
     def level_death(self, level_millis, frame_outbound_triggers):
         "Reduce level score based on level failure"
 
-        level_index_old = int(self.level_score + 0.001)  # add some fudge to round correctly
+        level_index_old = int(self.level_score + 0.001) # add some fudge to round correctly
 
         # decrement difficulty
         self.level_score -= self.level_death_decrement
         # keep at or above 0
         self.level_score = min(max(0.0, self.level_score), len(self.level_args_list) + 1)
 
-        level_index_new = int(self.level_score + 0.001)  # add some fudge to round correctly
+        level_index_new = int(self.level_score + 0.001) # add some fudge to round correctly
         if level_index_new < level_index_old:
             frame_outbound_triggers.append('adaptive_difficulty_decrease')
-
 
 class AsteroidImpactInfiniteGameplayScreen(GameScreen):
     """
     Gameplay logic for the Asteroid Impact game.
     """
-
     def __init__(
             self,
             screen,
@@ -1349,10 +1309,9 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.name = 'gameplay-adaptive'
         self.step_kwargs = kwargs
         self.game_globals = game_globals
-        self.timer = 0
 
         # init high score if there is none
-        if 'multicolor_high_score' not in self.game_globals:
+        if not self.game_globals.has_key('multicolor_high_score'):
             game_globals['multicolor_high_score'] = 0
 
         if game_element_opacity > 255:
@@ -1363,7 +1322,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         # multicolor scoring properties
         self.multicolor_crystal_scoring = False
-        if 'multicolor_crystal_scoring' in kwargs:
+        if kwargs.has_key('multicolor_crystal_scoring'): 
             self.multicolor_crystal_scoring = kwargs['multicolor_crystal_scoring']
 
         self.multicolor_crystal_num_showing = 1
@@ -1371,48 +1330,45 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # score table to find score as player collects crystal
         # row: current crystal color
         # column: previously collected crystal color. If no previous, use 6th cell.
-        self.multicolor_crystal_score_table = [[0] * 6] * 5
+        self.multicolor_crystal_score_table = [[0]*6]*5
 
         if self.multicolor_crystal_scoring:
             # load multicolor-crystal-scoring specific options:
-            if 'multicolor_crystal_num_showing' in kwargs:
+            if kwargs.has_key('multicolor_crystal_num_showing'):
                 self.multicolor_crystal_num_showing = kwargs['multicolor_crystal_num_showing']
 
-            if 'multicolor_crystal_lifetime_ms' in kwargs:
-                self.multicolor_crystal_lifetime_ms = kwargs['multicolor_crystal_lifetime_ms']
+            if kwargs.has_key('multicolor_crystal_lifetime_ms'):
+                self.multicolor_crystal_lifetime_ms = kwargs['multicolor_crystal_lifetime_ms']            
 
-            if 'multicolor_crystal_score_table' in kwargs:
+            if kwargs.has_key('multicolor_crystal_score_table'):
                 self.multicolor_crystal_score_table = kwargs['multicolor_crystal_score_table']
             else:
                 # all tens
                 self.multicolor_crystal_score_table = [[10 for s in row] for row in self.multicolor_crystal_score_table]
 
         self.multicolor_crystal_negative_score_buzzer = False
-        if 'multicolor_crystal_negative_score_buzzer' in kwargs:
+        if kwargs.has_key('multicolor_crystal_negative_score_buzzer'): 
             self.multicolor_crystal_negative_score_buzzer = kwargs['multicolor_crystal_negative_score_buzzer']
 
         self.blackbackground = pygame.Surface(self.screen.get_size())
         self.blackbackground = self.blackbackground.convert()
         self.blackbackground.fill((0, 0, 0))
 
-        self.gamebackground = load_image('background4x3.jpg', size=virtualdisplay.screenplayarea.size)
+        self.gamebackground = load_image('background4x3.jpg', size=virtualdisplay.screenarea.size)
         # draw gamebackground on blackbackground to only have to draw black/game once per frame:
         self.blackbackground.blit(self.gamebackground, virtualdisplay.screenarea.topleft)
-        try:
-            self.mondrian = load_image('mond.png', size=virtualdisplay.screenarea.size)
-        except:
-            self.mondrian = None
-        self.blank = load_image("transparent.png", size=virtualdisplay.screenarea.size)
-        self.overlay = None
+
+        # draw outline around game area
+        pygame.draw.rect(self.blackbackground, (250, 250, 250), virtualdisplay.screenplayarea, 1)
 
         status_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        status_font = load_font('Ubuntu-M.ttf', status_font_size)
+        status_font = load_font('FreeSansBold.ttf', status_font_size)
         status_color = (250, 250, 10)
 
         notice_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 64, 64)).height
-        notice_font = load_font('Ubuntu-M.ttf', notice_font_size)
+        notice_font = load_font('FreeSansBold.ttf', notice_font_size)
         notice_color = (250, 250, 10)
 
         self.status_asteroids_textsprite = TextSprite(
@@ -1422,17 +1378,17 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         self.status_time_textsprite = TextSprite(
             status_font, "0.00s", status_color,
-            x=virtualdisplay.GAME_AREA.width / 2,
+            x=virtualdisplay.GAME_AREA.width/2,
             bottom=960)
 
         self.status_score_textsprite = TextSprite(
             status_font, "Score: 00000", status_color,
-            x=20,
+            x=0,
             bottom=960)
 
         self.status_highscore_textsprite = TextSprite(
             status_font, "High Score: 00000", status_color,
-            x=virtualdisplay.GAME_AREA.width / 2,
+            x=virtualdisplay.GAME_AREA.width/2,
             bottom=960)
 
         self.notice_textsprite = TextSprite(
@@ -1457,10 +1413,10 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         self.sound_death = load_sound('DeathFlash.wav')
 
-        # Display The Background
+        #Display The Background
         self.screen.blit(self.blackbackground, (0, 0))
         if len(level_templates_list) == 0:
-            print('ERROR: Level list is empty')
+            print 'ERROR: Level list is empty'
             raise QuitGame
         levellist = AsteroidImpactInfiniteLevelMaker(level_templates_list, **kwargs)
         self.level_list = levellist
@@ -1473,21 +1429,19 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # load their settings from step JSON
         self.reaction_prompts = ReactionTimePromptGroup(reaction_prompts_settings)
 
-        self.overlay = Overlay()
-
     def setup_level(self, first=True, died_previously=False):
         """Setup for the current level"""
         self.died_previously = died_previously
         self.current_level = self.level_list['unused']
         self.show_countdown = (
-                first
-                or died_previously
-                or (self.level_list.show_advance_countdown and self.current_level['level_index_changed_from_previous']))
-        print('self.show_countdown', self.show_countdown)
-        self.level_millis = -2000 if (self.show_countdown) else 0  # for the 'get ready' and level countdown
+            first 
+            or died_previously 
+            or (self.level_list.show_advance_countdown and self.current_level['level_index_changed_from_previous']))
+        print 'self.show_countdown', self.show_countdown
+        self.level_millis = -2000 if (self.show_countdown) else 0 # for the 'get ready' and level countdown
 
         # resetting the cursor flashes it in top left
-        # this fixes typical case of advancing to next level, but it still happens
+        # this fixes typical case of advancing to next level, but it still happens 
         # when you die
         if first:
             self.cursor = Cursor(game_bounds=virtualdisplay.GAME_PLAY_AREA)
@@ -1501,15 +1455,15 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         target_list_new = []
         for t in self.current_level['level_target_list']:
             sprite = ScoredTarget(diameter=t['diameter'],
-                                  left=t['left'],
-                                  top=t['top'],
-                                  # when acting like "classic" behavior, use 'crystal.png'
-                                  imagefile='Crystal_%i.png' % t['color'] if t['color'] >= 1 else 'crystal.png',
-                                  number=t['color'],
-                                  lifetime_millis_max=self.multicolor_crystal_lifetime_ms,
-                                  play_buzzer_on_negative_score=self.multicolor_crystal_negative_score_buzzer)
+                left=t['left'],
+                top=t['top'],
+                # when acting like "classic" behavior, use 'crystal.png'
+                imagefile='Crystal_%i.png' % t['color'] if t['color'] >= 1 else 'crystal.png',
+                number=t['color'],
+                lifetime_millis_max = self.multicolor_crystal_lifetime_ms,
+                play_buzzer_on_negative_score = self.multicolor_crystal_negative_score_buzzer)
             target_list_new.append(sprite)
-
+        
         if first or died_previously:
             # I'm not sure the LayeredDirty group is ordered so its its own thing
             self.target_list = target_list_new
@@ -1528,14 +1482,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             self.target_previously_collected_number = 'x'
         else:
             if (self.current_level['level_index_changed_from_previous']
-                    or (not self.level_list.continuous_asteroids_on_same_level)):
+                or (not self.level_list.continuous_asteroids_on_same_level)):
                 # update asteroid speeds and sizes:
                 new_asteroids = [Asteroid(**d) for d in self.current_level['asteroids']]
                 # transition existing asteroid list into new asteroid list
                 prev_asteroid_count = len(self.asteroids)
                 if (len(new_asteroids) < len(self.asteroids)):
                     # reduce asteroid count by scaling down size. They are removed in update()
-                    for i in range(len(new_asteroids), len(self.asteroids)):
+                    for i in xrange(len(new_asteroids),len(self.asteroids)):
                         disappearing_asteroid = self.asteroids[i]
                         disappearing_asteroid.gamediameternew_start_diameter = disappearing_asteroid.gamediameter
                         disappearing_asteroid.gamediameternew_end_diameter = 1
@@ -1567,14 +1521,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                         asteroid.gamediameternew_transition_remaining_millis = 2000
                     asteroid.dxnew = newasteroid.dx
                     asteroid.dynew = newasteroid.dy
-
+        
         if first:
             prevpowerup = None
         else:
             prevpowerup = self.powerup
         if died_previously:
             prevpowerup = None
-
+            
         self.powerup_list = [make_powerup(d) for d in self.current_level['powerup_list']]
         self.powerup = self.powerup_list[0]
         self.next_powerup_list_index = 1 % len(self.powerup_list)
@@ -1605,8 +1559,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             self.status_score_textsprite.set_text('Score: %05d' % self.score)
             self.status_highscore_textsprite.set_text('High Score: %05d' % self.game_globals['multicolor_high_score'])
         else:
-            self.status_asteroids_textsprite.set_text(
-                '%d/%d collected' % (self.targets_collected, self.target_collection_target))
+            self.status_asteroids_textsprite.set_text('%d/%d collected' % (self.targets_collected, self.target_collection_target))
             self.status_time_textsprite.set_text('%2.2f' % (self.level_millis / 1000.))
             self.status_score_textsprite.set_text('')
             self.status_highscore_textsprite.set_text('')
@@ -1631,8 +1584,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         # The reaction time prompts run always, independent of the game state.
         # This allows them to be triggered externally, even when the player is
         # on a "level completed" or "you died" screen.
-        score_changes = self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers,
-                                                     events, step_trigger_count)
+        score_changes = self.reaction_prompts.update(millis, logrowdetails, reactionlogger, frame_outbound_triggers, events, step_trigger_count)
 
         if self.multicolor_crystal_scoring:
             for score_change in score_changes:
@@ -1649,15 +1601,14 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 if self.game_globals['multicolor_high_score'] < self.score:
                     self.game_globals['multicolor_high_score'] = self.score
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         """Run per-frame game logic"""
 
         if self.level_first_update:
             self.level_first_update = False
             frame_outbound_triggers.append('game_level_begin')
 
-        oldlevel_millis = self.level_millis
+        oldmlevelillis = self.level_millis
         self.level_millis += millis
 
         if self.first_update:
@@ -1673,7 +1624,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
             elif event.type is MOUSEBUTTONUP:
                 pass
 
-        self.update_notice_text(self.level_millis, oldlevel_millis)
+        self.update_notice_text(self.level_millis, oldmlevelillis)
         if self.level_millis < 0:
             # get ready countdown
             # only update asteroids, cursor
@@ -1699,7 +1650,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                     self.powerupsprites.add(self.powerup)
                 self.next_powerup_list_index = \
                     (1 + self.next_powerup_list_index) % len(self.powerup_list)
-                # print 'new available powerup is', self.powerup, 'at', self.powerup.gamerect
+                #print 'new available powerup is', self.powerup, 'at', self.powerup.gamerect
             self.powerup.update(millis, frame_outbound_triggers, self.cursor, self.asteroids)
 
             # Check target collision:
@@ -1715,11 +1666,11 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                             if isinstance(self.target_previously_collected_number, int):
                                 # use "nth" column
                                 scoreincrement = self.multicolor_crystal_score_table[
-                                    target.number - 1][self.target_previously_collected_number - 1]
+                                    target.number-1][self.target_previously_collected_number-1]
                             else:
                                 # use last column
                                 scoreincrement = self.multicolor_crystal_score_table[
-                                    target.number - 1][-1]
+                                    target.number-1][-1]
 
                         self.score += scoreincrement
 
@@ -1733,17 +1684,18 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                         if self.game_globals['multicolor_high_score'] < self.score:
                             self.game_globals['multicolor_high_score'] = self.score
 
-                    target.pickedup(score=scoreincrement)
+                    target.pickedup(score = scoreincrement)
 
                     # increment counter of targets hit
                     self.targets_collected += 1
+
 
                     self.target_previously_collected_number = target.number
 
                     frame_outbound_triggers.append('game_crystal_collected')
 
                     if self.targets_collected >= self.target_collection_target:
-                        print('completed level')
+                        print 'completed level'
                         levelstate = 'completed'
                         self.level_list.level_completed(self.level_millis, frame_outbound_triggers)
                         self.advance_level()
@@ -1753,11 +1705,11 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                         pass
 
             # Check powerup collision
-            if self.powerup != None \
-                    and circularspritesoverlap(self.cursor, self.powerup) \
-                    and not self.powerup.active \
-                    and not self.powerup.used:
-                # print 'activating powerup:', self.powerup
+            if self.powerup != None\
+                and circularspritesoverlap(self.cursor, self.powerup)\
+                and not self.powerup.active\
+                and not self.powerup.used:
+                #print 'activating powerup:', self.powerup
                 self.powerup.activate(self.cursor, self.asteroids, frame_outbound_triggers)
 
             # Check asteroid collision:
@@ -1768,7 +1720,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                             and isinstance(self.powerup, ShieldPowerup)
                             and self.powerup.active):
                         self.sound_death.play()
-                        print('dead', self.cursor.rect.left, self.cursor.rect.top)
+                        print 'dead', self.cursor.rect.left, self.cursor.rect.top
                         self.level_list.level_death(self.level_millis, frame_outbound_triggers)
                         levelstate = 'dead'
                         self.screenstack.append(
@@ -1805,7 +1757,7 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                 break
         logrowdetails['multicolor_crystal_score'] = self.score
 
-        # active powerup (none, shield, slow)
+        #active powerup (none, shield, slow)
         logrowdetails['active_powerup'] = 'none'
         if self.powerup and self.powerup.active:
             logrowdetails['active_powerup'] = self.powerup.type
@@ -1818,27 +1770,25 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
 
         logrowdetails['cursor_x'] = self.cursor.gamerect.centerx
         logrowdetails['cursor_y'] = self.cursor.gamerect.centery
-
-        for i, asteroid in enumerate(self.asteroids):
+        
+        for i,asteroid in enumerate(self.asteroids):
             # asteroid columns
-            prefix = 'asteroid_%d_' % (i + 1)
+            prefix = 'asteroid_%d_' % (i+1)
             logrowdetails[prefix + 'centerx'] = asteroid.gamerect.centerx
             logrowdetails[prefix + 'centery'] = asteroid.gamerect.centery
             logrowdetails[prefix + 'diameter'] = asteroid.gamediameter
-
+            
         # remove shrunken asteroids
         self.asteroids = [asteroid for asteroid in self.asteroids if asteroid.gamediameter >= 10]
 
         self.show_required_targets()
-
-        self.overlay.update(millis)
 
     def show_required_targets(self):
         # show targets if not enough are visible
         visible_target_count = len([t for t in self.target_list if t.active])
         next_crystal_lifetime_adjustment = 1.0
         while visible_target_count < self.simultaneous_targets:
-            self.target_list[self.target_next_index].activate(life_multiplier=next_crystal_lifetime_adjustment)
+            self.target_list[self.target_next_index].activate(life_multiplier = next_crystal_lifetime_adjustment)
             self.target_next_index = (self.target_next_index + 1) % len(self.target_list)
             visible_target_count += 1
             # so more than one crystal shown on same frame don't turn off at exactly the same time
@@ -1865,9 +1815,10 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
         self.reaction_prompts.draw(self.screen)
 
         if self.game_element_opacity < 255:
-            if self.overlay.visible == 1:
-                self.overlay.draw(self.screen)
-                self.overlay.image.set_alpha(255 - self.game_element_opacity)
+            # overlay the background over game elements to easily simulate dropping their opacity:
+            self.blackbackground.set_alpha(255 - self.game_element_opacity)
+            self.screen.blit(self.blackbackground, (0, 0))
+            self.blackbackground.set_alpha(None) # another way to be opaque
 
         # draw all text blocks:
         for textsprite in self.textsprites:
@@ -1878,12 +1829,11 @@ class ParallelPortTestScreen(GameScreen):
     """
     Parallel Port Test Screen. Display input pins status and toggle output pins by clicking on buttons.
     """
-
     def __init__(
-            self,
-            screen,
-            gamescreenstack,
-            port_address=0x0378):
+        self,
+        screen,
+        gamescreenstack,
+        port_address=0x0378):
         GameScreen.__init__(self, screen, gamescreenstack)
         self.name = 'paralleltest'
         self.opaque = True
@@ -1908,22 +1858,22 @@ class ParallelPortTestScreen(GameScreen):
 
         big_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 72, 72)).height
-        self.font_big = load_font('Ubuntu-M.ttf', big_font_size)
-
-        self.line_height = 36  # game-space like font size below
+        self.font_big = load_font('FreeSansBold.ttf', big_font_size)
+        
+        self.line_height = 36 # game-space like font size below
         small_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.font = load_font('Ubuntu-M.ttf', small_font_size)
+        self.font = load_font('FreeSansBold.ttf', small_font_size)
 
         self.digit_line_height = 32
         digit_font_size = virtualdisplay.screenrect_from_gamerect(
             pygame.Rect(0, 0, 32, 32)).height
-        self.digit_font = load_font('Ubuntu-M.ttf', digit_font_size)
+        self.digit_font = load_font('FreeSansBold.ttf', digit_font_size)
 
-        self.text_color = (11, 11, 11)  # dark
-        self.text_color_option = (127, 127, 127)  # gray
-        self.text_color_digit = (11, 11, 11)  # dark
-        self.text_color_active_digit = (215, 211, 5)  # yellow
+        self.text_color = (11, 11, 11) # dark
+        self.text_color_option = (127, 127, 127) # gray
+        self.text_color_digit = (11, 11, 11) # dark
+        self.text_color_active_digit = (215, 211, 5) # yellow
 
         # init text for prompt
         lines, result_bounds = flow_text(
@@ -1947,18 +1897,18 @@ class ParallelPortTestScreen(GameScreen):
             self.text_color_option,
             self.line_height,
             valign='bottom')
-        bottom_y -= (len(lines) + 1) * self.line_height
+        bottom_y -= (len(lines)+1)*self.line_height
         self.textsprites += lines
-
-        self.nextbutton = SurveyButton(option_bounds, next_text, lambda b: self.next_button_clicked())
+        
+        self.nextbutton = SurveyButton(option_bounds, next_text, lambda b:self.next_button_clicked())
 
         self.textsprites.append(TextSprite(
-            self.font,
-            'Port Address: 0x%X' % port_address,
+            self.font, 
+            'Port Address: 0x%X'%port_address,
             self.text_color,
             left=0,
             bottom=176))
-
+        
         self.status_data_value_textsprite = TextSprite(
             self.font,
             'Data value: XYZ (0xQW)',
@@ -1982,41 +1932,42 @@ class ParallelPortTestScreen(GameScreen):
         self.data_buttons = []
         for bit in range(8):
             # Data bit
-            x = 544 + (64 * (7 - bit))
+            x = 544 + (64*(7-bit))
             y = 288
             self.data_bits_sprites.append(
                 [TextSprite(
                     self.digit_font, "0", self.text_color_digit,
                     centerx=x,
-                    bottom=y + 16),
-                    TextSprite(
-                        self.digit_font, "1", self.text_color_active_digit,
-                        centerx=x,
-                        bottom=y + 16)])
+                    bottom=y+16),
+                 TextSprite(
+                    self.digit_font, "1", self.text_color_active_digit,
+                    centerx=x,
+                    bottom=y+16)])
             # add button to toggle output digit
-            button_bounds = Rect(x - 32, y - 32, 64, 64)
+            button_bounds = Rect(x-32, y-32, 64, 64)
             data_button = SurveyButton(
-                button_bounds,
-                "toggle bit %d" % bit,
-                lambda b: self.toggle_data_bit_for_button(b))
+                button_bounds, 
+                "toggle bit %d"%bit, 
+                lambda b:self.toggle_data_bit_for_button(b))
             self.data_buttons.append(data_button)
 
         # create text blocks for status bits
-        self.status_bits_sprites = [None] * 3
-        for bit in [3, 4, 5, 6, 7]:
-            x = 224 + (64 * (7 - bit))
+        self.status_bits_sprites = [None]*3
+        for bit in [3,4,5,6,7]:
+            x = 224 + (64*(7-bit))
             y = 672
             self.status_bits_sprites.append(
                 [TextSprite(
                     self.digit_font, "0", self.text_color_digit,
                     centerx=x,
-                    bottom=y + 16),
-                    TextSprite(
-                        self.digit_font, "1", self.text_color_active_digit,
-                        centerx=x,
-                        bottom=y + 16), ])
+                    bottom=y+16),
+                 TextSprite(
+                    self.digit_font, "1", self.text_color_active_digit,
+                    centerx=x,
+                    bottom=y+16),])
 
         self.first_update = True
+
 
     def draw(self):
         # draw background
@@ -2033,7 +1984,7 @@ class ParallelPortTestScreen(GameScreen):
 
         # Draw data bits:
         for i, dig_list in enumerate(self.data_bits_sprites):
-            if self.data_byte & (1 << i):
+            if self.data_byte & (1<<i):
                 dig_list[1].draw(self.screen)
             else:
                 dig_list[0].draw(self.screen)
@@ -2041,15 +1992,14 @@ class ParallelPortTestScreen(GameScreen):
         # Draw status bits:
         for i, dig_list in enumerate(self.status_bits_sprites):
             if dig_list:
-                if self.status_byte & (1 << i):
+                if self.status_byte & (1<<i):
                     dig_list[1].draw(self.screen)
                 else:
                     dig_list[0].draw(self.screen)
 
         self.sprites.draw(self.screen)
 
-    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count,
-                         reactionlogger):
+    def update_frontmost(self, millis, logrowdetails, frame_outbound_triggers, events, step_trigger_count, reactionlogger):
         if self.first_update:
             self.first_update = False
             # don't play music:
@@ -2066,10 +2016,11 @@ class ParallelPortTestScreen(GameScreen):
         self.nextbutton.update(millis)
 
         status_byte_new = parallelportwrapper.Inp32(self.port_address_status)
-        status_byte_new = status_byte_new & 0xF8  # mask off card-specific low bits
+        status_byte_new = status_byte_new & 0xF8 # mask off card-specific low bits
         if self.status_byte != status_byte_new:
             self.status_byte = status_byte_new
             self.update_status_text()
+
 
     def toggle_data_bit_for_button(self, button):
         # toggle corresponding bit
@@ -2084,7 +2035,7 @@ class ParallelPortTestScreen(GameScreen):
 
     def update_status_text(self):
         self.status_data_value_textsprite.set_text(
-            'Data value: %d (0x%02X)' % (self.data_byte, self.data_byte))
+            'Data value: %d (0x%02X)'%(self.data_byte, self.data_byte))
         self.status_status_value_textsprite.set_text(
-            'Status value: %d (0x%02X)' % (self.status_byte, self.status_byte))
+            'Status value: %d (0x%02X)'%(self.status_byte, self.status_byte))
 

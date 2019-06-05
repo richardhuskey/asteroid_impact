@@ -10,7 +10,7 @@
 Resource-loading utilities for AsteroidImpact
 """
 
-
+from __future__ import absolute_import, division
 import os, sys, pygame
 import pygame.ftfont
 
@@ -75,9 +75,9 @@ class ScaledImageCache(object):
         fullname = resource_path(os.path.join('data', name))
         try:
             fullsizeimage = pygame.image.load(fullname)
-        except pygame.error as message:
-            print('Cannot load image:', fullname)
-            raise SystemExit(message)
+        except pygame.error, message:
+            print 'Cannot load image:', fullname
+            raise SystemExit, message
 
         if self.convert_alpha:
             fullsizeimage = fullsizeimage.convert_alpha()
@@ -101,7 +101,7 @@ class ScaledImageCache(object):
         while 2**len(self.cache_by_log2_size) < maxsize:
             self.cache_by_log2_size.append(None)
 
-        for log2_size in range(len(self.cache_by_log2_size)):
+        for log2_size in xrange(len(self.cache_by_log2_size)):
             # todo: aspect preserve for non-square dimensions
             if fullsizeimage_size[0] < fullsizeimage_size[1]:
                 width = 2**log2_size
@@ -151,7 +151,7 @@ def load_image(name, size=None, convert_alpha=False, colorkey=None):
 
     # Look up image in cache
     cache_key = (name, convert_alpha, colorkey)
-    if cache_key in scaledimage_cache:
+    if scaledimage_cache.has_key(cache_key):
         return scaledimage_cache[cache_key].get(size)
 
     scaledimage_cache[cache_key] = ScaledImageCache(name, convert_alpha, colorkey)
@@ -183,12 +183,12 @@ class MixedSound(pygame.mixer.Sound):
         playing_count_total = 0
         # find total playing count for mixing group:
         playing_count_by_filename = {}
-        for i in range(pygame.mixer.get_num_channels()):
+        for i in xrange(pygame.mixer.get_num_channels()):
             channel = pygame.mixer.Channel(i)
             if channel.get_busy():
                 s = channel.get_sound()
                 if isinstance(s, MixedSound) and s.mixing_group == self.mixing_group:
-                    if s.filename not in playing_count_by_filename:
+                    if not playing_count_by_filename.has_key(s.filename):
                         playing_count_by_filename[s.filename] = (s, 1)
                     else:
                         playing_count_by_filename[s.filename] = (s, playing_count_by_filename[s.filename][1]+1)
@@ -196,13 +196,13 @@ class MixedSound(pygame.mixer.Sound):
         
         playing_count_total += 1 # me once I start playing
         # increment play count for me:
-        if self.filename not in playing_count_by_filename:
+        if not playing_count_by_filename.has_key(self.filename):
             playing_count_by_filename[self.filename] = (self, 1)
         else:
             playing_count_by_filename[self.filename] = (self, playing_count_by_filename[self.filename][1]+1)
 
         # adjust volume of myself and others for number of times playing
-        for filename,packed_val in playing_count_by_filename.items():
+        for filename,packed_val in playing_count_by_filename.iteritems():
             s, playing_count_this = packed_val
             s.set_volume(s.default_volume * playing_count_this / playing_count_total)
 
@@ -221,9 +221,9 @@ def load_sound(name, mixing_group=None):
     fullname = resource_path(os.path.join('data', name))
     try:
         key = (fullname, mixing_group)
-        if key not in sound_cache:
+        if not sound_cache.has_key(key):
             if not os.path.isfile(fullname):
-                print('Cannot load sound:', fullname, 'file does not exist')
+                print 'Cannot load sound:', fullname, 'file does not exist'
                 raise SystemExit
 
             if not mixing_group:
@@ -234,9 +234,9 @@ def load_sound(name, mixing_group=None):
 
             sound_cache[key] = sound
         return sound_cache[key]
-    except pygame.error as message:
-        print('Cannot load sound:', fullname)
-        raise SystemExit(message)
+    except pygame.error, message:
+        print 'Cannot load sound:', fullname
+        raise SystemExit, message
     return sound
 
 def load_music(name):
@@ -248,9 +248,9 @@ def load_music(name):
     fullname = resource_path(os.path.join('data', name))
     try:
         pygame.mixer.music.load(fullname)
-    except pygame.error as message:
-        print('Cannot load music:', fullname)
-        raise SystemExit(message)
+    except pygame.error, message:
+        print 'Cannot load music:', fullname
+        raise SystemExit, message
 
 def mute_music():
     """Mute Music by setting volume to zero temporarily."""

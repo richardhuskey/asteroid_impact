@@ -50,21 +50,21 @@ try:
         dllfile = 'inpoutx64.dll'
         pport = ctypes.windll.inpoutx64
     else:
-        print('WARNING: Parallel port support not available. Parallel port interface only implemented for Windows')
+        print 'WARNING: Parallel port support not available. Parallel port interface only implemented for Windows'
         pport = StubParallelPort()
 
 except AttributeError as e:
     # ctypes.windll doesn't exist outside windows
-    print(e)
+    print e
     pport = StubParallelPort()
 except WindowsError as e:
     # dll probably not found
-    print(e)
-    print(dllfile, 'not found. parallel port support is unavailable')
+    print e
+    print dllfile, 'not found. parallel port support is unavailable'
     pport = StubParallelPort()
 except OSError as e:
     # probably running 64-bit python trying to load 32-bit DLL
-    print(e)
+    print e
     pport = StubParallelPort()
 
 def Out32(port_addr, data_byte):
