@@ -266,8 +266,10 @@ class SurveyButton:
 
     def update(self, milliseconds):
         pos = pygame.mouse.get_pos()
-        overlapping_me = False
-        self.screenrect.collidepoint(pos)
+        if self.screenrect.collidepoint(pos):
+            overlapping_me = True
+        else:
+             overlapping_me = False
 
         mouse_button_down = pygame.mouse.get_pressed()[0]
 
