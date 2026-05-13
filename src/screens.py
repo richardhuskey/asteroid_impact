@@ -264,49 +264,42 @@ class SurveyButton:
         self.mouse_button_pressed_inside = False
         self.onclick = onclick
 
-    def update(self, milliseconds):
+    def update(self, milliseconds, events):
         pos = pygame.mouse.get_pos()
-        overlapping_me = False
-        self.screenrect.collidepoint(pos)
+        overlapping_me = self.screenrect.collidepoint(pos)
 
-        mouse_button_down = pygame.mouse.get_pressed()[0]
-
-        '''
-        states:
-         * normal
-         * selected
-         * highlight (mouse over)
-         * pressing (mouse over while pressed down on this object)
-
-        normal/selected happen when:
-         * mouse is up
-         * mouse is down but wasn't pressed on this object but is overlapping it
-        '''
-        if mouse_button_down:
-            if not self.mouse_button_was_down:
-                # mouse left button now pressed
+        # Use events instead of pygame.mouse.get_pressed() so clicks are
+        # detected correctly on Windows 11 with event grab active.
+        for event in events:
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                self.mouse_button_was_down = True
                 self.mouse_button_pressed_inside = overlapping_me
+            elif event.type == MOUSEBUTTONUP and event.button == 1:
+                if self.mouse_button_was_down and self.mouse_button_pressed_inside and overlapping_me:
+                    if self.onclick:
+                        self.onclick(self)
+                self.mouse_button_was_down = False
+                self.mouse_button_pressed_inside = False
+
+        # Visual states (all four preserved):
+        #   pressing  — mouse held down over this button
+        #   highlight — mouse hovering, button not held
+        #   selected  — this option has been chosen
+        #   normal    — default
+        if self.mouse_button_was_down:
             if overlapping_me:
                 self.buttonbackground.fill(self.color_pressing)
             elif self.selected:
                 self.buttonbackground.fill(self.color_selected)
             else:
                 self.buttonbackground.fill(self.color_normal)
-        if not mouse_button_down:
-            if self.mouse_button_was_down:
-                # mouse button released
-                if self.mouse_button_pressed_inside and overlapping_me:
-                    # self.selected = not self.selected
-                    if self.onclick: self.onclick(self)
-
+        else:
             if overlapping_me:
                 self.buttonbackground.fill(self.color_highlight)
             elif self.selected:
                 self.buttonbackground.fill(self.color_selected)
             else:
                 self.buttonbackground.fill(self.color_normal)
-
-        self.mouse_button_was_down = mouse_button_down
 
     def draw(self, screen):
         screen.blit(self.buttonbackground, (self.screenrect.left, self.screenrect.top))
@@ -432,14 +425,14 @@ class SurveyQuestionScreen(GameScreen):
 
         logrowdetails['survey_answer'] = 'MISSING'
         for b in self.option_buttons:
-            b.update(millis)
+            b.update(millis, events)
             if b.selected:
                 logrowdetails['survey_answer'] = b.text
                 logrowdetails['survey_answer_number'] = b.option_index + 1
         logrowdetails['survey_prompt'] = self.prompt
 
         if self.nextbutton:
-            self.nextbutton.update(millis)
+            self.nextbutton.update(millis, events)
 
     def option_button_click(self, button):
         # deselect all buttons
@@ -2061,9 +2054,9 @@ class ParallelPortTestScreen(GameScreen):
         self.sprites.update(millis)
 
         for b in self.data_buttons:
-            b.update(millis)
+            b.update(millis, events)
 
-        self.nextbutton.update(millis)
+        self.nextbutton.update(millis, events)
 
         status_byte_new = parallelportwrapper.Inp32(self.port_address_status)
         status_byte_new = status_byte_new & 0xF8  # mask off card-specific low bits

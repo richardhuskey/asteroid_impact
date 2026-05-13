@@ -903,6 +903,10 @@ class GameModeManager(object):
         screensize = (self.args.display_width, self.args.display_height)
         virtualdisplay.set_screensize(screensize)
 
+        # Fix mouse coordinate mismatch on Windows 11 with display scaling.
+        # Ignored on macOS and Linux.
+        os.environ['SDL_WINDOWS_DPI_AWARENESS'] = 'permonitorv2'
+
         pygame.init()
 
         if not pygame.mixer.get_init():
