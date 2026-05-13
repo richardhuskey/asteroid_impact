@@ -11,10 +11,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
       - run: |
           git remote add upstream https://github.com/asteroidimpact/asteroid_impact_py3.git
           git fetch upstream
-          git branch -a
-          git remote -v
-          git merge upstream/HEAD
-          git push origin HEAD
+          git merge upstream/master --allow-unrelated-histories -m "Sync from upstream"
+          git push origin master
