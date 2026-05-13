@@ -1,0 +1,18 @@
+name: Sync from upstream
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          git remote add upstream https://github.com/asteroidimpact/asteroid_impact_py3.git
+          git fetch upstream
+          git merge upstream/master
+          git push origin master
