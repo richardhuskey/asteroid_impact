@@ -14,6 +14,7 @@ jobs:
       - run: |
           git remote add upstream https://github.com/asteroidimpact/asteroid_impact_py3.git
           git fetch upstream
-          git checkout main || git checkout master
+          git branch -a
+          git remote -v
           git merge upstream/HEAD
           git push origin HEAD
