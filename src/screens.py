@@ -1702,8 +1702,8 @@ class AsteroidImpactInfiniteGameplayScreen(GameScreen):
                     target.pickedup()
 
                     # increment score
+                    scoreincrement = 0
                     if self.multicolor_crystal_scoring:
-                        scoreincrement = 0
                         if isinstance(target.number, int) and target.number > 0:
                             if isinstance(self.target_previously_collected_number, int):
                                 # use "nth" column

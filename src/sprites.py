@@ -882,6 +882,7 @@ class Overlay(VirtualGameSprite):
             w=virtualdisplay.screenplayarea.width,
             h=virtualdisplay.screenplayarea.height,
             visible=0,
+            image='transparent.png',
             **kwargs_extra):
         # if kwargs_extra: print 'extra arguments:', kwargs_extra
         VirtualGameSprite.__init__(self)  # call Sprite initializer
